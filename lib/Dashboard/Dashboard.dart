@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Dashboard/ModelClasses/ModelClass.dart';
 import 'package:mobility_sqr/Dashboard/ModelClasses/showHide.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -89,6 +90,114 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white10,
+        elevation: 0,
+        titleSpacing: 0.0,
+        title:
+        Text("Voyager", style: TextStyle(color: AppConstants.APP_THEME_COLOR, fontSize: 16,fontWeight: FontWeight.w800)),
+        centerTitle: false,
+        iconTheme: IconThemeData(color: Colors.black),
+
+      ),
+
+      drawer: Drawer(
+        elevation: 16.0,
+        child: Column(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountEmail: Text("xyz@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text("xyz"),
+              ),
+              otherAccountsPictures: <Widget>[
+                // CircleAvatar(
+                //   backgroundColor: Colors.white,
+                //   child: Text("abc"),
+                // )
+              ],
+            ),
+            ListTile(
+              leading: ImageIcon( AssetImage("assets/images/myprofile_sidemenu_icon.png"),
+                color: AppConstants.APP_THEME_COLOR,
+              ),
+              title: Text('My Profile'),
+            ),
+            Divider(
+              height: 0.1,
+            ),
+            ListTile(
+              leading: ImageIcon( AssetImage("assets/images/biometric-thumb.png"),
+                color: AppConstants.APP_THEME_COLOR,
+              ),
+              title: Text('Fingerprint Authentication'),
+            ),
+            ListTile(
+              leading: ImageIcon( AssetImage("assets/images/change_password_sidemenu_icon.png"),
+                color: AppConstants.APP_THEME_COLOR,
+              ),
+              title: Text('Change Password'),
+            ),
+            ListTile(
+              leading: ImageIcon( AssetImage("assets/images/logout_sidemenu_icon.png"),
+                color: AppConstants.APP_THEME_COLOR,
+              ),
+              title: Text('Logout'),
+            )
+          ],
+        ),
+      ),
+
+
+      // drawer: Drawer(
+      //   child: ListView(
+      //     padding: EdgeInsets.zero,
+      //     children: const <Widget>[
+      //       DrawerHeader(
+      //         // decoration: BoxDecoration(
+      //         //   color: Colors.white38,
+      //         // ),
+      //         // child: Text(
+      //         //
+      //         //   'Drawer Header',
+      //         //   style: TextStyle(
+      //         //     color: Colors.black45,
+      //         //     fontSize: 24,
+      //         //    ),
+      //         // ),
+      //
+      //
+      //
+      //       ),
+      //       ListTile(
+      //         leading: ImageIcon( AssetImage("assets/images/myprofile_sidemenu_icon.png"),
+      //           color: AppConstants.APP_THEME_COLOR,
+      //           ),
+      //          title: Text('My Profile'),
+      //
+      //       ),
+      //       ListTile(
+      //         leading: ImageIcon( AssetImage("assets/images/biometric-thumb.png"),
+      //           color: AppConstants.APP_THEME_COLOR,
+      //           ),
+      //         title: Text('Fingerprint Authentication'),
+      //        ),
+      //       ListTile(
+      //         leading: ImageIcon( AssetImage("assets/images/change_password_sidemenu_icon.png"),
+      //           color: AppConstants.APP_THEME_COLOR,
+      //         ),
+      //         title: Text('Change Password'),
+      //       ),
+      //       ListTile(
+      //         leading: ImageIcon( AssetImage("assets/images/logout_sidemenu_icon.png"),
+      //           color: AppConstants.APP_THEME_COLOR,
+      //         ),
+      //         title: Text('Logout'),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
