@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:mobility_sqr/Dashboard/ModelClasses/ModelClass.dart';
-import 'package:mobility_sqr/Dashboard/ModelClasses/showHide.dart';
+import 'package:mobility_sqr/ModelClasses/ModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/showHide.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 

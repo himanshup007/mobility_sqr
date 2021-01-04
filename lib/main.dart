@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobility_sqr/Dashboard/Dashboard.dart';
-import 'package:mobility_sqr/ForgetPassScreen/ForgetPass.dart';
-import 'package:mobility_sqr/LoginScreen/Username_screen.dart';
-import 'package:mobility_sqr/Terms/Terms_Conditions.dart';
+import 'package:mobility_sqr/Screens/Dashboard/Dashboard.dart';
+import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
+import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
+import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 
 void main() {
   runApp(MyApp());

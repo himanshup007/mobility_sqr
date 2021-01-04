@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:mobility_sqr/LoginScreen/UsernameConstants.dart';
-import 'package:mobility_sqr/LoginScreen/bloc/UsernameBloc.dart';
+import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';
+import 'package:mobility_sqr/Screens/LoginScreen/bloc/UsernameBloc.dart';
 
 class EditFieldCustom extends StatefulWidget {
   String Header, Hint;
@@ -72,7 +72,7 @@ class _EditFieldCustomState extends State<EditFieldCustom> {
                     border: InputBorder.none,
                     hintText: widget.Hint,
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+                    EdgeInsets.symmetric(vertical: 20, horizontal: 0),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(left: 0, right: 0),
                       child: Icon(
@@ -82,20 +82,20 @@ class _EditFieldCustomState extends State<EditFieldCustom> {
                     ),
                     suffixIcon: _passwordVisible
                         ? IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              hidePass
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: AppConstants.APP_THEME_COLOR,
-                            ),
-                            onPressed: () {
-                              this.setState(() {
-                                hidePass = !hidePass;
-                              });
-                              // Update the state i.e. toogle the state of passwordVisible variable
-                            },
-                          )
+                      icon: Icon(
+                        // Based on passwordVisible state choose the icon
+                        hidePass
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: AppConstants.APP_THEME_COLOR,
+                      ),
+                      onPressed: () {
+                        this.setState(() {
+                          hidePass = !hidePass;
+                        });
+                        // Update the state i.e. toogle the state of passwordVisible variable
+                      },
+                    )
                         : null,
                   ),
                   onChanged: (text) {

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:mobility_sqr/LoginScreen/UsernameConstants.dart';
-import 'package:mobility_sqr/LoginScreen/bloc/UsernameBloc.dart';
+import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';
+import 'package:mobility_sqr/Screens/LoginScreen/bloc/UsernameBloc.dart';
 import 'package:mobility_sqr/Widgets/AlertDialog.dart';
 import 'package:mobility_sqr/Widgets/EditFieldUsername.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';

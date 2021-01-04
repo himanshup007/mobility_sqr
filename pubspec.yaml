@@ -35,6 +35,7 @@ dependencies:
   scrollable_positioned_list: ^0.1.8
   im_stepper: ^0.1.2+8
   flutter_html: ^0.8.2
+  rxdart: ^0.22.0
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,51 @@
 import 'dart:async';
 
-import 'package:mobility_sqr/LoginScreen/UsernameConstants.dart';
+import 'package:mobility_sqr/ApiCall/Repository.dart';
+import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
+import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';
 import 'package:mobility_sqr/Validator/AppFieldValidator.dart';
-
-// import 'package:rxdart/rxdart.dart'; if you want to make use of PublishSubject, ReplaySubject or BehaviourSubject.
+ import 'package:rxdart/rxdart.dart';
+ // if you want to make use of PublishSubject, ReplaySubject or BehaviourSubject.
 
 class UsernameBloc {
   bool isEmailValid, isPasswordValid;
+  String email;
+
+
+  Repository _repository = Repository();
+
+
+  var _userFetcher = StreamController<bool>();
+  var _loader = StreamController<bool>();
+
+  Stream get loader => _loader.stream;
+
+
+
+  Stream get isUser => _userFetcher.stream;
+
+
+
+  void loaderSetter(visible){
+
+    _loader.sink.add(visible);
+
+  }
+
+
+  fetchUserCheck(int where) async {
+    if(where==0){
+      bool isUser = await _repository.fetch_user_status(email);
+    return isUser;
+    }
+    else{
+      email="";
+      return false;
+    }
+
+  }
+
+
 
   var _EmailController = StreamController<String>(); // created a StreamController
   var _PassController = StreamController<String>(); // created a StreamController
@@ -40,24 +79,30 @@ class UsernameBloc {
     _isPassValidController =StreamController<bool>();
     _isEmailValidController.close();
     _isEmailValidController =StreamController<bool>();
+    _userFetcher.close();
+    _userFetcher= StreamController<bool>();
+
+
+
   }
 
-void backbtn(){
+  void backbtn(){
 
-  _isEmailValidController.sink.add(false);
+    _isEmailValidController.sink.add(false);
 
-}
-void SetConfirmMail(String data){
+  }
+  void SetConfirmMail(String data){
 
     _ConfirmEmailController.sink.add(data);
 
 
-}
+  }
 
   void updateEmail(String data) {
     _EmailController.sink.add(data); // add whatever data we want into the Sink
 
     _EmailDataController.sink.add(data);
+    email=data;
     if (Validator.isEmailValid(data)) {
 
       _isEmailValidController.sink.add(true);
@@ -69,6 +114,7 @@ void SetConfirmMail(String data){
 
     }
   }
+
   void updatePassword(String data) {
     _PassController.sink.add(data); // add whatever data we want into the Sink
 
@@ -97,6 +143,7 @@ void SetConfirmMail(String data){
     _PassController.close();
     _ConfirmEmailController.close();
     _isPassValidController.close();
+    _userFetcher.close();
   }
 }
 
