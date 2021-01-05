@@ -17,6 +17,8 @@ class ForgetPass extends StatefulWidget {
 }
 
 class _ForgetPass extends State<ForgetPass> {
+  BuildContext dialogContext;
+
   @override
   void dispose() {
     super.dispose();
@@ -84,13 +86,14 @@ class _ForgetPass extends State<ForgetPass> {
                         "Send",
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
 
-
+                        FocusScope.of(context).unfocus();
+                        _onLoading();
+                      String msg=  await bloc.sendResetEmail();
                         showDefaultSnackbar(context,
-                            "Reset Email sent to your Registered Email");
-
-
+                            "$msg");
+                        Navigator.of(context, rootNavigator: true).pop(dialogContext);
                       }),
                 ),
                 GestureDetector(
@@ -116,6 +119,26 @@ class _ForgetPass extends State<ForgetPass> {
         );
       });
     });
+  }
+  void _onLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 50,
+            width: 50,
+            color: Colors.transparent,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

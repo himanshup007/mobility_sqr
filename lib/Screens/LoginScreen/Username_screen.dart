@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/bloc/UsernameBloc.dart';
 import 'package:mobility_sqr/Widgets/AlertDialog.dart';
@@ -17,9 +19,10 @@ class Username_Screen extends StatefulWidget {
 
 class _Username_Screen extends State<Username_Screen> {
   bool manageloginUI = false;
-  ApiProvider appApiProvider = ApiProvider();
+  final tokengetter = TokenGetter();
   String Email = "";
   BuildContext dialogContext;
+
   @override
   void dispose() {
     bloc.dispose(); // call the dispose method to close our StreamController
@@ -29,6 +32,7 @@ class _Username_Screen extends State<Username_Screen> {
   @override
   void initState() {
     super.initState();
+    bloc.flush();
   }
 
   @override
@@ -76,7 +80,6 @@ class _Username_Screen extends State<Username_Screen> {
                               StreamBuilder<String>(
                                   stream: bloc.EmailData,
                                   builder: (context, snapshot) {
-
                                     return Container(
                                       margin:
                                           EdgeInsets.fromLTRB(10, 20, 20, 0),
@@ -86,11 +89,11 @@ class _Username_Screen extends State<Username_Screen> {
                                             width: 10.0.w,
                                             child: RaisedButton(
                                               onPressed: () {
-                                                bloc.flush();
-                                                bloc.fetchUserCheck(1);
                                                 this.setState(() {
                                                   manageloginUI = false;
                                                 });
+                                                bloc.flush();
+                                                bloc.fetchUserCheck(1);
                                               },
                                               child: Icon(Icons.arrow_back),
                                               color: Colors.white,
@@ -135,48 +138,83 @@ class _Username_Screen extends State<Username_Screen> {
                             stream: bloc.isUser,
                             initialData: false,
                             builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return RaisedButton(
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    color: AppConstants.APP_THEME_COLOR,
+                                    child: Text(
+                                      "NEXT",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () async {
+                                      //   Navigator.pushNamed(context, '/DashBoard');
+                                      FocusScope.of(context).unfocus();
+                                      _onLoading();
+                                      if (snapshot.hasData) {
+                                        // Navigator.pushNamed(context, '/Term&Condition');
+                                        bool data;
+                                        try {
+                                          data = await bloc.fetchUserCheck(0);
+                                        } catch (e) {}
 
-                                if(snapshot.hasData){
-                                  return  RaisedButton(
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      color: AppConstants.APP_THEME_COLOR,
-                                      child: Text(
-                                        "NEXT",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () async {
-                                        //   Navigator.pushNamed(context, '/DashBoard');
-
-                                        if (snapshot.hasData) {
-                                          // Navigator.pushNamed(context, '/Term&Condition');
-
-                                          bool data= await bloc.fetchUserCheck(0);
-                                          _onLoading();
-                                          if(data){
-                                            this.setState(() {
-                                              manageloginUI = true;
-                                            });
-                                            Navigator.of(context, rootNavigator: true).pop(dialogContext);
-                                          }
-                                          else{
-                                            Navigator.of(context, rootNavigator: true).pop(dialogContext);
-                                            showDefaultSnackbar(context,UsernameConst.USER_INVALID);
-                                          }
+                                        if (data != null && data != false) {
+                                          this.setState(() {
+                                            manageloginUI = true;
+                                          });
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop(dialogContext);
+                                        } else if (data == null) {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop(dialogContext);
+                                          showDefaultSnackbar(
+                                              context, "No Internet found");
+                                        } else {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop(dialogContext);
+                                          showDefaultSnackbar(context,
+                                              UsernameConst.USER_INVALID);
                                         }
-
-                                      });
-                                }
-
-
-
+                                      }
+                                    });
+                              }
                             })
-                        : StreamBuilder<bool>(
+                        : StreamBuilder<UserToken>(
                             stream: bloc.getIsValidPass,
-                            initialData: false,
-                            builder: (context, snapshot) {
+                            initialData: null,
+                            builder:
+                                (context, AsyncSnapshot<UserToken> snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data.access != null) {
+                                if (snapshot.data.access != null) {
+                                  tokengetter.saveValue(snapshot.data.access,
+                                      snapshot.data.refresh);
+                                  getTimeforPush();
+                                }
+                              } else if (snapshot.hasData &&
+                                  snapshot.data.detail != null) {
+                                Future.delayed(Duration(seconds: 3), () {
+                                  try {
+
+
+
+
+                                      showDefaultSnackbar(
+                                          context, snapshot.data.detail);
+
+
+                                  } catch (e) {
+
+                                  }
+
+                                });
+                              }
+
                               return RaisedButton(
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
@@ -188,17 +226,15 @@ class _Username_Screen extends State<Username_Screen> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () {
-                                    //   Navigator.pushNamed(context, '/DashBoard');
+                                    _onLoading();
 
-                                    if (snapshot.hasData) {
-                                      if (snapshot.data) {
-                                        Navigator.pushNamed(
-                                            context, '/Term&Condition');
-                                      } else {
-                                        showDefaultSnackbar(context,
-                                            UsernameConst.PASS_INVALID);
-                                      }
-                                    }
+                                    FocusScope.of(context).unfocus();
+                                    bloc.passwordValidate();
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop(dialogContext);
+                                    });
+
                                   });
                             }),
                   ),
@@ -208,23 +244,34 @@ class _Username_Screen extends State<Username_Screen> {
       });
     });
   }
+
   void _onLoading() {
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        dialogContext=context;
+        dialogContext = context;
         return Dialog(
-          child: new Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              new CircularProgressIndicator(),
-              new Text("Loading"),
-            ],
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 50,
+            width: 50,
+            color: Colors.transparent,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
         );
       },
     );
+  }
+
+  void getTimeforPush() async {
+    Future.delayed(Duration.zero, () {
+      Navigator.of(context, rootNavigator: true).pop(dialogContext);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/Term&Condition', (Route<dynamic> route) => false);
+    });
   }
 }
 
