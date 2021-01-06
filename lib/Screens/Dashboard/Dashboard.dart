@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/ModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
+
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
@@ -94,110 +95,115 @@ class _DashBoardState extends State<DashBoard> {
         backgroundColor: Colors.white10,
         elevation: 0,
         titleSpacing: 0.0,
-        title:
-        Text("Voyager", style: TextStyle(color: AppConstants.APP_THEME_COLOR, fontSize: 16,fontWeight: FontWeight.w800)),
+        title: Text("Voyager",
+            style: TextStyle(
+                color: AppConstants.APP_THEME_COLOR,
+                fontSize: 16,
+                fontWeight: FontWeight.w800)),
         centerTitle: false,
         iconTheme: IconThemeData(color: Colors.black),
-
       ),
 
       drawer: Drawer(
-        elevation: 16.0,
-        child: Column(
+
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountEmail: Text("xyz@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text("xyz"),
-              ),
-              otherAccountsPictures: <Widget>[
-                // CircleAvatar(
-                //   backgroundColor: Colors.white,
-                //   child: Text("abc"),
-                // )
-              ],
-            ),
+
+            DrawerHeader(
+
+                decoration: BoxDecoration(
+                  // color: Colors.green,
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage('assets/images/cover.jpg'))),
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Material(
+                        child: ImageIcon(
+                          AssetImage(
+                              'assets/images/myprofile_sidemenu_icon.png'),
+                          size: 80,
+                        ),
+                        borderRadius: BorderRadius.circular(40.0),
+                        color: Colors.black12,
+                      ),
+                      Material(
+                        child: Text(
+                          'User Name',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w700, height: 1.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+
             ListTile(
-              leading: ImageIcon( AssetImage("assets/images/myprofile_sidemenu_icon.png"),
+              // contentPadding: new EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
+              contentPadding:
+              new EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
+              leading: ImageIcon(
+                AssetImage("assets/images/myprofile_sidemenu_icon.png"),
                 color: AppConstants.APP_THEME_COLOR,
               ),
               title: Text('My Profile'),
+              onTap: () => {},
             ),
             Divider(
-              height: 0.1,
+              height: 0.5,
+              indent: 80,
+              endIndent: 30,
+              thickness: 0.8,
             ),
             ListTile(
-              leading: ImageIcon( AssetImage("assets/images/biometric-thumb.png"),
+              contentPadding:
+              new EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
+              leading: ImageIcon(
+                AssetImage("assets/images/biometric-thumb.png"),
                 color: AppConstants.APP_THEME_COLOR,
               ),
               title: Text('Fingerprint Authentication'),
+              onTap: () => {},
+            ),
+            Divider(
+              height: 0.5,
+              indent: 80,
+              endIndent: 30,
+              thickness: 0.8,
             ),
             ListTile(
-              leading: ImageIcon( AssetImage("assets/images/change_password_sidemenu_icon.png"),
+              contentPadding:
+              new EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
+              leading: ImageIcon(
+                AssetImage("assets/images/change_password_sidemenu_icon.png"),
                 color: AppConstants.APP_THEME_COLOR,
               ),
               title: Text('Change Password'),
+              onTap: () => {},
+            ),
+            Divider(
+              height: 0.5,
+              indent: 80,
+              endIndent: 30,
+              thickness: 0.8,
             ),
             ListTile(
-              leading: ImageIcon( AssetImage("assets/images/logout_sidemenu_icon.png"),
+              contentPadding:
+              new EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
+              leading: ImageIcon(
+                AssetImage("assets/images/logout_sidemenu_icon.png"),
                 color: AppConstants.APP_THEME_COLOR,
               ),
               title: Text('Logout'),
+              onTap: () => {},
             )
           ],
         ),
       ),
 
 
-      // drawer: Drawer(
-      //   child: ListView(
-      //     padding: EdgeInsets.zero,
-      //     children: const <Widget>[
-      //       DrawerHeader(
-      //         // decoration: BoxDecoration(
-      //         //   color: Colors.white38,
-      //         // ),
-      //         // child: Text(
-      //         //
-      //         //   'Drawer Header',
-      //         //   style: TextStyle(
-      //         //     color: Colors.black45,
-      //         //     fontSize: 24,
-      //         //    ),
-      //         // ),
-      //
-      //
-      //
-      //       ),
-      //       ListTile(
-      //         leading: ImageIcon( AssetImage("assets/images/myprofile_sidemenu_icon.png"),
-      //           color: AppConstants.APP_THEME_COLOR,
-      //           ),
-      //          title: Text('My Profile'),
-      //
-      //       ),
-      //       ListTile(
-      //         leading: ImageIcon( AssetImage("assets/images/biometric-thumb.png"),
-      //           color: AppConstants.APP_THEME_COLOR,
-      //           ),
-      //         title: Text('Fingerprint Authentication'),
-      //        ),
-      //       ListTile(
-      //         leading: ImageIcon( AssetImage("assets/images/change_password_sidemenu_icon.png"),
-      //           color: AppConstants.APP_THEME_COLOR,
-      //         ),
-      //         title: Text('Change Password'),
-      //       ),
-      //       ListTile(
-      //         leading: ImageIcon( AssetImage("assets/images/logout_sidemenu_icon.png"),
-      //           color: AppConstants.APP_THEME_COLOR,
-      //         ),
-      //         title: Text('Logout'),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -316,7 +322,9 @@ class _DashBoardState extends State<DashBoard> {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
                             boxShadow: [
-                              BoxShadow(color: Colors.deepOrangeAccent, spreadRadius: 3),
+                              BoxShadow(
+                                  color: Colors.deepOrangeAccent,
+                                  spreadRadius: 3),
                             ],
                           ),
                           child: TextField(
@@ -326,11 +334,9 @@ class _DashBoardState extends State<DashBoard> {
                               suffixIcon: Icon(Icons.search),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(20),
-
                             ),
                             onChanged: (text) {
                               traveldata[index].name = text;
-
                             },
                           ),
                         ),

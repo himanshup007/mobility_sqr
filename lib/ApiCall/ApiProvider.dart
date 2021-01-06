@@ -16,20 +16,23 @@ class ApiProvider {
     };
     String queryString = Uri(queryParameters: queryParams).query;
     final http.Response response = await http.get(
-      '${AppConstants.BASE_URL + AppConstants.CHECK_USER + "?" + queryString}',
+      '${AppConstants.BASE_URL+AppConstants.CHECK_USER+"?"+queryString}',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
+
     );
 
     if (response.statusCode == 200) {
-      CheckUser data = CheckUser.fromJson(jsonDecode(response.body));
+      CheckUser data= CheckUser.fromJson(jsonDecode(response.body));
 
-      if (data.isUser == 0) {
+      if(data.isUser==0){
         return true;
-      } else {
+      }
+      else{
         return false;
       }
+
     } else {
       throw Exception('User Not Found');
     }
