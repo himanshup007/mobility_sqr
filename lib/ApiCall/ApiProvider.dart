@@ -3,6 +3,7 @@ import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
+import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 
@@ -89,6 +90,40 @@ class ApiProvider {
     print("${response.statusCode}");
     print("${response.body}");
     return passModel;
+  }
+
+
+  Future<GetTravelRequest> getTravelRequest() async{
+
+
+    UserInfo userInfo=await _TokenGetter.readUserInfo() ?? null;
+
+
+    String travelreq="2";String OrgId=userInfo.data.orgId;String empMail=userInfo.data.empCode;
+
+
+    Map<String, String> queryParams = {
+      'travel_req_status': travelreq,
+      'org_id':OrgId,
+      'emp_email':empMail
+    };
+    String queryString = Uri(queryParameters: queryParams).query;
+
+
+    String token = await _TokenGetter.getAcessToken() ?? "";
+    var response = await http.get(
+      AppConstants.BASE_URL + AppConstants.GET_TRAVEL_REQ+"?"+queryString,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+       /* 'Authorization': 'Bearer ${token}',*/
+      },
+
+    );
+    GetTravelRequest listTravelReq = GetTravelRequest.fromJson(jsonDecode(response.body));
+    print("${response.statusCode}");
+    print("${response.body}");
+    return listTravelReq;
   }
 
 

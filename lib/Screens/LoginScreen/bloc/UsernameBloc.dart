@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:mobility_sqr/ApiCall/Repository.dart';
+import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
@@ -15,6 +16,7 @@ class UsernameBloc {
   String email, password;
   String confirmMail;
   Repository _repository = Repository();
+  final appsharedprefs=TokenGetter();
 
   var _userFetcher = StreamController<bool>();
 
@@ -92,6 +94,7 @@ class UsernameBloc {
 
   Future<UserInfo> setUserInfo() async {
     UserInfo userInfo = await _repository.fetch_user_info(email);
+    appsharedprefs.saveUserInfo(userInfo);
     return userInfo;
   }
 

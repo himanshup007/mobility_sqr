@@ -32,7 +32,7 @@ class _Username_Screen extends State<Username_Screen> {
   @override
   void initState() {
     super.initState();
-    bloc.flush();
+
   }
 
   @override
@@ -112,7 +112,7 @@ class _Username_Screen extends State<Username_Screen> {
                                   Navigator.pushNamed(context, '/ForgetPass');
                                 },
                                 child: Container(
-                                  width: 100.0.w,
+                                  alignment: Alignment.centerRight,
                                   margin: EdgeInsets.fromLTRB(0, 30, 20, 30),
                                   child: Text(
                                     "Forget Password?",

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobility_sqr/Screens/Dashboard/Dashboard.dart';
+import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
+
+import 'Screens/Dashboard/Dashboard.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,7 +29,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => Username_Screen(),
-        '/DashBoard': (context) => DashBoard(),
+        '/AddCity': (context) => AddCity(),
+        '/Dashboard':(context) => Dashboard(),
         '/Term&Condition': (context) => Terms(),
         '/ForgetPass': (context) => ForgetPass()
       },

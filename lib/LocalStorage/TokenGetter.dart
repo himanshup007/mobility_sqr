@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenGetter {
@@ -18,5 +21,24 @@ class TokenGetter {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String refreshToken = prefs.getString(AppConstants.REFRESH_TOKEN);
     return refreshToken;
+  }
+
+
+
+
+  readUserInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    UserInfo user = UserInfo.fromJson( json.decode(prefs.getString(AppConstants.USER_INFO)));
+    return user;
+  }
+
+  saveUserInfo(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(AppConstants.USER_INFO, json.encode(value));
+  }
+
+  remove(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(AppConstants.USER_INFO);
   }
 }

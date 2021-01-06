@@ -101,7 +101,7 @@ class Terms extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/DashBoard');
+                          Navigator.pushNamed(context, '/Dashboard');
                         },
                       ),
                       SizedBox(height: 10),
