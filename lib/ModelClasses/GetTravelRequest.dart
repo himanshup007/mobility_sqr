@@ -518,17 +518,17 @@ class Details {
   bool _isClientLocation;
   String _clientName;
   String _clientAddress;
-  int _hotelCost;
-  int _perDiemCost;
-  int _airfareCost;
-  int _transportationCost;
-  int _totalCost;
+  dynamic _hotelCost;
+  dynamic _perDiemCost;
+  dynamic _airfareCost;
+  dynamic _transportationCost;
+  dynamic _totalCost;
   dynamic _travelRequestStatus;
   dynamic _travelRequestStatusNotes;
   bool _isDependent;
 
   Details(
-      {int id,
+      {dynamic id,
         String travelReqIdId,
         String travellingCountry,
         String travellingCountryTo,
@@ -554,11 +554,11 @@ class Details {
         bool isClientLocation,
         String clientName,
         String clientAddress,
-        int hotelCost,
-        int perDiemCost,
-        int airfareCost,
-        int transportationCost,
-        int totalCost,
+        dynamic hotelCost,
+        dynamic perDiemCost,
+        dynamic airfareCost,
+        dynamic transportationCost,
+        dynamic totalCost,
         dynamic travelRequestStatus,
         dynamic travelRequestStatusNotes,
         bool isDependent}) {
@@ -598,8 +598,8 @@ class Details {
     this._isDependent = isDependent;
   }
 
-  int get id => _id;
-  set id(int id) => _id = id;
+  dynamic get id => _id;
+  set id(dynamic id) => _id = id;
   String get travelReqIdId => _travelReqIdId;
   set travelReqIdId(String travelReqIdId) => _travelReqIdId = travelReqIdId;
   String get travellingCountry => _travellingCountry;
@@ -658,17 +658,17 @@ class Details {
   set clientName(String clientName) => _clientName = clientName;
   String get clientAddress => _clientAddress;
   set clientAddress(String clientAddress) => _clientAddress = clientAddress;
-  int get hotelCost => _hotelCost;
-  set hotelCost(int hotelCost) => _hotelCost = hotelCost;
-  int get perDiemCost => _perDiemCost;
-  set perDiemCost(int perDiemCost) => _perDiemCost = perDiemCost;
-  int get airfareCost => _airfareCost;
-  set airfareCost(int airfareCost) => _airfareCost = airfareCost;
-  int get transportationCost => _transportationCost;
-  set transportationCost(int transportationCost) =>
+  dynamic get hotelCost => _hotelCost;
+  set hotelCost(dynamic hotelCost) => _hotelCost = hotelCost;
+  dynamic get perDiemCost => _perDiemCost;
+  set perDiemCost(dynamic perDiemCost) => _perDiemCost = perDiemCost;
+  dynamic get airfareCost => _airfareCost;
+  set airfareCost(dynamic airfareCost) => _airfareCost = airfareCost;
+  dynamic get transportationCost => _transportationCost;
+  set transportationCost(dynamic transportationCost) =>
       _transportationCost = transportationCost;
-  int get totalCost => _totalCost;
-  set totalCost(int totalCost) => _totalCost = totalCost;
+  dynamic get totalCost => _totalCost;
+  set totalCost(dynamic totalCost) => _totalCost = totalCost;
   dynamic get travelRequestStatus => _travelRequestStatus;
   set travelRequestStatus(dynamic travelRequestStatus) =>
       _travelRequestStatus = travelRequestStatus;
@@ -756,7 +756,7 @@ class Details {
 }
 
 class Dependent {
-  int _id;
+  dynamic _id;
   String _dateCreated;
   String _dateModified;
   String _createdBy;
@@ -783,7 +783,7 @@ class Dependent {
   dynamic _organization;
 
   Dependent(
-      {int id,
+      {dynamic id,
         String dateCreated,
         String dateModified,
         String createdBy,
@@ -835,8 +835,8 @@ class Dependent {
     this._organization = organization;
   }
 
-  int get id => _id;
-  set id(int id) => _id = id;
+  dynamic get id => _id;
+  set id(dynamic id) => _id = id;
   String get dateCreated => _dateCreated;
   set dateCreated(String dateCreated) => _dateCreated = dateCreated;
   String get dateModified => _dateModified;

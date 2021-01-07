@@ -103,7 +103,7 @@ class ApiProvider {
 
 
     Map<String, String> queryParams = {
-      'travel_req_status': travelreq,
+      'travel_req_status': "",
       'org_id':OrgId,
       'emp_email':empMail
     };
@@ -116,7 +116,7 @@ class ApiProvider {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-       /* 'Authorization': 'Bearer ${token}',*/
+        'Authorization': 'Bearer ${token}',
       },
 
     );

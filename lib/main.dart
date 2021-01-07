@@ -23,8 +23,10 @@ class MyApp extends StatelessWidget {
       title: 'Mobility SQR',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        highlightColor: Color(0xffffc600),
         appBarTheme: AppBarTheme(
           color: Colors.white,
+
         ),
       ),
       routes: {

@@ -16,6 +16,7 @@ class AppConstants {
   static const Color APP_THEME_COLOR = Color(0xFF94488F);
   static const Color LABEL_COLOR = Color(0xFF353535);
   static const Color TEXT_BACKGROUND_COLOR = Color(0xFF50584F);
+  static const Color BACKGROUND_COLOR_BOTTOM = Color(0xFFe4e4e4);
 
 //=========================================================================================Strings
 
