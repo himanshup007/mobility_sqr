@@ -200,9 +200,18 @@ class _Username_Screen extends State<Username_Screen> {
                                   snapshot.data.detail != null) {
                                 Future.delayed(Duration(seconds: 3), () {
                                   try {
-                                    showDefaultSnackbar(
-                                        context, snapshot.data.detail);
-                                  } catch (e) {}
+
+
+
+
+                                      showDefaultSnackbar(
+                                          context, snapshot.data.detail);
+
+
+                                  } catch (e) {
+
+                                  }
+
                                 });
                               }
 
@@ -225,6 +234,7 @@ class _Username_Screen extends State<Username_Screen> {
                                       Navigator.of(context, rootNavigator: true)
                                           .pop(dialogContext);
                                     });
+
                                   });
                             }),
                   ),

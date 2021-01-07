@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/Screens/Dashboard/bloc/travel_req_bloc.dart';
 import 'package:mobility_sqr/Widgets/Divider.dart';
 import 'package:mobility_sqr/Widgets/MenuTile.dart';
@@ -13,20 +15,43 @@ import 'DashboardConstants.dart';
 
 class Dashboard extends StatefulWidget {
   final Repository repository = Repository();
+  final _userInfo=TokenGetter();
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  final List<String> entries = <String>['A', 'B', 'C', 'd', '4'];
-  final List<int> colorCodes = <int>[600, 500, 100];
-
   var _ScrollController = ScrollController();
+  UserInfo info=UserInfo();
+  String UserName='';
 
+  getprofile() async {
+    try{
+      info = await widget._userInfo.readUserInfo() ??null;
+      if(info!=null){
+        this.setState(() {
+          UserName=info.data.userName;
+        });
+
+      }
+
+    }catch(e){
+      print(e);
+    }
+  }
+  @override
+  initState()  {
+
+    super.initState();
+
+    getprofile();
+
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white10,
@@ -41,19 +66,56 @@ class _DashboardState extends State<Dashboard> {
           ),
           centerTitle: false,
           iconTheme: IconThemeData(color: Colors.black),
+          actions: [
+            Container(
+              height: 30,
+              width: 30,
+              child: Image.asset('assets/images/sos.png',fit: BoxFit.contain,),
+            ),
+            SizedBox(width: 40,),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+
+                child: Stack(
+                  children: <Widget>[
+                    new Icon(Icons.notifications,color: AppConstants.TEXT_BACKGROUND_COLOR,),
+                    new Positioned(
+                      right: 0,
+                      child: new Container(
+                         padding: EdgeInsets.all(2),
+                        decoration: new BoxDecoration(
+                          color: Colors.pinkAccent,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 12,
+                          minHeight: 12,
+                        ),
+                        child: new Text(
+                          '1',
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+
+          ],
         ),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                  decoration: BoxDecoration(
-                    // color: Colors.green,
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/images/cover.jpg'),
-                    ),
-                  ),
+
                   child: Container(
                     child: Column(
                       children: <Widget>[
@@ -68,7 +130,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Material(
                           child: Text(
-                            'User Name',
+                            '${UserName}',
                             style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
@@ -141,13 +203,15 @@ class _DashboardState extends State<Dashboard> {
                               child: Text("No Travel Request Found"),
                             );
                           }else{*/
-                          return Scrollbar(
-                            isAlwaysShown: true,
-                            controller: _ScrollController,
-                            child: Container(
-                              height: 60.0.w,
-                              width: 100.0.w,
-                              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          return Container(
+                            height: 60.0.w,
+                            width: 100.0.w,
+                            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            child: Scrollbar(
+                              isAlwaysShown: true,
+                              controller: _ScrollController,
+                              radius: Radius.circular(5),
+                              thickness: 3,
                               child: new ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: state.travelRequest.data.length,
@@ -453,43 +517,51 @@ class _DashboardState extends State<Dashboard> {
                       },
                     )),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  height: 50.0.w,
+                  margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                  height: 48.0.w,
                   width: 100.0.w,
                   child: Row(
                     children: [
-                      TileDashboard('assets/images/new-travel-box.png'),
-                      SizedBox(width: 20,),
-                      TileDashboard('assets/images/previous-travel-box.png'),
+                      TileDashboard(
+                          'assets/images/new-travel-box.png', 'New', 'Travel'),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      TileDashboard('assets/images/previous-travel-box.png',
+                          'Previous', 'Travels'),
                     ],
                   ),
-
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
-                  height: 50.0.w,
+                  height: 48.0.w,
                   width: 100.0.w,
                   child: Row(
                     children: [
-                      TileDashboard('assets/images/travel-calendar-box.png'),
-                      SizedBox(width: 20,),
-                      TileDashboard('assets/images/expense-master-box.png'),
+                      TileDashboard('assets/images/travel-calendar-box.png',
+                          'Travel', 'Calendar'),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      TileDashboard('assets/images/expense-master-box.png',
+                          'Expenses', ''),
                     ],
                   ),
-
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
-                  height: 50.0.w,
+                  height: 48.0.w,
                   width: 100.0.w,
                   child: Row(
                     children: [
-                      TileDashboard('assets/images/approver-box.png'),
-                      SizedBox(width: 20,),
-                      TileDashboard('assets/images/vault-box.png'),
+                      TileDashboard(
+                          'assets/images/approver-box.png', 'Approvals', ''),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      TileDashboard('assets/images/vault-box.png', 'Vault', ''),
                     ],
                   ),
-
                 )
               ],
             ),
