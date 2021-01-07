@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/Screens/Dashboard/bloc/travel_req_bloc.dart';
+
 import 'package:mobility_sqr/Widgets/Divider.dart';
 import 'package:mobility_sqr/Widgets/MenuTile.dart';
 import 'package:mobility_sqr/Widgets/TileDashboard.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'DashboardConstants.dart';
@@ -488,9 +490,27 @@ class _DashboardState extends State<Dashboard> {
                                                           ],
                                                         ),
                                                       ),
-                                                      Expanded(
+                                                      state.travelRequest.data[Index].travelReqStatus=='2'?Expanded(
                                                           flex: 1,
-                                                          child: Container())
+                                                          child: Container(
+                                                            foregroundDecoration: const RotatedCornerDecoration(
+                                                              color: Colors.orangeAccent,
+                                                              geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                              textSpan: TextSpan(text: 'In Progress', style: TextStyle(fontSize: 8,fontWeight: FontWeight.bold)),
+                                                              labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                            ),
+                                                          ),
+                                                          ):Expanded(
+                                                        flex: 1,
+                                                        child: Container(
+                                                          foregroundDecoration: const RotatedCornerDecoration(
+                                                            color: Colors.lightGreen,
+                                                            geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                            textSpan: TextSpan(text: 'Approved', style: TextStyle(fontSize: 8,fontWeight: FontWeight.bold)),
+                                                            labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                          ),
+                                                        ),
+                                                      )
                                                     ],
                                                   ),
                                                 ),
@@ -581,5 +601,13 @@ class _DashboardState extends State<Dashboard> {
     final depatureDate = DateTime.parse(date);
     final String daystring = DateFormat('EEEE').format(depatureDate);
     return daystring;
+  }
+
+  getBadgeCustomtext(){
+
+  }
+  getBadgeCustomColor(){
+
+
   }
 }

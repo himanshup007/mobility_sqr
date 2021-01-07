@@ -1,5 +1,4 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:sizer/sizer.dart';
