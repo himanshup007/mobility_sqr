@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppConstants {
 //==============================================================================URL
-  static final String BASE_URL = "http://52.165.220.40:8888/";
-  static final String CHECK_USER = "checkemployeeuser/";
-  static final String ACCESS_TOKEN_FETCHER = "api/login/";
-  static final String GET_USER_INFO = "emoloyeeinfo/";
-  static final String FORGET_PASS="forget_password/";
-  static final String GET_TRAVEL_REQ="get_add/travel_request/";
+  static final String BASE_URL = "http://52.165.220.40:8888";
+  static final String CHECK_USER = "/checkemployeeuser/";
+  static final String ACCESS_TOKEN_FETCHER = "/api/login/";
+  static final String GET_USER_INFO = "/emoloyeeinfo/";
+  static final String FORGET_PASS="/forget_password/";
+  static final String GET_TRAVEL_REQ="/get_add/travel_request/";
 
   //=======================================================================================/Colors
   static const Color DIVIDER_COLOR = Color(0xFFE9E9E9);

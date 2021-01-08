@@ -9,6 +9,7 @@ import 'package:mobility_sqr/Screens/Dashboard/bloc/travel_req_bloc.dart';
 
 import 'package:mobility_sqr/Widgets/Divider.dart';
 import 'package:mobility_sqr/Widgets/MenuTile.dart';
+import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:mobility_sqr/Widgets/TileDashboard.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'package:sizer/sizer.dart';
@@ -17,7 +18,7 @@ import 'DashboardConstants.dart';
 
 class Dashboard extends StatefulWidget {
   final Repository repository = Repository();
-  final _userInfo=TokenGetter();
+  final _userInfo = TokenGetter();
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -25,31 +26,31 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   var _ScrollController = ScrollController();
-  UserInfo info=UserInfo();
-  String UserName='';
+  UserInfo info = UserInfo();
+  String UserName = '';
+  String ProfileImage = null;
 
   getprofile() async {
-    try{
-      info = await widget._userInfo.readUserInfo() ??null;
-      if(info!=null){
+    try {
+      info = await widget._userInfo.readUserInfo() ?? null;
+      if (info != null) {
         this.setState(() {
-          UserName=info.data.userName;
+          UserName = info.data.userName;
+          ProfileImage = AppConstants.BASE_URL + info.data.photo;
         });
-
       }
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
-  @override
-  initState()  {
 
+  @override
+  initState() {
     super.initState();
 
     getprofile();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,44 +73,15 @@ class _DashboardState extends State<Dashboard> {
             Container(
               height: 30,
               width: 30,
-              child: Image.asset('assets/images/sos.png',fit: BoxFit.contain,),
-            ),
-            SizedBox(width: 40,),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-
-                child: Stack(
-                  children: <Widget>[
-                    new Icon(Icons.notifications,color: AppConstants.TEXT_BACKGROUND_COLOR,),
-                    new Positioned(
-                      right: 0,
-                      child: new Container(
-                         padding: EdgeInsets.all(2),
-                        decoration: new BoxDecoration(
-                          color: Colors.pinkAccent,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: new Text(
-                          '1',
-                          style: new TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+              child: Image.asset(
+                'assets/images/sos.png',
+                fit: BoxFit.contain,
               ),
             ),
-
+            SizedBox(
+              width: 40,
+            ),
+            GetNotificationIcon(),
           ],
         ),
         drawer: Drawer(
@@ -117,31 +89,34 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-
                   child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Material(
-                          child: ImageIcon(
-                            AssetImage(
-                                'assets/images/myprofile_sidemenu_icon.png'),
-                            size: 80,
-                          ),
-                          borderRadius: BorderRadius.circular(40.0),
-                          color: Colors.black12,
-                        ),
-                        Material(
-                          child: Text(
-                            '${UserName}',
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                height: 1.7),
-                          ),
-                        ),
-                      ],
+                child: Column(
+                  children: <Widget>[
+                    Material(
+                      child: ProfileImage == null
+                          ? ImageIcon(
+                              AssetImage(
+                                  'assets/images/myprofile_sidemenu_icon.png'),
+                              size: 80,
+                            )
+                          : CircleAvatar(
+                              radius: 40.0,
+                              backgroundImage: NetworkImage("${ProfileImage}"),
+                              backgroundColor: Colors.transparent,
+                            ),
                     ),
-                  )),
+                    Material(
+                      child: Text(
+                        '${UserName}',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            height: 1.7),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
               CustomMenuTitle("assets/images/myprofile_sidemenu_icon.png",
                   'My Profile', "profile", context),
               CustomDivider(),
@@ -206,9 +181,9 @@ class _DashboardState extends State<Dashboard> {
                             );
                           }else{*/
                           return Container(
-                            height: 60.0.w,
+                            height: 65.0.w,
                             width: 100.0.w,
-                            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: Scrollbar(
                               isAlwaysShown: true,
                               controller: _ScrollController,
@@ -221,7 +196,7 @@ class _DashboardState extends State<Dashboard> {
                                     return Row(
                                       children: [
                                         Container(
-                                          height: 55.0.w,
+                                          height: 60.0.w,
                                           width: 40.0.w,
                                           decoration: BoxDecoration(
                                             border: Border.all(
@@ -490,27 +465,73 @@ class _DashboardState extends State<Dashboard> {
                                                           ],
                                                         ),
                                                       ),
-                                                      state.travelRequest.data[Index].travelReqStatus=='2'?Expanded(
-                                                          flex: 1,
-                                                          child: Container(
-                                                            foregroundDecoration: const RotatedCornerDecoration(
-                                                              color: Colors.orangeAccent,
-                                                              geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
-                                                              textSpan: TextSpan(text: 'In Progress', style: TextStyle(fontSize: 8,fontWeight: FontWeight.bold)),
-                                                              labelInsets: LabelInsets(baselineShift: 3, start: 1),
-                                                            ),
-                                                          ),
-                                                          ):Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          foregroundDecoration: const RotatedCornerDecoration(
-                                                            color: Colors.lightGreen,
-                                                            geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
-                                                            textSpan: TextSpan(text: 'Approved', style: TextStyle(fontSize: 8,fontWeight: FontWeight.bold)),
-                                                            labelInsets: LabelInsets(baselineShift: 3, start: 1),
-                                                          ),
-                                                        ),
-                                                      )
+                                                      state
+                                                                  .travelRequest
+                                                                  .data[Index]
+                                                                  .travelReqStatus ==
+                                                              '2'
+                                                          ? Expanded(
+                                                              flex: 1,
+                                                              child: Container(
+                                                                foregroundDecoration:
+                                                                    const RotatedCornerDecoration(
+                                                                  color: Colors
+                                                                      .orangeAccent,
+                                                                  geometry: const BadgeGeometry(
+                                                                      width: 55,
+                                                                      height:
+                                                                          55,
+                                                                      alignment:
+                                                                          BadgeAlignment
+                                                                              .bottomRight),
+                                                                  textSpan: TextSpan(
+                                                                      text:
+                                                                          'In Progress',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              8,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                                  labelInsets:
+                                                                      LabelInsets(
+                                                                          baselineShift:
+                                                                              3,
+                                                                          start:
+                                                                              1),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : Expanded(
+                                                              flex: 1,
+                                                              child: Container(
+                                                                foregroundDecoration:
+                                                                    const RotatedCornerDecoration(
+                                                                  color: Colors
+                                                                      .lightGreen,
+                                                                  geometry: const BadgeGeometry(
+                                                                      width: 55,
+                                                                      height:
+                                                                          55,
+                                                                      alignment:
+                                                                          BadgeAlignment
+                                                                              .bottomRight),
+                                                                  textSpan: TextSpan(
+                                                                      text:
+                                                                          'Approved',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              8,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                                  labelInsets:
+                                                                      LabelInsets(
+                                                                          baselineShift:
+                                                                              3,
+                                                                          start:
+                                                                              1),
+                                                                ),
+                                                              ),
+                                                            )
                                                     ],
                                                   ),
                                                 ),
@@ -538,48 +559,85 @@ class _DashboardState extends State<Dashboard> {
                     )),
                 Container(
                   margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                  height: 48.0.w,
+                  height: 50.0.w,
                   width: 100.0.w,
                   child: Row(
                     children: [
                       TileDashboard(
-                          'assets/images/new-travel-box.png', 'New', 'Travel'),
-                      SizedBox(
-                        width: 20,
+                        'assets/images/new-travel-box.png',
+                        'New',
+                        'Travel',
+                        onTap: () {
+                          getNavigator(context, 1);
+                        },
                       ),
-                      TileDashboard('assets/images/previous-travel-box.png',
-                          'Previous', 'Travels'),
+                      SizedBox(
+                        width: 6.0.w,
+                      ),
+                      TileDashboard(
+                        'assets/images/previous-travel-box.png',
+                        'Previous',
+                        'Travels',
+                        onTap: () {
+                          getNavigator(context, 1);
+                        },
+                      ),
                     ],
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
-                  height: 48.0.w,
+                  height: 50.0.w,
                   width: 100.0.w,
                   child: Row(
                     children: [
-                      TileDashboard('assets/images/travel-calendar-box.png',
-                          'Travel', 'Calendar'),
-                      SizedBox(
-                        width: 20,
+                      TileDashboard(
+                        'assets/images/travel-calendar-box.png',
+                        'Travel',
+                        'Calendar',
+                        onTap: () {
+                          getNavigator(context, 1);
+                        },
                       ),
-                      TileDashboard('assets/images/expense-master-box.png',
-                          'Expenses', ''),
+                      SizedBox(
+                        width: 6.0.w,
+                      ),
+                      TileDashboard(
+                        'assets/images/expense-master-box.png',
+                        'Expenses',
+                        '',
+                        onTap: () {
+                          getNavigator(context, 1);
+                        },
+                      ),
                     ],
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
-                  height: 48.0.w,
+                  height: 50.0.w,
                   width: 100.0.w,
                   child: Row(
                     children: [
                       TileDashboard(
-                          'assets/images/approver-box.png', 'Approvals', ''),
-                      SizedBox(
-                        width: 20,
+                        'assets/images/approver-box.png',
+                        'Approvals',
+                        '',
+                        onTap: () {
+                          getNavigator(context, 1);
+                        },
                       ),
-                      TileDashboard('assets/images/vault-box.png', 'Vault', ''),
+                      SizedBox(
+                        width: 6.0.w,
+                      ),
+                      TileDashboard(
+                        'assets/images/vault-box.png',
+                        'Vault',
+                        '',
+                        onTap: () {
+                          getNavigator(context, 1);
+                        },
+                      ),
                     ],
                   ),
                 )
@@ -603,11 +661,9 @@ class _DashboardState extends State<Dashboard> {
     return daystring;
   }
 
-  getBadgeCustomtext(){
-
-  }
-  getBadgeCustomColor(){
-
-
+  getNavigator(BuildContext context, int where) {
+    if (where == 1) {
+      Navigator.pushNamed(context, '/AddCity');
+    }
   }
 }
