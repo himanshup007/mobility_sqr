@@ -24,6 +24,8 @@ class DashboardCustomEditField extends StatelessWidget {
         onTap();
       },
       child: TextField(
+
+        enabled: !showIcon,
         textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(

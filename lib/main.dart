@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
@@ -24,8 +25,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         highlightColor: Color(0xffffc600),
+
+        unselectedWidgetColor:AppConstants.APP_THEME_COLOR,
+
+
         appBarTheme: AppBarTheme(
           color: Colors.white,
+
 
         ),
       ),
