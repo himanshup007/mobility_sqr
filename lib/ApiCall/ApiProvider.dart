@@ -128,6 +128,8 @@ class ApiProvider {
   }
 
   Future<SearchModel> getLocation(String locationName) async {
+    String token = await _TokenGetter.getAcessToken() ?? "";
+
     Map<String, String> queryParams = {
       'city': locationName,
     };
@@ -136,6 +138,8 @@ class ApiProvider {
       '${AppConstants.BASE_URL+AppConstants.GET_LOCATION_DATA+"?"+queryString}',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
       },
 
     );
