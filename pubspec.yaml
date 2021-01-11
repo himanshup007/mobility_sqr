@@ -33,12 +33,11 @@ dependencies:
   http: ^0.12.2
   sizer: ^1.1.8
   scrollable_positioned_list: ^0.1.8
-  im_stepper: ^0.1.2+8
   flutter_html: ^0.8.2
   rxdart: ^0.22.0
   shared_preferences: ^0.5.12+4
   rotated_corner_decoration: ^1.0.2
-
+  auto_size_text: ^2.1.0
 
 dev_dependencies:
   flutter_test:

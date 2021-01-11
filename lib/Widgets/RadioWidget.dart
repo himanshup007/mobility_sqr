@@ -28,9 +28,9 @@ class _RadioBtnState extends State<RadioBtn> {
     return Row(
       children: <Widget>[
         Container(
-          width: 5.0.w,
+          width: 3.0.w,
           child: Transform.scale(
-            scale: 1.5,
+            scale: 1.2,
             child: Radio(
               activeColor: AppConstants.APP_THEME_COLOR,
               value: 1,
@@ -55,24 +55,23 @@ class _RadioBtnState extends State<RadioBtn> {
             widget.billable(true);
           },
           child: Container(
-            width: 30.0.w,
+            width: 25.0.w,
             padding: EdgeInsets.only(left: 10),
             child: Text(widget.item1,
                 style: widget.id == 1
                     ? TextStyle(
-                        fontSize: 18.0, color: AppConstants.APP_THEME_COLOR)
+                        fontSize: 16.0, color: AppConstants.APP_THEME_COLOR)
                     : TextStyle(
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         color: AppConstants.TEXT_BACKGROUND_COLOR)),
           ),
         ),
-        SizedBox(
-          width: 10.0.w,
-        ),
+        SizedBox(width: 5.0.w,),
+
         Container(
-          width: 5.0.w,
+          width: 3.0.w,
           child: Transform.scale(
-            scale: 1.5,
+            scale: 1.2,
             child: Radio(
               activeColor: AppConstants.APP_THEME_COLOR,
               value: 2,
@@ -96,14 +95,14 @@ class _RadioBtnState extends State<RadioBtn> {
             widget.billable(false);
           },
           child: Container(
-            width: 30.0.w,
+            width: 25.0.w,
             padding: EdgeInsets.only(left: 10),
             child: Text(widget.item2,
                 style: widget.id == 2
                     ? TextStyle(
-                        fontSize: 18.0, color: AppConstants.APP_THEME_COLOR)
+                        fontSize: 16.0, color: AppConstants.APP_THEME_COLOR)
                     : TextStyle(
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         color: AppConstants.TEXT_BACKGROUND_COLOR)),
           ),
         ),

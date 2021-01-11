@@ -3,6 +3,7 @@ import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
+import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 
@@ -19,5 +20,9 @@ class Repository {
 
   Future<GetTravelRequest> fetch_travel_req() async {
     return await appApiProvider.getTravelRequest();
+  }
+
+  Future<SearchModel>  fetch_location(String locationName) async{
+    return await appApiProvider.getLocation(locationName);
   }
 }

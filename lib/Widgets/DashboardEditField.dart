@@ -23,28 +23,35 @@ class DashboardCustomEditField extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: TextField(
+      child: Container(
 
-        enabled: !showIcon,
-        textAlignVertical: TextAlignVertical.top,
-        decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
-            ),
-            border: new UnderlineInputBorder(
-                borderSide: new BorderSide(color: Colors.black12)),
-            hintText: hint,
-            hintStyle: TextStyle(
-              fontWeight: FontWeight.normal,
-              color: AppConstants.TEXT_BACKGROUND_COLOR,
-            ),
-            focusColor: AppConstants.APP_THEME_COLOR,
-            suffixIcon: showIcon
-                ? Icon(
-                    icon,
-                    color: AppConstants.APP_THEME_COLOR,
-                  )
-                : null),
+        child: TextField(
+          enabled: !showIcon,
+          textAlignVertical: TextAlignVertical.center,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
+                
+              ),
+              border: new UnderlineInputBorder(
+                  borderSide: new BorderSide(color: Colors.black12)),
+              hintText: hint,
+
+              hintStyle: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: AppConstants.TEXT_BACKGROUND_COLOR,
+
+                
+              ),
+              focusColor: AppConstants.APP_THEME_COLOR,
+              suffixIcon: showIcon
+                  ? Icon(
+                      icon,
+                      color: AppConstants.APP_THEME_COLOR,
+                    )
+                  : null),
+        ),
       ),
     );
   }

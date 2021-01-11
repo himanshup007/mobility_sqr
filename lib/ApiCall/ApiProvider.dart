@@ -4,6 +4,7 @@ import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
+import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 
@@ -126,6 +127,28 @@ class ApiProvider {
     return listTravelReq;
   }
 
+  Future<SearchModel> getLocation(String locationName) async {
+    Map<String, String> queryParams = {
+      'city': locationName,
+    };
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL+AppConstants.GET_LOCATION_DATA+"?"+queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
 
+    );
+
+    if (response.statusCode == 200) {
+      SearchModel data= SearchModel.fromJson(jsonDecode(response.body));
+
+      return data;
+
+
+    } else {
+      throw Exception('User Not Found');
+    }
+  }
 
 }

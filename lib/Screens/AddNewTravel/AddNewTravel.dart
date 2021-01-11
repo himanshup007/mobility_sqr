@@ -1,9 +1,10 @@
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/ModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
+import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
 import 'package:mobility_sqr/Widgets/DashboardEditField.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:mobility_sqr/Widgets/RadioWidget.dart';
@@ -16,7 +17,6 @@ import 'package:sizer/sizer.dart';
 class AddCity extends StatefulWidget {
   @override
   _AddCity createState() => _AddCity();
-
 }
 
 class _AddCity extends State<AddCity> {
@@ -30,7 +30,8 @@ class _AddCity extends State<AddCity> {
 
   int id = 1;
 
-  String radioButtonItem='ONE';
+  String radioButtonItem = 'ONE';
+
   @override
   void initState() {
     super.initState();
@@ -54,7 +55,7 @@ class _AddCity extends State<AddCity> {
 
   manageColor(bool show) {
     if (show == false) {
-      return Colors.red;
+      return AppConstants.APP_THEME_COLOR;
     } else {
       return Colors.grey;
     }
@@ -121,50 +122,71 @@ class _AddCity extends State<AddCity> {
         body: Column(
           children: [
             Container(
-              height: 15.0.w,
+              height: 8.0.w,
               width: 100.0.w,
-              margin:EdgeInsets.symmetric(horizontal: 15),
-              child: Column(children: [
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(children: [
                 Expanded(
-                  flex: 10,
+                  flex: 3,
                   child: Align(
-                    alignment: Alignment.topLeft,
-                    child: DashboardEditFieldHeader("Project",AppConstants.TEXT_BACKGROUND_COLOR),
+                    alignment: Alignment.centerLeft,
+                    child: DashboardEditFieldHeader(
+                        "Project", AppConstants.TEXT_BACKGROUND_COLOR),
                   ),
                 ),
-              Expanded(child: SizedBox(),flex: 1,),
-              Expanded(
-                  flex: 8,
-                  child:DashboardCustomEditField("Search for a project ID",true,Icons.search,onTap: (){
-                    showFragment();
-                  },))
-                  ]),
+                // Expanded(
+                //   child: SizedBox(),
+                //   flex: 1,
+                // ),
+                Expanded(
+                    flex: 7,
+                    child: DashboardCustomEditField(
+                      "Search for a project ID",
+                      true,
+                      Icons.search,
+                      onTap: () {
+                        showFragment();
+                      },
+                    ))
+              ]),
             ),
+
             Container(
-              margin:EdgeInsets.symmetric(horizontal: 15),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10,),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child:  DashboardEditFieldHeader("Travel Type",AppConstants.TEXT_BACKGROUND_COLOR),
-                ),
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: DashboardEditFieldHeader(
+                        "Travel Type", AppConstants.TEXT_BACKGROUND_COLOR),
+                  ),
+                  SizedBox(width: 10,),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    child: RadioBtn(
+                      "Billable",
+                      "Non-Billable",
+                      1,
+                      "Billable",
+                      billable: (value) {
+                        showDefaultSnackbar(context, value.toString() + "  ");
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            Container(
-              margin:EdgeInsets.symmetric(horizontal: 15),
-              child: RadioBtn("Billable","Non-Billable",1,"Billable", billable:(value){
-                showDefaultSnackbar(context, value.toString()+"  ");
 
-              },)
+            Divider(
+              thickness: 5,
+              color: Colors.black12,
             ),
-
-            Divider(thickness: 5,color: Colors.black12,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin:EdgeInsets.symmetric(horizontal: 15),
-                  height: 20,
+                  margin: EdgeInsets.symmetric(horizontal: 15,vertical: 2),
+                  height: 3.0.h,
                   alignment: Alignment.centerLeft,
                   child: new ListView.builder(
                     shrinkWrap: true,
@@ -188,14 +210,21 @@ class _AddCity extends State<AddCity> {
                         },
                         child: Container(
                           width: 20,
+                          height: 3.0.h,
+                          margin: EdgeInsets.only(right: 1),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent),
-                            color: manageColor(userdetails[index].hide),
+                            border: Border.all(
+                              color: manageColor(userdetails[index].hide),
+                            ),
                           ),
-                          child: Text(
-                            "${index + 1}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "${index + 1}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: manageColor(userdetails[index].hide),),
+                            ),
                           ),
                         ),
                       );
@@ -204,53 +233,104 @@ class _AddCity extends State<AddCity> {
                   ),
                 ),
                 Container(
+                  height: 4.0.h,
+                  width: 45.0.w,
+                  margin: EdgeInsets.only(right: 15),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 28.0.w,
+                        child: GestureDetector(
+                          onTap: (){
+                            if (traveldata[index]
+                                .name
+                                .toString()
+                                .trim()
+                                .isEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => new AlertDialog(
+                                    title: new Text("Mobility"),
+                                    content: new Text("Insert trip name"),
+                                  ));
 
-                  alignment: Alignment.centerRight,
-                  child: RaisedButton(
-                      child: Text("Add Another City"),
-                      onPressed: () {
-                        if (traveldata[index]
-                            .name
-                            .toString()
-                            .trim()
-                            .isEmpty) {
-                          showDialog(
-                              context: context,
-                              child: new AlertDialog(
-                                title: new Text("Mobility"),
-                                content: new Text("Insert trip name"),
-                              ));
-
-                          itemScrollController.scrollTo(
-                              index: userdetails.length - 1,
-                              duration: Duration(milliseconds: 400),
-                              curve: Curves.easeInOutCubic);
-                          for (int i = 0; i < userdetails.length; i++) {
-                            if (i == userdetails.length - 1) {
-                              userdetails[i].hide = false;
+                              itemScrollController.scrollTo(
+                                  index: userdetails.length - 1,
+                                  duration: Duration(milliseconds: 400),
+                                  curve: Curves.easeInOutCubic);
+                              for (int i = 0; i < userdetails.length; i++) {
+                                if (i == userdetails.length - 1) {
+                                  userdetails[i].hide = false;
+                                } else {
+                                  userdetails[i].hide = true;
+                                }
+                              }
+                              this.setState(() {
+                                userdetails = userdetails;
+                              });
                             } else {
-                              userdetails[i].hide = true;
+                              this.setState(() {
+                                index = index + 1;
+                              });
+                              AddNewReq();
                             }
-                          }
-                          this.setState(() {
-                            userdetails = userdetails;
-                          });
-                        } else {
-                          this.setState(() {
-                            index = index + 1;
-                          });
-                          AddNewReq();
-                        }
-                      }),
+                          },
+                          child: Container(
+                            width: 28.0.w,
+                            height: 4.0.h,
+
+                            color: AppConstants.APP_THEME_COLOR,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: AutoSizeText(
+                                "Add Another City",
+                                minFontSize: 1,
+                                maxFontSize: 13,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2.0.w,
+                      ),
+                      GestureDetector(
+                        onTap: (){},
+                        child: Container(
+                          color: AppConstants.APP_THEME_COLOR,
+                          width: 15.0.w,
+                          height: 4.0.h,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: AutoSizeText(
+                              "Delete",
+                              wrapWords: true,
+                              minFontSize: 16,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
-            Divider(
-              color: Colors.black,
+            Container(
+              width: 100.0.w,
+              height: 2,
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              color: AppConstants.APP_THEME_COLOR,
             ),
             Expanded(
               child: Container(
-                margin:EdgeInsets.symmetric(horizontal: 15),
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                 height: 70.0.h,
                 width: 100.0.w,
                 child: ScrollablePositionedList.builder(
@@ -274,31 +354,10 @@ class _AddCity extends State<AddCity> {
                         child: Column(
                           children: [
                             Container(
-                              height: 50,
-
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.deepOrangeAccent,
-                                      spreadRadius: 3),
-                                ],
-                              ),
-                              child: TextField(
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  hintStyle: TextStyle(fontSize: 17),
-                                  hintText: 'Search your trips',
-                                  enabled: false,
-                                  suffixIcon: Icon(Icons.search),
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(20),
-                                ),
-                                onChanged: (text) {
-                                  traveldata[index].name = text;
-                                },
-                              ),
+                              width: 50.0.w,
+                              child: CustomColumnEditText("Start location","","",onTap: (){
+                                Navigator.pushNamed(context, '/SearchPlace');
+                              },),
                             ),
                           ],
                         ),
@@ -315,35 +374,35 @@ class _AddCity extends State<AddCity> {
     );
   }
 
-showFragment(){
-  return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            width: double.maxFinite,
-            height: 70.0.h,
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                      child: ListView(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          children: <Widget>[
-                            Text("ajsddddddddddddddddddddddddddddddddddddddddddddddhsa"),
-                            Text("ajhsa"),  Text("ajhsa"),  Text("ajhsa"),  Text("ajhsa"),  Text("ajhsa"),  Text("ajhsa"),  Text("ajhsa"),  Text("ajhsa"),  Text("ajhsa"),
-                          ]
-                      )
-                  )
-                ]
+  showFragment() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+              width: double.maxFinite,
+              height: 70.0.h,
+              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                Expanded(
+                    child: ListView(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        children: <Widget>[
+                      Text(
+                          "ajsddddddddddddddddddddddddddddddddddddddddddddddhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                      Text("ajhsa"),
+                    ]))
+              ]),
             ),
-          ),
-        );
-      }
-  );
+          );
+        });
+  }
 }
-
-}
-
-

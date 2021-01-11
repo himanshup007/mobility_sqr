@@ -183,7 +183,7 @@ class _DashboardState extends State<Dashboard> {
                           return Container(
                             height: 65.0.w,
                             width: 100.0.w,
-                            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
                             child: Scrollbar(
                               isAlwaysShown: true,
                               controller: _ScrollController,
@@ -558,7 +558,7 @@ class _DashboardState extends State<Dashboard> {
                       },
                     )),
                 Container(
-                  margin: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                  margin: EdgeInsets.fromLTRB(20, 10, 10, 0),
                   height: 50.0.w,
                   width: 100.0.w,
                   child: Row(
@@ -586,7 +586,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
                   height: 50.0.w,
                   width: 100.0.w,
                   child: Row(
@@ -614,7 +614,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
                   height: 50.0.w,
                   width: 100.0.w,
                   child: Row(

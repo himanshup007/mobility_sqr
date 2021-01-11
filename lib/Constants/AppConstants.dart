@@ -8,6 +8,8 @@ class AppConstants {
   static final String GET_USER_INFO = "/emoloyeeinfo/";
   static final String FORGET_PASS="/forget_password/";
   static final String GET_TRAVEL_REQ="/get_add/travel_request/";
+  static final String GET_LOCATION_DATA="/get_city/";
+
 
   //=======================================================================================/Colors
   static const Color DIVIDER_COLOR = Color(0xFFE9E9E9);
