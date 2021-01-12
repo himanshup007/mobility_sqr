@@ -38,7 +38,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
   rotated_corner_decoration: ^1.0.2
   auto_size_text: ^2.1.0
-
+  flutter_switch: ^0.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

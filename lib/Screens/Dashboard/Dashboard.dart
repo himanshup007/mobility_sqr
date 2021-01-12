@@ -174,12 +174,13 @@ class _DashboardState extends State<Dashboard> {
                           );
                         }
                         if (state is TravelReqLoaded) {
-                          /*if(state.travelRequest.data.isEmpty){
+                          if(state.travelRequest.data==null){
 
                             return Container(
-                              child: Text("No Travel Request Found"),
+                              height: 10.0.h,
+                              child: Center(child: Text("Oops Something went wrong!")),
                             );
-                          }else{*/
+                          }else{
                           return Container(
                             height: 65.0.w,
                             width: 100.0.w,
@@ -549,7 +550,7 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           );
 
-                          /*}*/
+                          }
 
                         }
                         return Center(

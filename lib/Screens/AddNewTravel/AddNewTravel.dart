@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/ModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
 import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
 import 'package:mobility_sqr/Widgets/DashboardEditField.dart';
@@ -10,7 +12,7 @@ import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:mobility_sqr/Widgets/RadioWidget.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:mobility_sqr/Widgets/textFieldProject.dart';
-
+import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 
@@ -23,14 +25,20 @@ class _AddCity extends State<AddCity> {
   TextEditingController nameController = TextEditingController();
   ItemScrollController itemScrollController = ItemScrollController();
   String fullName = '';
+  DateTime depature_selectedDate = DateTime.now();
+  DateTime return_selectedDate = new DateTime(DateTime.now().year, DateTime.now().month , DateTime.now().day+1);
 
   List userdetails = [];
   List traveldata = [];
   int index = 0;
 
   int id = 1;
-
+  dynamic fromplace;
   String radioButtonItem = 'ONE';
+
+  Data fromData= Data(countryName: "",airportName: "",city: "");
+  Data toData= Data(countryName: "",airportName: "",city: "");
+
 
   @override
   void initState() {
@@ -38,6 +46,9 @@ class _AddCity extends State<AddCity> {
 
     initalizeValues();
   }
+
+
+
 
   initalizeValues() {
     showHide data;
@@ -237,16 +248,30 @@ class _AddCity extends State<AddCity> {
                   width: 45.0.w,
                   margin: EdgeInsets.only(right: 15),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      GestureDetector(
+                        onTap: (){},
+                        child: Container(
+
+                          width: 10.0.w,
+                          height: 4.0.h,
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: Icon(Icons.auto_delete,color: AppConstants.APP_THEME_COLOR,)
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        width: 5.0.w,
+                      ),
+
                       Container(
                         width: 28.0.w,
                         child: GestureDetector(
                           onTap: (){
-                            if (traveldata[index]
-                                .name
-                                .toString()
-                                .trim()
-                                .isEmpty) {
+                            if (fromData.country==null) {
                               showDialog(
                                   context: context,
                                   builder: (context) => new AlertDialog(
@@ -276,47 +301,34 @@ class _AddCity extends State<AddCity> {
                             }
                           },
                           child: Container(
-                            width: 28.0.w,
+                            width: 30.0.w,
                             height: 4.0.h,
+                           decoration: BoxDecoration(
+                             borderRadius: BorderRadius.circular(2),
+                             color: AppConstants.APP_THEME_COLOR
 
-                            color: AppConstants.APP_THEME_COLOR,
+                           ),
+
                             child: Align(
                               alignment: Alignment.center,
-                              child: AutoSizeText(
-                                "Add Another City",
-                                minFontSize: 1,
-                                maxFontSize: 13,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: AutoSizeText(
+                                  "Add Another City",
+                                  minFontSize: 1,
+                                  maxFontSize: 14,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                  textAlign: TextAlign.start,
                                 ),
-                                textAlign: TextAlign.start,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 2.0.w,
-                      ),
-                      GestureDetector(
-                        onTap: (){},
-                        child: Container(
-                          color: AppConstants.APP_THEME_COLOR,
-                          width: 15.0.w,
-                          height: 4.0.h,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: AutoSizeText(
-                              "Delete",
-                              wrapWords: true,
-                              minFontSize: 16,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      )
+
                     ],
                   ),
                 ),
@@ -343,21 +355,135 @@ class _AddCity extends State<AddCity> {
                       child: Container(
                         height: 70.0.h,
                         width: 92.0.w,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.red[500],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 3),
                         child: Column(
                           children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex:1,
+                                  child: Container(
+
+                                    child: CustomColumnEditText("Start location",fromData.city,fromData.countryName,
+                                      "From",1,onTap: () async {
+                                       fromplace = await Navigator.pushNamed(context, '/SearchPlace');
+                                       if(fromplace!=null){
+                                         this.setState(() {
+                                           fromData=fromplace;
+                                         });
+                                       }
+
+                                    },),
+
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Expanded(
+                                  flex:1,
+                                  child: Container(child:  CustomColumnEditText("Destination location",toData.city,toData.countryName,
+                                    "To",1,
+                                    onTap: () async {
+                                     var data = await Navigator.pushNamed(context, '/SearchPlace');
+                                    if(data!=null){
+                                      this.setState(() {
+                                        toData=data;
+                                      });
+                                    }
+
+                                  },),),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex:1,
+                                  child: CustomColumnEditText("hint", "${getDepartureDate(depature_selectedDate.toString())}", "${getDepatureDay(depature_selectedDate.toString())}","Departure",2,onTap: (){
+                                    _selectDate(context,1);
+
+                                  },),
+                                ),
+                                SizedBox(width: 20,),
+                                Expanded(
+                                  flex:1,
+                                  child: CustomColumnEditText("hint", "${getDepartureDate(return_selectedDate.toString())}", "${getDepatureDay(return_selectedDate.toString())}","Return",2,onTap: (){
+                                    _selectDate(context,2);
+
+                                  },),
+                                ),
+                              ],
+                            ),
+
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child:Container(
+                                decoration:BoxDecoration(
+                                    border: Border.all(color:AppConstants.APP_THEME_COLOR)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text("Purpose of Travel",style: TextStyle(color: AppConstants.APP_THEME_COLOR,fontWeight: FontWeight.w500),),
+                                ),
+                              ) ,
+                            ),
+                            SizedBox(height: 2,width: 100.0.w,child: Container(color: AppConstants.APP_THEME_COLOR,),),
+
+
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Add Details",style: TextStyle(color: AppConstants.APP_THEME_COLOR,fontWeight: FontWeight.w800,fontSize: 16),),
+                            ),
+
                             Container(
-                              width: 50.0.w,
-                              child: CustomColumnEditText("Start location","","",onTap: (){
-                                Navigator.pushNamed(context, '/SearchPlace');
-                              },),
+                              margin: EdgeInsets.only(top:5,bottom: 10),
+                              child: Row(
+                                children: [
+
+
+                                  Expanded(child: Text("Do you need accomodation?",style: TextStyle(fontSize: 15),),flex: 8,),
+
+                                  Expanded(
+                                    flex:1,
+                                    child: Container(
+                                      child: FlutterSwitch(
+                                        height: 25.0,
+                                        width: 20.0,
+                                        padding: 2.0,
+                                        toggleSize: 20.0,
+                                        borderRadius: 12.0,
+                                        inactiveColor: AppConstants.APP_THEME_COLOR,
+                                        activeColor: AppConstants.APP_THEME_COLOR,
+                                        value: true,
+                                        onToggle: (value) {
+                                          setState(() {
+
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex:1,
+                                  child: CustomColumnEditText("hint", "${getDepartureDate(depature_selectedDate.toString())}", "${getDepatureDay(depature_selectedDate.toString())}","Start Date",2,onTap: (){
+                                    _selectDate(context,1);
+
+                                  },),
+                                ),
+                                SizedBox(width: 20,),
+                                Expanded(
+                                  flex:1,
+                                  child: CustomColumnEditText("hint", "${getDepartureDate(return_selectedDate.toString())}", "${getDepatureDay(return_selectedDate.toString())}","End Date",2,onTap: (){
+                                    _selectDate(context,2);
+
+                                  },),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -404,5 +530,49 @@ class _AddCity extends State<AddCity> {
             ),
           );
         });
+  }
+
+  Future<Null> _selectDate(BuildContext context,int where) async {
+    var selectedDate;
+    if(where==1){
+       selectedDate=depature_selectedDate;
+    }
+    else{
+      selectedDate=return_selectedDate;
+    }
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1901, 1),
+        lastDate: DateTime(2100));
+    if (picked != null && picked != selectedDate){
+
+      if(where==1){
+
+        setState(() {
+          depature_selectedDate = picked;
+
+        });
+      }
+      else{
+        setState(() {
+          return_selectedDate = picked;
+
+        });
+      }
+
+    }
+
+  }
+  getDepartureDate(String date) {
+    var depatureDate =  DateTime.parse(date.toString());
+    final String datestring = DateFormat("dd MMM yy").format(depatureDate);
+    return datestring;
+  }
+
+  getDepatureDay(String date) {
+    final depatureDate = DateTime.parse(date);
+    final String daystring = DateFormat('EEEE').format(depatureDate);
+    return daystring;
   }
 }

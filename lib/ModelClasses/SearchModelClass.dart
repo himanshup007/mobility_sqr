@@ -52,23 +52,23 @@ String _iataCode;
 String _icaoCode;
 String _country;
 String _column3;
-Null _column4;
-Null _column5;
-Null _column6;
-Null _column7;
-Null _column8;
-Null _column9;
-Null _column10;
-Null _column11;
-Null _column12;
+dynamic _column4;
+dynamic _column5;
+dynamic _column6;
+dynamic _column7;
+dynamic _column8;
+dynamic _column9;
+dynamic _column10;
+dynamic _column11;
+dynamic _column12;
 String _countryName;
 
 Data(
 {int id,
 String dateCreated,
 String dateModified,
-Null createdBy,
-Null modifiedBy,
+dynamic createdBy,
+dynamic modifiedBy,
 bool status,
 String airportId,
 String city,
@@ -77,15 +77,15 @@ String iataCode,
 String icaoCode,
 String country,
 String column3,
-Null column4,
-Null column5,
-Null column6,
-Null column7,
-Null column8,
-Null column9,
-Null column10,
-Null column11,
-Null column12,
+dynamic column4,
+dynamic column5,
+dynamic column6,
+dynamic column7,
+dynamic column8,
+dynamic column9,
+dynamic column10,
+dynamic column11,
+dynamic column12,
 String countryName}) {
 this._id = id;
 this._dateCreated = dateCreated;
@@ -118,10 +118,10 @@ String get dateCreated => _dateCreated;
 set dateCreated(String dateCreated) => _dateCreated = dateCreated;
 String get dateModified => _dateModified;
 set dateModified(String dateModified) => _dateModified = dateModified;
-Null get createdBy => _createdBy;
-set createdBy(Null createdBy) => _createdBy = createdBy;
-Null get modifiedBy => _modifiedBy;
-set modifiedBy(Null modifiedBy) => _modifiedBy = modifiedBy;
+dynamic get createdBy => _createdBy;
+set createdBy(dynamic createdBy) => _createdBy = createdBy;
+dynamic get modifiedBy => _modifiedBy;
+set modifiedBy(dynamic modifiedBy) => _modifiedBy = modifiedBy;
 bool get status => _status;
 set status(bool status) => _status = status;
 String get airportId => _airportId;
@@ -138,24 +138,24 @@ String get country => _country;
 set country(String country) => _country = country;
 String get column3 => _column3;
 set column3(String column3) => _column3 = column3;
-Null get column4 => _column4;
-set column4(Null column4) => _column4 = column4;
-Null get column5 => _column5;
-set column5(Null column5) => _column5 = column5;
-Null get column6 => _column6;
-set column6(Null column6) => _column6 = column6;
-Null get column7 => _column7;
-set column7(Null column7) => _column7 = column7;
-Null get column8 => _column8;
-set column8(Null column8) => _column8 = column8;
-Null get column9 => _column9;
-set column9(Null column9) => _column9 = column9;
-Null get column10 => _column10;
-set column10(Null column10) => _column10 = column10;
-Null get column11 => _column11;
-set column11(Null column11) => _column11 = column11;
-Null get column12 => _column12;
-set column12(Null column12) => _column12 = column12;
+dynamic get column4 => _column4;
+set column4(dynamic column4) => _column4 = column4;
+dynamic get column5 => _column5;
+set column5(dynamic column5) => _column5 = column5;
+dynamic get column6 => _column6;
+set column6(dynamic column6) => _column6 = column6;
+dynamic get column7 => _column7;
+set column7(dynamic column7) => _column7 = column7;
+dynamic get column8 => _column8;
+set column8(dynamic column8) => _column8 = column8;
+dynamic get column9 => _column9;
+set column9(dynamic column9) => _column9 = column9;
+dynamic get column10 => _column10;
+set column10(dynamic column10) => _column10 = column10;
+dynamic get column11 => _column11;
+set column11(dynamic column11) => _column11 = column11;
+dynamic get column12 => _column12;
+set column12(dynamic column12) => _column12 = column12;
 String get countryName => _countryName;
 set countryName(String countryName) => _countryName = countryName;
 
