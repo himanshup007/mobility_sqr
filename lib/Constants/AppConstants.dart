@@ -10,6 +10,7 @@ class AppConstants {
   static final String GET_TRAVEL_REQ="/get_add/travel_request/";
   static final String GET_LOCATION_DATA="/get_city/";
   static final String Token_GETTER="/api/token/refresh/";
+  static final String GET_PURPOSE="/get_add/visa_purpose_list/";
 
 
 

@@ -39,8 +39,16 @@ class PurposeModelClass {
 }
 
 class Data {
+  bool _isChecked=false;
   int _id;
   String _dateCreated;
+
+  bool get isChecked => _isChecked;
+
+  set isChecked(bool value) {
+    _isChecked = value;
+  }
+
   String _dateModified;
   dynamic _createdBy;
   dynamic _modifiedBy;
@@ -64,7 +72,8 @@ class Data {
   dynamic _column12;
 
   Data(
-      {int id,
+      { bool isChecked,
+        int id,
         String dateCreated,
         String dateModified,
         dynamic createdBy,
@@ -110,6 +119,7 @@ class Data {
     this._column10 = column10;
     this._column11 = column11;
     this._column12 = column12;
+    this._isChecked=isChecked;
   }
 
   int get id => _id;

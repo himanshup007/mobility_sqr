@@ -193,7 +193,7 @@ class ApiProvider {
     };
     String queryString = Uri(queryParameters: queryParams).query;
     final http.Response response = await http.get(
-      '${AppConstants.BASE_URL+AppConstants.GET_LOCATION_DATA+"?"+queryString}',
+      '${AppConstants.BASE_URL+AppConstants.GET_PURPOSE+"?"+queryString}',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',

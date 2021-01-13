@@ -665,6 +665,7 @@ class _DashboardState extends State<Dashboard> {
   getNavigator(BuildContext context, int where) {
     if (where == 1) {
       Navigator.pushNamed(context, '/AddCity');
+
     }
   }
 }

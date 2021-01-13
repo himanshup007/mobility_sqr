@@ -4,6 +4,7 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
+import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
 
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         '/Dashboard':(context) => Dashboard(),
         '/Term&Condition': (context) => Terms(),
         '/ForgetPass': (context) => ForgetPass(),
-        '/SearchPlace':(context) => SearchPlace()
+        '/SearchPlace':(context) => SearchPlace(),
+        '/PurposeScreen':(context)=> PurposeScreen(),
       },
     );
   }

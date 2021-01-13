@@ -137,30 +137,36 @@ class _AddCity extends State<AddCity> {
                 height: 10.0.w,
                 width: 100.0.w,
                 margin: EdgeInsets.symmetric(horizontal: 15),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "Project ID",
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: AppConstants.APP_THEME_COLOR,
+                child: GestureDetector(
+                  onTap: (){},
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Project ID",
+                      enabled: false,
+                      suffixIcon: Icon(
+                        Icons.search,
+                        color: AppConstants.APP_THEME_COLOR,
+                      ),
+                      hintStyle: TextStyle(
+                          color: AppConstants.TEXT_BACKGROUND_COLOR,
+                          fontSize: 16),
+                      labelStyle: TextStyle(
+                          color: AppConstants.APP_THEME_COLOR, fontSize: 18),
+                      border: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: AppConstants.APP_THEME_COLOR, width: 2.0),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
                     ),
-                    hintStyle: TextStyle(
-                        color: AppConstants.TEXT_BACKGROUND_COLOR,
-                        fontSize: 16),
-                    labelStyle: TextStyle(
-                        color: AppConstants.APP_THEME_COLOR, fontSize: 18),
-                    border: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: AppConstants.APP_THEME_COLOR, width: 2.0),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
+                    onTap: () {
+
+                         },
                   ),
-                  onTap: () {},
                 ),
               ),
               Container(
@@ -455,13 +461,23 @@ class _AddCity extends State<AddCity> {
                                           left: BorderSide(
                                               color: AppConstants
                                                   .APP_THEME_COLOR))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Text(
-                                      "Purpose of Travel",
-                                      style: TextStyle(
-                                          color: AppConstants.APP_THEME_COLOR,
-                                          fontWeight: FontWeight.w500),
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      if(toData.iataCode!=null){
+                                        Navigator.pushNamed(context, '/PurposeScreen',arguments: {'iataCode':toData.iataCode});
+
+                                      }else{
+                                        showDefaultSnackbar(context, "Please choose Destination Point");
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Text(
+                                        "Purpose of Travel",
+                                        style: TextStyle(
+                                            color: AppConstants.APP_THEME_COLOR,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                   ),
                                 ),
