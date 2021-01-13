@@ -4,6 +4,7 @@ import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
+import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
@@ -111,7 +112,8 @@ class ApiProvider {
     String queryString = Uri(queryParameters: queryParams).query;
 
 
-    String token = await _TokenGetter.getAcessToken() ?? "";
+ //   String token = await _TokenGetter.getAcessToken() ?? "";
+    String token=await  getToken_byReresh();
     var response = await http.get(
       AppConstants.BASE_URL + AppConstants.GET_TRAVEL_REQ+"?"+queryString,
       headers: {
@@ -128,7 +130,9 @@ class ApiProvider {
   }
 
   Future<SearchModel> getLocation(String locationName) async {
-    String token = await _TokenGetter.getAcessToken() ?? "";
+
+
+    String token = await getToken_byReresh();
 
     Map<String, String> queryParams = {
       'city': locationName,
@@ -150,9 +154,65 @@ class ApiProvider {
       return data;
 
 
-    } else {
+    }
+
+    else {
       throw Exception('User Not Found');
     }
   }
+
+
+   getToken_byReresh() async {
+    String refresh_token = await _TokenGetter.getRefreshToken() ?? "";
+
+    Map data = {"refresh":refresh_token};
+    //encode Map to JSON
+    var body = json.encode(data);
+    var response = await http.post(
+        AppConstants.BASE_URL + AppConstants.Token_GETTER,
+        headers: {"Content-Type": "application/json"},
+        body: body);
+    Map<String, dynamic> userToken = jsonDecode(response.body);
+    String token= userToken["access"];
+    print("${token}");
+    _TokenGetter.saveValue(token,refresh_token);
+    print("${response.statusCode}");
+    print("${response.body}");
+
+    return token;
+
+  }
+
+  Future<PurposeModelClass> getPurposeList(String iata) async {
+
+
+    String token = await getToken_byReresh();
+
+    Map<String, String> queryParams = {
+      'country_id': iata,
+    };
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL+AppConstants.GET_LOCATION_DATA+"?"+queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+
+    );
+
+    if (response.statusCode == 200) {
+      PurposeModelClass data= PurposeModelClass.fromJson(jsonDecode(response.body));
+
+      return data;
+
+    }
+
+    else {
+      throw Exception('User Not Found');
+    }
+  }
+
 
 }

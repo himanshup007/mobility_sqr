@@ -9,6 +9,8 @@ class AppConstants {
   static final String FORGET_PASS="/forget_password/";
   static final String GET_TRAVEL_REQ="/get_add/travel_request/";
   static final String GET_LOCATION_DATA="/get_city/";
+  static final String Token_GETTER="/api/token/refresh/";
+
 
 
   //=======================================================================================/Colors

@@ -6,10 +6,13 @@ class DashboardCustomEditField extends StatelessWidget {
    String hint = '';
   bool showIcon=false;
   IconData icon;
+   final Function(String) onChange;
+   int Type;
 
   DashboardCustomEditField(
-      @required String hint, @required bool showIcon, IconData icon,
-      {this.onTap}){
+  @required String hint, @required bool showIcon, IconData icon,@required this.Type,
+      {this.onTap,this.onChange} )
+  {
 
     this.hint=hint;
     this.showIcon=showIcon;
@@ -28,7 +31,8 @@ class DashboardCustomEditField extends StatelessWidget {
         child: TextField(
           enabled: !showIcon,
           textAlignVertical: TextAlignVertical.center,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.start,
+          keyboardType: Type==1?TextInputType.numberWithOptions(signed: true, decimal: false):TextInputType.text,
           decoration: InputDecoration(
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
@@ -51,6 +55,9 @@ class DashboardCustomEditField extends StatelessWidget {
                       color: AppConstants.APP_THEME_COLOR,
                     )
                   : null),
+          onChanged: (text){
+            onChange(text);
+          },
         ),
       ),
     );

@@ -89,6 +89,9 @@ class _SearchPlaceState extends State<SearchPlace> {
                         );
                       }
                       if (state is SearchInitial) {}
+                      if(state is SearchClassEmpty){
+                        return Center(child:Text("No data Found"));
+                      }
                       if (state is SearchClassError) {
                         return Center(
                           child:

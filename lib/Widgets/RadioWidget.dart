@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:sizer/sizer.dart';
@@ -57,16 +58,19 @@ class _RadioBtnState extends State<RadioBtn> {
           child: Container(
             width: 25.0.w,
             padding: EdgeInsets.only(left: 10),
-            child: Text(widget.item1,
+            child: AutoSizeText(widget.item1,
                 style: widget.id == 1
                     ? TextStyle(
                         fontSize: 16.0, color: AppConstants.APP_THEME_COLOR)
                     : TextStyle(
                         fontSize: 16.0,
-                        color: AppConstants.TEXT_BACKGROUND_COLOR)),
+                        color: AppConstants.TEXT_BACKGROUND_COLOR),
+              minFontSize: 10,
+              maxFontSize: 13,
+            ),
           ),
         ),
-        SizedBox(width: 5.0.w,),
+        SizedBox(width: 1.0.w,),
 
         Container(
           width: 3.0.w,
@@ -97,13 +101,16 @@ class _RadioBtnState extends State<RadioBtn> {
           child: Container(
             width: 25.0.w,
             padding: EdgeInsets.only(left: 10),
-            child: Text(widget.item2,
+            child: AutoSizeText(widget.item2,
+
                 style: widget.id == 2
                     ? TextStyle(
-                        fontSize: 16.0, color: AppConstants.APP_THEME_COLOR)
+                         color: AppConstants.APP_THEME_COLOR)
                     : TextStyle(
-                        fontSize: 16.0,
-                        color: AppConstants.TEXT_BACKGROUND_COLOR)),
+                        color: AppConstants.TEXT_BACKGROUND_COLOR),
+            minFontSize: 10,
+              maxFontSize: 13,
+            ),
           ),
         ),
       ],

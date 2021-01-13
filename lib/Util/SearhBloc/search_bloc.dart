@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
@@ -27,7 +27,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       try {
         final SearchModel result = await repository.fetch_location(event.query);
-        yield SearchClassLoaded(location: result);
+        if(result!=null){
+          yield SearchClassLoaded(location: result);
+        }
+        else{
+          yield SearchClassEmpty();
+        }
+
       }
       catch (_) {
         yield  SearchClassError("Couldn't Fetch Data");
