@@ -11,6 +11,7 @@ import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/ModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
+import 'package:mobility_sqr/Widgets/CountryCodePicker.dart';
 import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
 import 'package:mobility_sqr/Widgets/DashboardEditField.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
@@ -30,13 +31,11 @@ class _AddCity extends State<AddCity> {
   ItemScrollController itemScrollController = ItemScrollController();
   String fullName = '';
   DateTime depature_selectedDate = DateTime.now();
-  DateTime return_selectedDate = new DateTime(
-      DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+  dynamic return_selectedDate = "";
 
   List userdetails = [];
   List traveldata = [];
   int index = 0;
-
   int id = 1;
   dynamic fromplace;
   String radioButtonItem = 'ONE';
@@ -47,8 +46,10 @@ class _AddCity extends State<AddCity> {
   bool accomodationBool = false;
   bool locationBool = true;
   String phoneCode = 'Code';
+  String ClientphoneCode = 'Code';
   List<String> dialCode = new List<String>();
-  var hostPhoneCountry=Country();
+  var hostPhoneCountry = Country();
+  var clientPhoneCountry = Country();
 
   @override
   void initState() {
@@ -445,7 +446,7 @@ class _AddCity extends State<AddCity> {
                                   Expanded(
                                     flex: 1,
                                     child: CustomColumnEditText(
-                                      "hint",
+                                      "Select Date",
                                       "${getDepartureDate(return_selectedDate.toString())}",
                                       "${getDepatureDay(return_selectedDate.toString())}",
                                       "Return",
@@ -610,65 +611,67 @@ class _AddCity extends State<AddCity> {
                               Container(
                                 height: 50,
                                 width: 100.0.w,
-
                                 child: Row(
                                   children: [
                                     Expanded(
                                       flex: 1,
-                                      child: Align(
-                                        alignment: Alignment.bottomCenter,
-
-                                        child: Container(
-                                       margin: EdgeInsets.only(top:10),
-                                          child: Row(
-                                            children: [
-                                              Flexible(
-                                                child: phoneCode=='Code'?Container(
-                                                    child: Icon(
-                                                        Icons.arrow_drop_down)):Container(
-
-                                                  child:  CountryPickerUtils.getDefaultFlagImage(hostPhoneCountry),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    openCountryPickerDialog(context,
-                                                        callback: (value) {
-                                                          this.setState(() {
-                                                            phoneCode =
-                                                                "+" + value.phoneCode;
-                                                            hostPhoneCountry=value;
-                                                          });
-                                                        }, dialCode: dialCode);
-                                                  },
-                                                  child: Container(
-
-                                                    child: Flexible(
-                                                      child: Align(
-                                                        alignment: Alignment.centerRight,
-
-                                                          child:FittedBox(
-                                                            fit: BoxFit.scaleDown,
-                                                            child:
-                                                            Text(
-                                                              phoneCode,
-                                                              textAlign: TextAlign.center,
-                                                              style:
-                                                              TextStyle(fontSize: 16),
-                                                            ),)
-                                                      ),
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 5),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              child: phoneCode == 'Code'
+                                                  ? Container(
+                                                      child: Icon(Icons
+                                                          .arrow_drop_down))
+                                                  : Container(
+                                                      child: CountryPickerUtils
+                                                          .getDefaultFlagImage(
+                                                              hostPhoneCountry),
                                                     ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  openCountryPickerDialog(
+                                                      context,
+                                                      callback: (value) {
+                                                    this.setState(() {
+                                                      phoneCode =
+                                                          "+" + value.phoneCode;
+                                                      hostPhoneCountry = value;
+                                                    });
+                                                  }, dialCode: dialCode);
+                                                },
+                                                child: Container(
+                                                  child: Flexible(
+                                                    child: Align(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        child: FittedBox(
+                                                          fit: BoxFit.scaleDown,
+                                                          child: Text(
+                                                            phoneCode,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontSize: 16),
+                                                          ),
+                                                        )),
                                                   ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
                                     Expanded(
-                                      flex: 2,
+                                      flex: 4,
                                       child: DashboardCustomEditField(
                                         "Enter Phone No",
                                         false,
@@ -715,8 +718,101 @@ class _AddCity extends State<AddCity> {
                                       onChange: (text) {},
                                     )
                                   : Container(
-                                      width: 0,
-                                      height: 0,
+
+                                child: Column(
+                                  children: [
+                                    DashboardCustomEditField(
+                                      "Client Name",
+                                      false,
+                                      Icons.arrow_drop_down_sharp,
+                                      2,
+                                      onChange: (text) {},
+                                    ),
+                                    DashboardCustomEditField(
+                                      "Client Address",
+                                      false,
+                                      Icons.arrow_drop_down_sharp,
+                                      2,
+                                      onChange: (text) {},
+                                    ),
+                                    Container(
+                                      height: 50,
+                                      width: 100.0.w,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              margin: EdgeInsets.only(top: 5),
+                                              child: Row(
+                                                children: [
+                                                  Flexible(
+                                                    child: ClientphoneCode == 'Code'
+                                                        ? Container(
+                                                        child: Icon(Icons
+                                                            .arrow_drop_down))
+                                                        : Container(
+                                                      child: CountryPickerUtils
+                                                          .getDefaultFlagImage(
+                                                          clientPhoneCountry),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        openCountryPickerDialog(
+                                                            context,
+                                                            callback: (value) {
+                                                              this.setState(() {
+                                                                ClientphoneCode =
+                                                                    "+" + value.phoneCode;
+                                                                clientPhoneCountry = value;
+
+                                                              });
+                                                            }, dialCode: dialCode);
+                                                      },
+                                                      child: Container(
+                                                        child: Flexible(
+                                                          child: Align(
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              child: FittedBox(
+                                                                fit: BoxFit.scaleDown,
+                                                                child: Text(
+                                                                  ClientphoneCode,
+                                                                  textAlign: TextAlign
+                                                                      .center,
+                                                                  style: TextStyle(
+                                                                      fontSize: 16),
+                                                                ),
+                                                              )),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            flex: 4,
+                                            child: DashboardCustomEditField(
+                                              "Enter Phone No",
+                                              false,
+                                              Icons.ac_unit,
+                                              1,
+                                              onChange: (text) {},
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                     ),
                               Container(
                                 margin: EdgeInsets.only(top: 5, bottom: 10),
@@ -825,16 +921,19 @@ class _AddCity extends State<AddCity> {
     }
   }
 
-  Future<Null> _selectDate(BuildContext context, int where) async {
+  Future<Null> _selectDate(BuildContext context, int where,) async {
     var selectedDate;
     if (where == 1) {
       selectedDate = depature_selectedDate;
     } else {
-      selectedDate = return_selectedDate;
+
+       selectedDate= new DateTime(depature_selectedDate.year,depature_selectedDate.month,depature_selectedDate.day + 1);
+
     }
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
+
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
@@ -848,15 +947,29 @@ class _AddCity extends State<AddCity> {
             child: child,
           );
         },
-        firstDate: DateTime(1901, 1),
+        firstDate: where!=1?selectedDate:DateTime.now(),
+
         lastDate: DateTime(2100));
     if (picked != null && picked != selectedDate) {
       if (where == 1) {
         setState(() {
           depature_selectedDate = picked;
         });
+if(return_selectedDate!=""){
+  var difference = "${return_selectedDate.difference(depature_selectedDate).inDays}";
+
+  if(int.parse(difference)<0){
+    setState(() {
+
+      return_selectedDate = "";
+    });
+  }
+
+}
+
       } else {
         setState(() {
+
           return_selectedDate = picked;
         });
       }
@@ -864,55 +977,27 @@ class _AddCity extends State<AddCity> {
   }
 
   getDepartureDate(String date) {
-    var depatureDate = DateTime.parse(date.toString());
-    final String datestring = DateFormat("dd MMM yy").format(depatureDate);
-    return datestring;
+    if(date==""){
+
+      return "";
+    }else{
+      var depatureDate = DateTime.parse(date.toString());
+      final String datestring = DateFormat("dd MMM yy").format(depatureDate);
+      return datestring;
+    }
+
   }
 
   getDepatureDay(String date) {
-    final depatureDate = DateTime.parse(date);
-    final String daystring = DateFormat('EEEE').format(depatureDate);
-    return daystring;
+    if(date==""){
+      return "";
+
+    }
+    else{
+      final depatureDate = DateTime.parse(date);
+      final String daystring = DateFormat('EEEE').format(depatureDate);
+      return daystring;
+    }
+
   }
 }
-
-void openCountryPickerDialog(BuildContext context,
-        {Function(Country) callback, List<String> dialCode}) =>
-    showDialog(
-      context: context,
-      builder: (context) => Theme(
-          data: Theme.of(context).copyWith(primaryColor: Colors.pink),
-          child: CountryPickerDialog(
-              titlePadding: EdgeInsets.all(8.0),
-              searchCursorColor: Colors.pinkAccent,
-              searchInputDecoration: InputDecoration(hintText: 'Search......'),
-              isSearchable: true,
-              itemFilter: (c) => dialCode.contains(c.isoCode),
-              title: Text('Select your Phone Code'),
-              onValuePicked: ((Country country) => callback(country)),
-              itemBuilder: _buildDialogItem)),
-    );
-
-Widget _buildDialogItem(Country country) => Row(
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: CountryPickerUtils.getDefaultFlagImage(country),
-        ),
-        SizedBox(width: 10,),
-
-        Expanded(
-            flex: 2,
-            child: Container(
-                child: Text(
-              "+${country.phoneCode}",
-              textAlign: TextAlign.start,
-            ))),
-        Expanded(
-            flex: 5,
-            child: Text(
-              country.name,
-              maxLines: 1,
-            ))
-      ],
-    );
