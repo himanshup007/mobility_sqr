@@ -1,8 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_picker_dialog.dart';
+import 'package:country_pickers/country_picker_dropdown.dart';
+import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/ModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
@@ -39,11 +44,22 @@ class _AddCity extends State<AddCity> {
   Data fromData = Data(countryName: "", airportName: "", city: "");
   Data toData = Data(countryName: "", airportName: "", city: "");
 
+  bool accomodationBool = false;
+  bool locationBool = true;
+  String phoneCode = 'Code';
+  List<String> dialCode = new List<String>();
+  var hostPhoneCountry=Country();
+
   @override
   void initState() {
     super.initState();
-
+    getDialCode();
     initalizeValues();
+  }
+
+  getDialCode() async {
+    var _TokenGetter = TokenGetter();
+    dialCode = await _TokenGetter.readDialCode() ?? "";
   }
 
   initalizeValues() {
@@ -138,7 +154,7 @@ class _AddCity extends State<AddCity> {
                 width: 100.0.w,
                 margin: EdgeInsets.symmetric(horizontal: 15),
                 child: GestureDetector(
-                  onTap: (){},
+                  onTap: () {},
                   child: TextFormField(
                     decoration: InputDecoration(
                       labelText: "Project ID",
@@ -163,9 +179,7 @@ class _AddCity extends State<AddCity> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-                    onTap: () {
-
-                         },
+                    onTap: () {},
                   ),
                 ),
               ),
@@ -189,8 +203,7 @@ class _AddCity extends State<AddCity> {
                         1,
                         "Billable",
                         billable: (value) {
-                          showDefaultSnackbar(
-                              context, value.toString() + "  ");
+                          showDefaultSnackbar(context, value.toString() + "  ");
                         },
                       ),
                     ),
@@ -269,8 +282,7 @@ class _AddCity extends State<AddCity> {
                                     context: context,
                                     builder: (context) => new AlertDialog(
                                           title: new Text("Mobility"),
-                                          content:
-                                              new Text("Insert trip name"),
+                                          content: new Text("Insert trip name"),
                                         ));
 
                                 itemScrollController.scrollTo(
@@ -375,9 +387,8 @@ class _AddCity extends State<AddCity> {
                                         "From",
                                         1,
                                         onTap: () async {
-                                          fromplace =
-                                              await Navigator.pushNamed(
-                                                  context, '/SearchPlace');
+                                          fromplace = await Navigator.pushNamed(
+                                              context, '/SearchPlace');
                                           if (fromplace != null) {
                                             this.setState(() {
                                               fromData = fromplace;
@@ -400,9 +411,8 @@ class _AddCity extends State<AddCity> {
                                         "To",
                                         1,
                                         onTap: () async {
-                                          var data =
-                                              await Navigator.pushNamed(
-                                                  context, '/SearchPlace');
+                                          var data = await Navigator.pushNamed(
+                                              context, '/SearchPlace');
                                           if (data != null) {
                                             this.setState(() {
                                               toData = data;
@@ -453,21 +463,25 @@ class _AddCity extends State<AddCity> {
                                   decoration: BoxDecoration(
                                       border: Border(
                                           top: BorderSide(
-                                              color: AppConstants
-                                                  .APP_THEME_COLOR),
+                                              color:
+                                                  AppConstants.APP_THEME_COLOR),
                                           right: BorderSide(
-                                              color: AppConstants
-                                                  .APP_THEME_COLOR),
+                                              color:
+                                                  AppConstants.APP_THEME_COLOR),
                                           left: BorderSide(
                                               color: AppConstants
                                                   .APP_THEME_COLOR))),
                                   child: GestureDetector(
-                                    onTap: (){
-                                      if(toData.iataCode!=null){
-                                        Navigator.pushNamed(context, '/PurposeScreen',arguments: {'iataCode':toData.iataCode});
-
-                                      }else{
-                                        showDefaultSnackbar(context, "Please choose Destination Point");
+                                    onTap: () {
+                                      if (toData.iataCode != null) {
+                                        Navigator.pushNamed(
+                                            context, '/PurposeScreen',
+                                            arguments: {
+                                              'iataCode': toData.iataCode
+                                            });
+                                      } else {
+                                        showDefaultSnackbar(context,
+                                            "Please choose Destination Point");
                                       }
                                     },
                                     child: Padding(
@@ -523,9 +537,14 @@ class _AddCity extends State<AddCity> {
                                           inactiveColor: Colors.grey,
                                           activeColor:
                                               AppConstants.APP_THEME_COLOR,
-                                          value: false,
+                                          value: accomodationBool,
                                           onToggle: (value) {
-                                            setState(() {});
+                                            setState(() {
+                                              this.setState(() {
+                                                accomodationBool =
+                                                    !accomodationBool;
+                                              });
+                                            });
                                           },
                                         ),
                                       ),
@@ -533,39 +552,44 @@ class _AddCity extends State<AddCity> {
                                   ],
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: CustomColumnEditText(
-                                      "hint",
-                                      "${getDepartureDate(depature_selectedDate.toString())}",
-                                      "${getDepatureDay(depature_selectedDate.toString())}",
-                                      "Start Date",
-                                      2,
-                                      onTap: () {
-                                        _selectDate(context, 1);
-                                      },
+                              accomodationBool
+                                  ? Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: CustomColumnEditText(
+                                            "hint",
+                                            "${getDepartureDate(depature_selectedDate.toString())}",
+                                            "${getDepatureDay(depature_selectedDate.toString())}",
+                                            "Start Date",
+                                            2,
+                                            onTap: () {
+                                              _selectDate(context, 1);
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: CustomColumnEditText(
+                                            "hint",
+                                            "${getDepartureDate(return_selectedDate.toString())}",
+                                            "${getDepatureDay(return_selectedDate.toString())}",
+                                            "End Date",
+                                            2,
+                                            onTap: () {
+                                              _selectDate(context, 2);
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Container(
+                                      width: 0,
+                                      height: 0,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: CustomColumnEditText(
-                                      "hint",
-                                      "${getDepartureDate(return_selectedDate.toString())}",
-                                      "${getDepatureDay(return_selectedDate.toString())}",
-                                      "End Date",
-                                      2,
-                                      onTap: () {
-                                        _selectDate(context, 2);
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
@@ -583,12 +607,78 @@ class _AddCity extends State<AddCity> {
                                 2,
                                 onChange: (text) {},
                               ),
-                              DashboardCustomEditField(
-                                "Enter Phone No",
-                                false,
-                                Icons.ac_unit,
-                                1,
-                                onChange: (text) {},
+                              Container(
+                                height: 50,
+                                width: 100.0.w,
+
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+
+                                        child: Container(
+                                       margin: EdgeInsets.only(top:10),
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: phoneCode=='Code'?Container(
+                                                    child: Icon(
+                                                        Icons.arrow_drop_down)):Container(
+
+                                                  child:  CountryPickerUtils.getDefaultFlagImage(hostPhoneCountry),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    openCountryPickerDialog(context,
+                                                        callback: (value) {
+                                                          this.setState(() {
+                                                            phoneCode =
+                                                                "+" + value.phoneCode;
+                                                            hostPhoneCountry=value;
+                                                          });
+                                                        }, dialCode: dialCode);
+                                                  },
+                                                  child: Container(
+
+                                                    child: Flexible(
+                                                      child: Align(
+                                                        alignment: Alignment.centerRight,
+
+                                                          child:FittedBox(
+                                                            fit: BoxFit.scaleDown,
+                                                            child:
+                                                            Text(
+                                                              phoneCode,
+                                                              textAlign: TextAlign.center,
+                                                              style:
+                                                              TextStyle(fontSize: 16),
+                                                            ),)
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: DashboardCustomEditField(
+                                        "Enter Phone No",
+                                        false,
+                                        Icons.ac_unit,
+                                        1,
+                                        onChange: (text) {},
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Row(
                                 children: [
@@ -605,23 +695,29 @@ class _AddCity extends State<AddCity> {
                                     child: RadioBtn(
                                       "Office location",
                                       "Client location",
-                                      1,
+                                      getValue(locationBool),
                                       "Office location",
                                       billable: (value) {
-                                        showDefaultSnackbar(
-                                            context, value.toString() + "  ");
+                                        this.setState(() {
+                                          locationBool = value;
+                                        });
                                       },
                                     ),
                                   ),
                                 ],
                               ),
-                              DashboardCustomEditField(
-                                "Location",
-                                true,
-                                Icons.arrow_drop_down_sharp,
-                                1,
-                                onChange: (text) {},
-                              ),
+                              locationBool
+                                  ? DashboardCustomEditField(
+                                      "Location",
+                                      true,
+                                      Icons.arrow_drop_down_sharp,
+                                      1,
+                                      onChange: (text) {},
+                                    )
+                                  : Container(
+                                      width: 0,
+                                      height: 0,
+                                    ),
                               Container(
                                 margin: EdgeInsets.only(top: 5, bottom: 10),
                                 padding: EdgeInsets.all(5),
@@ -663,11 +759,9 @@ class _AddCity extends State<AddCity> {
                                 width: 100.0.w,
                                 child: RaisedButton(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.0),
+                                      borderRadius: BorderRadius.circular(5.0),
                                       side: BorderSide(
-                                          color:
-                                              AppConstants.APP_THEME_COLOR)),
+                                          color: AppConstants.APP_THEME_COLOR)),
                                   onPressed: () {},
                                   color: AppConstants.APP_THEME_COLOR,
                                   textColor: Colors.white,
@@ -723,6 +817,14 @@ class _AddCity extends State<AddCity> {
         });
   }
 
+  getValue(value) {
+    if (value) {
+      return 1;
+    } else {
+      return 2;
+    }
+  }
+
   Future<Null> _selectDate(BuildContext context, int where) async {
     var selectedDate;
     if (where == 1) {
@@ -737,8 +839,10 @@ class _AddCity extends State<AddCity> {
           return Theme(
             data: ThemeData.light().copyWith(
               primaryColor: AppConstants.APP_THEME_COLOR,
-              accentColor:  AppConstants.APP_THEME_COLOR,
-              colorScheme: ColorScheme.light(primary:  AppConstants.APP_THEME_COLOR,),
+              accentColor: AppConstants.APP_THEME_COLOR,
+              colorScheme: ColorScheme.light(
+                primary: AppConstants.APP_THEME_COLOR,
+              ),
               buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
             ),
             child: child,
@@ -771,3 +875,44 @@ class _AddCity extends State<AddCity> {
     return daystring;
   }
 }
+
+void openCountryPickerDialog(BuildContext context,
+        {Function(Country) callback, List<String> dialCode}) =>
+    showDialog(
+      context: context,
+      builder: (context) => Theme(
+          data: Theme.of(context).copyWith(primaryColor: Colors.pink),
+          child: CountryPickerDialog(
+              titlePadding: EdgeInsets.all(8.0),
+              searchCursorColor: Colors.pinkAccent,
+              searchInputDecoration: InputDecoration(hintText: 'Search......'),
+              isSearchable: true,
+              itemFilter: (c) => dialCode.contains(c.isoCode),
+              title: Text('Select your Phone Code'),
+              onValuePicked: ((Country country) => callback(country)),
+              itemBuilder: _buildDialogItem)),
+    );
+
+Widget _buildDialogItem(Country country) => Row(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: CountryPickerUtils.getDefaultFlagImage(country),
+        ),
+        SizedBox(width: 10,),
+
+        Expanded(
+            flex: 2,
+            child: Container(
+                child: Text(
+              "+${country.phoneCode}",
+              textAlign: TextAlign.start,
+            ))),
+        Expanded(
+            flex: 5,
+            child: Text(
+              country.name,
+              maxLines: 1,
+            ))
+      ],
+    );

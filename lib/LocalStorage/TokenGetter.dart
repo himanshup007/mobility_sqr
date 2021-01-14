@@ -41,4 +41,19 @@ class TokenGetter {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(AppConstants.USER_INFO);
   }
+
+
+  readDialCode() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String > DialCode =  (jsonDecode(prefs.getString(AppConstants.USER_DIAL_CODE)) as List<dynamic>).cast<String>();
+    return DialCode;
+  }
+
+  saveDialCode(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(AppConstants.USER_DIAL_CODE, json.encode(value));
+  }
+
+
+
 }

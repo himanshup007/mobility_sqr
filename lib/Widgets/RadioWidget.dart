@@ -10,7 +10,8 @@ class RadioBtn extends StatefulWidget {
    Function(bool) billable;
 
 
-    RadioBtn(@required  this.item1,@required  this.item2,@required int id,@required  this.radioButtonItem, {this.billable});
+
+    RadioBtn(@required  this.item1,@required  this.item2,@required  this.id,@required  this.radioButtonItem, {this.billable});
   @override
   _RadioBtnState createState() => _RadioBtnState();
 }

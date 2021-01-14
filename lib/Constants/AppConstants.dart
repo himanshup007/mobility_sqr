@@ -11,6 +11,8 @@ class AppConstants {
   static final String GET_LOCATION_DATA="/get_city/";
   static final String Token_GETTER="/api/token/refresh/";
   static final String GET_PURPOSE="/get_add/visa_purpose_list/";
+  static final String DIAL_CODE="/get_dial_code/";
+
 
 
 
@@ -28,6 +30,7 @@ class AppConstants {
   static const String ACCESS_TOKEN = "access_token";
   static const String REFRESH_TOKEN = "refresh_token";
   static const String USER_INFO = "User_Info";
+  static const String USER_DIAL_CODE = "Dial_code";
 
 
 

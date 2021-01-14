@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobility_sqr/ModelClasses/DialCodeModel.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
@@ -99,7 +100,7 @@ class ApiProvider {
 
 
     UserInfo userInfo=await _TokenGetter.readUserInfo() ?? null;
-
+    getDialCode();
 
     String travelreq="2";String OrgId=userInfo.data.orgId;String empMail=userInfo.data.empCode;
 
@@ -213,6 +214,32 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
+  Future<DialCode> getDialCode() async {
 
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL+AppConstants.DIAL_CODE+"?dial_code="}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+
+      },
+
+    );
+
+    if (response.statusCode == 200) {
+      DialCode data= DialCode.fromJson(jsonDecode(response.body));
+      List<String> dialString= new List<String>();
+      for(int i=0;i<data.data.length;i++){
+        dialString.add(data.data[i].code);
+      }
+      _TokenGetter.saveDialCode(dialString);
+
+
+    }
+
+    else {
+      throw Exception('User Not Found');
+    }
+  }
 
 }

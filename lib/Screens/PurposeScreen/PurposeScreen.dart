@@ -23,7 +23,7 @@ class _PurposeScreenState extends State<PurposeScreen> {
         elevation: 0,
         titleSpacing: 0.0,
         title: Text(
-          "Search Location",
+          "Purpose of Travel",
           style: TextStyle(
               color: AppConstants.TEXT_BACKGROUND_COLOR,
               fontSize: 18,
