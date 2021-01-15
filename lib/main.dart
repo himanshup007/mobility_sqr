@@ -30,28 +30,22 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         highlightColor: Color(0xffffc600),
-
-        unselectedWidgetColor:AppConstants.APP_THEME_COLOR,
-
-
+        unselectedWidgetColor: AppConstants.APP_THEME_COLOR,
         appBarTheme: AppBarTheme(
           color: Colors.white,
-
-
         ),
       ),
       routes: {
-        '/': (context) => Username_Screen(),
+        '/': (context) => ApproxTravelCost(),
         '/AddCity': (context) => AddCity(),
-        '/Dashboard':(context) => Dashboard(),
+        '/Dashboard': (context) => Dashboard(),
         '/Term&Condition': (context) => Terms(),
         '/ForgetPass': (context) => ForgetPass(),
-        '/SearchPlace':(context) => SearchPlace(),
-        '/PurposeScreen':(context)=> PurposeScreen(),
-    '/AddNewTravel2': (context) => AddNewTravel2(),
-    '/Dependents': (context) => Dependents(),
-    '/ApproxTravelCost': (context) => ApproxTravelCost(),
-
+        '/SearchPlace': (context) => SearchPlace(),
+        '/PurposeScreen': (context) => PurposeScreen(),
+        '/AddNewTravel2': (context) => AddNewTravel2(),
+        '/Dependents': (context) => Dependents(),
+        '/ApproxTravelCost': (context) => ApproxTravelCost(),
       },
     );
   }

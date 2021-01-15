@@ -6,14 +6,10 @@ import 'package:currency_pickers/country.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:currency_pickers/currency_pickers.dart';
 
-
 class ApproxTravelCost extends StatefulWidget {
   @override
   _ApproxTravelCostState createState() => _ApproxTravelCostState();
-
-
 }
-
 
 class _ApproxTravelCostState extends State<ApproxTravelCost> {
   @override
@@ -21,6 +17,13 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white38,
+        elevation: 0,
+        title: Text("New Request", style: TextStyle(color: Colors.black)),
+        centerTitle: true,
+      ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         decoration: BoxDecoration(
@@ -45,17 +48,16 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                   flex: 1,
                   child: Row(
                     children: [
-                       GestureDetector(
-                        onTap: (){ _openCurrencyPickerDialog() ;
+                      GestureDetector(
+                        onTap: () {
+                          _openCurrencyPickerDialog();
                         },
                         child: Container(
-
                           child: Text(
                             "Select Currency",
                             style: TextStyle(
-                                 fontWeight: FontWeight.w600,
-                                fontSize: 15.0),
-                           ),
+                                fontWeight: FontWeight.w600, fontSize: 15.0),
+                          ),
                         ),
                       ),
                       Icon(Icons.arrow_drop_down)
@@ -65,55 +67,9 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
               ],
             ),
             SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "City Name",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "New Delhi",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
-                  ),
-                )
-              ],
-            ),
+            ApproxTravelRowWidget("City Name", "New Delhi"),
             SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Per-diems",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "-",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.0),
-                  ),
-                )
-              ],
-            ),
+            ApproxTravelRowWidget("Per-diems", "-"),
             SizedBox(height: 30),
             Row(
               children: [
@@ -122,9 +78,8 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                   child: Text(
                     "Airfare",
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
+                    style:
+                        TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0),
                   ),
                 ),
                 Expanded(
@@ -132,151 +87,91 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                   child: Container(
                     height: 35,
                     child: TextField(
-                      keyboardType: TextInputType.numberWithOptions(signed: true),
+                      keyboardType:
+                          TextInputType.numberWithOptions(signed: true),
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      style: TextStyle( fontWeight: FontWeight.w500, fontSize: 15.0),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 15.0),
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                           focusedBorder: OutlineInputBorder(
+                          focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                   color: AppConstants.APP_THEME_COLOR))),
-                     ),
+                    ),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Hotel",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "-",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.0),
-                  ),
-                )
-              ],
-            ),
+            ApproxTravelRowWidget("Hotel", "-"),
             SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Transportation",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "-",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.0),
-                  ),
-                )
-              ],
-            ),
+            ApproxTravelRowWidget("Transportation", "-"),
             SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Total",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "10000",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.0),
-                  ),
-                )
-              ],
-            ),
+            ApproxTravelRowWidget("Total", "10000"),
             SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Total (Currency)",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "10,000",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.0),
-                  ),
-                )
-              ],
-            ),
+            ApproxTravelRowWidget("Total (Currency)", "10,000"),
           ],
         ),
       ),
     );
   }
 
-
   Widget _buildDialogItem(Country country) => Row(
-    children: <Widget>[
-      CurrencyPickerUtils.getDefaultFlagImage(country),
-      SizedBox(width: 8.0),
-      Text("+${country.currencyCode}"),
-      SizedBox(width: 8.0),
-      Flexible(child: Text(country.name))
-    ],
-  );
+        children: <Widget>[
+          CurrencyPickerUtils.getDefaultFlagImage(country),
+          SizedBox(width: 8.0),
+          Text("+${country.currencyCode}"),
+          SizedBox(width: 8.0),
+          Flexible(child: Text(country.name))
+        ],
+      );
 
   void _openCurrencyPickerDialog() => showDialog(
-    context: context,
-    builder: (context) => Theme(
-        data: Theme.of(context).copyWith(primaryColor: Colors.pink),
-        child: CurrencyPickerDialog(
-            titlePadding: EdgeInsets.all(8.0),
-            searchCursorColor: Colors.pinkAccent,
-            searchInputDecoration: InputDecoration(hintText: 'Search...'),
-            isSearchable: true,
-            title: Text('Select your Currency'),
-
-            itemBuilder: _buildDialogItem
-        )),
-  );
-
+        context: context,
+        builder: (context) => Theme(
+            data: Theme.of(context).copyWith(primaryColor: Colors.pink),
+            child: CurrencyPickerDialog(
+                titlePadding: EdgeInsets.all(8.0),
+                searchCursorColor: Colors.pinkAccent,
+                searchInputDecoration: InputDecoration(hintText: 'Search...'),
+                isSearchable: true,
+                title: Text('Select your Currency'),
+                itemBuilder: _buildDialogItem)),
+      );
 }
 
+class ApproxTravelRowWidget extends StatelessWidget {
+  ApproxTravelRowWidget(this.keyName, this.value);
 
+  final String keyName;
+  final dynamic value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          flex: 5,
+          child: Container(
+            child: Text(
+              keyName,
+              textAlign: TextAlign.left,
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0),
+            ),
+          ),
+        ),
+        SizedBox(width: 20),
+        Expanded(
+          flex: 6,
+          child: Container(
+            child: Text(
+              value,
+              textAlign: TextAlign.left,
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15.0),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

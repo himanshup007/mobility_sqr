@@ -61,7 +61,7 @@ class _PurposeScreenState extends State<PurposeScreen> {
                   itemBuilder: (context, index) {
                     return CheckboxListTile(
                       checkColor: Colors.white,
-                        selectedTileColor: Colors.white,
+                        //selectedTileColor: Colors.white,
                         activeColor: AppConstants.APP_THEME_COLOR,
                         title: Text(state.purposelist.data[index].purposeName),
                         value: state.purposelist.data[index].isChecked,
