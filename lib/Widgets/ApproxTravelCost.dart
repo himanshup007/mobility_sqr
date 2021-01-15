@@ -17,14 +17,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white38,
-        elevation: 0,
-        title: Text("New Request", style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-      ),
-      body: Container(
+       body: Container(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
