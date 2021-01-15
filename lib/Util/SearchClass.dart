@@ -108,84 +108,82 @@ class _SearchPlaceState extends State<SearchPlace> {
 
                                 Navigator.pop(context, state.location.data[index]);
                               },
-                              child: Flexible(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 20.0.w,
-                                      width: 100.0.w,
-                                      margin: EdgeInsets.symmetric(horizontal: 5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey,
-                                            offset: Offset(0.0, 1.0),
-                                            blurRadius: 6.0,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 8,
-                                            child: Container(
-                                              height: 100.0.h,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Align(
-                                                      alignment: Alignment.centerLeft,
-                                                      child: Container(
-                                                        padding: EdgeInsets.all(5),
-                                                        child: Text(
-                                                          state.location.data[index]
-                                                                  .airportName +","+
-                                                              state.location.data[index]
-                                                                  .countryName,
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight.w600),
-                                                        ),
-                                                      )),
-                                                  Align(
-                                                      alignment: Alignment.centerLeft,
-                                                      child: Container(
-                                                        padding: EdgeInsets.all(5),
-                                                        child: Text(
-                                                          state.location.data[index]
-                                                              .airportName,
-                                                          textAlign: TextAlign.start,
-                                                        ),
-                                                      ))
-                                                ],
-                                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 20.0.w,
+                                    width: 100.0.w,
+                                    margin: EdgeInsets.symmetric(horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          offset: Offset(0.0, 1.0),
+                                          blurRadius: 6.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 8,
+                                          child: Container(
+                                            height: 100.0.h,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        state.location.data[index]
+                                                                .airportName +","+
+                                                            state.location.data[index]
+                                                                .countryName,
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w600),
+                                                      ),
+                                                    )),
+                                                Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(5),
+                                                      child: Text(
+                                                        state.location.data[index]
+                                                            .airportName,
+                                                        textAlign: TextAlign.start,
+                                                      ),
+                                                    ))
+                                              ],
                                             ),
                                           ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: Container(
-                                                height: 100.0.h,
-                                                child: Center(
-                                                  child: Text(
-                                                    state.location.data[index]
-                                                        .iataCode,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                                  ),
-                                                ),),
-                                          )
-                                        ],
-                                      ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                              height: 100.0.h,
+                                              child: Center(
+                                                child: Text(
+                                                  state.location.data[index]
+                                                      .iataCode,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                                ),
+                                              ),),
+                                        )
+                                      ],
                                     ),
-                                    SizedBox(height: 10,)
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(height: 10,)
+                                ],
                               ),
                             );
                           },

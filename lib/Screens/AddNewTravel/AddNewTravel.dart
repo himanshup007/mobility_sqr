@@ -619,17 +619,15 @@ class _AddCity extends State<AddCity> {
                                         margin: EdgeInsets.only(top: 5),
                                         child: Row(
                                           children: [
-                                            Flexible(
-                                              child: phoneCode == 'Code'
-                                                  ? Container(
-                                                      child: Icon(Icons
-                                                          .arrow_drop_down))
-                                                  : Container(
-                                                      child: CountryPickerUtils
-                                                          .getDefaultFlagImage(
-                                                              hostPhoneCountry),
-                                                    ),
-                                            ),
+                                            phoneCode == 'Code'
+                                                ? Container(
+                                                    child: Icon(Icons
+                                                        .arrow_drop_down))
+                                                : Container(
+                                                    child: CountryPickerUtils
+                                                        .getDefaultFlagImage(
+                                                            hostPhoneCountry),
+                                                  ),
                                             Expanded(
                                               flex: 2,
                                               child: GestureDetector(
@@ -645,21 +643,19 @@ class _AddCity extends State<AddCity> {
                                                   }, dialCode: dialCode);
                                                 },
                                                 child: Container(
-                                                  child: Flexible(
-                                                    child: Align(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        child: FittedBox(
-                                                          fit: BoxFit.scaleDown,
-                                                          child: Text(
-                                                            phoneCode,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 16),
-                                                          ),
-                                                        )),
-                                                  ),
+                                                  child: Align(
+                                                      alignment: Alignment
+                                                          .centerRight,
+                                                      child: FittedBox(
+                                                        fit: BoxFit.scaleDown,
+                                                        child: Text(
+                                                          phoneCode,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                          style: TextStyle(
+                                                              fontSize: 16),
+                                                        ),
+                                                      )),
                                                 ),
                                               ),
                                             ),
@@ -746,16 +742,14 @@ class _AddCity extends State<AddCity> {
                                               margin: EdgeInsets.only(top: 5),
                                               child: Row(
                                                 children: [
-                                                  Flexible(
-                                                    child: ClientphoneCode == 'Code'
-                                                        ? Container(
-                                                        child: Icon(Icons
-                                                            .arrow_drop_down))
-                                                        : Container(
-                                                      child: CountryPickerUtils
-                                                          .getDefaultFlagImage(
-                                                          clientPhoneCountry),
-                                                    ),
+                                                  ClientphoneCode == 'Code'
+                                                      ? Container(
+                                                      child: Icon(Icons
+                                                          .arrow_drop_down))
+                                                      : Container(
+                                                    child: CountryPickerUtils
+                                                        .getDefaultFlagImage(
+                                                        clientPhoneCountry),
                                                   ),
                                                   Expanded(
                                                     flex: 2,
@@ -773,21 +767,19 @@ class _AddCity extends State<AddCity> {
                                                             }, dialCode: dialCode);
                                                       },
                                                       child: Container(
-                                                        child: Flexible(
-                                                          child: Align(
-                                                              alignment: Alignment
-                                                                  .centerRight,
-                                                              child: FittedBox(
-                                                                fit: BoxFit.scaleDown,
-                                                                child: Text(
-                                                                  ClientphoneCode,
-                                                                  textAlign: TextAlign
-                                                                      .center,
-                                                                  style: TextStyle(
-                                                                      fontSize: 16),
-                                                                ),
-                                                              )),
-                                                        ),
+                                                        child: Align(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: FittedBox(
+                                                              fit: BoxFit.scaleDown,
+                                                              child: Text(
+                                                                ClientphoneCode,
+                                                                textAlign: TextAlign
+                                                                    .center,
+                                                                style: TextStyle(
+                                                                    fontSize: 16),
+                                                              ),
+                                                            )),
                                                       ),
                                                     ),
                                                   ),

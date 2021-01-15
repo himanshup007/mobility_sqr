@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 
 class DashboardCustomEditField extends StatelessWidget {
@@ -33,6 +34,7 @@ class DashboardCustomEditField extends StatelessWidget {
           textAlignVertical: TextAlignVertical.center,
           textAlign: TextAlign.start,
           keyboardType: Type==1?TextInputType.numberWithOptions(signed: true, decimal: false):TextInputType.text,
+          inputFormatters:[Type==1?FilteringTextInputFormatter.digitsOnly:FilteringTextInputFormatter.singleLineFormatter],
           decoration: InputDecoration(
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
