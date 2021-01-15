@@ -7,8 +7,11 @@ import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
+import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
 
+import 'Screens/AddNewTravel/AddNewTravel2.dart';
 import 'Screens/Dashboard/Dashboard.dart';
+import 'Screens/DependentsScreen/Dependents.dart';
 
 void main() {
   runApp(MyApp());
@@ -45,6 +48,10 @@ class MyApp extends StatelessWidget {
         '/ForgetPass': (context) => ForgetPass(),
         '/SearchPlace':(context) => SearchPlace(),
         '/PurposeScreen':(context)=> PurposeScreen(),
+    '/AddNewTravel2': (context) => AddNewTravel2(),
+    '/Dependents': (context) => Dependents(),
+    '/ApproxTravelCost': (context) => ApproxTravelCost(),
+
       },
     );
   }

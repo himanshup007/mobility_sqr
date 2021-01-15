@@ -841,7 +841,9 @@ class _AddCity extends State<AddCity> {
                                               AppConstants.APP_THEME_COLOR,
                                           value: false,
                                           onToggle: (value) {
-                                            setState(() {});
+                                            if(value){
+                                              Navigator.pushNamed(context, '/Dependents');
+                                            }
                                           },
                                         ),
                                       ),
@@ -858,7 +860,9 @@ class _AddCity extends State<AddCity> {
                                       borderRadius: BorderRadius.circular(5.0),
                                       side: BorderSide(
                                           color: AppConstants.APP_THEME_COLOR)),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/AddNewTravel2');
+                                  },
                                   color: AppConstants.APP_THEME_COLOR,
                                   textColor: Colors.white,
                                   child: Text("Save & Next".toUpperCase(),

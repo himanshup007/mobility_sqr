@@ -6,7 +6,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
 
 class Terms extends StatelessWidget {
-  get child => null;
+
 
 
   @override
@@ -43,25 +43,25 @@ class Terms extends StatelessWidget {
                       <div>Follow<a class='sup'><sup>pl</sup></a> 
                       Below hr
                       <b>Bold</b>
-                      <h1>what was sent down to you from your Lord</h1>, 
+                      <h3  style: TextStyle(fontSize: 8),>what wawefrwefs sent down to you from your Lord</h3>, 
                   and do not follow other guardians apart from Him. Little do 
                   <span class='h'>you remind yourselves</span><a class='f'><sup f=2437>1</sup></a></div>
                   <div>Follow<a class='sup'><sup>pl</sup></a> 
                     Below hr
                       <b>Bold</b>
-                  <h1>what was sent down to you from your Lord</h1>, 
+                  <h3  style: TextStyle(fontSize: 8),>what wawefrwefs sent down to you from your Lord</h3> 
                   and do not follow other guardians apart from Him. Little do 
                   <span class='h'>you remind yourselves</span><a class='f'><sup f=2437>1</sup></a></div>
                   <div>Follow<a class='sup'><sup>pl</sup></a> 
                     Below hr
                       <b>Bold</b>
-                  <h1>what was sent down to you from your Lord</h1>, 
+                  <h3  style: TextStyle(fontSize: 8),>what wawefrwefs sent down to you from your Lord</h3> 
                   and do not follow other guardians apart from Him. Little do 
                   <span class='h'>you remind yourselves</span><a class='f'><sup f=2437>1</sup></a></div>
                   <div>Follow<a class='sup'><sup>pl</sup></a> 
                     Below hr
                       <b>Bold</b>
-                  <h1>what was sent down to you from your Lord</h1>, 
+                  <h3  style: TextStyle(fontSize: 8),>what wawefrwefs sent down to you from your Lord</h3>
                   and do not follow other guardians apart from Him. Little do 
                   <span class='h'>you remind yourselves</span><a class='f'><sup f=2437>1</sup></a></div>
                   """,
