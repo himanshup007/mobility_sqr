@@ -1,9 +1,9 @@
 class SearchModel {
 bool _status;
 String _message;
-List<Data> _data;
+List<SearchList> _data;
 
-SearchModel({bool status, String message, List<Data> data}) {
+SearchModel({bool status, String message, List<SearchList> data}) {
 this._status = status;
 this._message = message;
 this._data = data;
@@ -13,16 +13,16 @@ bool get status => _status;
 set status(bool status) => _status = status;
 String get message => _message;
 set message(String message) => _message = message;
-List<Data> get data => _data;
-set data(List<Data> data) => _data = data;
+List<SearchList> get data => _data;
+set data(List<SearchList> data) => _data = data;
 
 SearchModel.fromJson(Map<String, dynamic> json) {
 _status = json['status'];
 _message = json['Message'];
 if (json['data'] != null) {
-_data = new List<Data>();
+_data = new List<SearchList>();
 json['data'].forEach((v) {
-_data.add(new Data.fromJson(v));
+_data.add(new SearchList.fromJson(v));
 });
 }
 }
@@ -38,7 +38,7 @@ return data;
 }
 }
 
-class Data {
+class SearchList {
 int _id;
 String _dateCreated;
 String _dateModified;
@@ -63,7 +63,7 @@ dynamic _column11;
 dynamic _column12;
 String _countryName;
 
-Data(
+SearchList(
 {int id,
 String dateCreated,
 String dateModified,
@@ -159,7 +159,7 @@ set column12(dynamic column12) => _column12 = column12;
 String get countryName => _countryName;
 set countryName(String countryName) => _countryName = countryName;
 
-Data.fromJson(Map<String, dynamic> json) {
+SearchList.fromJson(Map<String, dynamic> json) {
 _id = json['id'];
 _dateCreated = json['date_created'];
 _dateModified = json['date_modified'];

@@ -1,6 +1,7 @@
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
+import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
@@ -24,7 +25,6 @@ class Repository {
   Future<SearchModel>  fetch_location(String locationName) async{
     return await appApiProvider.getLocation(locationName);
   }
-  Future<PurposeModelClass> getPurposeList(String iatacode) async{
-    return await appApiProvider.getPurposeList(iatacode);
-  }
+  Future<PurposeModelClass> getPurposeList(String iatacode) async{return await appApiProvider.getPurposeList(iatacode);}
+  Future<ProjectIdModel> GetProjectId(String pid) async{return await appApiProvider.GetProjectId(pid);}
 }

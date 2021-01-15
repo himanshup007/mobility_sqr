@@ -49,6 +49,7 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
 
     getprofile();
+
   }
 
   @override
@@ -95,8 +96,9 @@ class _DashboardState extends State<Dashboard> {
                     Material(
                       child: ProfileImage == null
                           ? ImageIcon(
+
                               AssetImage(
-                                  'assets/images/myprofile_sidemenu_icon.png'),
+                                  'assets/images/myprofile_sidemenu_icon.png',),
                               size: 80,
                             )
                           : CircleAvatar(

@@ -208,7 +208,15 @@ class TravelReqPayLoad {
 }
 
 class TravelCity {
+  int  _hide;
   String _sourceCity;
+
+  int get hide => _hide;
+
+  set hide(int value) {
+    _hide = value;
+  }
+
   String _destinationCity;
   String _travellingCountry;
   String _travellingCountryTo;
@@ -241,7 +249,9 @@ class TravelCity {
   List<DependentData> _dependentData;
 
   TravelCity(
-      {String sourceCity,
+      {
+        int hide,
+        String sourceCity,
         String destinationCity,
         String travellingCountry,
         String travellingCountryTo,
@@ -273,6 +283,7 @@ class TravelCity {
         bool isDependent,
         List<DependentData> dependentData}) {
     this._sourceCity = sourceCity;
+    this._hide=hide;
     this._destinationCity = destinationCity;
     this._travellingCountry = travellingCountry;
     this._travellingCountryTo = travellingCountryTo;

@@ -12,6 +12,7 @@ class AppConstants {
   static final String Token_GETTER="/api/token/refresh/";
   static final String GET_PURPOSE="/get_add/visa_purpose_list/";
   static final String DIAL_CODE="/get_dial_code/";
+  static final String GET_PROJECT="/get_project/";
 
 
 
