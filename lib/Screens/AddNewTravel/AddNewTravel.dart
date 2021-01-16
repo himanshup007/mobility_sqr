@@ -24,7 +24,7 @@ import 'package:mobility_sqr/Widgets/textFieldProject.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 class AddCity extends StatefulWidget {
   @override
   _AddCity createState() => _AddCity();
@@ -406,66 +406,75 @@ class _AddCity extends State<AddCity> {
                         margin: EdgeInsets.symmetric(horizontal: 3),
                         child: SingleChildScrollView(
                           reverse: true,
-                          child: Column(
-                            children: [
-                              Row(
+                          child: AnimationLimiter(
+                            child: Column(
+                              children: AnimationConfiguration.toStaggeredList(
+                                duration: const Duration(milliseconds: 375),
+                                childAnimationBuilder: (widget) => SlideAnimation(
+                                  verticalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                    child: widget,
+                                  ),
+                                ),
                                 children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      child: CustomColumnEditText(
-                                        "Start location",
-                                        traveldata[index].sourceCity,
-                                        traveldata[index].travellingCountry,
-                                        "From",
-                                        1,
-                                        onTap: () async {
-                                          fromplace = await Navigator.pushNamed(
-                                              context, '/SearchPlace');
-                                          if (fromplace != null) {
-                                            this.setState(() {
+                              Row(
+                              children: [
+                              Expanded(
+                              flex: 1,
+                                child: Container(
+                                  child: CustomColumnEditText(
+                                    "Start location",
+                                    traveldata[index].sourceCity,
+                                    traveldata[index].travellingCountry,
+                                    "From",
+                                    1,
+                                    onTap: () async {
+                                      fromplace = await Navigator.pushNamed(
+                                          context, '/SearchPlace');
+                                      if (fromplace != null) {
+                                        this.setState(() {
 
-                                              fromData = fromplace;
-                                              traveldata[index].sourceCity=fromplace.city;
-                                              traveldata[index].travellingCountry=fromplace.country;
-                                            });
+                                          fromData = fromplace;
+                                          traveldata[index].sourceCity=fromplace.city;
+                                          traveldata[index].travellingCountry=fromplace.country;
+                                        });
 
 
 
 
-                                          }
-                                        },
-                                      ),
-                                    ),
+                                      }
+                                    },
                                   ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      child: CustomColumnEditText(
-                                        "Destination ",
-                                        toData.city,
-                                        toData.countryName,
-                                        "To",
-                                        1,
-                                        onTap: () async {
-                                          var data = await Navigator.pushNamed(
-                                              context, '/SearchPlace');
-                                          if (data != null) {
-                                            this.setState(() {
-                                              toData = data;
-                                            });
-                                            traveldata[index].destinationCity=toData.city;
-                                            traveldata[index].travellingCountryTo=toData.country;
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  child: CustomColumnEditText(
+                                    "Destination ",
+                                    toData.city,
+                                    toData.countryName,
+                                    "To",
+                                    1,
+                                    onTap: () async {
+                                      var data = await Navigator.pushNamed(
+                                          context, '/SearchPlace');
+                                      if (data != null) {
+                                        this.setState(() {
+                                          toData = data;
+                                        });
+                                        traveldata[index].destinationCity=toData.city;
+                                        traveldata[index].travellingCountryTo=toData.country;
+                                      }
+                                    },
+                                  ),
+                                ),
+                              )
+                              ],
+                            ),
                               Row(
                                 children: [
                                   Expanded(
@@ -506,10 +515,10 @@ class _AddCity extends State<AddCity> {
                                       border: Border(
                                           top: BorderSide(
                                               color:
-                                                  AppConstants.APP_THEME_COLOR),
+                                              AppConstants.APP_THEME_COLOR),
                                           right: BorderSide(
                                               color:
-                                                  AppConstants.APP_THEME_COLOR),
+                                              AppConstants.APP_THEME_COLOR),
                                           left: BorderSide(
                                               color: AppConstants
                                                   .APP_THEME_COLOR))),
@@ -578,13 +587,13 @@ class _AddCity extends State<AddCity> {
                                           borderRadius: 12.0,
                                           inactiveColor: Colors.grey,
                                           activeColor:
-                                              AppConstants.APP_THEME_COLOR,
+                                          AppConstants.APP_THEME_COLOR,
                                           value: accomodationBool,
                                           onToggle: (value) {
                                             setState(() {
                                               this.setState(() {
                                                 accomodationBool =
-                                                    !accomodationBool;
+                                                !accomodationBool;
                                               });
                                             });
                                           },
@@ -596,42 +605,42 @@ class _AddCity extends State<AddCity> {
                               ),
                               accomodationBool
                                   ? Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: CustomColumnEditText(
-                                            "hint",
-                                            "${getDepartureDate(depature_selectedDate.toString())}",
-                                            "${getDepatureDay(depature_selectedDate.toString())}",
-                                            "Start Date",
-                                            2,
-                                            onTap: () {
-                                              _selectDate(context, 1);
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: CustomColumnEditText(
-                                            "hint",
-                                            "${getDepartureDate(return_selectedDate.toString())}",
-                                            "${getDepatureDay(return_selectedDate.toString())}",
-                                            "End Date",
-                                            2,
-                                            onTap: () {
-                                              _selectDate(context, 2);
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Container(
-                                      width: 0,
-                                      height: 0,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: CustomColumnEditText(
+                                      "hint",
+                                      "${getDepartureDate(depature_selectedDate.toString())}",
+                                      "${getDepatureDay(depature_selectedDate.toString())}",
+                                      "Start Date",
+                                      2,
+                                      onTap: () {
+                                        _selectDate(context, 1);
+                                      },
                                     ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: CustomColumnEditText(
+                                      "hint",
+                                      "${getDepartureDate(return_selectedDate.toString())}",
+                                      "${getDepatureDay(return_selectedDate.toString())}",
+                                      "End Date",
+                                      2,
+                                      onTap: () {
+                                        _selectDate(context, 2);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )
+                                  : Container(
+                                width: 0,
+                                height: 0,
+                              ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
@@ -662,13 +671,13 @@ class _AddCity extends State<AddCity> {
                                           children: [
                                             phoneCode == 'Code'
                                                 ? Container(
-                                                    child: Icon(
-                                                        Icons.arrow_drop_down))
+                                                child: Icon(
+                                                    Icons.arrow_drop_down))
                                                 : Container(
-                                                    child: CountryPickerUtils
-                                                        .getDefaultFlagImage(
-                                                            hostPhoneCountry),
-                                                  ),
+                                              child: CountryPickerUtils
+                                                  .getDefaultFlagImage(
+                                                  hostPhoneCountry),
+                                            ),
                                             Expanded(
                                               flex: 2,
                                               child: GestureDetector(
@@ -676,23 +685,23 @@ class _AddCity extends State<AddCity> {
                                                   openCountryPickerDialog(
                                                       context,
                                                       callback: (value) {
-                                                    this.setState(() {
-                                                      phoneCode =
-                                                          "+" + value.phoneCode;
-                                                      hostPhoneCountry = value;
-                                                    });
-                                                  }, dialCode: dialCode);
+                                                        this.setState(() {
+                                                          phoneCode =
+                                                              "+" + value.phoneCode;
+                                                          hostPhoneCountry = value;
+                                                        });
+                                                      }, dialCode: dialCode);
                                                 },
                                                 child: Container(
                                                   child: Align(
                                                       alignment:
-                                                          Alignment.centerRight,
+                                                      Alignment.centerRight,
                                                       child: FittedBox(
                                                         fit: BoxFit.scaleDown,
                                                         child: Text(
                                                           phoneCode,
                                                           textAlign:
-                                                              TextAlign.center,
+                                                          TextAlign.center,
                                                           style: TextStyle(
                                                               fontSize: 16),
                                                         ),
@@ -748,119 +757,119 @@ class _AddCity extends State<AddCity> {
                               ),
                               locationBool
                                   ? DashboardCustomEditField(
-                                      "Location",
-                                      true,
-                                      Icons.arrow_drop_down_sharp,
-                                      1,
-                                      onChange: (text) {},
-                                    )
+                                "Location",
+                                true,
+                                Icons.arrow_drop_down_sharp,
+                                1,
+                                onChange: (text) {},
+                              )
                                   : Container(
-                                      child: Column(
+                                child: Column(
+                                  children: [
+                                    DashboardCustomEditField(
+                                      "Client Name",
+                                      false,
+                                      Icons.arrow_drop_down_sharp,
+                                      2,
+                                      onChange: (text) {},
+                                    ),
+                                    DashboardCustomEditField(
+                                      "Client Address",
+                                      false,
+                                      Icons.arrow_drop_down_sharp,
+                                      2,
+                                      onChange: (text) {},
+                                    ),
+                                    Container(
+                                      height: 50,
+                                      width: 100.0.w,
+                                      child: Row(
                                         children: [
-                                          DashboardCustomEditField(
-                                            "Client Name",
-                                            false,
-                                            Icons.arrow_drop_down_sharp,
-                                            2,
-                                            onChange: (text) {},
-                                          ),
-                                          DashboardCustomEditField(
-                                            "Client Address",
-                                            false,
-                                            Icons.arrow_drop_down_sharp,
-                                            2,
-                                            onChange: (text) {},
-                                          ),
-                                          Container(
-                                            height: 50,
-                                            width: 100.0.w,
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Container(
-                                                    margin:
-                                                        EdgeInsets.only(top: 5),
-                                                    child: Row(
-                                                      children: [
-                                                        ClientphoneCode ==
-                                                                'Code'
-                                                            ? Container(
-                                                                child: Icon(Icons
-                                                                    .arrow_drop_down))
-                                                            : Container(
-                                                                child: CountryPickerUtils
-                                                                    .getDefaultFlagImage(
-                                                                        clientPhoneCountry),
-                                                              ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              openCountryPickerDialog(
-                                                                  context,
-                                                                  callback:
-                                                                      (value) {
-                                                                this.setState(
-                                                                    () {
-                                                                  ClientphoneCode =
-                                                                      "+" +
-                                                                          value
-                                                                              .phoneCode;
-                                                                  clientPhoneCountry =
-                                                                      value;
-                                                                });
-                                                              },
-                                                                  dialCode:
-                                                                      dialCode);
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              margin:
+                                              EdgeInsets.only(top: 5),
+                                              child: Row(
+                                                children: [
+                                                  ClientphoneCode ==
+                                                      'Code'
+                                                      ? Container(
+                                                      child: Icon(Icons
+                                                          .arrow_drop_down))
+                                                      : Container(
+                                                    child: CountryPickerUtils
+                                                        .getDefaultFlagImage(
+                                                        clientPhoneCountry),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child:
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        openCountryPickerDialog(
+                                                            context,
+                                                            callback:
+                                                                (value) {
+                                                              this.setState(
+                                                                      () {
+                                                                    ClientphoneCode =
+                                                                        "+" +
+                                                                            value
+                                                                                .phoneCode;
+                                                                    clientPhoneCountry =
+                                                                        value;
+                                                                  });
                                                             },
-                                                            child: Container(
-                                                              child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerRight,
-                                                                  child:
-                                                                      FittedBox(
-                                                                    fit: BoxFit
-                                                                        .scaleDown,
-                                                                    child: Text(
-                                                                      ClientphoneCode,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              16),
-                                                                    ),
-                                                                  )),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                            dialCode:
+                                                            dialCode);
+                                                      },
+                                                      child: Container(
+                                                        child: Align(
+                                                            alignment:
+                                                            Alignment
+                                                                .centerRight,
+                                                            child:
+                                                            FittedBox(
+                                                              fit: BoxFit
+                                                                  .scaleDown,
+                                                              child: Text(
+                                                                ClientphoneCode,
+                                                                textAlign:
+                                                                TextAlign
+                                                                    .center,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                    16),
+                                                              ),
+                                                            )),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Expanded(
-                                                  flex: 4,
-                                                  child:
-                                                      DashboardCustomEditField(
-                                                    "Enter Phone No",
-                                                    false,
-                                                    Icons.ac_unit,
-                                                    1,
-                                                    onChange: (text) {},
-                                                  ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            flex: 4,
+                                            child:
+                                            DashboardCustomEditField(
+                                              "Enter Phone No",
+                                              false,
+                                              Icons.ac_unit,
+                                              1,
+                                              onChange: (text) {},
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
+                                  ],
+                                ),
+                              ),
                               Container(
                                 margin: EdgeInsets.only(top: 5, bottom: 10),
                                 padding: EdgeInsets.all(5),
@@ -885,7 +894,7 @@ class _AddCity extends State<AddCity> {
                                           borderRadius: 12.0,
                                           inactiveColor: Colors.grey,
                                           activeColor:
-                                              AppConstants.APP_THEME_COLOR,
+                                          AppConstants.APP_THEME_COLOR,
                                           value: false,
                                           onToggle: (value) {
                                             if (value) {
@@ -918,7 +927,10 @@ class _AddCity extends State<AddCity> {
                                       style: TextStyle(fontSize: 14)),
                                 ),
                               )
-                            ],
+                              ],
+                              ),
+
+                            ),
                           ),
                         ),
                       ),
