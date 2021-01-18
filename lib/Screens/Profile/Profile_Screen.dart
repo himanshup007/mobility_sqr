@@ -48,13 +48,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   width: 50.0,
                   height: 120.0,
-                  child: Center(
-                    child: ImageIcon(
-                      AssetImage(
-                        'assets/images/back_terms_condition.png',
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Center(
+                      child: ImageIcon(
+
+                        AssetImage(
+                          'assets/images/back_terms_condition.png',
+                        ),
+                        size: 22,
+                        color: Colors.white,
+
                       ),
-                      size: 19,
-                      color: Colors.white,
                     ),
                   ),
                 ),

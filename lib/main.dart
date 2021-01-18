@@ -4,6 +4,7 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
+import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
@@ -31,23 +32,29 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         highlightColor: Color(0xffffc600),
-        unselectedWidgetColor: AppConstants.APP_THEME_COLOR,
+
+        unselectedWidgetColor:AppConstants.APP_THEME_COLOR,
+
+
         appBarTheme: AppBarTheme(
           color: Colors.white,
+
+
         ),
       ),
       routes: {
         '/': (context) => Username_Screen(),
         '/AddCity': (context) => AddCity(),
-        '/Dashboard': (context) => Dashboard(),
+        '/Dashboard':(context) => Dashboard(),
         '/Term&Condition': (context) => Terms(),
         '/ForgetPass': (context) => ForgetPass(),
-        '/SearchPlace': (context) => SearchPlace(),
-        '/PurposeScreen': (context) => PurposeScreen(),
-        '/AddNewTravel2': (context) => AddNewTravel2(),
-        '/Dependents': (context) => Dependents(),
-        '/ApproxTravelCost': (context) => ApproxTravelCost(),
+        '/SearchPlace':(context) => SearchPlace(),
+        '/PurposeScreen':(context)=> PurposeScreen(),
+    '/AddNewTravel2': (context) => AddNewTravel2(),
+    '/Dependents': (context) => Dependents(),
+    '/ApproxTravelCost': (context) => ApproxTravelCost(),
         '/ProjectIdScreen': (context) => ProjectIdScreen(),
+        '/Profile_Screen':(context) =>ProfileScreen()
       },
     );
   }
