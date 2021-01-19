@@ -74,7 +74,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ProfileRowWidget(
                     'assets/images/personal_info.png',
                     "Personal Information",
-                    onTap:(){},
+                    onTap:(){
+                      Navigator.pushNamed(
+                          context, '/PersonalInfo');
+                    },
                   ),
                   ProfileRowWidget('assets/images/emergency_contact.png',
                       "Emergency Contacts", onTap:(){},),

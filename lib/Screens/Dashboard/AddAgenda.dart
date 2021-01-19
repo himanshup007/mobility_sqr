@@ -9,31 +9,38 @@ class AddAgenda extends StatefulWidget {
 class _AddAgendaState extends State<AddAgenda> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return ListView(
         children: [
-          SizedBox(height: 50),
+       SizedBox(height: 10,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+
               Expanded(
-                flex: 5,
+                flex: 1,
                 child: Text(
                   "Add Agenda",
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 25,
+                      fontSize: 20,
                       color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
               Expanded(
                 flex: 1,
-                child: ImageIcon(
-                  AssetImage(
-                    'assets/images/close.png',
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: ImageIcon(
+                      AssetImage(
+                        'assets/images/close.png',
+                      ),
+                      size: 19,
+                      color: Colors.black38,
+                    ),
                   ),
-                  size: 19,
-                  color: Colors.black38,
                 ),
               ),
             ],
@@ -41,7 +48,7 @@ class _AddAgendaState extends State<AddAgenda> {
 
            SizedBox(height: 20),
            Container(
-            width: MediaQuery.of(context).size.width * 0.95,
+            width: MediaQuery.of(context).size.width * 0.75,
             height: 2,
             color: AppConstants.APP_THEME_COLOR,
            ),
@@ -49,11 +56,11 @@ class _AddAgendaState extends State<AddAgenda> {
           SizedBox(height: 20),
 
           Container(
-            width: MediaQuery.of(context).size.width * 0.95,
+            width: MediaQuery.of(context).size.width * 0.65,
             child: TextField(
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.done,
-              maxLines: 7,
+              maxLines: 12,
 
                style: TextStyle(
                 fontSize: 16.0, height: 1.0, color: Colors.black,),
@@ -69,7 +76,7 @@ class _AddAgendaState extends State<AddAgenda> {
           SizedBox(height: 30),
 
            Container(
-             width: MediaQuery.of(context).size.width * 0.95,
+             width: MediaQuery.of(context).size.width * 0.75,
              child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -80,7 +87,7 @@ class _AddAgendaState extends State<AddAgenda> {
                     textAlign: TextAlign.center,
                   ),
                   height: 40,
-                  minWidth: 165,
+                  minWidth: 100,
                   textColor: Colors.amber[600],
 
                   shape: RoundedRectangleBorder(
@@ -104,7 +111,7 @@ class _AddAgendaState extends State<AddAgenda> {
                     textAlign: TextAlign.center,
                   ),
                   height: 40,
-                  minWidth: 165,
+                  minWidth: 100,
                   textColor: Colors.white,
                   color: AppConstants.APP_THEME_COLOR,
                   shape: RoundedRectangleBorder(
@@ -120,7 +127,7 @@ class _AddAgendaState extends State<AddAgenda> {
 
 
         ],
-      ),
+
     );
   }
 }

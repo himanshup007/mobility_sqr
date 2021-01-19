@@ -16,8 +16,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
   String dropdownValue = 'Select Currency';
 
   Widget build(BuildContext context) {
-    return Scaffold(
-       body: Container(
+    return  Container(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -105,7 +104,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
             ApproxTravelRowWidget("Total (Currency)", "10,000"),
           ],
         ),
-      ),
+
     );
   }
 

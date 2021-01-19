@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
+import 'package:mobility_sqr/Screens/Dashboard/AddAgenda.dart';
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
+import 'package:mobility_sqr/Screens/Profile/Personal_info/Personal_Info_Screen.dart';
 import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
@@ -54,7 +56,9 @@ class MyApp extends StatelessWidget {
     '/Dependents': (context) => Dependents(),
     '/ApproxTravelCost': (context) => ApproxTravelCost(),
         '/ProjectIdScreen': (context) => ProjectIdScreen(),
-        '/Profile_Screen':(context) =>ProfileScreen()
+        '/Profile_Screen':(context) =>ProfileScreen(),
+        '/Add_Agenda' :(context) => AddAgenda(),
+        '/PersonalInfo':(context) =>PersonalInfo()
       },
     );
   }

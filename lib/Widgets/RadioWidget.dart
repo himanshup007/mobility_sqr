@@ -34,7 +34,7 @@ class _RadioBtnState extends State<RadioBtn> {
         Container(
           width: 3.0.w,
           child: Transform.scale(
-            scale: 1.2,
+            scale: 1.4,
             child: Radio(
               activeColor: AppConstants.APP_THEME_COLOR,
               value: 1,
@@ -60,16 +60,19 @@ class _RadioBtnState extends State<RadioBtn> {
           },
           child: Container(
             width: 25.0.w,
-            padding: EdgeInsets.only(left: 10),
-            child: AutoSizeText(widget.item1,
-                style: widget.id == 1
-                    ? TextStyle(
-                        fontSize: 16.0, color: AppConstants.APP_THEME_COLOR)
-                    : TextStyle(
-                        fontSize: 16.0,
-                        color: AppConstants.TEXT_BACKGROUND_COLOR),
-              minFontSize: 10,
-              maxFontSize: 13,
+            margin: EdgeInsets.only(left: 5),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AutoSizeText(widget.item1,
+                  style: widget.id == 1
+                      ? TextStyle(
+                          fontSize: 16.0, color: AppConstants.APP_THEME_COLOR)
+                      : TextStyle(
+                          fontSize: 16.0,
+                          color: AppConstants.TEXT_BACKGROUND_COLOR),
+                minFontSize: 10,
+                maxFontSize: 13,
+              ),
             ),
           ),
         ),
@@ -78,7 +81,7 @@ class _RadioBtnState extends State<RadioBtn> {
         Container(
           width: 3.0.w,
           child: Transform.scale(
-            scale: 1.2,
+            scale: 1.4,
             child: Radio(
               activeColor: AppConstants.APP_THEME_COLOR,
               value: 2,
@@ -103,16 +106,19 @@ class _RadioBtnState extends State<RadioBtn> {
           },
           child: Container(
             width: 25.0.w,
-            padding: EdgeInsets.only(left: 10),
-            child: AutoSizeText(widget.item2,
+ margin: EdgeInsets.only(left: 5),
+            child: Container(
+              padding: EdgeInsets.all(5),
+              child: AutoSizeText(widget.item2,
 
-                style: widget.id == 2
-                    ? TextStyle(
-                         color: AppConstants.APP_THEME_COLOR)
-                    : TextStyle(
-                        color: AppConstants.TEXT_BACKGROUND_COLOR),
-            minFontSize: 10,
-              maxFontSize: 13,
+                  style: widget.id == 2
+                      ? TextStyle(
+                           color: AppConstants.APP_THEME_COLOR)
+                      : TextStyle(
+                          color: AppConstants.TEXT_BACKGROUND_COLOR),
+              minFontSize: 10,
+                maxFontSize: 13,
+              ),
             ),
           ),
         ),
