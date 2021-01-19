@@ -121,16 +121,19 @@ class _DashboardState extends State<Dashboard> {
                 ),
               )),
               CustomMenuTitle("assets/images/myprofile_sidemenu_icon.png",
-                  'My Profile', "profile", context),
+                  'My Profile', context,OnTouch: (){
+
+                    Navigator.pushNamed(context, '/Profile_Screen');
+                  }),
               CustomDivider(),
               CustomMenuTitle("assets/images/biometric-thumb.png",
-                  'Fingerprint Authentication', "fingerprint", context),
+                  'Fingerprint Authentication', context,OnTouch: (){}),
               CustomDivider(),
               CustomMenuTitle("assets/images/change_password_sidemenu_icon.png",
-                  'Change Password', "password", context),
+                  'Change Password', context,OnTouch: (){}),
               CustomDivider(),
               CustomMenuTitle("assets/images/logout_sidemenu_icon.png",
-                  'Logout', "logout", context),
+                  'Logout', context,OnTouch: (){}),
             ],
           ),
         ),

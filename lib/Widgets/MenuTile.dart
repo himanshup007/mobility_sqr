@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 
-CustomMenuTitle(String image,String text,String where,BuildContext context) {
+CustomMenuTitle(String image,String text,BuildContext context,
+    {VoidCallback OnTouch}) {
+
   return
     ListTile(
       contentPadding:
@@ -13,6 +15,7 @@ CustomMenuTitle(String image,String text,String where,BuildContext context) {
       title: Text(text),
       onTap: () => {
 
+        OnTouch()
       },
     );
 }
