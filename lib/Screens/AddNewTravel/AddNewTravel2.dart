@@ -34,8 +34,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
         child: Column(
           children: <Widget>[
             Align(
-                //heightFactor: 1.5,
-                alignment: Alignment.centerLeft,
+                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Home Contact",
                   textAlign: TextAlign.left,
@@ -48,8 +47,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             Container(
               height: 46.0,
               child: TextField(
-                // obscureText: true,
-                style:
+                 style:
                     TextStyle(fontSize: 16.0, height: 1.0, color: Colors.black),
                 decoration: InputDecoration(
                     border: UnderlineInputBorder(),
@@ -63,8 +61,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             Container(
               height: 46.0,
               child: TextField(
-                // obscureText: true,
-                style:
+                 style:
                     TextStyle(fontSize: 16.0, height: 1.0, color: Colors.black),
                 decoration: InputDecoration(
                     border: UnderlineInputBorder(),
@@ -97,8 +94,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                     value: _switchValue,
                    onToggle: (value) {
                      setState(() {
-                      // is = _switchValue;
-                     });
+                      });
                    },
                  ),
                ],
@@ -109,8 +105,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-
-                'Additional note',
+                 'Additional note',
                 style: TextStyle(
                   fontSize: 16.0, ),
                 textAlign: TextAlign.center,
@@ -120,8 +115,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             SizedBox(height: 10),
 
              Container(
-
-               child: TextField(
+                child: TextField(
                   keyboardType: TextInputType.multiline,
                  textInputAction: TextInputAction.done,
                 maxLines: 7,
@@ -142,7 +136,6 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-
                 '(Maximum 1000 characters)',
                 style: TextStyle(
                   fontSize: 13.0,color: Colors.black54 ),
@@ -170,8 +163,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             ),
 
             SizedBox(height: 30),
-              //Container(
-                Row(
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: [
                   FlatButton(
@@ -217,14 +209,10 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                   ),
                 ],
               ),
-          //  ),
-
-
-          ],
+           ],
         ),
       ),
-      // ),
-    );
+     );
   }
 }
 
