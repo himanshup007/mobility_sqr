@@ -54,7 +54,7 @@ class _AddCity extends State<AddCity> {
   TextEditingController ProjectTextController;
   TravelReqPayLoad req_data = TravelReqPayLoad();
   BuildContext purposecontext;
-  var postLocationList = List<PostLocationData>();
+
   ApiProvider _appApiProvider = ApiProvider();
 
   var currentSelectedValue;
@@ -185,7 +185,7 @@ class _AddCity extends State<AddCity> {
           child: ListView(
             children: [
               Container(
-                height: 79.0.h,
+                height: 80.0.h,
                 width: 100.0.w,
                 child: ListView(
                   children: [
@@ -194,6 +194,7 @@ class _AddCity extends State<AddCity> {
                       width: 100.0.w,
                       margin: EdgeInsets.symmetric(
                         horizontal: 15,
+                        vertical: 5
                       ),
                       child: GestureDetector(
                         onTap: () async {
@@ -442,7 +443,7 @@ class _AddCity extends State<AddCity> {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      height: 60.0.h,
+                      height: 70.0.h,
                       width: 100.0.w,
                       child: ScrollablePositionedList.builder(
                         itemScrollController: itemScrollController,
@@ -541,7 +542,7 @@ class _AddCity extends State<AddCity> {
                                                                     .iataCode));
                                                         _appApiProvider.GetPostLocation(toData.countryName).then((value) => this.setState(() {
 
-                                                          postLocationList=value.data;
+                                                          traveldata[index].postLocationList=value.data;
                                                         }));
 
                                                       }
@@ -1015,10 +1016,10 @@ class _AddCity extends State<AddCity> {
                                     //         },
                                     //       )
                                     Container(
-                                      width:100.0.w,
+                                      width:90.0.w,
                                      height: 40,
-                                      child: FormField<String>(
-                                        builder: (FormFieldState<String> state) {
+                                      child: FormField<PostLocationData>(
+                                        builder: (FormFieldState<PostLocationData> state) {
                                           return
                                             InputDecorator(
                                               decoration: InputDecoration(
@@ -1026,25 +1027,31 @@ class _AddCity extends State<AddCity> {
                                                   border: OutlineInputBorder(
                                                       borderRadius: BorderRadius.circular(5.0))),
                                               child: DropdownButtonHideUnderline(
-                                                child: DropdownButton<String>(
-                                                  hint: Text("Location"),
-                                                  value: currentSelectedValue,
+
+                                                child: DropdownButton<PostLocationData>(
+
+                                                  hint: Padding(
+                                                    padding: const EdgeInsets.only(left: 10),
+                                                    child: Text("Location"),
+                                                  ),
+                                                  value: traveldata[index].postLocationData,
                                                   isDense: true,
                                                   onChanged: (newValue) {
                                                     setState(() {
-                                                      currentSelectedValue = newValue;
+                                                      traveldata[index].postLocationData = newValue;
+                                                      traveldata[index].officeLocation=newValue.locationName;
                                                     });
-                                                    print(currentSelectedValue);
+
                                                   },
-                                                  items: postLocationList.map((PostLocationData value) {
-                                                    return DropdownMenuItem<String>(
-                                                      value: value.locationName,
+                                                  items: traveldata[index].postLocationList!=null?traveldata[index].postLocationList.map((PostLocationData value) {
+                                                    return DropdownMenuItem<PostLocationData>(
+                                                      value: value,
                                                       child: Padding(
                                                         padding: const EdgeInsets.only(left: 10),
                                                         child: Text(value.locationName),
                                                       ),
                                                     );
-                                                  }).toList(),
+                                                  }).toList():null,
                                                 ),
 
                                               ),
@@ -1210,6 +1217,7 @@ class _AddCity extends State<AddCity> {
                                               ),
                                             ),
                                           ),
+
                                         ],
                                       ),
                                     ),
@@ -1225,9 +1233,11 @@ class _AddCity extends State<AddCity> {
                   ],
                 ),
               ),
+
+
               Container(
-                margin: EdgeInsets.only(right: 10, left: 10),
-                height: 10.0.w,
+                margin: EdgeInsets.only(right: 10, left: 10,top: 20),
+                height: 6.0.h,
                 width: 100.0.w,
                 child: RaisedButton(
                   shape: RoundedRectangleBorder(

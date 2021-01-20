@@ -1,3 +1,4 @@
+import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 
 class TravelReqPayLoad {
@@ -225,8 +226,16 @@ class TravelCity {
     _purposeList = value;
   }
 
+  PostLocationData _postLocationData;
   List<PurposeData> _purposeList;
   String _destinationCity;
+
+  PostLocationData get postLocationData => _postLocationData;
+
+  set postLocationData(PostLocationData value) {
+    _postLocationData = value;
+  }
+
   String _travellingCountry;
   String _travellingCountryTo;
   String _departureDate;
@@ -256,9 +265,19 @@ class TravelCity {
   String _hostPhoneExt;
   bool _isDependent;
   List<DependentData> _dependentData;
+  List<PostLocationData> _postLocationList;
+
+
+  List<PostLocationData> get postLocationList => _postLocationList;
+
+  set postLocationList(List<PostLocationData> value) {
+    _postLocationList = value;
+  }
 
   TravelCity(
       {
+        PostLocationData postLocationData,
+        List<PostLocationData> postLocationList,
         List<PurposeData> purposeList,
         int hide,
         String sourceCity,
@@ -292,6 +311,7 @@ class TravelCity {
         String hostPhoneExt,
         bool isDependent,
         List<DependentData> dependentData}) {
+    this._postLocationData=postLocationData;
     this._purposeList=purposeList;
     this._sourceCity = sourceCity;
     this._hide=hide;
@@ -325,6 +345,7 @@ class TravelCity {
     this._hostPhoneExt = hostPhoneExt;
     this._isDependent = isDependent;
     this._dependentData = dependentData;
+    this._postLocationList=postLocationList;
   }
 
   String get sourceCity => _sourceCity;
