@@ -1,5 +1,5 @@
 class UsernameConst {
-  static const String EMAIL_HINT = "Enter email or phone";
+  static const String EMAIL_HINT = "Enter Username";
   static const String PASS_HINT = "Enter password";
   static final RegExp emailRegExp = RegExp(
     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',

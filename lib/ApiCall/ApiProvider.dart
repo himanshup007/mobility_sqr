@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/DialCodeModel.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
+import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
@@ -268,6 +269,32 @@ class ApiProvider {
       return data;
     } else {
       throw Exception('User Not Found');
+    }
+  }
+  Future<PostLocationResponse> GetPostLocation(String country) async {
+    UserInfo userInfo=await _TokenGetter.readUserInfo() ?? null;
+    Map<String, String> queryParams = {
+      'country': country,
+      'org_id':userInfo.data.orgId
+
+    };
+    String token = await getToken_byReresh();
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL+AppConstants.GET_POST_LOCATION+"?"+queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}',
+      },
+
+    );
+
+    if (response.statusCode == 200) {
+      PostLocationResponse data= PostLocationResponse.fromJson(jsonDecode(response.body));
+
+      return data;
+    } else {
+      throw Exception('error');
     }
   }
 

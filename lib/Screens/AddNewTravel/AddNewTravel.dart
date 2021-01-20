@@ -1,20 +1,24 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:country_pickers/country.dart';
-import 'package:country_pickers/country_picker_dialog.dart';
-import 'package:country_pickers/country_picker_dropdown.dart';
+
 import 'package:country_pickers/utils/utils.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
+import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
-import 'package:mobility_sqr/ModelClasses/ModelClass.dart';
-import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
+import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
+import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
+
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
 import 'package:mobility_sqr/Screens/Dashboard/AddAgenda.dart';
-import 'package:mobility_sqr/Screens/ProjectName/ProjectIdScreen.dart';
+import 'package:mobility_sqr/Screens/PurposeScreen/purpose_bloc.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/CountryCodePicker.dart';
 import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
@@ -35,27 +39,25 @@ class AddCity extends StatefulWidget {
 
 class _AddCity extends State<AddCity> {
   ItemScrollController itemScrollController = ItemScrollController();
-  String fullName = '';
-
+  final Repository repository = Repository();
   List<dynamic> userdetails = [];
   List<TravelCity> traveldata = new List<TravelCity>();
   int index = 0;
   int id = 1;
-
   String radioButtonItem = 'ONE';
-
   SearchList fromData = SearchList(countryName: "", airportName: "", city: "");
   SearchList toData = SearchList(countryName: "", airportName: "", city: "");
-
   bool accomodationBool = false;
   List<String> dialCode = new List<String>();
   var hostPhoneCountry = Country();
   var clientPhoneCountry = Country();
-
   TextEditingController ProjectTextController;
-
   TravelReqPayLoad req_data = TravelReqPayLoad();
+  BuildContext purposecontext;
+  var postLocationList = List<PostLocationData>();
+  ApiProvider _appApiProvider = ApiProvider();
 
+  var currentSelectedValue;
   @override
   void initState() {
     super.initState();
@@ -95,7 +97,7 @@ class _AddCity extends State<AddCity> {
     modelClass.accmodationEndDate = "";
     modelClass.isClientLocation = false.toString();
     modelClass.isAccmodationRequired = false;
-
+    modelClass.purposeList = null;
 
     traveldata.add(modelClass);
   }
@@ -130,6 +132,9 @@ class _AddCity extends State<AddCity> {
     modelClass.clientNumberExt = 'Code';
     modelClass.hostPhoneExt = 'Code';
     modelClass.isAccmodationRequired = false;
+    modelClass.sourceCity = traveldata[index - 1].destinationCity;
+    modelClass.travellingCountry = traveldata[index - 1].travellingCountryTo;
+
     for (int i = 0; i < userdetails.length; i++) {
       if (i == index) {
         userdetails[i].hide = false;
@@ -178,22 +183,22 @@ class _AddCity extends State<AddCity> {
           height: 100.0.h,
           width: 100.0.w,
           child: ListView(
-
             children: [
               Container(
-                height: 80.0.h,
+                height: 79.0.h,
                 width: 100.0.w,
                 child: ListView(
-
                   children: [
                     Container(
                       height: 10.0.w,
                       width: 100.0.w,
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 15,
+                      ),
                       child: GestureDetector(
                         onTap: () async {
-                          dynamic project =
-                              await Navigator.pushNamed(context, '/ProjectIdScreen');
+                          dynamic project = await Navigator.pushNamed(
+                              context, '/ProjectIdScreen');
                           req_data.project = project.pid;
                           req_data.projectName = project.projectName;
                           ProjectTextController.text =
@@ -218,15 +223,17 @@ class _AddCity extends State<AddCity> {
                                   color: AppConstants.TEXT_BACKGROUND_COLOR,
                                   fontSize: 16),
                               labelStyle: TextStyle(
-                                  color: AppConstants.APP_THEME_COLOR, fontSize: 18),
+                                  color: AppConstants.APP_THEME_COLOR,
+                                  fontSize: 18),
                               border: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.white, width: 2.0),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 2.0),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                    color: AppConstants.APP_THEME_COLOR, width: 2.0),
+                                    color: AppConstants.APP_THEME_COLOR,
+                                    width: 2.0),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               contentPadding: EdgeInsets.all(2)),
@@ -240,8 +247,8 @@ class _AddCity extends State<AddCity> {
                         children: [
                           Align(
                             alignment: Alignment.bottomLeft,
-                            child: DashboardEditFieldHeader(
-                                "Travel Type", AppConstants.TEXT_BACKGROUND_COLOR),
+                            child: DashboardEditFieldHeader("Travel Type",
+                                AppConstants.TEXT_BACKGROUND_COLOR),
                           ),
                           SizedBox(
                             width: 10,
@@ -271,7 +278,8 @@ class _AddCity extends State<AddCity> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 2),
                           height: 3.0.h,
                           alignment: Alignment.centerLeft,
                           child: new ListView.builder(
@@ -285,7 +293,9 @@ class _AddCity extends State<AddCity> {
                                       duration: Duration(milliseconds: 400),
                                       curve: Curves.easeInOutCubic);
                                   this.setState(() {
-                                    for (int i = 0; i < userdetails.length; i++) {
+                                    for (int i = 0;
+                                        i < userdetails.length;
+                                        i++) {
                                       if (i == index) {
                                         userdetails[i].hide = false;
                                       } else {
@@ -300,7 +310,8 @@ class _AddCity extends State<AddCity> {
                                   margin: EdgeInsets.only(right: 1),
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: manageColor(userdetails[index].hide),
+                                      color:
+                                          manageColor(userdetails[index].hide),
                                     ),
                                   ),
                                   child: Align(
@@ -309,7 +320,8 @@ class _AddCity extends State<AddCity> {
                                       "${index + 1}",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color: manageColor(userdetails[index].hide),
+                                        color: manageColor(
+                                            userdetails[index].hide),
                                       ),
                                     ),
                                   ),
@@ -343,7 +355,9 @@ class _AddCity extends State<AddCity> {
                                           index: userdetails.length - 1,
                                           duration: Duration(milliseconds: 400),
                                           curve: Curves.easeInOutCubic);
-                                      for (int i = 0; i < userdetails.length; i++) {
+                                      for (int i = 0;
+                                          i < userdetails.length;
+                                          i++) {
                                         if (i == userdetails.length - 1) {
                                           userdetails[i].hide = false;
                                         } else {
@@ -358,6 +372,9 @@ class _AddCity extends State<AddCity> {
                                         index = index + 1;
                                       });
                                       AddNewReq();
+                                      BlocProvider.of<PurposeBloc>(
+                                              purposecontext)
+                                          .add(ResetBloc());
                                     }
                                   },
                                   child: Container(
@@ -371,7 +388,7 @@ class _AddCity extends State<AddCity> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
                                         child: AutoSizeText(
-                                          "Add Another City",
+                                          "Add City",
                                           minFontSize: 1,
                                           maxFontSize: 14,
                                           style: TextStyle(
@@ -388,9 +405,7 @@ class _AddCity extends State<AddCity> {
                                 width: 5.0.w,
                               ),
                               GestureDetector(
-                                onTap: () {
-
-                                },
+                                onTap: () {},
                                 child: Container(
                                   width: 12.0.w,
                                   height: 4.0.h,
@@ -451,16 +466,19 @@ class _AddCity extends State<AddCity> {
                                             child: CustomColumnEditText(
                                               "Start location",
                                               traveldata[index].sourceCity,
-                                              traveldata[index].travellingCountry,
+                                              traveldata[index]
+                                                  .travellingCountry,
                                               "From",
                                               1,
                                               onTap: () async {
                                                 dynamic fromplace =
                                                     await Navigator.pushNamed(
-                                                        context, '/SearchPlace');
+                                                        context,
+                                                        '/SearchPlace');
                                                 if (fromplace != null) {
                                                   this.setState(() {
-                                                    traveldata[index].sourceCity =
+                                                    traveldata[index]
+                                                            .sourceCity =
                                                         fromplace.city;
                                                     traveldata[index]
                                                             .travellingCountry =
@@ -476,27 +494,60 @@ class _AddCity extends State<AddCity> {
                                         ),
                                         Expanded(
                                           flex: 1,
-                                          child: Container(
-                                            child: CustomColumnEditText(
-                                              "Destination ",
-                                              traveldata[index].destinationCity,
-                                              traveldata[index].travellingCountryTo,
-                                              "To",
-                                              1,
-                                              onTap: () async {
-                                                var data = await Navigator.pushNamed(
-                                                    context, '/SearchPlace');
-                                                if (data != null) {
-                                                  this.setState(() {
-                                                    toData = data;
-                                                    traveldata[index]
-                                                            .destinationCity =
-                                                        toData.city;
-                                                    traveldata[index]
-                                                            .travellingCountryTo =
-                                                        toData.countryName;
-                                                  });
+                                          child: BlocProvider(
+                                            create: (context) =>
+                                                PurposeBloc(repository),
+                                            child: BlocBuilder<PurposeBloc,
+                                                PurposeState>(
+                                              builder: (context, state) {
+                                                purposecontext = context;
+
+                                                if (state is PurposeLoaded) {
+                                                  traveldata[this.index]
+                                                          .purposeList =
+                                                      state.purposelist.data;
                                                 }
+
+                                                return Container(
+                                                  child: CustomColumnEditText(
+                                                    "Destination ",
+                                                    traveldata[index]
+                                                        .destinationCity,
+                                                    traveldata[index]
+                                                        .travellingCountryTo,
+                                                    "To",
+                                                    1,
+                                                    onTap: () async {
+                                                      var data = await Navigator
+                                                          .pushNamed(context,
+                                                              '/SearchPlace');
+                                                      if (data != null) {
+                                                        this.setState(() {
+                                                          toData = data;
+                                                          traveldata[index]
+                                                                  .destinationCity =
+                                                              toData.city;
+                                                          traveldata[index]
+                                                                  .travellingCountryTo =
+                                                              toData
+                                                                  .countryName;
+                                                        });
+
+                                                        BlocProvider.of<
+                                                                    PurposeBloc>(
+                                                                context)
+                                                            .add(FetchPurposelist(
+                                                                toData
+                                                                    .iataCode));
+                                                        _appApiProvider.GetPostLocation(toData.countryName).then((value) => this.setState(() {
+
+                                                          postLocationList=value.data;
+                                                        }));
+
+                                                      }
+                                                    },
+                                                  ),
+                                                );
                                               },
                                             ),
                                           ),
@@ -516,12 +567,14 @@ class _AddCity extends State<AddCity> {
                                             onTap: () {
                                               selectDate(
                                                   context,
-                                                  DateTime.parse(traveldata[index]
-                                                      .departureDate),
-                                                  DateTime(2100), datevalue: (data) {
+                                                  DateTime.parse(
+                                                      traveldata[index]
+                                                          .departureDate),
+                                                  DateTime(2100),
+                                                  datevalue: (data) {
                                                 this.setState(() {
-                                                  traveldata[index].departureDate =
-                                                      data;
+                                                  traveldata[index]
+                                                      .departureDate = data;
                                                 });
                                               });
                                             },
@@ -530,85 +583,136 @@ class _AddCity extends State<AddCity> {
                                         SizedBox(
                                           width: 20,
                                         ),
-                                        getdepatureview()?Expanded(
-                                          flex: 1,
-                                          child: CustomColumnEditText(
-                                            "Select Date",
-                                            "${getDepartureDate(traveldata[index].returnDate.toString())}",
-                                            "${getDepatureDay(traveldata[index].returnDate.toString())}",
-                                            "Return",
-                                            2,
-                                            onTap: () {
-                                              selectDate(
-                                                  context,
-                                                  DateTime.parse(traveldata[index]
-                                                      .departureDate),
-                                                  DateTime(2100), datevalue: (data) {
-                                                this.setState(() {
-                                                  traveldata[index].returnDate = data;
-                                                });
-                                              });
-                                            },
-                                          ),
-                                        ):SizedBox(),
+                                        getdepatureview()
+                                            ? Expanded(
+                                                flex: 1,
+                                                child: CustomColumnEditText(
+                                                  "Select Date",
+                                                  "${getDepartureDate(traveldata[index].returnDate.toString())}",
+                                                  "${getDepatureDay(traveldata[index].returnDate.toString())}",
+                                                  "Return",
+                                                  2,
+                                                  onTap: () {
+                                                    selectDate(
+                                                        context,
+                                                        DateTime.parse(
+                                                            traveldata[index]
+                                                                .departureDate),
+                                                        DateTime(2100),
+                                                        datevalue: (data) {
+                                                      this.setState(() {
+                                                        traveldata[index]
+                                                            .returnDate = data;
+                                                      });
+                                                    });
+                                                  },
+                                                ),
+                                              )
+                                            : SizedBox(),
                                       ],
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          decoration: BoxDecoration(
-                                              border: Border(
-                                                  top: BorderSide(
-                                                      color:
-                                                          AppConstants.APP_THEME_COLOR),
-                                                  right: BorderSide(
-                                                      color:
-                                                          AppConstants.APP_THEME_COLOR),
-                                                  left: BorderSide(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    top: BorderSide(
+                                                        color: AppConstants
+                                                            .APP_THEME_COLOR),
+                                                    right: BorderSide(
+                                                        color: AppConstants
+                                                            .APP_THEME_COLOR),
+                                                    left: BorderSide(
+                                                        color: AppConstants
+                                                            .APP_THEME_COLOR))),
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                var travelList =
+                                                    traveldata[index]
+                                                        .purposeList;
+                                                if (travelList != null) {
+                                                  dynamic purposelist =
+                                                      await Navigator.pushNamed(
+                                                          context,
+                                                          '/PurposeScreen',
+                                                          arguments: {
+                                                        "list": travelList
+                                                      });
+                                                } else {
+                                                  showDefaultSnackbar(context,
+                                                      "Please choose the Destination point");
+                                                }
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child: Text(
+                                                  "Purpose of Travel",
+                                                  style: TextStyle(
                                                       color: AppConstants
-                                                          .APP_THEME_COLOR))),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              if (toData.iataCode != null) {
-                                                Navigator.pushNamed(
-                                                    context, '/PurposeScreen',
-                                                    arguments: {
-                                                      'iataCode': toData.iataCode
-                                                    });
-                                              } else {
-                                                showDefaultSnackbar(context,
-                                                    "Please choose Destination Point");
-                                              }
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(2.0),
-                                              child: Text(
-                                                "Purpose of Travel",
-                                                style: TextStyle(
-                                                    color: AppConstants.APP_THEME_COLOR,
-                                                    fontWeight: FontWeight.w500),
+                                                          .APP_THEME_COLOR,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        ),
+                                            )),
                                         customBorderBox(
-                                            "Visa", true, Icons.remove_red_eye,ontouch: (){
-
-                                          showCustomDialogClass(context,  Container(
+                                            "Visa", false, Icons.remove_red_eye,
+                                            ontouch: () {
+                                          showCustomDialogClass(
+                                            context,
+                                            Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
                                               ),
-                                              margin: EdgeInsets.only(left:10),
+                                              margin: EdgeInsets.only(left: 10),
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
-                                                  Align(child: Text("Visa Details",style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),),alignment: Alignment.center,),
-                                                  Expanded(child: Align(child: Text("Applicable visa:Work"),alignment: Alignment.centerLeft,),flex: 1,),
-                                                  Expanded(child: Align(child: Text("Number:dl001002"),alignment: Alignment.centerLeft,),flex: 1,),
-                                                  Expanded(child: Align(child: Text("Expiry date:06-Aug-2020"),alignment: Alignment.centerLeft,),flex:1),
-                                                  Expanded(child: SizedBox(),flex: 4,)
-
+                                                  Align(
+                                                    child: Text(
+                                                      "Visa Details",
+                                                      style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                  ),
+                                                  Expanded(
+                                                    child: Align(
+                                                      child: Text(
+                                                          "Applicable visa:Work"),
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                    ),
+                                                    flex: 1,
+                                                  ),
+                                                  Expanded(
+                                                    child: Align(
+                                                      child: Text(
+                                                          "Number:dl001002"),
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                    ),
+                                                    flex: 1,
+                                                  ),
+                                                  Expanded(
+                                                      child: Align(
+                                                        child: Text(
+                                                            "Expiry date:06-Aug-2020"),
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                      ),
+                                                      flex: 1),
+                                                  Expanded(
+                                                    child: SizedBox(),
+                                                    flex: 4,
+                                                  )
                                                 ],
                                               ),
                                             ),
@@ -623,6 +727,9 @@ class _AddCity extends State<AddCity> {
                                         color: AppConstants.APP_THEME_COLOR,
                                       ),
                                     ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
                                     Row(
                                       children: [
                                         Expanded(
@@ -630,7 +737,8 @@ class _AddCity extends State<AddCity> {
                                           child: Text(
                                             "Add Details",
                                             style: TextStyle(
-                                                color: AppConstants.APP_THEME_COLOR,
+                                                color: AppConstants
+                                                    .APP_THEME_COLOR,
                                                 fontWeight: FontWeight.w800,
                                                 fontSize: 16),
                                           ),
@@ -639,24 +747,23 @@ class _AddCity extends State<AddCity> {
                                           child: SizedBox(),
                                           flex: 1,
                                         ),
-
-
                                         SizedBox(
                                           width: 10,
                                         ),
                                         Expanded(
                                           child: customBorderBox(
-                                              "Agenda", false, Icons.add,ontouch: (){
-                                         showCustomDialogClass(context, AddAgenda());
-
+                                              "Agenda", false, Icons.add,
+                                              ontouch: () {
+                                            showCustomDialogClass(
+                                                context, AddAgenda());
                                           }),
                                           flex: 1,
-
                                         ),
                                       ],
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(top: 5, bottom: 10),
+                                      margin:
+                                          EdgeInsets.only(top: 5, bottom: 10),
                                       child: Row(
                                         children: [
                                           Expanded(
@@ -677,8 +784,8 @@ class _AddCity extends State<AddCity> {
                                                 toggleSize: 20.0,
                                                 borderRadius: 12.0,
                                                 inactiveColor: Colors.grey,
-                                                activeColor:
-                                                    AppConstants.APP_THEME_COLOR,
+                                                activeColor: AppConstants
+                                                    .APP_THEME_COLOR,
                                                 value: traveldata[index]
                                                     .isAccmodationRequired,
                                                 onToggle: (value) {
@@ -791,11 +898,12 @@ class _AddCity extends State<AddCity> {
                                               margin: EdgeInsets.only(top: 5),
                                               child: Row(
                                                 children: [
-                                                  traveldata[index].hostPhoneExt ==
+                                                  traveldata[index]
+                                                              .hostPhoneExt ==
                                                           'Code'
                                                       ? Container(
-                                                          child: Icon(
-                                                              Icons.arrow_drop_down))
+                                                          child: Icon(Icons
+                                                              .arrow_drop_down))
                                                       : Container(
                                                           child: CountryPickerUtils
                                                               .getDefaultFlagImage(
@@ -811,24 +919,31 @@ class _AddCity extends State<AddCity> {
                                                           this.setState(() {
                                                             traveldata[index]
                                                                     .hostPhoneExt =
-                                                                "+" + value.phoneCode;
-                                                            hostPhoneCountry = value;
+                                                                "+" +
+                                                                    value
+                                                                        .phoneCode;
+                                                            hostPhoneCountry =
+                                                                value;
                                                           });
                                                         }, dialCode: dialCode);
                                                       },
                                                       child: Container(
                                                         child: Align(
-                                                            alignment:
-                                                                Alignment.centerRight,
+                                                            alignment: Alignment
+                                                                .centerRight,
                                                             child: FittedBox(
-                                                              fit: BoxFit.scaleDown,
+                                                              fit: BoxFit
+                                                                  .scaleDown,
                                                               child: Text(
-                                                                traveldata[index]
+                                                                traveldata[
+                                                                        index]
                                                                     .hostPhoneExt,
                                                                 textAlign:
-                                                                    TextAlign.center,
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: TextStyle(
-                                                                    fontSize: 16),
+                                                                    fontSize:
+                                                                        16),
                                                               ),
                                                             )),
                                                       ),
@@ -849,7 +964,8 @@ class _AddCity extends State<AddCity> {
                                               Icons.ac_unit,
                                               1,
                                               onChange: (text) {
-                                                traveldata[index].hostPhoneNo = text;
+                                                traveldata[index].hostPhoneNo =
+                                                    text;
                                               },
                                             ),
                                           ),
@@ -862,7 +978,8 @@ class _AddCity extends State<AddCity> {
                                           alignment: Alignment.bottomLeft,
                                           child: DashboardEditFieldHeader(
                                               "Travelling to",
-                                              AppConstants.TEXT_BACKGROUND_COLOR),
+                                              AppConstants
+                                                  .TEXT_BACKGROUND_COLOR),
                                         ),
                                         SizedBox(
                                           width: 5.0.w,
@@ -871,12 +988,13 @@ class _AddCity extends State<AddCity> {
                                           child: RadioBtn(
                                             "Office location",
                                             "Client location",
-                                            getValue(
-                                                traveldata[index].isClientLocation),
+                                            getValue(traveldata[index]
+                                                .isClientLocation),
                                             "Office location",
                                             billable: (value) {
                                               this.setState(() {
-                                                traveldata[index].isClientLocation =
+                                                traveldata[index]
+                                                        .isClientLocation =
                                                     (!value).toString();
                                               });
                                             },
@@ -885,15 +1003,56 @@ class _AddCity extends State<AddCity> {
                                       ],
                                     ),
                                     !getbool(traveldata[index].isClientLocation)
-                                        ? DashboardCustomEditField(
-                                            "Location",
-                                            true,
-                                            Icons.arrow_drop_down_sharp,
-                                            1,
-                                            onChange: (text) {
-                                              traveldata[index].officeLocation = text;
-                                            },
-                                          )
+                                        ?
+                                    // DashboardCustomEditField(
+                                    //         "Location",
+                                    //         true,
+                                    //         Icons.arrow_drop_down_sharp,
+                                    //         1,
+                                    //         onChange: (text) {
+                                    //           traveldata[index].officeLocation =
+                                    //               text;
+                                    //         },
+                                    //       )
+                                    Container(
+                                      width:100.0.w,
+                                     height: 40,
+                                      child: FormField<String>(
+                                        builder: (FormFieldState<String> state) {
+                                          return
+                                            InputDecorator(
+                                              decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.zero,
+                                                  border: OutlineInputBorder(
+                                                      borderRadius: BorderRadius.circular(5.0))),
+                                              child: DropdownButtonHideUnderline(
+                                                child: DropdownButton<String>(
+                                                  hint: Text("Location"),
+                                                  value: currentSelectedValue,
+                                                  isDense: true,
+                                                  onChanged: (newValue) {
+                                                    setState(() {
+                                                      currentSelectedValue = newValue;
+                                                    });
+                                                    print(currentSelectedValue);
+                                                  },
+                                                  items: postLocationList.map((PostLocationData value) {
+                                                    return DropdownMenuItem<String>(
+                                                      value: value.locationName,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 10),
+                                                        child: Text(value.locationName),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                ),
+
+                                              ),
+                                            );
+                                        },
+                                      ),
+                                    )
+
                                         : Container(
                                             child: Column(
                                               children: [
@@ -903,8 +1062,8 @@ class _AddCity extends State<AddCity> {
                                                   Icons.arrow_drop_down_sharp,
                                                   2,
                                                   onChange: (text) {
-                                                    traveldata[index].clientName =
-                                                        text;
+                                                    traveldata[index]
+                                                        .clientName = text;
                                                   },
                                                 ),
                                                 DashboardCustomEditField(
@@ -913,8 +1072,8 @@ class _AddCity extends State<AddCity> {
                                                   Icons.arrow_drop_down_sharp,
                                                   2,
                                                   onChange: (text) {
-                                                    traveldata[index].clientAddress =
-                                                        text;
+                                                    traveldata[index]
+                                                        .clientAddress = text;
                                                   },
                                                 ),
                                                 Container(
@@ -926,15 +1085,17 @@ class _AddCity extends State<AddCity> {
                                                         flex: 1,
                                                         child: Container(
                                                           margin:
-                                                              EdgeInsets.only(top: 5),
+                                                              EdgeInsets.only(
+                                                                  top: 5),
                                                           child: Row(
                                                             children: [
                                                               traveldata[index]
                                                                           .clientNumberExt ==
                                                                       'Code'
                                                                   ? Container(
-                                                                      child: Icon(Icons
-                                                                          .arrow_drop_down))
+                                                                      child: Icon(
+                                                                          Icons
+                                                                              .arrow_drop_down))
                                                                   : Container(
                                                                       child: CountryPickerUtils
                                                                           .getDefaultFlagImage(
@@ -951,11 +1112,9 @@ class _AddCity extends State<AddCity> {
                                                                             (value) {
                                                                       this.setState(
                                                                           () {
-                                                                        traveldata[index]
-                                                                                .clientNumberExt =
+                                                                        traveldata[index].clientNumberExt =
                                                                             "+" +
-                                                                                value
-                                                                                    .phoneCode;
+                                                                                value.phoneCode;
                                                                         clientPhoneCountry =
                                                                             value;
                                                                       });
@@ -963,25 +1122,20 @@ class _AddCity extends State<AddCity> {
                                                                         dialCode:
                                                                             dialCode);
                                                                   },
-                                                                  child: Container(
+                                                                  child:
+                                                                      Container(
                                                                     child: Align(
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .centerRight,
-                                                                        child:
-                                                                            FittedBox(
+                                                                        alignment: Alignment.centerRight,
+                                                                        child: FittedBox(
                                                                           fit: BoxFit
                                                                               .scaleDown,
-                                                                          child: Text(
-                                                                            traveldata[
-                                                                                    index]
-                                                                                .clientNumberExt,
+                                                                          child:
+                                                                              Text(
+                                                                            traveldata[index].clientNumberExt,
                                                                             textAlign:
-                                                                                TextAlign
-                                                                                    .center,
-                                                                            style: TextStyle(
-                                                                                fontSize:
-                                                                                    16),
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
                                                                           ),
                                                                         )),
                                                                   ),
@@ -1004,7 +1158,8 @@ class _AddCity extends State<AddCity> {
                                                           1,
                                                           onChange: (text) {
                                                             traveldata[index]
-                                                                .clientNumber = text;
+                                                                    .clientNumber =
+                                                                text;
                                                           },
                                                         ),
                                                       ),
@@ -1015,7 +1170,8 @@ class _AddCity extends State<AddCity> {
                                             ),
                                           ),
                                     Container(
-                                      margin: EdgeInsets.only(top: 5, bottom: 10),
+                                      margin:
+                                          EdgeInsets.only(top: 5, bottom: 10),
                                       padding: EdgeInsets.all(5),
                                       child: Row(
                                         children: [
@@ -1037,13 +1193,14 @@ class _AddCity extends State<AddCity> {
                                                 toggleSize: 20.0,
                                                 borderRadius: 12.0,
                                                 inactiveColor: Colors.grey,
-                                                activeColor:
-                                                    AppConstants.APP_THEME_COLOR,
+                                                activeColor: AppConstants
+                                                    .APP_THEME_COLOR,
                                                 value: false,
                                                 onToggle: (value) {
-                                                  traveldata[index].isDependent =
-                                                      value;
-                                                  req_data.travelCity = traveldata;
+                                                  traveldata[index]
+                                                      .isDependent = value;
+                                                  req_data.travelCity =
+                                                      traveldata;
 
                                                   if (value) {
                                                     Navigator.pushNamed(
@@ -1056,7 +1213,6 @@ class _AddCity extends State<AddCity> {
                                         ],
                                       ),
                                     ),
-
                                   ],
                                 ),
                               ),
@@ -1070,24 +1226,22 @@ class _AddCity extends State<AddCity> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: EdgeInsets.only(right: 10, left: 10),
                 height: 10.0.w,
                 width: 100.0.w,
                 child: RaisedButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
-                      side: BorderSide(
-                          color: AppConstants.APP_THEME_COLOR)),
+                      side: BorderSide(color: AppConstants.APP_THEME_COLOR)),
                   onPressed: () {
-                    Navigator.pushNamed(
-                        context, '/AddNewTravel2');
+                    Navigator.pushNamed(context, '/AddNewTravel2');
                   },
                   color: AppConstants.APP_THEME_COLOR,
                   textColor: Colors.white,
                   child: Text("Save & Next".toUpperCase(),
                       style: TextStyle(fontSize: 14)),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -1157,12 +1311,13 @@ class _AddCity extends State<AddCity> {
     }
   }
 
-  getdepatureview(){
-    if(traveldata.length<=1){
+  getdepatureview() {
+    if (traveldata.length <= 1) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }
+
+
 }

@@ -1,9 +1,9 @@
 class PurposeModelClass {
   bool _status;
   String _message;
-  List<Data> _data;
+  List<PurposeData> _data;
 
-  PurposeModelClass({bool status, String message, List<Data> data}) {
+  PurposeModelClass({bool status, String message, List<PurposeData> data}) {
     this._status = status;
     this._message = message;
     this._data = data;
@@ -13,16 +13,16 @@ class PurposeModelClass {
   set status(bool status) => _status = status;
   String get message => _message;
   set message(String message) => _message = message;
-  List<Data> get data => _data;
-  set data(List<Data> data) => _data = data;
+  List<PurposeData> get data => _data;
+  set data(List<PurposeData> data) => _data = data;
 
   PurposeModelClass.fromJson(Map<String, dynamic> json) {
     _status = json['status'];
     _message = json['Message'];
     if (json['data'] != null) {
-      _data = new List<Data>();
+      _data = new List<PurposeData>();
       json['data'].forEach((v) {
-        _data.add(new Data.fromJson(v));
+        _data.add(new PurposeData.fromJson(v));
       });
     }
   }
@@ -38,7 +38,7 @@ class PurposeModelClass {
   }
 }
 
-class Data {
+class PurposeData {
   bool _isChecked=false;
   int _id;
   String _dateCreated;
@@ -169,7 +169,7 @@ class Data {
   dynamic get column12 => _column12;
   set column12(dynamic column12) => _column12 = column12;
 
-  Data.fromJson(Map<String, dynamic> json) {
+  PurposeData.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _dateCreated = json['date_created'];
     _dateModified = json['date_modified'];

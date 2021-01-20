@@ -13,6 +13,7 @@ class AppConstants {
   static final String GET_PURPOSE="/get_add/visa_purpose_list/";
   static final String DIAL_CODE="/get_dial_code/";
   static final String GET_PROJECT="/get_project/";
+  static final String GET_POST_LOCATION="/get_post_location/";
 
 
 

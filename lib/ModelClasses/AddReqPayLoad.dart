@@ -1,3 +1,5 @@
+import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
+
 class TravelReqPayLoad {
   String _travelReqId;
   String _project;
@@ -217,6 +219,13 @@ class TravelCity {
     _hide = value;
   }
 
+  List<PurposeData> get purposeList => _purposeList;
+
+  set purposeList(List<PurposeData> value) {
+    _purposeList = value;
+  }
+
+  List<PurposeData> _purposeList;
   String _destinationCity;
   String _travellingCountry;
   String _travellingCountryTo;
@@ -250,6 +259,7 @@ class TravelCity {
 
   TravelCity(
       {
+        List<PurposeData> purposeList,
         int hide,
         String sourceCity,
         String destinationCity,
@@ -282,6 +292,7 @@ class TravelCity {
         String hostPhoneExt,
         bool isDependent,
         List<DependentData> dependentData}) {
+    this._purposeList=purposeList;
     this._sourceCity = sourceCity;
     this._hide=hide;
     this._destinationCity = destinationCity;

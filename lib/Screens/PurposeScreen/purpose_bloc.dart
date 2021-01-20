@@ -33,5 +33,8 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
         yield PurposeError("Couldn't Fetch Data");
       }
     }
+    if(event is ResetBloc){
+      yield PurposeInitial();
+    }
   }
 }
