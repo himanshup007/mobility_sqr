@@ -105,7 +105,7 @@ class _RadioBtnState extends State<RadioBtn> {
             widget.billable(false);
           },
           child: Container(
-            width: 25.0.w,
+            width: 24.0.w,
  margin: EdgeInsets.only(left: 5),
             child: Container(
               padding: EdgeInsets.all(5),

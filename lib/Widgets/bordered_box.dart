@@ -8,10 +8,10 @@ customBorderBox(String text, bool ShowIcon, IconData icon,
       ontouch();
     },
     child: Container(
-        height: 20,
+        height: 30,
          width: 60,
         margin: EdgeInsets.only(top: 2),
-        decoration: BoxDecoration(border: Border.all(color: AppConstants.APP_THEME_COLOR)),
+        decoration: BoxDecoration(border: Border.all(color: AppConstants.APP_THEME_COLOR),borderRadius: BorderRadius.all(Radius.circular(5))),
         child: FittedBox(
           fit: BoxFit.none,
           child: Row(
