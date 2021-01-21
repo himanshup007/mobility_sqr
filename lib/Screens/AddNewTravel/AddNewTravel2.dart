@@ -3,7 +3,6 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
-import 'package:sizer/sizer.dart';
 
 
 class AddNewTravel2 extends StatefulWidget {

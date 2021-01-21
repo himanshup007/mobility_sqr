@@ -7,8 +7,8 @@ class PersonalInfo extends StatefulWidget {
 }
 
 class _PersonalInfoState extends State<PersonalInfo> {
+  bool iseditable = false;
 
-  bool iseditable=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +22,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
         centerTitle: true,
         actions: [
           GestureDetector(
-            onTap: (){
+            onTap: () {
               this.setState(() {
-                iseditable=!iseditable;
+                iseditable = !iseditable;
               });
             },
             child: Container(
@@ -34,7 +34,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
               child: Image.asset(
                 'assets/images/edit.png',
                 fit: BoxFit.contain,
-                color: iseditable?AppConstants.APP_THEME_COLOR:Colors.black12,
+                color:
+                    iseditable ? Colors.black12 : AppConstants.APP_THEME_COLOR,
               ),
             ),
           ),
@@ -43,15 +44,49 @@ class _PersonalInfoState extends State<PersonalInfo> {
       body: Container(
         child: Column(
           children: [
-            ColumnWidget('First Name', 'Enter First Name', iseditable, false),
-            ColumnWidget('Last Name', 'Enter Last Name', iseditable, false),
-            ColumnWidget('Phone Number', 'Enter Phone Number', iseditable, false),
-            ColumnWidget('Email Address', 'Enter Email Address', iseditable, false),
-            ColumnWidget('Country of Birth', 'Select Country of Birth  ', iseditable, true),
-            ColumnWidget('Maratial Status', 'Select Maratial Status', iseditable, true),
-            ColumnWidget('Nationality', 'Select Nationality', iseditable, true),
+            Expanded(
+              flex: 10,
+              child: Column(
+                children: [
+                  ColumnWidget('First Name', 'Enter First Name', iseditable, false),
+                  ColumnWidget('Last Name', 'Enter Last Name', iseditable, false),
+                  ColumnWidget('Phone Number', 'Enter Phone Number', iseditable, false),
+                  ColumnWidget('Email Address', 'Enter Email Address', iseditable, false),
+                  ColumnWidget('Country of Birth', 'Select Country of Birth',false, true),
+                  ColumnWidget('Maratial Status', 'Select Maratial Status', false, true),
+                  ColumnWidget('Nationality', 'Select Nationality', false, true),
+                ],
+              ),
+            ),
+
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: Container(
+                   width: MediaQuery.of(context).size.width * 0.95,
+                   height: 45,
+                  child: FlatButton(
+                    child: Text(
+                      'DONE',
+                      style: TextStyle(fontSize: 20.0),
+                      textAlign: TextAlign.center,
+                    ),
+                    textColor: Colors.white,
+                    color: AppConstants.APP_THEME_COLOR,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/Dashboard');
+                    },
+                  ),
+                ),
+              ),
+            ),
           ],
+
         ),
+
       ),
     );
 
@@ -99,13 +134,14 @@ class ColumnWidget extends StatelessWidget {
             ),
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
-                 suffixIcon: showDropdown ? Icon(
-                   Icons.arrow_drop_down,size: 25,
-
-                 ) : null,
+                suffixIcon: showDropdown
+                    ? Icon(
+                        Icons.arrow_drop_down,
+                        size: 25,
+                      )
+                    : null,
                 // contentPadding: EdgeInsets.fromLTRB(0, 9, 0, 7),
-
-                enabled: iseditable,
+                 enabled: iseditable,
                 isDense: true,
                 border: UnderlineInputBorder(),
                 hintText: hint,
