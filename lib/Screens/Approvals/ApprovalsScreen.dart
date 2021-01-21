@@ -2323,7 +2323,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/Dashboard');
+
                     },
                   ),
                 ),

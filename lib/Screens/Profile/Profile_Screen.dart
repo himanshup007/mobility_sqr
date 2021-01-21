@@ -31,7 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 image: new DecorationImage(
                                     fit: BoxFit.fill,
                                     image: new NetworkImage(
-                                        "https://i.imgur.com/BoN9kdC.png")))),
+                                        "https://picsum.photos/200")))),
                         SizedBox(height: 10),
                         Text(
                           "Divyanshu Kumar",
