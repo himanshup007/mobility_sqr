@@ -1,6 +1,8 @@
+import 'package:country_pickers/country.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 
 class TravelReqPayLoad {
   String _travelReqId;
@@ -27,32 +29,35 @@ class TravelReqPayLoad {
   String _expenceReturnDate;
   String _expenceEstimatedCost;
   String _expenceCureency;
+  Country _homeCountry;
 
   TravelReqPayLoad(
       {String travelReqId,
-        String project,
-        String projectName,
-        bool isBillable,
-        bool isTravelMultiCountry,
-        bool isTravelMultiCity,
-        String homeContactName,
-        String homePhoneNumber,
-        String homePhoneExt,
-        String empEmail,
-        String remark,
-        bool isLaptopRequired,
-        bool haveLaptop,
-        String organization,
-        String travelReqStatus,
-        List<TravelCity> travelCity,
-        List<TravelVisa> travelVisa,
-        String createdBy,
-        String expenceFromCountry,
-        String expenceToCountry,
-        String expenceDepartureDate,
-        String expenceReturnDate,
-        String expenceEstimatedCost,
-        String expenceCureency}) {
+      String project,
+      String projectName,
+      bool isBillable,
+      bool isTravelMultiCountry,
+      bool isTravelMultiCity,
+      String homeContactName,
+      String homePhoneNumber,
+      String homePhoneExt,
+      String empEmail,
+      String remark,
+      bool isLaptopRequired,
+      bool haveLaptop,
+      String organization,
+      String travelReqStatus,
+      List<TravelCity> travelCity,
+      List<TravelVisa> travelVisa,
+      String createdBy,
+      String expenceFromCountry,
+      String expenceToCountry,
+      String expenceDepartureDate,
+      String expenceReturnDate,
+      String expenceEstimatedCost,
+      String expenceCureency,
+      Country homeCountry}) {
+    this._homeCountry = homeCountry;
     this._travelReqId = travelReqId;
     this._project = project;
     this._projectName = projectName;
@@ -79,64 +84,117 @@ class TravelReqPayLoad {
     this._expenceCureency = expenceCureency;
   }
 
+  Country get homeCountry => _homeCountry;
+
+  set homeCountry(Country value) {
+    _homeCountry = value;
+  }
+
   String get travelReqId => _travelReqId;
+
   set travelReqId(String travelReqId) => _travelReqId = travelReqId;
+
   String get project => _project;
+
   set project(String project) => _project = project;
+
   String get projectName => _projectName;
+
   set projectName(String projectName) => _projectName = projectName;
+
   bool get isBillable => _isBillable;
+
   set isBillable(bool isBillable) => _isBillable = isBillable;
+
   bool get isTravelMultiCountry => _isTravelMultiCountry;
+
   set isTravelMultiCountry(bool isTravelMultiCountry) =>
       _isTravelMultiCountry = isTravelMultiCountry;
+
   bool get isTravelMultiCity => _isTravelMultiCity;
+
   set isTravelMultiCity(bool isTravelMultiCity) =>
       _isTravelMultiCity = isTravelMultiCity;
+
   String get homeContactName => _homeContactName;
+
   set homeContactName(String homeContactName) =>
       _homeContactName = homeContactName;
+
   String get homePhoneNumber => _homePhoneNumber;
+
   set homePhoneNumber(String homePhoneNumber) =>
       _homePhoneNumber = homePhoneNumber;
+
   String get homePhoneExt => _homePhoneExt;
+
   set homePhoneExt(String homePhoneExt) => _homePhoneExt = homePhoneExt;
+
   String get empEmail => _empEmail;
+
   set empEmail(String empEmail) => _empEmail = empEmail;
+
   String get remark => _remark;
+
   set remark(String remark) => _remark = remark;
+
   bool get isLaptopRequired => _isLaptopRequired;
+
   set isLaptopRequired(bool isLaptopRequired) =>
       _isLaptopRequired = isLaptopRequired;
+
   bool get haveLaptop => _haveLaptop;
+
   set haveLaptop(bool haveLaptop) => _haveLaptop = haveLaptop;
+
   String get organization => _organization;
+
   set organization(String organization) => _organization = organization;
+
   String get travelReqStatus => _travelReqStatus;
+
   set travelReqStatus(String travelReqStatus) =>
       _travelReqStatus = travelReqStatus;
+
   List<TravelCity> get travelCity => _travelCity;
+
   set travelCity(List<TravelCity> travelCity) => _travelCity = travelCity;
+
   List<TravelVisa> get travelVisa => _travelVisa;
+
   set travelVisa(List<TravelVisa> travelVisa) => _travelVisa = travelVisa;
+
   String get createdBy => _createdBy;
+
   set createdBy(String createdBy) => _createdBy = createdBy;
+
   String get expenceFromCountry => _expenceFromCountry;
+
   set expenceFromCountry(String expenceFromCountry) =>
       _expenceFromCountry = expenceFromCountry;
+
   String get expenceToCountry => _expenceToCountry;
+
   set expenceToCountry(String expenceToCountry) =>
       _expenceToCountry = expenceToCountry;
+
   String get expenceDepartureDate => _expenceDepartureDate;
+
   set expenceDepartureDate(String expenceDepartureDate) =>
       _expenceDepartureDate = expenceDepartureDate;
+
   String get expenceReturnDate => _expenceReturnDate;
+
   set expenceReturnDate(String expenceReturnDate) =>
       _expenceReturnDate = expenceReturnDate;
+
   String get expenceEstimatedCost => _expenceEstimatedCost;
+
   set expenceEstimatedCost(String expenceEstimatedCost) =>
       _expenceEstimatedCost = expenceEstimatedCost;
+
   String get expenceCureency => _expenceCureency;
+
   set expenceCureency(String expenceCureency) =>
       _expenceCureency = expenceCureency;
 
@@ -212,8 +270,10 @@ class TravelReqPayLoad {
 }
 
 class TravelCity {
-  int  _hide;
+  int _hide;
   String _sourceCity;
+  String _perDiamValue;
+  String _transportCost;
 
   int get hide => _hide;
 
@@ -268,6 +328,14 @@ class TravelCity {
   List<DependentData> _dependentData;
   List<PostLocationData> _postLocationList;
   List<SecondDependentData> _myDependentList;
+  SearchList _toCountryData ;
+
+
+  SearchList get toCountryData => _toCountryData;
+
+  set toCountryData(SearchList value) {
+    _toCountryData = value;
+  }
 
   List<SecondDependentData> get myDependentList => _myDependentList;
 
@@ -281,49 +349,66 @@ class TravelCity {
     _postLocationList = value;
   }
 
+  String get perDiamValue => _perDiamValue;
+
+  set perDiamValue(String value) {
+    _perDiamValue = value;
+  }
+
+  String get transportCost => _transportCost;
+
+  set transportCost(String value) {
+    _transportCost = value;
+  }
+
   TravelCity(
-      {
-        List<SecondDependentData> myDependentList,
-        PostLocationData postLocationData,
-        List<PostLocationData> postLocationList,
-        List<PurposeData> purposeList,
-        int hide,
-        String sourceCity,
-        String destinationCity,
-        String travellingCountry,
-        String travellingCountryTo,
-        String departureDate,
-        String returnDate,
-        bool isAccmodationRequired,
-        String accmodationStartDate,
-        String accmodationEndDate,
-        dynamic hotelCost,
-        dynamic perDiemCost,
-        dynamic transportationCost,
-        dynamic totalCost,
-        String reportingCurrency,
-        String currency,
-        String agenda,
-        String travelPurpose,
-        String applicableVisa,
-        String visaNumber,
-        String visaExpiryDate,
-        String isClientLocation,
-        String clientName,
-        String clientNumber,
-        String clientNumberExt,
-        String clientAddress,
-        String officeLocation,
-        String hostHrName,
-        String hostPhoneNo,
-        String hostPhoneExt,
-        bool isDependent,
-        List<DependentData> dependentData}) {
-    this._myDependentList=myDependentList;
-    this._postLocationData=postLocationData;
-    this._purposeList=purposeList;
+      {String TransportCost,
+        SearchList toCountryData,
+      List<SecondDependentData> myDependentList,
+      PostLocationData postLocationData,
+      List<PostLocationData> postLocationList,
+      List<PurposeData> purposeList,
+      int hide,
+      String sourceCity,
+      String destinationCity,
+      String travellingCountry,
+      String travellingCountryTo,
+      String departureDate,
+      String returnDate,
+      bool isAccmodationRequired,
+      String accmodationStartDate,
+      String accmodationEndDate,
+      dynamic hotelCost,
+      dynamic perDiemCost,
+      dynamic transportationCost,
+      dynamic totalCost,
+      String reportingCurrency,
+      String currency,
+      String agenda,
+      String travelPurpose,
+      String applicableVisa,
+      String visaNumber,
+      String visaExpiryDate,
+      String isClientLocation,
+      String clientName,
+      String clientNumber,
+      String clientNumberExt,
+      String clientAddress,
+      String officeLocation,
+      String hostHrName,
+      String hostPhoneNo,
+      String hostPhoneExt,
+      bool isDependent,
+      String perDiemValue,
+      List<DependentData> dependentData}) {
+    this._toCountryData=toCountryData;
+    this._transportCost = TransportCost;
+    this._perDiamValue = perDiemValue;
+    this._myDependentList = myDependentList;
+    this._postLocationData = postLocationData;
+    this._purposeList = purposeList;
     this._sourceCity = sourceCity;
-    this._hide=hide;
+    this._hide = hide;
     this._destinationCity = destinationCity;
     this._travellingCountry = travellingCountry;
     this._travellingCountryTo = travellingCountryTo;
@@ -354,80 +439,141 @@ class TravelCity {
     this._hostPhoneExt = hostPhoneExt;
     this._isDependent = isDependent;
     this._dependentData = dependentData;
-    this._postLocationList=postLocationList;
+    this._postLocationList = postLocationList;
   }
 
   String get sourceCity => _sourceCity;
+
   set sourceCity(String sourceCity) => _sourceCity = sourceCity;
+
   String get destinationCity => _destinationCity;
+
   set destinationCity(String destinationCity) =>
       _destinationCity = destinationCity;
+
   String get travellingCountry => _travellingCountry;
+
   set travellingCountry(String travellingCountry) =>
       _travellingCountry = travellingCountry;
+
   String get travellingCountryTo => _travellingCountryTo;
+
   set travellingCountryTo(String travellingCountryTo) =>
       _travellingCountryTo = travellingCountryTo;
+
   String get departureDate => _departureDate;
+
   set departureDate(String departureDate) => _departureDate = departureDate;
+
   String get returnDate => _returnDate;
+
   set returnDate(String returnDate) => _returnDate = returnDate;
+
   bool get isAccmodationRequired => _isAccmodationRequired;
+
   set isAccmodationRequired(bool isAccmodationRequired) =>
       _isAccmodationRequired = isAccmodationRequired;
+
   String get accmodationStartDate => _accmodationStartDate;
+
   set accmodationStartDate(String accmodationStartDate) =>
       _accmodationStartDate = accmodationStartDate;
+
   String get accmodationEndDate => _accmodationEndDate;
+
   set accmodationEndDate(String accmodationEndDate) =>
       _accmodationEndDate = accmodationEndDate;
+
   dynamic get hotelCost => _hotelCost;
+
   set hotelCost(dynamic hotelCost) => _hotelCost = hotelCost;
+
   dynamic get perDiemCost => _perDiemCost;
+
   set perDiemCost(dynamic perDiemCost) => _perDiemCost = perDiemCost;
+
   dynamic get transportationCost => _transportationCost;
+
   set transportationCost(dynamic transportationCost) =>
       _transportationCost = transportationCost;
+
   dynamic get totalCost => _totalCost;
+
   set totalCost(dynamic totalCost) => _totalCost = totalCost;
+
   String get reportingCurrency => _reportingCurrency;
+
   set reportingCurrency(String reportingCurrency) =>
       _reportingCurrency = reportingCurrency;
+
   String get currency => _currency;
+
   set currency(String currency) => _currency = currency;
+
   String get agenda => _agenda;
+
   set agenda(String agenda) => _agenda = agenda;
+
   String get travelPurpose => _travelPurpose;
+
   set travelPurpose(String travelPurpose) => _travelPurpose = travelPurpose;
+
   String get applicableVisa => _applicableVisa;
+
   set applicableVisa(String applicableVisa) => _applicableVisa = applicableVisa;
+
   String get visaNumber => _visaNumber;
+
   set visaNumber(String visaNumber) => _visaNumber = visaNumber;
+
   String get visaExpiryDate => _visaExpiryDate;
+
   set visaExpiryDate(String visaExpiryDate) => _visaExpiryDate = visaExpiryDate;
+
   String get isClientLocation => _isClientLocation;
+
   set isClientLocation(String isClientLocation) =>
       _isClientLocation = isClientLocation;
+
   String get clientName => _clientName;
+
   set clientName(String clientName) => _clientName = clientName;
+
   String get clientNumber => _clientNumber;
+
   set clientNumber(String clientNumber) => _clientNumber = clientNumber;
+
   String get clientNumberExt => _clientNumberExt;
+
   set clientNumberExt(String clientNumberExt) =>
       _clientNumberExt = clientNumberExt;
+
   String get clientAddress => _clientAddress;
+
   set clientAddress(String clientAddress) => _clientAddress = clientAddress;
+
   String get officeLocation => _officeLocation;
+
   set officeLocation(String officeLocation) => _officeLocation = officeLocation;
+
   String get hostHrName => _hostHrName;
+
   set hostHrName(String hostHrName) => _hostHrName = hostHrName;
+
   String get hostPhoneNo => _hostPhoneNo;
+
   set hostPhoneNo(String hostPhoneNo) => _hostPhoneNo = hostPhoneNo;
+
   String get hostPhoneExt => _hostPhoneExt;
+
   set hostPhoneExt(String hostPhoneExt) => _hostPhoneExt = hostPhoneExt;
+
   bool get isDependent => _isDependent;
+
   set isDependent(bool isDependent) => _isDependent = isDependent;
+
   List<DependentData> get dependentData => _dependentData;
+
   set dependentData(List<DependentData> dependentData) =>
       _dependentData = dependentData;
 
@@ -523,11 +669,16 @@ class DependentData {
   }
 
   String get dependentRelation => _dependentRelation;
+
   set dependentRelation(String dependentRelation) =>
       _dependentRelation = dependentRelation;
+
   String get dependentName => _dependentName;
+
   set dependentName(String dependentName) => _dependentName = dependentName;
+
   String get reqId => _reqId;
+
   set reqId(String reqId) => _reqId = reqId;
 
   DependentData.fromJson(Map<String, dynamic> json) {
@@ -569,25 +720,25 @@ class TravelVisa {
 
   TravelVisa(
       {String reqId,
-        String projectId,
-        String projectName,
-        bool isBillable,
-        String fromCity,
-        String toCity,
-        String travelStartDate,
-        String travelEndDate,
-        String visaPurpose,
-        String appliedVisa,
-        String requestNotes,
-        String visaStatus,
-        String empEmail,
-        String organization,
-        String visaReqId,
-        bool isDependent,
-        String dependentRelation,
-        String dependentName,
-        String country,
-        String createdBy}) {
+      String projectId,
+      String projectName,
+      bool isBillable,
+      String fromCity,
+      String toCity,
+      String travelStartDate,
+      String travelEndDate,
+      String visaPurpose,
+      String appliedVisa,
+      String requestNotes,
+      String visaStatus,
+      String empEmail,
+      String organization,
+      String visaReqId,
+      bool isDependent,
+      String dependentRelation,
+      String dependentName,
+      String country,
+      String createdBy}) {
     this._reqId = reqId;
     this._projectId = projectId;
     this._projectName = projectName;
@@ -611,46 +762,85 @@ class TravelVisa {
   }
 
   String get reqId => _reqId;
+
   set reqId(String reqId) => _reqId = reqId;
+
   String get projectId => _projectId;
+
   set projectId(String projectId) => _projectId = projectId;
+
   String get projectName => _projectName;
+
   set projectName(String projectName) => _projectName = projectName;
+
   bool get isBillable => _isBillable;
+
   set isBillable(bool isBillable) => _isBillable = isBillable;
+
   String get fromCity => _fromCity;
+
   set fromCity(String fromCity) => _fromCity = fromCity;
+
   String get toCity => _toCity;
+
   set toCity(String toCity) => _toCity = toCity;
+
   String get travelStartDate => _travelStartDate;
+
   set travelStartDate(String travelStartDate) =>
       _travelStartDate = travelStartDate;
+
   String get travelEndDate => _travelEndDate;
+
   set travelEndDate(String travelEndDate) => _travelEndDate = travelEndDate;
+
   String get visaPurpose => _visaPurpose;
+
   set visaPurpose(String visaPurpose) => _visaPurpose = visaPurpose;
+
   String get appliedVisa => _appliedVisa;
+
   set appliedVisa(String appliedVisa) => _appliedVisa = appliedVisa;
+
   String get requestNotes => _requestNotes;
+
   set requestNotes(String requestNotes) => _requestNotes = requestNotes;
+
   String get visaStatus => _visaStatus;
+
   set visaStatus(String visaStatus) => _visaStatus = visaStatus;
+
   String get empEmail => _empEmail;
+
   set empEmail(String empEmail) => _empEmail = empEmail;
+
   String get organization => _organization;
+
   set organization(String organization) => _organization = organization;
+
   String get visaReqId => _visaReqId;
+
   set visaReqId(String visaReqId) => _visaReqId = visaReqId;
+
   bool get isDependent => _isDependent;
+
   set isDependent(bool isDependent) => _isDependent = isDependent;
+
   String get dependentRelation => _dependentRelation;
+
   set dependentRelation(String dependentRelation) =>
       _dependentRelation = dependentRelation;
+
   String get dependentName => _dependentName;
+
   set dependentName(String dependentName) => _dependentName = dependentName;
+
   String get country => _country;
+
   set country(String country) => _country = country;
+
   String get createdBy => _createdBy;
+
   set createdBy(String createdBy) => _createdBy = createdBy;
 
   TravelVisa.fromJson(Map<String, dynamic> json) {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
@@ -242,16 +243,17 @@ class _Username_Screen extends State<Username_Screen> {
     showDialog(
       context: context,
       barrierDismissible: false,
+
       builder: (BuildContext context) {
         dialogContext = context;
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            height: 50,
-            width: 50,
-            color: Colors.transparent,
-            child: Center(
-              child: CircularProgressIndicator(),
+        return Container(
+          height: 50,
+          width: 50,
+          color: Colors.transparent,
+          child: Center(
+            child:LoadingBouncingGrid.circle(
+              size: 50,
+              backgroundColor: Colors.white,
             ),
           ),
         );
@@ -260,13 +262,22 @@ class _Username_Screen extends State<Username_Screen> {
   }
 
   void getTimeforPush() async {
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       Navigator.of(context, rootNavigator: true).pop(dialogContext);
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          '/Term&Condition', (Route<dynamic> route) => false);
+      var userinfo = await bloc.setUserInfo();
+      if (userinfo.data.termandcondtion == "1") {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/Dashboard', (Route<dynamic> route) => false);
+
+      } else {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/Term&Condition', (Route<dynamic> route) => false);
+      }
     });
+    }
+
   }
-}
+
 
 class Loign_UI_Constants {
   static const TextStyle styleForText = TextStyle(

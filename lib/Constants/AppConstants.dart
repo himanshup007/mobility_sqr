@@ -15,6 +15,10 @@ class AppConstants {
   static final String GET_PROJECT="/get_project/";
   static final String GET_POST_LOCATION="/get_post_location/";
   static final String Get_DEPENDENTS="/emoloyeedependent/";
+  static final String GET_PER_DIEM="/get_perdiem/";
+  static final String GET_EMPLYOEE_VISA="/get_employee_visa/";
+  static final String POST_TRAVEL_REQ="/get_add/travel_request/";
+
 
 
 

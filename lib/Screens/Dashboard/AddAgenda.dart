@@ -38,7 +38,7 @@ class _AddAgendaState extends State<AddAgenda> {
                 "Add Agenda",
                 style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 20,
+                    fontSize: 25,
                     color: Colors.black),
                 textAlign: TextAlign.center,
               ),
@@ -83,7 +83,7 @@ class _AddAgendaState extends State<AddAgenda> {
             maxLines: 12,
 
             style: TextStyle(
-              fontSize: 16.0,
+              fontSize: 20.0,
               height: 1.0,
               color: Colors.black,
             ),

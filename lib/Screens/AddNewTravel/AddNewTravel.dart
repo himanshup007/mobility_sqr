@@ -13,6 +13,7 @@ import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
+import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 
@@ -36,6 +37,7 @@ import 'package:sizer/sizer.dart';
 class AddCity extends StatefulWidget {
   @override
   _AddCity createState() => _AddCity();
+
 }
 
 class _AddCity extends State<AddCity> {
@@ -46,7 +48,8 @@ class _AddCity extends State<AddCity> {
   int index = 0;
   int id = 1;
   String radioButtonItem = 'ONE';
-  SearchList fromData = SearchList(countryName: "", airportName: "", city: "");
+
+
   SearchList toData = SearchList(countryName: "", airportName: "", city: "");
   bool accomodationBool = false;
   List<String> dialCode = new List<String>();
@@ -57,6 +60,7 @@ class _AddCity extends State<AddCity> {
   BuildContext purposecontext;
 
   ApiProvider _appApiProvider = ApiProvider();
+
 
   var currentSelectedValue;
 
@@ -103,6 +107,35 @@ class _AddCity extends State<AddCity> {
 
     modelClass.isDependent=false;
     traveldata.add(modelClass);
+    req_data.homePhoneExt='Code';
+    req_data.isLaptopRequired=false;
+    req_data.haveLaptop=false;
+    req_data.travelReqId="";
+    traveldata[index].dependentData=[];
+
+    TravelVisa visa = new TravelVisa();
+    visa.reqId="0";
+    visa.projectId="1001";
+    visa.projectName="3M Lights on support";
+    visa.isBillable=true;
+    visa.fromCity= "United States";
+    visa.toCity= "United States";
+    visa.travelStartDate= "2021-01-08T06:52:36.397Z";
+    visa.travelEndDate="2021-01-27T18:30:00.000Z";
+   visa.visaPurpose= "19";
+
+   visa.appliedVisa= "Work";
+    visa.requestNotes= "";
+    visa.visaStatus= "1";
+    visa.empEmail= "Emp112";
+    visa.organization= "ORG150866";
+    visa.visaReqId= "";
+    visa.isDependent= true;
+   visa.dependentRelation= "SP";
+  visa.dependentName= "test9";
+    visa.country= "231";
+   visa.createdBy ="Emp112";
+    req_data.travelVisa=[visa];
   }
 
   manageColor(bool show) {
@@ -138,7 +171,10 @@ class _AddCity extends State<AddCity> {
     modelClass.sourceCity = traveldata[index - 1].destinationCity;
     modelClass.travellingCountry = traveldata[index - 1].travellingCountryTo;
     modelClass.isDependent=false;
-
+    modelClass.dependentData=[];
+    req_data.homePhoneExt='Code';
+    req_data.isLaptopRequired=false;
+    req_data.haveLaptop=false;
     for (int i = 0; i < userdetails.length; i++) {
       if (i == index) {
         userdetails[i].hide = false;
@@ -486,13 +522,14 @@ class _AddCity extends State<AddCity> {
                                                             '/SearchPlace');
                                                     if (data != null) {
                                                       this.setState(() {
-                                                        toData = data;
+                                                        traveldata[index].toCountryData=data;
+
                                                         traveldata[index]
                                                                 .destinationCity =
-                                                            toData.city;
+                                                            traveldata[index].toCountryData.city;
                                                         traveldata[index]
                                                                 .travellingCountryTo =
-                                                            toData.countryName;
+                                                            traveldata[index].toCountryData.countryName;
                                                       });
 
                                                       BlocProvider.of<
@@ -500,11 +537,20 @@ class _AddCity extends State<AddCity> {
                                                               context)
                                                           .add(FetchPurposelist(
                                                               toData.iataCode));
-                                                      _appApiProvider.GetPostLocation(toData.countryName).then((value) =>
+                                                      _appApiProvider.GetPostLocation(traveldata[index].toCountryData.countryName).then((value) =>
                                                               this.setState(() {traveldata[index].postLocationList = value.data;}));
 
-                                                      _appApiProvider.GetDependentList(toData.countryName).then((value) => this.setState(() {
+                                                      _appApiProvider.GetDependentList(traveldata[index].toCountryData.countryName).then((value) => this.setState(() {
                                                         traveldata[index].myDependentList=value;
+
+                                                        _appApiProvider.GetPerDiem(traveldata[index].toCountryData.countryName).then((value) =>
+                                                        this.setState(() {
+                                                          traveldata[index].perDiamValue=value.perDiem;
+                                                          traveldata[index].transportCost=value.transportation;
+                                                          traveldata[index].currency=value.currency;
+
+                                                        })
+                                                        );
                                                       }));
                                                     }
                                                   },
@@ -521,7 +567,7 @@ class _AddCity extends State<AddCity> {
                                       Expanded(
                                         flex: 1,
                                         child: CustomColumnEditText(
-                                          "hint",
+                                          "Select Date",
                                           "${getDepartureDate(traveldata[index].departureDate)}",
                                           "${getDepatureDay(traveldata[index].departureDate)}",
                                           "Departure",
@@ -620,6 +666,14 @@ class _AddCity extends State<AddCity> {
                                                             'Business';
                                                       });
                                                     }
+
+
+                                                    _appApiProvider.GetTravelVisa(traveldata[index].travelPurpose, traveldata[index].toCountryData.countryName).then((value) =>
+
+                                                    SetValueTravelReq(value)
+
+                                                    );
+
                                                   } else {
                                                     showDefaultSnackbar(context,
                                                         "Please choose the Destination point");
@@ -655,7 +709,7 @@ class _AddCity extends State<AddCity> {
                                               : SizedBox(),
                                         ],
                                       ),
-                                      customBorderBox(
+                                      traveldata[index].visaNumber!=null?customBorderBox(
                                           "Visa", false, Icons.remove_red_eye,
                                           ontouch: () {
                                         showCustomDialogClass(
@@ -668,53 +722,69 @@ class _AddCity extends State<AddCity> {
                                             margin: EdgeInsets.only(left: 10),
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
+                                                SizedBox(height: 30,),
                                                 Align(
                                                   child: Text(
                                                     "Visa Details",
                                                     style: TextStyle(
-                                                        fontSize: 17,
+                                                        fontSize: 30,
                                                         fontWeight:
-                                                            FontWeight.w700),
+                                                            FontWeight.w700,color: AppConstants.APP_THEME_COLOR),
                                                   ),
                                                   alignment: Alignment.center,
                                                 ),
-                                                Expanded(
-                                                  child: Align(
-                                                    child: Text(
-                                                        "Applicable visa:Work"),
-                                                    alignment:
-                                                        Alignment.centerLeft,
+                                                SizedBox(height: 30,),
+                                                Align(
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                          "Applicable visa:  ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,color:Colors.black54 ),textAlign: TextAlign.center,),
+
+                                                      Text(
+                                                        "${traveldata[index].travelPurpose}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,),textAlign: TextAlign.center,),
+                                                   ],
                                                   ),
-                                                  flex: 1,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                 ),
-                                                Expanded(
-                                                  child: Align(
-                                                    child:
-                                                        Text("Number:dl001002"),
-                                                    alignment:
-                                                        Alignment.centerLeft,
+                                                SizedBox(height: 20,),
+                                                Align(
+                                                  child:
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "Number:  ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,color:Colors.black54 ),textAlign: TextAlign.center,),
+
+                                                      Text(
+                                                        "${traveldata[index].visaNumber}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,),textAlign: TextAlign.center,),
+                                                    ],
                                                   ),
-                                                  flex: 1,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                 ),
-                                                Expanded(
-                                                    child: Align(
-                                                      child: Text(
-                                                          "Expiry date:06-Aug-2020"),
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                    ),
-                                                    flex: 1),
-                                                Expanded(
-                                                  child: SizedBox(),
-                                                  flex: 4,
-                                                )
+                                                SizedBox(height: 20,),
+                                                Align(
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Expiry Date:  ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,color:Colors.black54 ),textAlign: TextAlign.center,),
+
+                                                      Text(
+                                                        "${traveldata[index].visaExpiryDate}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,),textAlign: TextAlign.center,),
+                                                    ],
+                                                  ),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                ),
+
                                               ],
                                             ),
                                           ),
                                         );
-                                      }),
+                                      }):SizedBox(),
                                     ],
                                   ),
                                   SizedBox(
@@ -797,7 +867,7 @@ class _AddCity extends State<AddCity> {
                                             Expanded(
                                               flex: 1,
                                               child: CustomColumnEditText(
-                                                "hint",
+                                                "Select Date",
                                                 "${getDepartureDate(traveldata[index].accmodationStartDate)}",
                                                 "${getDepatureDay(traveldata[index].accmodationStartDate)}",
                                                 "Start Date",
@@ -825,7 +895,7 @@ class _AddCity extends State<AddCity> {
                                             Expanded(
                                               flex: 1,
                                               child: CustomColumnEditText(
-                                                "hint",
+                                                "Select Date",
                                                 "${getDepartureDate(traveldata[index].accmodationEndDate)}",
                                                 "${getDepatureDay(traveldata[index].accmodationEndDate)}",
                                                 "End Date",
@@ -902,7 +972,7 @@ class _AddCity extends State<AddCity> {
                                             },
                                           ));
                                         }),
-                                        flex: 1,
+                                        flex: 2,
                                       ),
                                     ],
                                   ),
@@ -1311,8 +1381,22 @@ class _AddCity extends State<AddCity> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                     side: BorderSide(color: AppConstants.APP_THEME_COLOR)),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/AddNewTravel2');
+                onPressed: () async {
+                  req_data.travelCity=traveldata;
+                  var ReqData=req_data;
+                  if(req_data!=null){
+
+
+                    dynamic Dependents =
+                        await Navigator
+                        .pushNamed(context,
+                        '/AddNewTravel2',
+                        arguments: {
+                          "list": req_data
+                        });
+
+                  }
+
                 },
                 color: AppConstants.APP_THEME_COLOR,
                 textColor: Colors.white,
@@ -1423,5 +1507,22 @@ class _AddCity extends State<AddCity> {
       return false;
     }
 
+  }
+
+  SetValueTravelReq(GetVisaModel data){
+
+    if(data.message=="Success"){
+      this.setState(() {
+        traveldata[index].visaNumber=data.data[0].documentNumber;
+        traveldata[index].visaExpiryDate=data.data[0].expirationDate;
+      });
+
+    }
+    else{
+      this.setState(() {
+        traveldata[index].visaNumber=null;
+        traveldata[index].visaExpiryDate=null;
+      });
+    }
   }
 }

@@ -6,10 +6,13 @@ import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/DialCodeModel.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
+import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
+import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/TravelReqResponse.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 
@@ -299,5 +302,83 @@ class ApiProvider {
     }
   }
 
+
+  Future<PerDiemModel> GetPerDiem(String country) async {
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+    Map<String, String> queryParams = {
+      'country': country,
+    };
+    String token = await getToken_byReresh();
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_PER_DIEM + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      PerDiemModelClass myresponse =
+      PerDiemModelClass.fromJson(jsonDecode(response.body));
+
+      return myresponse.data[0];
+    } else {
+      throw Exception('error');
+    }
+  }
+  Future<GetVisaModel> GetTravelVisa(String visaType,String visaCountryId) async {
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+    Map<String, String> queryParams = {
+     "emp_code_id": userInfo.data.empCode,
+     "visa_country_id": visaCountryId,
+      "visa_type": visaType
+    };
+    String token = await getToken_byReresh();
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_EMPLYOEE_VISA + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      GetVisaModel myresponse =
+      GetVisaModel.fromJson(jsonDecode(response.body));
+
+      return myresponse;
+    } else {
+      throw Exception('error');
+    }
+  }
+
+  Future<TravelReqResponseModel> PostTravelRequest(var data) async {
+
+    //encode Map to JSON
+
+    String token = await getToken_byReresh();
+    var response = await http.post(
+        AppConstants.BASE_URL + AppConstants.POST_TRAVEL_REQ,
+        headers: {"Content-Type": "application/json",
+          'Authorization': 'Bearer ${token}',
+        },
+        body: data);
+    if(response.statusCode==200){
+
+
+    TravelReqResponseModel travelReqResponse = TravelReqResponseModel.fromJson(jsonDecode(response.body));
+
+    return travelReqResponse;
+    }
+    else{
+      if(response.statusCode==500){
+        print("errr");
+      }else{
+
+      }
+    }
+  }
 
 }

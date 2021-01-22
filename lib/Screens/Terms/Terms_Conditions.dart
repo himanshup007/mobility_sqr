@@ -12,7 +12,7 @@ class Terms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    bloc.setUserInfo();
+
 
     return WillPopScope(
       onWillPop: ()async{

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/bloc/UsernameBloc.dart';
@@ -123,23 +124,25 @@ class _ForgetPass extends State<ForgetPass> {
   void _onLoading() {
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
+
       builder: (BuildContext context) {
         dialogContext = context;
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            height: 50,
-            width: 50,
-            color: Colors.transparent,
-            child: Center(
-              child: CircularProgressIndicator(),
+        return Container(
+          height: 50,
+          width: 50,
+          color: Colors.transparent,
+          child: Center(
+            child:LoadingBouncingGrid.circle(
+              size: 50,
+              backgroundColor: Colors.white,
             ),
           ),
         );
       },
     );
   }
+
 }
 
 class Loign_UI_Constants {
