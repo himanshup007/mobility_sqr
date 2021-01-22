@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
     '/ApproxTravelCost': (context) => ApproxTravelCost(),
         '/ProjectIdScreen': (context) => ProjectIdScreen(),
         '/Profile_Screen':(context) =>ProfileScreen(),
-        '/Add_Agenda' :(context) => AddAgenda(),
         '/PersonalInfo':(context) =>PersonalInfo()
       },
     );
