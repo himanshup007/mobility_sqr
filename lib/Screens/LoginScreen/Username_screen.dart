@@ -262,9 +262,11 @@ class _Username_Screen extends State<Username_Screen> {
   }
 
   void getTimeforPush() async {
-    Future.delayed(Duration.zero, () async {
+    var userinfo = await bloc.setUserInfo();
+
+    Future.delayed(Duration.zero, ()  {
       Navigator.of(context, rootNavigator: true).pop(dialogContext);
-      var userinfo = await bloc.setUserInfo();
+
       if (userinfo.data.termandcondtion == "1") {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/Dashboard', (Route<dynamic> route) => false);

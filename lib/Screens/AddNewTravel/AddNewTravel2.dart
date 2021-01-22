@@ -59,7 +59,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
         centerTitle: true,
       ),
       body: Container(
-        // width: 100.0.w,
+         width: 100.0.w,
         margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 17.0),
         child: Column(
           children: <Widget>[
@@ -118,40 +118,37 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top:5),
-                    child: Expanded(
-                      flex: 2,
-                      child: GestureDetector(
-                        onTap: () {
-                          openCountryPickerDialog(
-                              context,
-                              callback: (value) {
-                                this.setState(() {
-                                  list.homePhoneExt =
-                                      "+" +
-                                          value
-                                              .phoneCode;
-                                  list.homeCountry =
-                                      value;
-                                });
-                              }, dialCode: dialCode);
-                        },
-                        child: Container(
-                          child: Align(
-                              alignment: Alignment
-                                  .center,
-                              child: FittedBox(
-                                fit: BoxFit
-                                    .scaleDown,
-                                child: Text(
-                                  list.homePhoneExt,
-                                  textAlign:
-                                  TextAlign
-                                      .center,
-                                  style: TextStyle(
-                                      fontSize: 16),
-                                ),
-                              )),
-                        ),
+                    child: GestureDetector(
+                      onTap: () {
+                        openCountryPickerDialog(
+                            context,
+                            callback: (value) {
+                              this.setState(() {
+                                list.homePhoneExt =
+                                    "+" +
+                                        value
+                                            .phoneCode;
+                                list.homeCountry =
+                                    value;
+                              });
+                            }, dialCode: dialCode);
+                      },
+                      child: Container(
+                        child: Align(
+                            alignment: Alignment
+                                .center,
+                            child: FittedBox(
+                              fit: BoxFit
+                                  .scaleDown,
+                              child: Text(
+                                list.homePhoneExt,
+                                textAlign:
+                                TextAlign
+                                    .center,
+                                style: TextStyle(
+                                    fontSize: 16),
+                              ),
+                            )),
                       ),
                     ),
                   ),
@@ -246,7 +243,6 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                 textAlign: TextAlign.center,
               ),
             ),
-
             SizedBox(height: 10),
 
             Container(
