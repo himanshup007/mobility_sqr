@@ -43,7 +43,7 @@ import 'package:sizer/sizer.dart';
 
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
-              width: 100.0.w,height: 55.0.h,
+              width: 100.0.w,height: 70.0.h,
               child: mywidget
             ),
           ),

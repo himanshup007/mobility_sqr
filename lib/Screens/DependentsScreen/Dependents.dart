@@ -107,7 +107,7 @@ class _DependentsState extends State<Dependents> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
                child: FlatButton(
                  minWidth: MediaQuery.of(context).size.width,
                 child: Text(

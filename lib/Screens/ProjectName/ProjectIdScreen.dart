@@ -17,16 +17,14 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
   GlobalKey<_ProjectIdScreen> _myKey = GlobalKey();
 
   Map args;
+
   @override
   void initState() {
-
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -61,7 +59,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                     labelStyle: TextStyle(color: AppConstants.APP_THEME_COLOR),
                     border: OutlineInputBorder(
                       borderSide:
-                      const BorderSide(color: Colors.white, width: 2.0),
+                          const BorderSide(color: Colors.white, width: 2.0),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -71,11 +69,10 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                     ),
                   ),
                   onChanged: (text) {
-                    if(text.length>2){
+                    if (text.length > 2) {
                       BlocProvider.of<ProjectIdBloc>(_myKey.currentContext)
                           .add(FetchProject(text));
                     }
-
                   },
                 ),
               ),
@@ -93,8 +90,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
 
                       if (state is ProjectIdError) {
                         return Center(
-                          child:
-                          Text('Oops Something Went Wrong!'),
+                          child: Text('Oops Something Went Wrong!'),
                         );
                       }
                       if (state is ProjectIdLoaded) {
@@ -103,9 +99,9 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                           itemCount: state.projectIdModel.data.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: (){
-
-                                Navigator.pop(context, state.projectIdModel.data[index]);
+                              onTap: () {
+                                Navigator.pop(
+                                    context, state.projectIdModel.data[index]);
                               },
                               child: Column(
                                 children: [
@@ -115,14 +111,14 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                     margin: EdgeInsets.symmetric(horizontal: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5.0),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey,
-                                          offset: Offset(0.0, 1.0),
-                                          blurRadius: 6.0,
-                                        ),
-                                      ],
+
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //     color: Colors.grey,
+                                      //     offset: Offset(0.0, 1.0),
+                                      //     blurRadius: 6.0,
+                                      //   ),
+                                      // ],
                                     ),
                                     child: Row(
                                       children: [
@@ -130,34 +126,54 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                           flex: 8,
                                           child: Container(
                                             height: 100.0.h,
-
                                             child: Column(
                                               mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 Align(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
+                                                        // Container(
+                                                        //     padding:
+                                                        //         EdgeInsets.all(
+                                                        //             5),
+                                                        //     child: Text(
+                                                        //       "Project Name",
+                                                        //       textAlign:
+                                                        //           TextAlign
+                                                        //               .start,
+                                                        //     ),
+                                                        // ),
                                                         Container(
-                                                          padding: EdgeInsets.all(5),
-                                                            child: Text("Project Name",textAlign: TextAlign.start,)),
-                                                        Container(
-                                                          padding: EdgeInsets.all(5),
+                                                          padding:
+                                                              EdgeInsets.all(5),
                                                           child: Text(
-                                                            state.projectIdModel.data[index]
-                                                                .projectName +","+
-                                                                state.projectIdModel.data[index]
+                                                            state
+                                                                    .projectIdModel
+                                                                    .data[index]
+                                                                    .projectName +
+                                                                "," +
+                                                                state
+                                                                    .projectIdModel
+                                                                    .data[index]
                                                                     .pid,
-                                                            textAlign: TextAlign.start,
+                                                            textAlign:
+                                                                TextAlign.start,
                                                             style: TextStyle(
                                                                 fontSize: 16,
-                                                                color: Colors.black,
+                                                                color: Colors
+                                                                    .black,
                                                                 fontWeight:
-                                                                FontWeight.w600),
+                                                                    FontWeight
+                                                                        .w600),
                                                           ),
                                                         ),
+
                                                       ],
                                                     )),
                                               ],
@@ -169,20 +185,26 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Container(
-            margin: EdgeInsets.only(top: 20),
+                                              margin: EdgeInsets.only(top: 20),
                                               height: 100.0.h,
                                               child: Text(
                                                 state.projectIdModel.data[index]
                                                     .pid,
                                                 textAlign: TextAlign.start,
-                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                              ),),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
                                           ),
                                         )
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10,)
+                                  Container(color: Colors.black12,height: 1,),
+                                  SizedBox(
+                                    height: 10,
+                                  )
                                 ],
                               ),
                             );

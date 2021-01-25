@@ -57,11 +57,12 @@ class AddNewTravel2State extends State<AddNewTravel2> {
         elevation: 0,
         title: Text("New Request", style: TextStyle(color: Colors.black)),
         centerTitle: true,
+
       ),
       body: Container(
          width: 100.0.w,
-        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 17.0),
-        child: Column(
+        margin: EdgeInsets.symmetric(horizontal: 17.0),
+        child: ListView(
           children: <Widget>[
             Align(
                 alignment: Alignment.centerLeft,
@@ -73,7 +74,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                       fontWeight: FontWeight.w600,
                       fontSize: 16.0),
                 )),
-            SizedBox(height: 10),
+
             Container(
               height: 46.0,
               child: TextField(
@@ -205,35 +206,40 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             ),
 
             SizedBox(height: 20),
-            list.isLaptopRequired?Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Do you have a laptop?',
-                  style: TextStyle(
-                      fontSize: 15.0,fontWeight: FontWeight.w600,color: Colors.black54),
-                  textAlign: TextAlign.center,
-                ),
+            list.isLaptopRequired?Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Do you have a laptop?',
+                      style: TextStyle(
+                          fontSize: 15.0,fontWeight: FontWeight.w600,color: Colors.black54),
+                      textAlign: TextAlign.center,
+                    ),
 
-                FlutterSwitch(
-                  height: 25.0,
-                  width: 40.0,
-                  padding: 2.0,
-                  toggleSize: 20.0,
-                  borderRadius: 12.0,
-                  inactiveColor: Colors.black12,
-                  activeColor: AppConstants.APP_THEME_COLOR,
-                  value: list.haveLaptop,
-                  onToggle: (value) {
-                    print(value);
-                    this.setState(() {
-                      list.haveLaptop=!list.haveLaptop;
-                    });
-                  },
+                    FlutterSwitch(
+                      height: 25.0,
+                      width: 40.0,
+                      padding: 2.0,
+                      toggleSize: 20.0,
+                      borderRadius: 12.0,
+                      inactiveColor: Colors.black12,
+                      activeColor: AppConstants.APP_THEME_COLOR,
+                      value: list.haveLaptop,
+                      onToggle: (value) {
+                        print(value);
+                        this.setState(() {
+                          list.haveLaptop=!list.haveLaptop;
+                        });
+                      },
+                    ),
+                  ],
                 ),
+                SizedBox(height: 10,)
               ],
             ):SizedBox(),
-            SizedBox(height: 20),
+
             Align(
               alignment: Alignment.centerLeft,
               child: Text(

@@ -116,14 +116,14 @@ class _SearchPlaceState extends State<SearchPlace> {
                                     margin: EdgeInsets.symmetric(horizontal: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5.0),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey,
-                                          offset: Offset(0.0, 1.0),
-                                          blurRadius: 6.0,
-                                        ),
-                                      ],
+
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //     color: Colors.grey,
+                                      //     offset: Offset(0.0, 1.0),
+                                      //     blurRadius: 6.0,
+                                      //   ),
+                                      // ],
                                     ),
                                     child: Row(
                                       children: [
@@ -182,6 +182,8 @@ class _SearchPlaceState extends State<SearchPlace> {
                                       ],
                                     ),
                                   ),
+
+                                  Container(color: Colors.black12,height: 1,),
                                   SizedBox(height: 10,)
                                 ],
                               ),

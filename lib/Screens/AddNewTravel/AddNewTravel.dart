@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:country_pickers/country.dart';
@@ -13,6 +15,7 @@ import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
+import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
@@ -24,6 +27,7 @@ import 'package:mobility_sqr/Screens/PurposeScreen/purpose_bloc.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/CountryCodePicker.dart';
 import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
+import 'package:mobility_sqr/Widgets/CustomSwitch.dart';
 import 'package:mobility_sqr/Widgets/DashboardEditField.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:mobility_sqr/Widgets/RadioWidget.dart';
@@ -37,7 +41,6 @@ import 'package:sizer/sizer.dart';
 class AddCity extends StatefulWidget {
   @override
   _AddCity createState() => _AddCity();
-
 }
 
 class _AddCity extends State<AddCity> {
@@ -49,7 +52,6 @@ class _AddCity extends State<AddCity> {
   int id = 1;
   String radioButtonItem = 'ONE';
 
-
   SearchList toData = SearchList(countryName: "", airportName: "", city: "");
   bool accomodationBool = false;
   List<String> dialCode = new List<String>();
@@ -60,9 +62,11 @@ class _AddCity extends State<AddCity> {
   BuildContext purposecontext;
 
   ApiProvider _appApiProvider = ApiProvider();
-
+  final _listview_controller = ScrollController();
 
   var currentSelectedValue;
+
+  bool dependentEyeBtn = false;
 
   @override
   void initState() {
@@ -72,6 +76,7 @@ class _AddCity extends State<AddCity> {
     ProjectTextController = new TextEditingController();
     getDialCode();
     initalizeValues();
+    scrolltotop();
   }
 
   getDialCode() async {
@@ -105,37 +110,37 @@ class _AddCity extends State<AddCity> {
     modelClass.isAccmodationRequired = false;
     modelClass.purposeList = null;
 
-    modelClass.isDependent=false;
+    modelClass.isDependent = false;
     traveldata.add(modelClass);
-    req_data.homePhoneExt='Code';
-    req_data.isLaptopRequired=false;
-    req_data.haveLaptop=false;
-    req_data.travelReqId="";
-    traveldata[index].dependentData=[];
+    req_data.homePhoneExt = 'Code';
+    req_data.isLaptopRequired = false;
+    req_data.haveLaptop = false;
+    req_data.travelReqId = "";
+    traveldata[index].dependentData = [];
 
     TravelVisa visa = new TravelVisa();
-    visa.reqId="0";
-    visa.projectId="1001";
-    visa.projectName="3M Lights on support";
-    visa.isBillable=true;
-    visa.fromCity= "United States";
-    visa.toCity= "United States";
-    visa.travelStartDate= "2021-01-08T06:52:36.397Z";
-    visa.travelEndDate="2021-01-27T18:30:00.000Z";
-   visa.visaPurpose= "19";
+    visa.reqId = "0";
+    visa.projectId = "1001";
+    visa.projectName = "3M Lights on support";
+    visa.isBillable = true;
+    visa.fromCity = "United States";
+    visa.toCity = "United States";
+    visa.travelStartDate = "2021-01-08T06:52:36.397Z";
+    visa.travelEndDate = "2021-01-27T18:30:00.000Z";
+    visa.visaPurpose = "19";
 
-   visa.appliedVisa= "Work";
-    visa.requestNotes= "";
-    visa.visaStatus= "1";
-    visa.empEmail= "Emp112";
-    visa.organization= "ORG150866";
-    visa.visaReqId= "";
-    visa.isDependent= true;
-   visa.dependentRelation= "SP";
-  visa.dependentName= "test9";
-    visa.country= "231";
-   visa.createdBy ="Emp112";
-    req_data.travelVisa=[visa];
+    visa.appliedVisa = "Work";
+    visa.requestNotes = "";
+    visa.visaStatus = "1";
+    visa.empEmail = "Emp112";
+    visa.organization = "ORG150866";
+    visa.visaReqId = "";
+    visa.isDependent = true;
+    visa.dependentRelation = "SP";
+    visa.dependentName = "test9";
+    visa.country = "231";
+    visa.createdBy = "Emp112";
+    req_data.travelVisa = [visa];
   }
 
   manageColor(bool show) {
@@ -170,11 +175,11 @@ class _AddCity extends State<AddCity> {
     modelClass.isAccmodationRequired = false;
     modelClass.sourceCity = traveldata[index - 1].destinationCity;
     modelClass.travellingCountry = traveldata[index - 1].travellingCountryTo;
-    modelClass.isDependent=false;
-    modelClass.dependentData=[];
-    req_data.homePhoneExt='Code';
-    req_data.isLaptopRequired=false;
-    req_data.haveLaptop=false;
+    modelClass.isDependent = false;
+    modelClass.dependentData = [];
+    req_data.homePhoneExt = 'Code';
+    req_data.isLaptopRequired = false;
+    req_data.haveLaptop = false;
     for (int i = 0; i < userdetails.length; i++) {
       if (i == index) {
         userdetails[i].hide = false;
@@ -193,6 +198,34 @@ class _AddCity extends State<AddCity> {
           index: index,
           duration: Duration(milliseconds: 400),
           curve: Curves.easeInOutCubic);
+    });
+  }
+
+  scrolltotop() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_listview_controller.hasClients) {
+        Timer(
+            Duration(milliseconds: 1),
+            () => _listview_controller.animateTo(
+                  _listview_controller.position.maxScrollExtent,
+                  duration: Duration(seconds: 1),
+                  curve: Curves.fastOutSlowIn,
+                ));
+      }
+    });
+  }
+
+  scrolltobottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_listview_controller.hasClients) {
+        Timer(
+            Duration(milliseconds: 1),
+            () => _listview_controller.animateTo(
+                  _listview_controller.position.minScrollExtent,
+                  duration: Duration(seconds: 1),
+                  curve: Curves.fastOutSlowIn,
+                ));
+      }
     });
   }
 
@@ -281,26 +314,30 @@ class _AddCity extends State<AddCity> {
                     margin: EdgeInsets.symmetric(horizontal: 15),
                     child: Row(
                       children: [
-                        Align(
-                          alignment: Alignment.bottomLeft,
+                        Expanded(
+                          flex: 3,
                           child: DashboardEditFieldHeader("Travel Type",
                               AppConstants.TEXT_BACKGROUND_COLOR),
                         ),
-                        SizedBox(
-                          width: 10,
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(),
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 15),
-                          child: RadioBtn(
-                            "Billable",
-                            "Non-Billable",
-                            1,
-                            "Billable",
-                            billable: (value) {
-                              req_data.isBillable = value;
+                        Expanded(
+                          flex: 10,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: RadioBtn(
+                              "Billable",
+                              "Non-Billable",
+                              1,
+                              "Billable",
+                              billable: (value) {
+                                req_data.isBillable = value;
 
-                              //showDefaultSnackbar(context, value.toString() + "  ");
-                            },
+                                //showDefaultSnackbar(context, value.toString() + "  ");
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -443,7 +480,7 @@ class _AddCity extends State<AddCity> {
                     color: AppConstants.APP_THEME_COLOR,
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     height: 63.0.h,
                     width: 100.0.w,
                     child: ScrollablePositionedList.builder(
@@ -457,6 +494,7 @@ class _AddCity extends State<AddCity> {
                             width: 92.0.w,
                             margin: EdgeInsets.symmetric(horizontal: 3),
                             child: SingleChildScrollView(
+                              controller: _listview_controller,
                               reverse: true,
                               child: Column(
                                 children: [
@@ -522,14 +560,20 @@ class _AddCity extends State<AddCity> {
                                                             '/SearchPlace');
                                                     if (data != null) {
                                                       this.setState(() {
-                                                        traveldata[index].toCountryData=data;
+                                                        traveldata[index]
+                                                                .toCountryData =
+                                                            data;
 
                                                         traveldata[index]
                                                                 .destinationCity =
-                                                            traveldata[index].toCountryData.city;
+                                                            traveldata[index]
+                                                                .toCountryData
+                                                                .city;
                                                         traveldata[index]
                                                                 .travellingCountryTo =
-                                                            traveldata[index].toCountryData.countryName;
+                                                            traveldata[index]
+                                                                .toCountryData
+                                                                .countryName;
                                                       });
 
                                                       BlocProvider.of<
@@ -537,21 +581,39 @@ class _AddCity extends State<AddCity> {
                                                               context)
                                                           .add(FetchPurposelist(
                                                               toData.iataCode));
-                                                      _appApiProvider.GetPostLocation(traveldata[index].toCountryData.countryName).then((value) =>
-                                                              this.setState(() {traveldata[index].postLocationList = value.data;}));
+                                                      _appApiProvider.GetPostLocation(
+                                                              traveldata[index]
+                                                                  .toCountryData
+                                                                  .countryName)
+                                                          .then((value) =>
+                                                              this.setState(() {
+                                                                traveldata[index]
+                                                                        .postLocationList =
+                                                                    value.data;
+                                                              }));
 
-                                                      _appApiProvider.GetDependentList(traveldata[index].toCountryData.countryName).then((value) => this.setState(() {
-                                                        traveldata[index].myDependentList=value;
+                                                      _appApiProvider.GetDependentList(
+                                                              traveldata[index]
+                                                                  .toCountryData
+                                                                  .countryName)
+                                                          .then(
+                                                              (value) => this
+                                                                      .setState(
+                                                                          () {
+                                                                    traveldata[index]
+                                                                            .myDependentList =
+                                                                        value;
 
-                                                        _appApiProvider.GetPerDiem(traveldata[index].toCountryData.countryName).then((value) =>
-                                                        this.setState(() {
-                                                          traveldata[index].perDiamValue=value.perDiem;
-                                                          traveldata[index].transportCost=value.transportation;
-                                                          traveldata[index].currency=value.currency;
-
-                                                        })
-                                                        );
-                                                      }));
+                                                                    _appApiProvider.GetPerDiem(traveldata[index]
+                                                                            .toCountryData
+                                                                            .countryName)
+                                                                        .then((value) =>
+                                                                            this.setState(() {
+                                                                              traveldata[index].perDiamValue = value.perDiem;
+                                                                              traveldata[index].transportCost = value.transportation;
+                                                                              traveldata[index].currency = value.currency;
+                                                                            }));
+                                                                  }));
                                                     }
                                                   },
                                                 ),
@@ -667,13 +729,15 @@ class _AddCity extends State<AddCity> {
                                                       });
                                                     }
 
-
-                                                    _appApiProvider.GetTravelVisa(traveldata[index].travelPurpose, traveldata[index].toCountryData.countryName).then((value) =>
-
-                                                    SetValueTravelReq(value)
-
-                                                    );
-
+                                                    _appApiProvider.GetTravelVisa(
+                                                            traveldata[index]
+                                                                .travelPurpose,
+                                                            traveldata[index]
+                                                                .toCountryData
+                                                                .countryName)
+                                                        .then((value) =>
+                                                            SetValueTravelReq(
+                                                                value));
                                                   } else {
                                                     showDefaultSnackbar(context,
                                                         "Please choose the Destination point");
@@ -709,82 +773,159 @@ class _AddCity extends State<AddCity> {
                                               : SizedBox(),
                                         ],
                                       ),
-                                      traveldata[index].visaNumber!=null?customBorderBox(
-                                          "Visa", false, Icons.remove_red_eye,
-                                          ontouch: () {
-                                        showCustomDialogClass(
-                                          context,
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                            ),
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                SizedBox(height: 30,),
-                                                Align(
-                                                  child: Text(
-                                                    "Visa Details",
-                                                    style: TextStyle(
-                                                        fontSize: 30,
-                                                        fontWeight:
-                                                            FontWeight.w700,color: AppConstants.APP_THEME_COLOR),
+                                      traveldata[index].visaNumber != null
+                                          ? customBorderBox("Visa", false,
+                                              Icons.remove_red_eye,
+                                              ontouch: () {
+                                              showCustomDialogClass(
+                                                context,
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
                                                   ),
-                                                  alignment: Alignment.center,
-                                                ),
-                                                SizedBox(height: 30,),
-                                                Align(
-                                                  child: Row(
+                                                  margin:
+                                                      EdgeInsets.only(left: 10),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
                                                     children: [
-                                                      Text(
-                                                          "Applicable visa:  ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,color:Colors.black54 ),textAlign: TextAlign.center,),
-
-                                                      Text(
-                                                        "${traveldata[index].travelPurpose}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,),textAlign: TextAlign.center,),
-                                                   ],
-                                                  ),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                ),
-                                                SizedBox(height: 20,),
-                                                Align(
-                                                  child:
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Number:  ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,color:Colors.black54 ),textAlign: TextAlign.center,),
-
-                                                      Text(
-                                                        "${traveldata[index].visaNumber}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,),textAlign: TextAlign.center,),
+                                                      SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Align(
+                                                        child: Text(
+                                                          "Visa Details",
+                                                          style: TextStyle(
+                                                              fontSize: 30,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: AppConstants
+                                                                  .APP_THEME_COLOR),
+                                                        ),
+                                                        alignment:
+                                                            Alignment.center,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Align(
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              "Applicable visa:  ",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 25,
+                                                                  color: Colors
+                                                                      .black54),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                            Text(
+                                                              "${traveldata[index].travelPurpose}",
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 25,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Align(
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              "Number:  ",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 25,
+                                                                  color: Colors
+                                                                      .black54),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                            Text(
+                                                              "${traveldata[index].visaNumber}",
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 25,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Align(
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              "Expiry Date:  ",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 25,
+                                                                  color: Colors
+                                                                      .black54),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                            Text(
+                                                              "${traveldata[index].visaExpiryDate}",
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 25,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                      ),
                                                     ],
                                                   ),
-                                                  alignment:
-                                                      Alignment.centerLeft,
                                                 ),
-                                                SizedBox(height: 20,),
-                                                Align(
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        "Expiry Date:  ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,color:Colors.black54 ),textAlign: TextAlign.center,),
-
-                                                      Text(
-                                                        "${traveldata[index].visaExpiryDate}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 25,),textAlign: TextAlign.center,),
-                                                    ],
-                                                  ),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                ),
-
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }):SizedBox(),
+                                              );
+                                            })
+                                          : SizedBox(),
                                     ],
                                   ),
                                   SizedBox(
@@ -846,6 +987,7 @@ class _AddCity extends State<AddCity> {
                                               value: traveldata[index]
                                                   .isAccmodationRequired,
                                               onToggle: (value) {
+                                                scrolltobottom();
                                                 setState(() {
                                                   this.setState(() {
                                                     traveldata[index]
@@ -946,14 +1088,12 @@ class _AddCity extends State<AddCity> {
                                         child: Container(
                                           height: 10,
                                           child: CircularCheckBox(
-                                              value: check_tick_mark(traveldata[index].agenda),
-                                              checkColor: Colors.white,
-                                              activeColor: Colors.green, onChanged: (bool value) {
-
-                                          },
-
-
-                                             ),
+                                            value: check_tick_mark(
+                                                traveldata[index].agenda),
+                                            checkColor: Colors.white,
+                                            activeColor: Colors.green,
+                                            onChanged: (bool value) {},
+                                          ),
                                         ),
                                       ),
                                       Expanded(
@@ -961,16 +1101,24 @@ class _AddCity extends State<AddCity> {
                                             "Agenda", false, Icons.add,
                                             ontouch: () {
                                           showCustomDialogClass(
-                                              context, AddAgenda(traveldata[index].agenda,
-                                            onchange: (text){
-                                              this.setState(() {
-                                                traveldata[index].agenda=text;
-                                              }); Navigator.of(context, rootNavigator: true).pop();
-
-                                            },onclose: (){
-                                              Navigator.of(context, rootNavigator: true).pop();
-                                            },
-                                          ));
+                                              context,
+                                              AddAgenda(
+                                                traveldata[index].agenda,
+                                                onchange: (text) {
+                                                  this.setState(() {
+                                                    traveldata[index].agenda =
+                                                        text;
+                                                  });
+                                                  Navigator.of(context,
+                                                          rootNavigator: true)
+                                                      .pop();
+                                                },
+                                                onclose: () {
+                                                  Navigator.of(context,
+                                                          rootNavigator: true)
+                                                      .pop();
+                                                },
+                                              ));
                                         }),
                                         flex: 2,
                                       ),
@@ -1304,51 +1452,105 @@ class _AddCity extends State<AddCity> {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: Text(
-                                            "Travelling with dependent(s)?",
-                                            style: TextStyle(fontSize: 15),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Travelling with dependent(s)?",
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  if (!dependentEyeBtn) {
+                                                    var dependantList =
+                                                        traveldata[index]
+                                                            .myDependentList;
+                                                    if (dependantList != null) {
+                                                      dynamic Dependents =
+                                                          await Navigator
+                                                              .pushNamed(
+                                                                  context,
+                                                                  '/Dependents',
+                                                                  arguments: {
+                                                            "list":
+                                                                dependantList
+                                                          });
+                                                      checkSelectedDependents(
+                                                          Dependents);
+                                                    }
+                                                  } else {
+
+                                                  }
+                                                },
+                                                child: Icon(
+                                                  Icons.remove_red_eye_outlined,
+                                                  size: 25,
+                                                  color: dependentEyeBtn
+                                                      ? AppConstants
+                                                          .APP_THEME_COLOR
+                                                      : Colors.black12,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          flex: 13,
+                                          flex: 12,
                                         ),
+                                        Expanded(child: SizedBox()),
                                         Expanded(
                                           flex: 2,
                                           child: Container(
                                             margin: EdgeInsets.only(right: 4),
-                                            child: FlutterSwitch(
+                                            child: CustomFlutterSwitch(
                                               height: 25.0,
                                               width: 20.0,
                                               padding: 2.0,
                                               toggleSize: 20.0,
                                               borderRadius: 12.0,
                                               inactiveColor: Colors.grey,
-                                              activeColor: AppConstants.APP_THEME_COLOR,
-                                              value: traveldata[index].isDependent,
+                                              disabled: traveldata[index]
+                                                          .myDependentList ==
+                                                      null
+                                                  ? true
+                                                  : false,
+                                              activeColor:
+                                                  AppConstants.APP_THEME_COLOR,
+                                              value:
+                                                  traveldata[index].isDependent,
+                                              ondisabled: (va) {
+                                                if (va) {
+                                                  showDefaultSnackbar(context,
+                                                      "Please select destination Point");
+                                                }
+                                              },
                                               onToggle: (value) async {
+                                                scrolltobottom();
+
                                                 this.setState(() {
-                                                  traveldata[index].isDependent =
-                                                      value;
+                                                  traveldata[index]
+                                                          .isDependent =
+                                                      !traveldata[index]
+                                                          .isDependent;
                                                 });
 
-                                                // req_data.travelCity =
-                                                //     traveldata;
-
-                                                var dependantList= traveldata[index].myDependentList;
+                                                var dependantList =
+                                                    traveldata[index]
+                                                        .myDependentList;
 
                                                 if (value) {
-                                                  if(dependantList!=null){
-
-
-                                                  dynamic Dependents =
-                                                      await Navigator
-                                                      .pushNamed(context,
-                                                      '/Dependents',
-                                                      arguments: {
-                                                        "list": dependantList
-                                                      });
-
-                                                  }
-                                                  else{
-                                                    showDefaultSnackbar(context, "Please select destination Point");
+                                                  if (dependantList != null) {
+                                                    dynamic Dependents =
+                                                        await Navigator
+                                                            .pushNamed(context,
+                                                                '/Dependents',
+                                                                arguments: {
+                                                          "list": dependantList
+                                                        });
+                                                   checkSelectedDependents(
+                                                        Dependents);
+                                                    this.setState(() {
+                                                      traveldata[index]
+                                                          .isDependent =
+                                                    false;
+                                                    });
                                                   }
                                                 }
                                               },
@@ -1382,21 +1584,13 @@ class _AddCity extends State<AddCity> {
                     borderRadius: BorderRadius.circular(5.0),
                     side: BorderSide(color: AppConstants.APP_THEME_COLOR)),
                 onPressed: () async {
-                  req_data.travelCity=traveldata;
-                  var ReqData=req_data;
-                  if(req_data!=null){
-
-
-                    dynamic Dependents =
-                        await Navigator
-                        .pushNamed(context,
-                        '/AddNewTravel2',
-                        arguments: {
-                          "list": req_data
-                        });
-
+                  req_data.travelCity = traveldata;
+                  var ReqData = req_data;
+                  if (req_data != null) {
+                    dynamic Dependents = await Navigator.pushNamed(
+                        context, '/AddNewTravel2',
+                        arguments: {"list": req_data});
                   }
-
                 },
                 color: AppConstants.APP_THEME_COLOR,
                 textColor: Colors.white,
@@ -1491,38 +1685,46 @@ class _AddCity extends State<AddCity> {
     return false;
   }
 
-  check_tick_mark(String text){
-    if(text!=null){
-      if(text.isEmpty){
-
+  check_tick_mark(String text) {
+    if (text != null) {
+      if (text.isEmpty) {
         return false;
-      }else{
+      } else {
         return true;
-
       }
-
-
-    }
-    else{
+    } else {
       return false;
     }
-
   }
 
-  SetValueTravelReq(GetVisaModel data){
-
-    if(data.message=="Success"){
+  SetValueTravelReq(GetVisaModel data) {
+    if (data.message == "Success") {
       this.setState(() {
-        traveldata[index].visaNumber=data.data[0].documentNumber;
-        traveldata[index].visaExpiryDate=data.data[0].expirationDate;
+        traveldata[index].visaNumber = data.data[0].documentNumber;
+        traveldata[index].visaExpiryDate = data.data[0].expirationDate;
       });
-
+    } else {
+      this.setState(() {
+        traveldata[index].visaNumber = null;
+        traveldata[index].visaExpiryDate = null;
+      });
     }
-    else{
-      this.setState(() {
-        traveldata[index].visaNumber=null;
-        traveldata[index].visaExpiryDate=null;
-      });
+  }
+
+  checkSelectedDependents(List<SecondDependentData> dependentList) {
+    for (int i = 0; i < dependentList.length; i++) {
+      if (dependentList[i].isSelected) {
+        this.setState(() {
+          dependentEyeBtn = true;
+
+        });
+        return true;
+      } else {
+        this.setState(() {
+          dependentEyeBtn = false;
+        });
+        return false;
+      }
     }
   }
 }

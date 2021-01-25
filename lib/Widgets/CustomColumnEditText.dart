@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:sizer/sizer.dart';
@@ -79,14 +80,18 @@ class _CustomColumnEditTextState extends State<CustomColumnEditText> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              widget.placename,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold ),
+                            Expanded(
+                              child: AutoSizeText(
+                                widget.placename,
+                                minFontSize: 12,
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold ),
 
+                              ),
                             ),
-                            widget.Type==1?Icon(Icons.search,color: AppConstants.APP_THEME_COLOR,):Icon(Icons.calendar_today,color: AppConstants.APP_THEME_COLOR,),
-                          ],
+                            Expanded(child:widget.Type==1?Icon(Icons.search,color: AppConstants.APP_THEME_COLOR,):Icon(Icons.calendar_today,color: AppConstants.APP_THEME_COLOR,),
+                            )
+                            ],
                         ),
                       ),
                     )),

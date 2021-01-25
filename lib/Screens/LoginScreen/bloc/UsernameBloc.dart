@@ -89,12 +89,13 @@ class UsernameBloc {
 
   Future<void> passwordValidate() async {
     UserToken isUser = await _repository.fetch_user_token(email, password);
+
     _isPassValidController.sink.add(isUser);
   }
 
-  Future<UserInfo> setUserInfo() async {
-    UserInfo userInfo = await _repository.fetch_user_info(email);
-    appsharedprefs.saveUserInfo(userInfo);
+  Future<UserInfo> setUserInfo()  async {
+    UserInfo userInfo =  await  _repository.fetch_user_info(email);
+    await appsharedprefs.saveUserInfo(userInfo);
     return userInfo;
   }
 
