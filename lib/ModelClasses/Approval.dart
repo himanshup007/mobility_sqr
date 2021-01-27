@@ -28,7 +28,7 @@ class ApprovalModal {
 }
 
 class Data {
-  int id;
+  dynamic id;
   bool isSelected = false;
   String dateCreated;
   String dateModified;
@@ -37,18 +37,18 @@ class Data {
   bool status;
   String travelReqId;
   String projectName;
-  Null policyViolations;
+  dynamic policyViolations;
   bool isBillable;
   bool isTravelMultiCountry;
   bool isTravelMultiCity;
-  Null requestNotes;
+  dynamic requestNotes;
   String remark;
   String homeContactName;
   String homePhoneExt;
   String homePhoneNumber;
   bool isLaptopRequired;
   String travelReqStatus;
-  Null travelReqStatusNotes;
+  dynamic travelReqStatusNotes;
   String currentTicketOwner;
   String supervisor;
   String expenseApprover;
@@ -63,18 +63,18 @@ class Data {
   String expenceFromCountry;
   String expenceReturnDate;
   String expenceToCountry;
-  Null column1;
-  Null column2;
-  Null column3;
-  Null column4;
-  Null column5;
-  Null column6;
-  Null column7;
-  Null column8;
-  Null column9;
-  Null column10;
-  Null column11;
-  Null column12;
+  dynamic column1;
+  dynamic column2;
+  dynamic column3;
+  dynamic column4;
+  dynamic column5;
+  dynamic column6;
+  dynamic column7;
+  dynamic column8;
+  dynamic column9;
+  dynamic column10;
+  dynamic column11;
+  dynamic column12;
   String empEmail;
   String project;
   String organization;
@@ -273,13 +273,13 @@ class Data {
 }
 
 class Details {
-  int id;
+  dynamic id;
   String travelReqIdId;
   String travellingCountry;
   String travellingCountryTo;
   String officeLocation;
   String clientNumber;
-  Null organization;
+  dynamic organization;
   String sourceCity;
   String destinationCity;
   String departureDate;
@@ -288,24 +288,24 @@ class Details {
   String accmodationStartDate;
   String accmodationEndDate;
   String travelPurpose;
-  Null assignmentType;
+  dynamic assignmentType;
   String applicableVisa;
   String visaNumber;
   String visaExpiryDate;
   String hostHrName;
-  Null hostCountryHead;
-  Null hostAttorney;
+  dynamic hostCountryHead;
+  dynamic hostAttorney;
   String hostPhoneNo;
   bool isClientLocation;
   String clientName;
   String clientAddress;
-  int hotelCost;
-  int perDiemCost;
-  int airfareCost;
-  int transportationCost;
-  int totalCost;
-  Null travelRequestStatus;
-  Null travelRequestStatusNotes;
+  dynamic hotelCost;
+  dynamic perDiemCost;
+  dynamic airfareCost;
+  dynamic transportationCost;
+  dynamic totalCost;
+  dynamic travelRequestStatus;
+  dynamic travelRequestStatusNotes;
   bool isDependent;
 
   Details(
@@ -422,7 +422,7 @@ class Details {
 }
 
 class Dependent {
-  int id;
+  dynamic id;
   String dateCreated;
   String dateModified;
   String createdBy;
@@ -433,20 +433,20 @@ class Dependent {
   String dependentName;
   String dependentPassport;
   String dependentVisa;
-  Null column1;
-  Null column2;
-  Null column3;
-  Null column4;
-  Null column5;
-  Null column6;
-  Null column7;
-  Null column8;
-  Null column9;
-  Null column10;
-  Null column11;
-  Null column12;
+  dynamic column1;
+  dynamic column2;
+  dynamic column3;
+  dynamic column4;
+  dynamic column5;
+  dynamic column6;
+  dynamic column7;
+  dynamic column8;
+  dynamic column9;
+  dynamic column10;
+  dynamic column11;
+  dynamic column12;
   String travelReqId;
-  Null organization;
+  dynamic organization;
 
   Dependent(
       {this.id,

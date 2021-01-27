@@ -7,18 +7,15 @@ class CustomColumnEditText extends StatefulWidget {
   VoidCallback onTap;
   String placename, countryname, hint, header;
   int Type;
+  bool hide=false;
 
   CustomColumnEditText(@required this.hint, @required this.placename,
-      @required this.countryname, @required this.header,@required this.Type,
+      @required this.countryname, @required this.header,@required this.Type,this.hide,
       {this.onTap});
 
   @override
   _CustomColumnEditTextState createState() => _CustomColumnEditTextState();
 }
-
-
-
-
 
 class _CustomColumnEditTextState extends State<CustomColumnEditText> {
 
@@ -89,8 +86,8 @@ class _CustomColumnEditTextState extends State<CustomColumnEditText> {
 
                               ),
                             ),
-                            Expanded(child:widget.Type==1?Icon(Icons.search,color: AppConstants.APP_THEME_COLOR,):Icon(Icons.calendar_today,color: AppConstants.APP_THEME_COLOR,),
-                            )
+                            widget.hide?SizedBox():Expanded(child:widget.Type==1?Icon(Icons.search,color: AppConstants.APP_THEME_COLOR,):Icon(Icons.calendar_today,color: AppConstants.APP_THEME_COLOR,),
+                            ),
                             ],
                         ),
                       ),

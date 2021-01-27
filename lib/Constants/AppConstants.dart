@@ -18,6 +18,8 @@ class AppConstants {
   static final String GET_PER_DIEM="/get_perdiem/";
   static final String GET_EMPLYOEE_VISA="/get_employee_visa/";
   static final String POST_TRAVEL_REQ="/get_add/travel_request/";
+  static final String GET_APPROVAL_LIST="/get_travel_request_approver/";
+  static final String POST_REQUEST_FOR_APPROVAL="/get_post_approve_travelvisa_request/";
 
 
 

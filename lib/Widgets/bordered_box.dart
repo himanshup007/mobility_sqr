@@ -9,7 +9,7 @@ customBorderBox(String text, bool ShowIcon, IconData icon,
     },
     child: Container(
         height: 30,
-         width: 60,
+         width: 50,
         margin: EdgeInsets.only(top: 2),
         decoration: BoxDecoration(border: Border.all(color: AppConstants.APP_THEME_COLOR),borderRadius: BorderRadius.all(Radius.circular(5))),
         child: FittedBox(

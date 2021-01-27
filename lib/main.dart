@@ -3,13 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/SuccesfullyAdded.dart';
-import 'package:mobility_sqr/Screens/Dashboard/AddAgenda.dart';
+import 'package:mobility_sqr/Screens/Approvals/ApprovalsScreen.dart';
+
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
 import 'package:mobility_sqr/Screens/Profile/Personal_info/Personal_Info_Screen.dart';
 import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
+import 'package:mobility_sqr/Screens/TravelReqView/TravelReqView.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
 import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
 
@@ -55,6 +57,8 @@ class MyApp extends StatelessWidget {
         '/Profile_Screen': (context) => ProfileScreen(),
         '/PersonalInfo': (context) => PersonalInfo(),
         '/SuccessfullyAdded':(context) => SuccessfullyAdded(),
+        '/ApprovalsScreen':(context) => ApprovalsScreen(),
+        '/TravelReqView':(context) =>TravelReqView(),
       },
     );
   }

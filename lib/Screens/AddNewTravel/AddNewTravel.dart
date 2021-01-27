@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:country_pickers/country.dart';
 
@@ -511,6 +510,7 @@ class _AddCity extends State<AddCity> {
                                               traveldata[index].travellingCountry,
                                               "From",
                                               1,
+                                              false,
                                               onTap: () async {
                                                 dynamic fromplace =
                                                     await Navigator.pushNamed(
@@ -555,7 +555,7 @@ class _AddCity extends State<AddCity> {
                                                     traveldata[index]
                                                         .travellingCountryTo,
                                                     "To",
-                                                    1,
+                                                    1,  false,
                                                     onTap: () async {
                                                       var data = await Navigator
                                                           .pushNamed(context,
@@ -635,7 +635,7 @@ class _AddCity extends State<AddCity> {
                                             "${getDepartureDate(traveldata[index].departureDate)}",
                                             "${getDepatureDay(traveldata[index].departureDate)}",
                                             "Departure",
-                                            2,
+                                            2,  false,
                                             onTap: () {
                                               selectDate(
                                                   context,
@@ -662,7 +662,7 @@ class _AddCity extends State<AddCity> {
                                                   "${getDepartureDate(traveldata[index].returnDate.toString())}",
                                                   "${getDepatureDay(traveldata[index].returnDate.toString())}",
                                                   "Return",
-                                                  2,
+                                                  2,  false,
                                                   onTap: () {
                                                     selectDate(
                                                         context,
@@ -1015,7 +1015,7 @@ class _AddCity extends State<AddCity> {
                                                   "${getDepartureDate(traveldata[index].accmodationStartDate)}",
                                                   "${getDepatureDay(traveldata[index].accmodationStartDate)}",
                                                   "Start Date",
-                                                  2,
+                                                  2,  false,
                                                   onTap: () {
                                                     selectDate(
                                                         context,
@@ -1043,7 +1043,7 @@ class _AddCity extends State<AddCity> {
                                                   "${getDepartureDate(traveldata[index].accmodationEndDate)}",
                                                   "${getDepatureDay(traveldata[index].accmodationEndDate)}",
                                                   "End Date",
-                                                  2,
+                                                  2,  false,
                                                   onTap: () {
                                                     selectDate(
                                                         context,

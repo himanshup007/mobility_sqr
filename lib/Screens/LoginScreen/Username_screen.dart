@@ -115,6 +115,7 @@ class _Username_Screen extends State<Username_Screen> {
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.pushNamed(context, '/ForgetPass');
+
                                   },
                                   child: Container(
                                     alignment: Alignment.centerRight,

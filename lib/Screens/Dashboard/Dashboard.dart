@@ -12,6 +12,7 @@ import 'package:mobility_sqr/Widgets/Divider.dart';
 import 'package:mobility_sqr/Widgets/MenuTile.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:mobility_sqr/Widgets/TileDashboard.dart';
+import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
@@ -612,7 +613,7 @@ class _DashboardState extends State<Dashboard> {
                         'Previous',
                         'Travels',
                         onTap: () {
-                          getNavigator(context, 1);
+                          getNavigator(context, 2);
                         },
                       ),
                     ],
@@ -629,7 +630,7 @@ class _DashboardState extends State<Dashboard> {
                         'Travel',
                         'Calendar',
                         onTap: () {
-                          getNavigator(context, 1);
+                          getNavigator(context, 3);
                         },
                       ),
                       SizedBox(
@@ -640,7 +641,7 @@ class _DashboardState extends State<Dashboard> {
                         'Expenses',
                         '',
                         onTap: () {
-                          getNavigator(context, 1);
+                          getNavigator(context, 4);
                         },
                       ),
                     ],
@@ -657,7 +658,7 @@ class _DashboardState extends State<Dashboard> {
                         'Approvals',
                         '',
                         onTap: () {
-                          getNavigator(context, 1);
+                          getNavigator(context, 5);
                         },
                       ),
                       SizedBox(
@@ -668,7 +669,7 @@ class _DashboardState extends State<Dashboard> {
                         'Vault',
                         '',
                         onTap: () {
-                          getNavigator(context, 1);
+                          getNavigator(context, 6);
                         },
                       ),
                     ],
@@ -697,6 +698,43 @@ class _DashboardState extends State<Dashboard> {
   getNavigator(BuildContext context, int where) {
     if (where == 1) {
       Navigator.pushNamed(context, '/AddCity');
+
+    }
+    else if(where==2){
+      Navigator.pushNamed(context, '/ApprovalsScreen');
+    }
+    else{
+      showAlertDialog(context," Coming Soon");
     }
   }
+}
+showAlertDialog(BuildContext context,String text) {
+
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK",style: TextStyle(color: AppConstants.APP_THEME_COLOR),),
+    onPressed: () {
+
+      Navigator.of(context).pop();
+
+
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    content: Text("Coming Soon"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    barrierDismissible: true,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

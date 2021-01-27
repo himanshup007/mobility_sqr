@@ -1,4 +1,5 @@
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
+import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
@@ -42,4 +43,9 @@ class Repository {
   Future<PostLocationResponse> GetPostLocation(String country) async {
     return await appApiProvider.GetPostLocation(country);
   }
+
+  Future<ApprovalModal> fetch_Aprroval_list() async{
+    return await appApiProvider.fetch_approval_list();
+  }
+
 }

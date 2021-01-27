@@ -367,6 +367,9 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                 ),
               ],
             ),
+            SizedBox(
+              height: MediaQuery.of(context).viewInsets.bottom,
+            ),
           ],
         ),
       ),
