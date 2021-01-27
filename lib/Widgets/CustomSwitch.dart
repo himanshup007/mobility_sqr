@@ -34,10 +34,10 @@ class CustomFlutterSwitch extends StatefulWidget {
       : super(key: key);
 
   @override
-  _FlutterSwitchState createState() => _FlutterSwitchState();
+  FlutterSwitchState createState() => FlutterSwitchState();
 }
 
-class _FlutterSwitchState extends State<CustomFlutterSwitch>
+class FlutterSwitchState extends State<CustomFlutterSwitch>
     with SingleTickerProviderStateMixin {
   Animation _circleAnimation;
   AnimationController _animationController;
@@ -56,9 +56,20 @@ class _FlutterSwitchState extends State<CustomFlutterSwitch>
       CurvedAnimation(parent: _animationController, curve: Curves.linear),
     );
   }
+   void ChangeAnimation(){
+
+    print("hello");
+  }
 
   @override
   Widget build(BuildContext context) {
+    if(widget.value==false){
+      _animationController.reverse();
+    }else{
+      _animationController.forward();
+    }
+
+
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
@@ -71,8 +82,8 @@ class _FlutterSwitchState extends State<CustomFlutterSwitch>
                 _animationController.forward();
               }
               widget.value == false
-                  ? widget.onToggle(true)
-                  : widget.onToggle(false);
+                  ? widget.onToggle(false)
+                  : widget.onToggle(true);
             }
             else{
               widget.ondisabled(true);
