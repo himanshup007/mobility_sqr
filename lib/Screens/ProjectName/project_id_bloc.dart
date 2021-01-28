@@ -23,8 +23,12 @@ class ProjectIdBloc extends Bloc<ProjectIdEvent, ProjectIdState> {
       try {
         final ProjectIdModel result =
         await repository.GetProjectId(event.pid);
+        if(result.data.length>0){
+          yield ProjectIdLoaded(projectIdModel: result);
+        }else{
+          yield ProjectIdError("No Search Result Found");
+        }
 
-        yield ProjectIdLoaded(projectIdModel: result);
       } catch (_) {
         yield ProjectIdError("Couldn't Fetch Data");
       }

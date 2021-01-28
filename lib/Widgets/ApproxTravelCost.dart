@@ -1,112 +1,173 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:sizer/sizer.dart';
 import 'package:currency_pickers/country.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:currency_pickers/currency_pickers.dart';
+import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
 
 class ApproxTravelCost extends StatefulWidget {
+  TravelReqPayLoad list;
+  PerDiemModel perDiem;
+
+  ApproxTravelCost(TravelReqPayLoad this.list,this.perDiem);
+
   @override
-  _ApproxTravelCostState createState() => _ApproxTravelCostState();
+  _ApproxTravelCostState createState() => _ApproxTravelCostState(list,perDiem);
 }
 
 class _ApproxTravelCostState extends State<ApproxTravelCost> {
   @override
   String dropdownValue = 'Select Currency';
+  PerDiemModel perDiem;
+   TravelReqPayLoad list;
+  int _current = 0;
+  _ApproxTravelCostState(this.list,this.perDiem);
+
 
   Widget build(BuildContext context) {
-    return  Container(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Reporting Currency",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: AppConstants.APP_THEME_COLOR,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _openCurrencyPickerDialog();
-                        },
-                        child: Container(
-                          child: Text(
-                            "Select Currency",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15.0),
-                          ),
-                        ),
-                      ),
-                      Icon(Icons.arrow_drop_down)
-                    ],
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 30),
-            ApproxTravelRowWidget("City Name", "New Delhi"),
-            SizedBox(height: 30),
-            ApproxTravelRowWidget("Per-diems", "-"),
-            SizedBox(height: 30),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Airfare",
-                    textAlign: TextAlign.left,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    height: 35,
-                    child: TextField(
-                      keyboardType:
-                          TextInputType.numberWithOptions(signed: true),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+    List<Widget> CostList = list.travelCity.map((item) => Container(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(height: 40,),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "Reporting Currency",
+                      textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 15.0),
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: AppConstants.APP_THEME_COLOR))),
+                          color: AppConstants.APP_THEME_COLOR,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20.0),
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _openCurrencyPickerDialog();
+                          },
+                          child: Container(
+                            child: Text(
+                              "Select Currency",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20.0),
+                            ),
+                          ),
+                        ),
+                        Icon(Icons.arrow_drop_down)
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 30),
+              ApproxTravelRowWidget("City Name", "${item.destinationCity+"("+item.currency+")"}"),
+              SizedBox(height: 30),
+              ApproxTravelRowWidget("Per-diems", "${item.perDiamValue}"),
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "Airfare",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 20.0),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: 35,
+                      child: TextField(
+                        keyboardType:
+                        TextInputType.numberWithOptions(signed: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 18.0),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color:
+                                    AppConstants.APP_THEME_COLOR))),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              ApproxTravelRowWidget("Hotel", "-"),
+              SizedBox(height: 30),
+              ApproxTravelRowWidget("Transportation", "-"),
+              SizedBox(height: 30),
+              ApproxTravelRowWidget("Total", "10000"),
+              SizedBox(height: 30),
+              ApproxTravelRowWidget("Total (Currency)", "10,000"),
+            ],
+          ),
+        )
+    )).toList();
+    return Container(
+      height: 100.0.h,
+      width: 100.0.w,
+      child: Column(
+          children: [
+            CarouselSlider(
+              items: CostList,
+              options: CarouselOptions(
+                    enableInfiniteScroll: false,
+                  aspectRatio: 2.0,
+                  height: 60.0.h,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  }
+              ),
             ),
-            SizedBox(height: 30),
-            ApproxTravelRowWidget("Hotel", "-"),
-            SizedBox(height: 30),
-            ApproxTravelRowWidget("Transportation", "-"),
-            SizedBox(height: 30),
-            ApproxTravelRowWidget("Total", "10000"),
-            SizedBox(height: 30),
-            ApproxTravelRowWidget("Total (Currency)", "10,000"),
-          ],
-        ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: CostList.map((url) {
+                int index = CostList.indexOf(url);
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _current == index
+                        ? AppConstants.APP_THEME_COLOR
+                        : Color.fromRGBO(0, 0, 0, 0.4),
+                  ),
+                );
+              }).toList(),
+            ),
+          ]
+      ),
 
     );
   }
+
+
+
+
+
 
   Widget _buildDialogItem(Country country) => Row(
         children: <Widget>[
@@ -148,7 +209,7 @@ class ApproxTravelRowWidget extends StatelessWidget {
             child: Text(
               keyName,
               textAlign: TextAlign.left,
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0),
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
             ),
           ),
         ),
@@ -159,7 +220,7 @@ class ApproxTravelRowWidget extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.left,
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15.0),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
             ),
           ),
         ),

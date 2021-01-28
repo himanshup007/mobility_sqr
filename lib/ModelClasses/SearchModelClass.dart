@@ -3,14 +3,14 @@ bool _status;
 String _message;
 List<SearchList> _data;
 
-SearchModel({bool status, String message, List<SearchList> data}) {
+SearchModel({dynamic status, String message, List<SearchList> data}) {
 this._status = status;
 this._message = message;
 this._data = data;
 }
 
-bool get status => _status;
-set status(bool status) => _status = status;
+dynamic get status => _status;
+set status(dynamic status) => _status = status;
 String get message => _message;
 set message(String message) => _message = message;
 List<SearchList> get data => _data;
@@ -44,7 +44,7 @@ String _dateCreated;
 String _dateModified;
 Null _createdBy;
 Null _modifiedBy;
-bool _status;
+dynamic _status;
 String _airportId;
 String _city;
 String _airportName;
@@ -69,7 +69,7 @@ String dateCreated,
 String dateModified,
 dynamic createdBy,
 dynamic modifiedBy,
-bool status,
+dynamic status,
 String airportId,
 String city,
 String airportName,
@@ -122,8 +122,8 @@ dynamic get createdBy => _createdBy;
 set createdBy(dynamic createdBy) => _createdBy = createdBy;
 dynamic get modifiedBy => _modifiedBy;
 set modifiedBy(dynamic modifiedBy) => _modifiedBy = modifiedBy;
-bool get status => _status;
-set status(bool status) => _status = status;
+dynamic get status => _status;
+set status(dynamic status) => _status = status;
 String get airportId => _airportId;
 set airportId(String airportId) => _airportId = airportId;
 String get city => _city;

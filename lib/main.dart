@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
         '/PurposeScreen': (context) => PurposeScreen(),
         '/AddNewTravel2': (context) => AddNewTravel2(),
         '/Dependents': (context) => Dependents(),
-        '/ApproxTravelCost': (context) => ApproxTravelCost(),
         '/ProjectIdScreen': (context) => ProjectIdScreen(),
         '/Profile_Screen': (context) => ProfileScreen(),
         '/PersonalInfo': (context) => PersonalInfo(),

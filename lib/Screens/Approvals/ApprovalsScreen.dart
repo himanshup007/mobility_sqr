@@ -144,31 +144,6 @@ var where;
     );
   }
 
-  onLoading() {
-    Future.delayed(Duration.zero, () {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-
-        builder: (BuildContext context) {
-          dialogContext = context;
-          return Container(
-            height: 50,
-            width: 50,
-            color: Colors.transparent,
-            child: Center(
-              child: LoadingBouncingGrid.circle(
-                size: 50,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          );
-        },
-      );
-    });
-
-
-  }
 
   Future<bool> _onWillPop() {
     Navigator.of(context).pushNamedAndRemoveUntil(

@@ -28,7 +28,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       try {
         final SearchModel result = await repository.fetch_location(event.query);
         if(result!=null){
-          yield SearchClassLoaded(location: result);
+          if(result.data.length>0){
+            yield SearchClassLoaded(location: result);
+          }
+        else{
+            yield SearchClassError("No Search Result Found");
+
+          }
+
         }
         else{
           yield SearchClassEmpty();

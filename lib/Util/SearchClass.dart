@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Util/SearhBloc/search_bloc.dart';
+import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchPlace extends StatefulWidget {
@@ -16,16 +17,14 @@ class _SearchPlaceState extends State<SearchPlace> {
   GlobalKey<_SearchPlaceState> _myKey = GlobalKey();
 
   Map args;
+
   @override
   void initState() {
-
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -70,11 +69,10 @@ class _SearchPlaceState extends State<SearchPlace> {
                     ),
                   ),
                   onChanged: (text) {
-                    if(text.length>2){
+                    if (text.length > 2) {
                       BlocProvider.of<SearchBloc>(_myKey.currentContext)
                           .add(FetchSearchResult(text));
                     }
-
                   },
                 ),
               ),
@@ -84,18 +82,36 @@ class _SearchPlaceState extends State<SearchPlace> {
                     key: _myKey,
                     builder: (context, state) {
                       if (state is SearchClassLoading) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return showMobilityLoader();
                       }
                       if (state is SearchInitial) {}
-                      if(state is SearchClassEmpty){
-                        return Center(child:Text("No data Found"));
+                      if (state is SearchClassEmpty) {
+                        return Center(
+                            child: Container(
+                                child: Column(
+                          children: [
+                            Text("No data Found"),
+                          ],
+                        )));
                       }
                       if (state is SearchClassError) {
-                        return Center(
-                          child:
-                              Text('Oops Something Went Wrong!'),
+                        return Container(
+                          width: 100.0.w,
+                          height: 50.0.h,
+                          child: Center(
+                              child: Container(
+                                width: 100.0.w,
+                                height: 50.0.h,
+                                child: Column(
+                            children: [
+                                Image.asset(
+                                  "assets/images/no_data_found.png",
+                                  color: AppConstants.APP_THEME_COLOR,
+                                ),
+                                Text("${state.message}"),
+                            ],
+                          ),
+                              )),
                         );
                       }
                       if (state is SearchClassLoaded) {
@@ -104,11 +120,12 @@ class _SearchPlaceState extends State<SearchPlace> {
                           itemCount: state.location.data.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: (){
-
-                                Navigator.pop(context, state.location.data[index]);
+                              onTap: () {
+                                Navigator.pop(
+                                    context, state.location.data[index]);
                               },
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     height: 20.0.w,
@@ -136,30 +153,44 @@ class _SearchPlaceState extends State<SearchPlace> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Align(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: Container(
-                                                      padding: EdgeInsets.all(5),
+                                                      padding:
+                                                          EdgeInsets.all(5),
                                                       child: Text(
-                                                        state.location.data[index]
-                                                                .airportName +","+
-                                                            state.location.data[index]
+                                                        state
+                                                                .location
+                                                                .data[index]
+                                                                .airportName +
+                                                            "," +
+                                                            state
+                                                                .location
+                                                                .data[index]
                                                                 .countryName,
-                                                        textAlign: TextAlign.start,
+                                                        textAlign:
+                                                            TextAlign.start,
                                                         style: TextStyle(
                                                             fontSize: 16,
                                                             color: Colors.black,
                                                             fontWeight:
-                                                                FontWeight.w600),
+                                                                FontWeight
+                                                                    .w600),
                                                       ),
                                                     )),
                                                 Align(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: Container(
-                                                      padding: EdgeInsets.all(5),
+                                                      padding:
+                                                          EdgeInsets.all(5),
                                                       child: Text(
-                                                        state.location.data[index]
+                                                        state
+                                                            .location
+                                                            .data[index]
                                                             .airportName,
-                                                        textAlign: TextAlign.start,
+                                                        textAlign:
+                                                            TextAlign.start,
                                                       ),
                                                     ))
                                               ],
@@ -169,28 +200,36 @@ class _SearchPlaceState extends State<SearchPlace> {
                                         Expanded(
                                           flex: 2,
                                           child: Container(
-                                              height: 100.0.h,
-                                              child: Center(
-                                                child: Text(
-                                                  state.location.data[index]
-                                                      .iataCode,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                                ),
-                                              ),),
+                                            height: 100.0.h,
+                                            child: Center(
+                                              child: Text(
+                                                state.location.data[index]
+                                                    .iataCode,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
                                         )
                                       ],
                                     ),
                                   ),
-
-                                  Container(color: Colors.black12,height: 1,),
-                                  SizedBox(height: 10,)
+                                  Container(
+                                    color: Colors.black12,
+                                    height: 1,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
                                 ],
                               ),
                             );
                           },
                         );
                       }
+
                       return Container(
                         height: 0,
                         width: 0,

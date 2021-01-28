@@ -9,6 +9,7 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
+import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/TravelReqResponse.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
@@ -48,7 +49,9 @@ class AddNewTravel2State extends State<AddNewTravel2> {
   Widget build(BuildContext context) {
     final Map args = ModalRoute.of(context).settings.arguments;
     TravelReqPayLoad list = args['list'];
+    PerDiemModel perDiem= args['perDiem'];
     setValues(list);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -290,7 +293,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
               child:FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
-                  showCustomDialogClass(context,ApproxTravelCost());
+                  showCustomDialogClass(context,ApproxTravelCost(list,perDiem));
                 },
                 child: Text(
                   'View approximate travel cost',

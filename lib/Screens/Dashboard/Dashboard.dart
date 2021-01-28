@@ -125,6 +125,7 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.pushNamed(context, '/Profile_Screen');
               }),
               CustomDivider(),
+
               CustomMenuTitle("assets/images/biometric-thumb.png",
                   'Fingerprint Authentication', context,
                   OnTouch: () {}),

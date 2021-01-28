@@ -1,16 +1,16 @@
 class ProjectIdModel {
-  bool _status;
+  dynamic _status;
   String _message;
   List<ProjectList> _data;
 
-  ProjectIdModel({bool status, String message, List<ProjectList> data}) {
+  ProjectIdModel({dynamic status, String message, List<ProjectList> data}) {
     this._status = status;
     this._message = message;
     this._data = data;
   }
 
-  bool get status => _status;
-  set status(bool status) => _status = status;
+  dynamic get status => _status;
+  set status(dynamic status) => _status = status;
   String get message => _message;
   set message(String message) => _message = message;
   List<ProjectList> get data => _data;

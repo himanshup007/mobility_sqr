@@ -17,6 +17,7 @@ import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
+import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
@@ -45,6 +46,7 @@ class AddCity extends StatefulWidget {
 class _AddCity extends State<AddCity> {
   ItemScrollController itemScrollController = ItemScrollController();
   final Repository repository = Repository();
+  PerDiemModel perDiemModel;
   List<dynamic> userdetails = [];
   List<TravelCity> traveldata = new List<TravelCity>();
   int index = 0;
@@ -63,7 +65,6 @@ class _AddCity extends State<AddCity> {
   ApiProvider _appApiProvider = ApiProvider();
   final _listview_controller = ScrollController();
 
-  var currentSelectedValue;
 
   bool dependentEyeBtn = false;
 
@@ -164,7 +165,11 @@ class _AddCity extends State<AddCity> {
     modelClass.destinationCity = "";
     modelClass.sourceCity = "";
     modelClass.hide = index;
-    modelClass.departureDate = DateTime.now().toString();
+    modelClass.departureDate = traveldata[index-1].returnDate==null?DateTime.now().toString():traveldata[index-1].returnDate;
+
+    if(traveldata.length>=2){
+      modelClass.departureDate=traveldata[index-1].departureDate==null?DateTime.now().toString():traveldata[index-1].departureDate;
+    }
     modelClass.returnDate = "";
     modelClass.accmodationStartDate = modelClass.departureDate;
     modelClass.accmodationEndDate = "";
@@ -491,6 +496,7 @@ class _AddCity extends State<AddCity> {
                       child: ScrollablePositionedList.builder(
                         itemScrollController: itemScrollController,
                         scrollDirection: Axis.horizontal,
+                        physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
                             alignment: Alignment.center,
@@ -616,22 +622,19 @@ class _AddCity extends State<AddCity> {
                                                                   traveldata[index]
                                                                           .myDependentList =
                                                                       value;
-
-                                                                  _appApiProvider.GetPerDiem(traveldata[
-                                                                              index]
-                                                                          .toCountryData
-                                                                          .countryName)
-                                                                      .then((value) =>
-                                                                          this.setState(
-                                                                              () {
-                                                                            traveldata[index].perDiamValue =
-                                                                                value.perDiem;
-                                                                            traveldata[index].transportCost =
-                                                                                value.transportation;
-                                                                            traveldata[index].currency =
-                                                                                value.currency;
-                                                                          }));
                                                                 }));
+
+                                                        _appApiProvider.GetPerDiem(
+                                                                traveldata[
+                                                                        index]
+                                                                    .toCountryData
+                                                                    .countryName)
+                                                            .then((value) =>
+
+
+                                                       SaveCostData(value)
+
+                                                        );
                                                       }
                                                     },
                                                   ),
@@ -665,6 +668,31 @@ class _AddCity extends State<AddCity> {
                                                   traveldata[index]
                                                       .departureDate = data;
                                                 });
+
+                                                if(traveldata.length>1){
+                                                  try{
+                                                    for(int i=index;i<traveldata.length;i++){
+                                                      this.setState(() {
+                                                        traveldata[i+1]
+                                                            .departureDate = data;
+                                                      });
+                                                    }
+
+                                                  }catch(e){
+
+                                                  }
+
+                                                }
+                                                if(traveldata.length>1){
+                                                  try{
+
+                                                    traveldata[index].accmodationStartDate=data;
+
+                                                  }catch(e){
+
+                                                  }
+                                                }
+
                                               });
                                             },
                                           ),
@@ -1082,8 +1110,11 @@ class _AddCity extends State<AddCity> {
                                                                 index]
                                                             .accmodationStartDate),
                                                         DateTime.parse(
-                                                            traveldata[index]
-                                                                .returnDate),
+                                                            accomodationLogic(
+                                                                traveldata,
+                                                                traveldata[
+                                                                        index]
+                                                                    .returnDate,index)),
                                                         datevalue: (text) {
                                                       this.setState(() {
                                                         traveldata[index]
@@ -1633,7 +1664,7 @@ class _AddCity extends State<AddCity> {
                       if (req_data != null) {
                         dynamic Dependents = await Navigator.pushNamed(
                             context, '/AddNewTravel2',
-                            arguments: {"list": req_data});
+                            arguments: {"list": req_data,"perDiem":perDiemModel});
                       }
                     } else {
                       showDefaultSnackbar(
@@ -1788,17 +1819,16 @@ class _AddCity extends State<AddCity> {
       if (cityTravel.travellingCountry == null ||
           cityTravel.travellingCountry.isEmpty) {
         return false;
-      } else if (cityTravel.travellingCountryTo == null ||
-          cityTravel.travellingCountryTo.isEmpty) {
-        return false;
-      } else if (formdata.travelCity.length < 2) {
-        if (cityTravel.returnDate == null || cityTravel.returnDate.isEmpty) {
-          return false;
-        }
-      } else if (cityTravel.hostHrName == null ||
+      }
+      // else if (cityTravel.travellingCountryTo == null ||
+      //     cityTravel.travellingCountryTo.isEmpty) {
+      //   return false;
+      // }
+      else if (cityTravel.hostHrName == null ||
           cityTravel.hostHrName.isEmpty) {
         return false;
-      } else if (cityTravel.hostPhoneExt == null ||
+      }
+      else if (cityTravel.hostPhoneExt == null ||
           cityTravel.hostPhoneExt.isEmpty ||
           cityTravel.hostPhoneNo.isEmpty) {
         return false;
@@ -1809,5 +1839,36 @@ class _AddCity extends State<AddCity> {
     }
 
     return true;
+  }
+
+  accomodationLogic(List<TravelCity> travel_list, String date,int index) {
+    if(travel_list.length==1){
+
+      return travel_list[index].returnDate;
+    }
+    if(travel_list.length-1==index){
+      return travel_list[index].departureDate;
+    }
+   else if(travel_list.length>1){
+
+
+        return travel_list[index+1].departureDate;
+
+
+    }
+    else {
+
+      return date;
+    }
+
+  }
+
+  SaveCostData(value) {
+    perDiemModel = value;
+
+    traveldata[index].perDiamValue = value.perDiem;
+    traveldata[index].transportCost = value.transportation;
+    traveldata[index].currency = value.currency;
+
   }
 }

@@ -40,9 +40,8 @@ import 'package:sizer/sizer.dart';
           contentPadding: EdgeInsets.only(top: 10.0),
           content: FittedBox(
             fit: BoxFit.fill,
-
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
+              margin: EdgeInsets.symmetric(horizontal: 20),
               width: 100.0.w,height: 70.0.h,
               child: mywidget
             ),

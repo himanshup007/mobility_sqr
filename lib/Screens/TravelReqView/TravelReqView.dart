@@ -30,8 +30,8 @@ class _TravelReqViewState extends State<TravelReqView> {
   bool showcost = false;
   final _listview_controller = ScrollController();
   List<dynamic> userdetails = [];
-Data list=Data();
-int where;
+  Data list=Data();
+  int where;
   var  args;
   scrolltotop() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -96,7 +96,7 @@ int where;
         .of(context)
         .settings
         .arguments;
-     list = args['EmployeeData'];
+    list = args['EmployeeData'];
 
     return Scaffold(
       appBar: AppBar(
@@ -437,7 +437,7 @@ int where;
                                           width: 80,
                                           margin: EdgeInsets.only(right: 20),
                                           decoration: BoxDecoration(
-                                            border:Border.all(color:AppConstants.APP_THEME_COLOR),
+                                              border:Border.all(color:AppConstants.APP_THEME_COLOR),
                                               borderRadius:BorderRadius.all(Radius.circular(5)), color:AppConstants.APP_THEME_COLOR),
                                           child: FittedBox(
                                             fit: BoxFit.fitWidth,
@@ -554,122 +554,122 @@ int where;
                             list.details[index].isDependent
                                 ? Column(
                               children: [
-                                   for (var item in list.dependent)
-                                Container(
-                                  padding: EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(5)),
-                                      border: Border.all(
-                                          color: AppConstants
-                                              .TEXT_BACKGROUND_COLOR,
-                                          width: 0.3)),
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 5.0.w, vertical: 0.5.h),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              child: Row(
-                                                children: [
-                                                  Text("Name :",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR)),
-                                                  Text("${item.dependentName}",
-                                                      style: TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .bold,
-                                                          fontSize: 16,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR))
-                                                ],
+                                for (var item in list.dependent)
+                                  Container(
+                                    padding: EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5)),
+                                        border: Border.all(
+                                            color: AppConstants
+                                                .TEXT_BACKGROUND_COLOR,
+                                            width: 0.3)),
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 5.0.w, vertical: 0.5.h),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text("Name :",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR)),
+                                                    Text("${item.dependentName}",
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight
+                                                                .bold,
+                                                            fontSize: 16,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR))
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              child: Row(
-                                                children: [
-                                                  Text("Relation: ",
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR)),
-                                                  Text("${item.dependentRelation}",
-                                                      style: TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .bold,
-                                                          fontSize: 14,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR))
-                                                ],
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text("Relation: ",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR)),
+                                                    Text("${item.dependentRelation}",
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight
+                                                                .bold,
+                                                            fontSize: 14,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR))
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              child: Row(
-                                                children: [
-                                                  Text("Visa Number :",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR)),
-                                                  Text("${item.dependentVisa}",
-                                                      style: TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .bold,
-                                                          fontSize: 14,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR))
-                                                ],
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text("Visa Number :",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR)),
+                                                    Text("${item.dependentVisa}",
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight
+                                                                .bold,
+                                                            fontSize: 14,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR))
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              child: Row(
-                                                children: [
-                                                  Text("Passport Status: ",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR)),
-                                                  Text("${item.dependentPassport}",
-                                                      style: TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .bold,
-                                                          fontSize: 14,
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR))
-                                                ],
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text("Passport Status: ",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR)),
+                                                    Text("${item.dependentPassport}",
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight
+                                                                .bold,
+                                                            fontSize: 14,
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR))
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
                               ],
                             )
                                 : SizedBox(),

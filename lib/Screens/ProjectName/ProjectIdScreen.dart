@@ -1,9 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/ProjectName/project_id_bloc.dart';
 import 'package:mobility_sqr/Util/SearhBloc/search_bloc.dart';
+import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:sizer/sizer.dart';
 
 class ProjectIdScreen extends StatefulWidget {
@@ -82,15 +84,25 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                     key: _myKey,
                     builder: (context, state) {
                       if (state is ProjectIdLoading) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return showMobilityLoader();
                       }
                       if (state is ProjectIdInitial) {}
 
                       if (state is ProjectIdError) {
                         return Center(
-                          child: Text('Oops Something Went Wrong!'),
+                          child: Container(
+                            width: 100.0.w,
+                            height: 50.0.h,
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  "assets/images/no_data_found.png",
+                                  color: AppConstants.APP_THEME_COLOR,
+                                ),
+                                Text("${state.message}"),
+                              ],
+                            ),
+                          ),
                         );
                       }
                       if (state is ProjectIdLoaded) {
@@ -104,9 +116,11 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                     context, state.projectIdModel.data[index]);
                               },
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    height: 20.0.w,
+                                    height: 8.0.h,
                                     width: 100.0.w,
                                     margin: EdgeInsets.symmetric(horizontal: 5),
                                     decoration: BoxDecoration(
@@ -121,18 +135,19 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                       // ],
                                     ),
                                     child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           flex: 8,
                                           child: Container(
                                             height: 100.0.h,
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+
                                               children: [
                                                 Align(
                                                     alignment:
-                                                        Alignment.centerLeft,
+                                                        Alignment.topLeft,
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -152,7 +167,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                                         Container(
                                                           padding:
                                                               EdgeInsets.all(5),
-                                                          child: Text(
+                                                          child: AutoSizeText(
                                                             state
                                                                     .projectIdModel
                                                                     .data[index]
@@ -164,6 +179,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                                                     .pid,
                                                             textAlign:
                                                                 TextAlign.start,
+                                                            minFontSize: 14,
                                                             style: TextStyle(
                                                                 fontSize: 16,
                                                                 color: Colors
@@ -185,7 +201,8 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Container(
-                                              margin: EdgeInsets.only(top: 20),
+                                              padding:
+                                              EdgeInsets.all(5),
                                               height: 100.0.h,
                                               child: Text(
                                                 state.projectIdModel.data[index]
@@ -202,6 +219,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                     ),
                                   ),
                                   Container(color: Colors.black12,height: 1,),
+
                                   SizedBox(
                                     height: 10,
                                   )
