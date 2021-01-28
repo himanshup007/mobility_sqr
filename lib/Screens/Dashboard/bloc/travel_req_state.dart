@@ -24,12 +24,12 @@ class TravelReqLoading extends TravelReqState {
 }
 
 class TravelReqLoaded extends TravelReqState {
-  final GetTravelRequest travelRequest;
+  final ApprovalModal travelRequest;
 
   const TravelReqLoaded({@required this.travelRequest}) ;
 
   @override
-  List<Object> get props => [GetTravelRequest];
+  List<Object> get props => [ApprovalModal];
 }
 
 class TravelReqError extends TravelReqState {

@@ -7,7 +7,7 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/Screens/Dashboard/bloc/travel_req_bloc.dart';
-
+import 'dart:math' as math;
 import 'package:mobility_sqr/Widgets/Divider.dart';
 import 'package:mobility_sqr/Widgets/MenuTile.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
@@ -151,7 +151,7 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         Expanded(
                           child: Text(
-                            "My Travel Request",
+                            "My Travel Requests",
                             style: TextStyle(
                                 fontWeight: customWeight,
                                 color: AppConstants.TEXT_BACKGROUND_COLOR),
@@ -188,17 +188,12 @@ class _DashboardState extends State<Dashboard> {
                               child: Center(
                                   child: Text("Oops Something went wrong!")),
                             );
-                          }
-                          else if(state.travelRequest.data.length==0){
-
+                          } else if (state.travelRequest.data.length == 0) {
                             return Container(
                               height: 10.0.h,
-                              child: Center(
-                                  child: Text("No Travel Request")),
+                              child: Center(child: Text("No Travel Request")),
                             );
-                          }
-
-                          else {
+                          } else {
                             return Container(
                               height: 65.0.w,
                               width: 100.0.w,
@@ -211,7 +206,8 @@ class _DashboardState extends State<Dashboard> {
                                 child: AnimationLimiter(
                                   child: new ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: state.travelRequest.data.length,
+                                      itemCount:
+                                          state.travelRequest.data.length,
                                       itemBuilder:
                                           (BuildContext ctxt, int Index) {
                                         return AnimationConfiguration
@@ -223,352 +219,345 @@ class _DashboardState extends State<Dashboard> {
                                             horizontalOffset: 50,
                                             child: FadeInAnimation(
                                               child: Row(
-                                                children: [ 
-                                                  Container(
-                                                    height: 60.0.w,
-                                                    width: 40.0.w,
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: AppConstants
-                                                              .TEXT_BACKGROUND_COLOR,
-                                                          width: .2),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  5)),
-                                                    ),
-                                                    child: Column(
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 5,
-                                                          child: Column(
-                                                            children: [
-                                                              Container(
-                                                                margin:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            5),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Text(
-                                                                        "From"),
-                                                                    Container(
-                                                                      width:
-                                                                          15.0.w,
-                                                                      height:
-                                                                          3.5.w,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color:
-                                                                            AppConstants.APP_THEME_COLOR,
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(8)),
-                                                                      ),
-                                                                      child:
-                                                                          Container(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          '/TravelReqView',
+                                                          arguments: {
+                                                            "EmployeeData": state
+                                                                .travelRequest
+                                                                .data[Index],
+                                                            "where": 2
+                                                          });
+                                                    },
+                                                    child: Container(
+                                                      height: 60.0.w,
+                                                      width: 40.0.w,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: AppConstants
+                                                                .TEXT_BACKGROUND_COLOR,
+                                                            width: .2),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5)),
+                                                      ),
+                                                      child: Column(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 5,
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  margin:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              5),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Text(
+                                                                          "To"),
+                                                                      Container(
+                                                                        width:
+                                                                            15.0.w,
                                                                         height:
                                                                             3.5.w,
-                                                                        margin: EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            1,
-                                                                            0,
-                                                                            0),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              AppConstants.APP_THEME_COLOR,
+                                                                          borderRadius:
+                                                                              BorderRadius.all(Radius.circular(8)),
+                                                                        ),
                                                                         child:
-                                                                            Text(
-                                                                          state.travelRequest.data[Index].travelReqId,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color: Colors.white,
-                                                                            fontSize: 10,
-                                                                            fontWeight: FontWeight.bold,
+                                                                            Container(
+                                                                          height:
+                                                                              3.5.w,
+                                                                          margin: EdgeInsets.fromLTRB(
+                                                                              0,
+                                                                              1,
+                                                                              0,
+                                                                              0),
+                                                                          child:
+                                                                              Text(
+                                                                            state.travelRequest.data[Index].travelReqId,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 10,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                            textAlign:
+                                                                                TextAlign.center,
                                                                           ),
-                                                                          textAlign:
-                                                                              TextAlign.center,
                                                                         ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                width:
-                                                                    100.0.w,
-                                                                margin: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            5),
-                                                                child:state.travelRequest.data[Index].details.length>0? Text(
-                                                                  state
-                                                                      .travelRequest
-                                                                      .data[
-                                                                          Index]
-                                                                      .details[
-                                                                          0]
-                                                                      .sourceCity,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w900,
-                                                                      color: AppConstants
-                                                                          .TEXT_BACKGROUND_COLOR,
-                                                                      fontSize:
-                                                                          15),
-                                                                ):SizedBox(),
-                                                              ),
-                                                              Container(
-                                                                width:
-                                                                    100.0.w,
-                                                                margin: EdgeInsets
-                                                                    .fromLTRB(
-                                                                        5,
-                                                                        5,
-                                                                        5,
-                                                                        0),
-                                                                child: state.travelRequest.data[Index].details.length>0?Text(
-                                                                  state
-                                                                      .travelRequest
-                                                                      .data[
-                                                                          Index]
-                                                                      .details[
-                                                                          0]
-                                                                      .travellingCountry,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w300,
-                                                                      color: AppConstants
-                                                                          .TEXT_BACKGROUND_COLOR,
-                                                                      fontSize:
-                                                                          13),
-                                                                ):SizedBox(),
-                                                              ),
-                                                              Stack(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Container(
-                                                                    child:
-                                                                        Divider(
-                                                                      color: AppConstants
-                                                                          .TEXT_BACKGROUND_COLOR,
-                                                                      height:
-                                                                          15,
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    height:
-                                                                        15,
-                                                                    child:
-                                                                        Align(
-                                                                      alignment:
-                                                                          Alignment.center,
-                                                                      child: Image.asset(
-                                                                          'assets/images/plane_icon.png'),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                              Container(
-                                                                width:
-                                                                    100.0.w,
-                                                                margin: EdgeInsets
-                                                                    .fromLTRB(
-                                                                        5,
-                                                                        0,
-                                                                        5,
-                                                                        0),
-                                                                child: Text(
-                                                                  "To",
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                width:
-                                                                    100.0.w,
-                                                                margin: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            5),
-                                                                child: state.travelRequest.data[Index].details.length>0?Text(
-                                                                  state
-                                                                      .travelRequest
-                                                                      .data[
-                                                                          Index]
-                                                                      .details[
-                                                                          0]
-                                                                      .destinationCity,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w900,
-                                                                      color: AppConstants
-                                                                          .TEXT_BACKGROUND_COLOR,
-                                                                      fontSize:
-                                                                          15),
-                                                                ):SizedBox(),
-                                                              ),
-                                                              Container(
-                                                                width:
-                                                                    100.0.w,
-                                                                margin: EdgeInsets
-                                                                    .fromLTRB(
-                                                                        5,
-                                                                        5,
-                                                                        5,
-                                                                        0),
-                                                                child: state.travelRequest.data[Index].details.length>0?Text(
-                                                                  state
-                                                                      .travelRequest
-                                                                      .data[
-                                                                          Index]
-                                                                      .details[
-                                                                          0]
-                                                                      .travellingCountryTo,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w300,
-                                                                      color: AppConstants
-                                                                          .TEXT_BACKGROUND_COLOR,
-                                                                      fontSize:
-                                                                          13),
-                                                                ):SizedBox(),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 3,
-                                                          child: Container(
-                                                            color: AppConstants
-                                                                .BACKGROUND_COLOR_BOTTOM,
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  flex: 2,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Container(
-                                                                        width:
-                                                                            100.0.w,
-                                                                        margin:
-                                                                            EdgeInsets.all(5),
-                                                                        child:
-                                                                            Text(
-                                                                          "Departure",
-                                                                          textAlign:
-                                                                              TextAlign.start,
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        width:
-                                                                            100.0.w,
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                5),
-                                                                        child:
-                                                                        state.travelRequest.data[Index].details.length>0?Text(
-                                                                          getDepartureTime(state
-                                                                              .travelRequest
-                                                                              .data[Index]
-                                                                              .details[0]
-                                                                              .departureDate),
-                                                                          textAlign:
-                                                                              TextAlign.start,
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.w900,
-                                                                              color: Colors.black,
-                                                                              fontSize: 18),
-                                                                        ):SizedBox(),
-                                                                      ),
-                                                                      Container(
-                                                                        width:
-                                                                            100.0.w,
-                                                                        margin: EdgeInsets.fromLTRB(
-                                                                            5,
-                                                                            5,
-                                                                            5,
-                                                                            0),
-                                                                        child:
-                                                                        state.travelRequest.data[Index].details.length>0? Text(
-                                                                          getDepatureDate(state
-                                                                              .travelRequest
-                                                                              .data[Index]
-                                                                              .details[0]
-                                                                              .departureDate),
-                                                                          textAlign:
-                                                                              TextAlign.start,
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.w500,
-                                                                              color: AppConstants.TEXT_BACKGROUND_COLOR,
-                                                                              fontSize: 13),
-                                                                        ):SizedBox(),
                                                                       ),
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                state.travelRequest.data[Index]
-                                                                            .travelReqStatus ==
-                                                                        '2'
-                                                                    ? Expanded(
-                                                                        flex: 1,
+                                                                Container(
+                                                                  width:
+                                                                  100.0.w,
+                                                                  margin: EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                      5),
+                                                                  child: state
+                                                                      .travelRequest
+                                                                      .data[Index]
+                                                                      .details
+                                                                      .length >
+                                                                      0
+                                                                      ? Text(
+                                                                    state
+                                                                        .travelRequest
+                                                                        .data[Index]
+                                                                        .details[0]
+                                                                        .destinationCity,
+                                                                    textAlign:
+                                                                    TextAlign.start,
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w900,
+                                                                        color: AppConstants.TEXT_BACKGROUND_COLOR,
+                                                                        fontSize: 15),
+                                                                  )
+                                                                      : SizedBox(),
+                                                                ),
+                                                                Container(
+                                                                  width:
+                                                                  100.0.w,
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                      5,
+                                                                      5,
+                                                                      5,
+                                                                      0),
+                                                                  child: state
+                                                                      .travelRequest
+                                                                      .data[Index]
+                                                                      .details
+                                                                      .length >
+                                                                      0
+                                                                      ? Text(
+                                                                    state
+                                                                        .travelRequest
+                                                                        .data[Index]
+                                                                        .details[0]
+                                                                        .travellingCountryTo,
+                                                                    textAlign:
+                                                                    TextAlign.start,
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w300,
+                                                                        color: AppConstants.TEXT_BACKGROUND_COLOR,
+                                                                        fontSize: 13),
+                                                                  )
+                                                                      : SizedBox(),
+                                                                ),
+                                                                Stack(
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Container(
+                                                                      child:
+                                                                          Divider(
+                                                                        color: AppConstants
+                                                                            .TEXT_BACKGROUND_COLOR,
+                                                                        height:
+                                                                            15,
+                                                                      ),
+                                                                    ),
+                                                                    Transform.rotate(
+                                                                      angle: 180 * math.pi / 180,
+                                                                      child: Container(
+                                                                        height:
+                                                                            15,
                                                                         child:
-                                                                            Container(
-                                                                          foregroundDecoration:
-                                                                              const RotatedCornerDecoration(
-                                                                            color:
-                                                                                Colors.orangeAccent,
-                                                                            geometry: const BadgeGeometry(
-                                                                                width: 55,
-                                                                                height: 55,
-                                                                                alignment: BadgeAlignment.bottomRight),
-                                                                            textSpan:
-                                                                                TextSpan(text: 'In Progress', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
-                                                                            labelInsets:
-                                                                                LabelInsets(baselineShift: 3, start: 1),
-                                                                          ),
+                                                                            Align(
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child: Image.asset(
+                                                                              'assets/images/plane_icon.png'),
                                                                         ),
-                                                                      )
-                                                                    : Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Container(
-                                                                          foregroundDecoration:
-                                                                              const RotatedCornerDecoration(
-                                                                            color:
-                                                                                Colors.lightGreen,
-                                                                            geometry: const BadgeGeometry(
-                                                                                width: 55,
-                                                                                height: 55,
-                                                                                alignment: BadgeAlignment.bottomRight),
-                                                                            textSpan:
-                                                                                TextSpan(text: 'Approved', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
-                                                                            labelInsets:
-                                                                                LabelInsets(baselineShift: 3, start: 1),
-                                                                          ),
-                                                                        ),
-                                                                      )
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                Container(
+                                                                  width:
+                                                                      100.0.w,
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          5,
+                                                                          0,
+                                                                          5,
+                                                                          0),
+                                                                  child: Text(
+                                                                    "From",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                  ),
+                                                                ),
+
+                                                                Container(
+                                                                  width:
+                                                                  100.0.w,
+                                                                  margin: EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                      5),
+                                                                  child: state
+                                                                      .travelRequest
+                                                                      .data[Index]
+                                                                      .details
+                                                                      .length >
+                                                                      0
+                                                                      ? Text(
+                                                                    state
+                                                                        .travelRequest
+                                                                        .data[Index]
+                                                                        .details[0]
+                                                                        .sourceCity,
+                                                                    textAlign:
+                                                                    TextAlign.start,
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w900,
+                                                                        color: AppConstants.TEXT_BACKGROUND_COLOR,
+                                                                        fontSize: 15),
+                                                                  )
+                                                                      : SizedBox(),
+                                                                ),
+                                                                Container(
+                                                                  width:
+                                                                  100.0.w,
+                                                                  margin: EdgeInsets
+                                                                      .fromLTRB(
+                                                                      5,
+                                                                      5,
+                                                                      5,
+                                                                      0),
+                                                                  child: state
+                                                                      .travelRequest
+                                                                      .data[Index]
+                                                                      .details
+                                                                      .length >
+                                                                      0
+                                                                      ? Text(
+                                                                    state
+                                                                        .travelRequest
+                                                                        .data[Index]
+                                                                        .details[0]
+                                                                        .travellingCountry,
+                                                                    textAlign:
+                                                                    TextAlign.start,
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight.w300,
+                                                                        color: AppConstants.TEXT_BACKGROUND_COLOR,
+                                                                        fontSize: 13),
+                                                                  )
+                                                                      : SizedBox(),
+                                                                ),
                                                               ],
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Expanded(
+                                                            flex: 3,
+                                                            child: Container(
+                                                              color: AppConstants
+                                                                  .BACKGROUND_COLOR_BOTTOM,
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 2,
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              100.0.w,
+                                                                          margin:
+                                                                              EdgeInsets.all(5),
+                                                                          child:
+                                                                              Text(
+                                                                            "Departure",
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                          ),
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              100.0.w,
+                                                                          margin:
+                                                                              EdgeInsets.symmetric(horizontal: 5),
+                                                                          child: state.travelRequest.data[Index].details.length > 0
+                                                                              ? Text(
+                                                                                  getDepartureTime(state.travelRequest.data[Index].details[0].departureDate),
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black, fontSize: 18),
+                                                                                )
+                                                                              : SizedBox(),
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              100.0.w,
+                                                                          margin: EdgeInsets.fromLTRB(
+                                                                              5,
+                                                                              5,
+                                                                              5,
+                                                                              0),
+                                                                          child: state.travelRequest.data[Index].details.length > 0
+                                                                              ? Text(
+                                                                                  getDepatureDate(state.travelRequest.data[Index].details[0].departureDate),
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(fontWeight: FontWeight.w500, color: AppConstants.TEXT_BACKGROUND_COLOR, fontSize: 13),
+                                                                                )
+                                                                              : SizedBox(),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  state.travelRequest.data[Index]
+                                                                              .travelReqStatus ==
+                                                                          '2'
+                                                                      ? Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            foregroundDecoration:
+                                                                                const RotatedCornerDecoration(
+                                                                              color: Colors.orangeAccent,
+                                                                              geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                                              textSpan: TextSpan(text: 'In Progress', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
+                                                                              labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                      : Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            foregroundDecoration:
+                                                                                const RotatedCornerDecoration(
+                                                                              color: Colors.lightGreen,
+                                                                              geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                                              textSpan: TextSpan(text: 'Approved', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
+                                                                              labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -698,26 +687,27 @@ class _DashboardState extends State<Dashboard> {
   getNavigator(BuildContext context, int where) {
     if (where == 1) {
       Navigator.pushNamed(context, '/AddCity');
-
-    }
-    else if(where==2){
-      Navigator.pushNamed(context, '/ApprovalsScreen');
-    }
-    else{
-      showAlertDialog(context," Coming Soon");
+    } else if (where == 2) {
+      Navigator.pushNamed(context, '/ApprovalsScreen',
+          arguments: {"where": 2, "header": "Previous Travels"});
+    } else if (where == 5) {
+      Navigator.pushNamed(context, '/ApprovalsScreen',
+          arguments: {"where": 5, "header": "Approvals"});
+    } else {
+      showAlertDialog(context, " Coming Soon");
     }
   }
 }
-showAlertDialog(BuildContext context,String text) {
 
+showAlertDialog(BuildContext context, String text) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("OK",style: TextStyle(color: AppConstants.APP_THEME_COLOR),),
+    child: Text(
+      "OK",
+      style: TextStyle(color: AppConstants.APP_THEME_COLOR),
+    ),
     onPressed: () {
-
       Navigator.of(context).pop();
-
-
     },
   );
 

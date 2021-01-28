@@ -230,7 +230,6 @@ class _AddCity extends State<AddCity> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: false,
@@ -251,7 +250,7 @@ class _AddCity extends State<AddCity> {
       ),
       backgroundColor: Colors.white,
       body: Builder(
-        builder:(ctx)=> Container(
+        builder: (ctx) => Container(
           height: 100.0.h,
           width: 100.0.w,
           child: ListView(
@@ -367,7 +366,9 @@ class _AddCity extends State<AddCity> {
                                       duration: Duration(milliseconds: 400),
                                       curve: Curves.easeInOutCubic);
                                   this.setState(() {
-                                    for (int i = 0; i < userdetails.length; i++) {
+                                    for (int i = 0;
+                                        i < userdetails.length;
+                                        i++) {
                                       if (i == index) {
                                         userdetails[i].hide = false;
                                       } else {
@@ -382,7 +383,8 @@ class _AddCity extends State<AddCity> {
                                   margin: EdgeInsets.only(right: 1),
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: manageColor(userdetails[index].hide),
+                                      color:
+                                          manageColor(userdetails[index].hide),
                                     ),
                                   ),
                                   child: Align(
@@ -391,8 +393,8 @@ class _AddCity extends State<AddCity> {
                                       "${index + 1}",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        color:
-                                            manageColor(userdetails[index].hide),
+                                        color: manageColor(
+                                            userdetails[index].hide),
                                       ),
                                     ),
                                   ),
@@ -445,7 +447,8 @@ class _AddCity extends State<AddCity> {
                                         index = index + 1;
                                       });
                                       AddNewReq();
-                                      BlocProvider.of<PurposeBloc>(purposecontext)
+                                      BlocProvider.of<PurposeBloc>(
+                                              purposecontext)
                                           .add(ResetBloc());
                                     }
                                   } else {}
@@ -481,12 +484,12 @@ class _AddCity extends State<AddCity> {
                       color: AppConstants.APP_THEME_COLOR,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10, right: 15,top: 5,bottom: 5),
+                      margin: EdgeInsets.only(
+                          left: 10, right: 15, top: 5, bottom: 5),
                       height: 63.0.h,
                       width: 100.0.w,
                       child: ScrollablePositionedList.builder(
                         itemScrollController: itemScrollController,
-                        physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
@@ -507,17 +510,20 @@ class _AddCity extends State<AddCity> {
                                             child: CustomColumnEditText(
                                               "Start location",
                                               traveldata[index].sourceCity,
-                                              traveldata[index].travellingCountry,
+                                              traveldata[index]
+                                                  .travellingCountry,
                                               "From",
                                               1,
                                               false,
                                               onTap: () async {
                                                 dynamic fromplace =
                                                     await Navigator.pushNamed(
-                                                        context, '/SearchPlace');
+                                                        context,
+                                                        '/SearchPlace');
                                                 if (fromplace != null) {
                                                   this.setState(() {
-                                                    traveldata[index].sourceCity =
+                                                    traveldata[index]
+                                                            .sourceCity =
                                                         fromplace.city;
                                                     traveldata[index]
                                                             .travellingCountry =
@@ -555,7 +561,8 @@ class _AddCity extends State<AddCity> {
                                                     traveldata[index]
                                                         .travellingCountryTo,
                                                     "To",
-                                                    1,  false,
+                                                    1,
+                                                    false,
                                                     onTap: () async {
                                                       var data = await Navigator
                                                           .pushNamed(context,
@@ -582,40 +589,49 @@ class _AddCity extends State<AddCity> {
                                                                     PurposeBloc>(
                                                                 context)
                                                             .add(FetchPurposelist(
-                                                                toData.iataCode));
+                                                                toData
+                                                                    .iataCode));
                                                         _appApiProvider.GetPostLocation(
-                                                                traveldata[index]
+                                                                traveldata[
+                                                                        index]
                                                                     .toCountryData
                                                                     .countryName)
                                                             .then((value) =>
-                                                                this.setState(() {
+                                                                this.setState(
+                                                                    () {
                                                                   traveldata[index]
                                                                           .postLocationList =
-                                                                      value.data;
+                                                                      value
+                                                                          .data;
                                                                 }));
 
                                                         _appApiProvider.GetDependentList(
-                                                                traveldata[index]
+                                                                traveldata[
+                                                                        index]
                                                                     .toCountryData
                                                                     .countryName)
-                                                            .then(
-                                                                (value) => this
-                                                                        .setState(
-                                                                            () {
-                                                                      traveldata[index]
-                                                                              .myDependentList =
-                                                                          value;
+                                                            .then((value) =>
+                                                                this.setState(
+                                                                    () {
+                                                                  traveldata[index]
+                                                                          .myDependentList =
+                                                                      value;
 
-                                                                      _appApiProvider.GetPerDiem(traveldata[index]
-                                                                              .toCountryData
-                                                                              .countryName)
-                                                                          .then((value) =>
-                                                                              this.setState(() {
-                                                                                traveldata[index].perDiamValue = value.perDiem;
-                                                                                traveldata[index].transportCost = value.transportation;
-                                                                                traveldata[index].currency = value.currency;
-                                                                              }));
-                                                                    }));
+                                                                  _appApiProvider.GetPerDiem(traveldata[
+                                                                              index]
+                                                                          .toCountryData
+                                                                          .countryName)
+                                                                      .then((value) =>
+                                                                          this.setState(
+                                                                              () {
+                                                                            traveldata[index].perDiamValue =
+                                                                                value.perDiem;
+                                                                            traveldata[index].transportCost =
+                                                                                value.transportation;
+                                                                            traveldata[index].currency =
+                                                                                value.currency;
+                                                                          }));
+                                                                }));
                                                       }
                                                     },
                                                   ),
@@ -635,12 +651,14 @@ class _AddCity extends State<AddCity> {
                                             "${getDepartureDate(traveldata[index].departureDate)}",
                                             "${getDepatureDay(traveldata[index].departureDate)}",
                                             "Departure",
-                                            2,  false,
+                                            2,
+                                            false,
                                             onTap: () {
                                               selectDate(
                                                   context,
-                                                  DateTime.parse(traveldata[index]
-                                                      .departureDate),
+                                                  DateTime.parse(
+                                                      traveldata[index]
+                                                          .departureDate),
                                                   DateTime(2100),
                                                   datevalue: (data) {
                                                 this.setState(() {
@@ -662,7 +680,8 @@ class _AddCity extends State<AddCity> {
                                                   "${getDepartureDate(traveldata[index].returnDate.toString())}",
                                                   "${getDepatureDay(traveldata[index].returnDate.toString())}",
                                                   "Return",
-                                                  2,  false,
+                                                  2,
+                                                  false,
                                                   onTap: () {
                                                     selectDate(
                                                         context,
@@ -689,14 +708,13 @@ class _AddCity extends State<AddCity> {
                                         Row(
                                           children: [
                                             Container(
+                                                margin:
+                                                    EdgeInsets.only(bottom: 5),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft: Radius
-                                                                .circular(5),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    5)),
+                                                        BorderRadius.all(
+                                                      Radius.circular(5),
+                                                    ),
                                                     color: AppConstants
                                                         .APP_THEME_COLOR),
                                                 child: GestureDetector(
@@ -707,7 +725,8 @@ class _AddCity extends State<AddCity> {
                                                     if (travelList != null) {
                                                       dynamic purposelist =
                                                           await Navigator
-                                                              .pushNamed(context,
+                                                              .pushNamed(
+                                                                  context,
                                                                   '/PurposeScreen',
                                                                   arguments: {
                                                             "list": travelList
@@ -741,13 +760,15 @@ class _AddCity extends State<AddCity> {
                                                               SetValueTravelReq(
                                                                   value));
                                                     } else {
-                                                      showDefaultSnackbar(context,
+                                                      showDefaultSnackbar(
+                                                          context,
                                                           "Please choose the Destination point");
                                                     }
                                                   },
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(6.0),
+                                                        const EdgeInsets.all(
+                                                            6.0),
                                                     child: Text(
                                                       "Purpose of Travel",
                                                       style: TextStyle(
@@ -788,14 +809,15 @@ class _AddCity extends State<AddCity> {
                                                               Radius.circular(
                                                                   20)),
                                                     ),
-                                                    margin:
-                                                        EdgeInsets.only(left: 10),
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, bottom: 5),
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment.start,
+                                                          MainAxisAlignment
+                                                              .start,
                                                       children: [
                                                         SizedBox(
                                                           height: 30,
@@ -826,7 +848,8 @@ class _AddCity extends State<AddCity> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700,
-                                                                    fontSize: 25,
+                                                                    fontSize:
+                                                                        25,
                                                                     color: Colors
                                                                         .black54),
                                                                 textAlign:
@@ -835,7 +858,8 @@ class _AddCity extends State<AddCity> {
                                                               ),
                                                               Text(
                                                                 "${traveldata[index].travelPurpose}",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
@@ -862,7 +886,8 @@ class _AddCity extends State<AddCity> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700,
-                                                                    fontSize: 25,
+                                                                    fontSize:
+                                                                        25,
                                                                     color: Colors
                                                                         .black54),
                                                                 textAlign:
@@ -871,7 +896,8 @@ class _AddCity extends State<AddCity> {
                                                               ),
                                                               Text(
                                                                 "${traveldata[index].visaNumber}",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
@@ -898,7 +924,8 @@ class _AddCity extends State<AddCity> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700,
-                                                                    fontSize: 25,
+                                                                    fontSize:
+                                                                        25,
                                                                     color: Colors
                                                                         .black54),
                                                                 textAlign:
@@ -907,7 +934,8 @@ class _AddCity extends State<AddCity> {
                                                               ),
                                                               Text(
                                                                 "${traveldata[index].visaExpiryDate}",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
@@ -947,8 +975,8 @@ class _AddCity extends State<AddCity> {
                                           child: Text(
                                             "Add Details",
                                             style: TextStyle(
-                                                color:
-                                                    AppConstants.APP_THEME_COLOR,
+                                                color: AppConstants
+                                                    .APP_THEME_COLOR,
                                                 fontWeight: FontWeight.w800,
                                                 fontSize: 16),
                                           ),
@@ -963,7 +991,8 @@ class _AddCity extends State<AddCity> {
                                       ],
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(top: 5, bottom: 10),
+                                      margin:
+                                          EdgeInsets.only(top: 5, bottom: 10),
                                       child: Row(
                                         children: [
                                           Expanded(
@@ -984,8 +1013,8 @@ class _AddCity extends State<AddCity> {
                                                 toggleSize: 20.0,
                                                 borderRadius: 12.0,
                                                 inactiveColor: Colors.grey,
-                                                activeColor:
-                                                    AppConstants.APP_THEME_COLOR,
+                                                activeColor: AppConstants
+                                                    .APP_THEME_COLOR,
                                                 value: traveldata[index]
                                                     .isAccmodationRequired,
                                                 onToggle: (value) {
@@ -1015,7 +1044,8 @@ class _AddCity extends State<AddCity> {
                                                   "${getDepartureDate(traveldata[index].accmodationStartDate)}",
                                                   "${getDepatureDay(traveldata[index].accmodationStartDate)}",
                                                   "Start Date",
-                                                  2,  false,
+                                                  2,
+                                                  false,
                                                   onTap: () {
                                                     selectDate(
                                                         context,
@@ -1043,7 +1073,8 @@ class _AddCity extends State<AddCity> {
                                                   "${getDepartureDate(traveldata[index].accmodationEndDate)}",
                                                   "${getDepatureDay(traveldata[index].accmodationEndDate)}",
                                                   "End Date",
-                                                  2,  false,
+                                                  2,
+                                                  false,
                                                   onTap: () {
                                                     selectDate(
                                                         context,
@@ -1183,13 +1214,15 @@ class _AddCity extends State<AddCity> {
                                                               fit: BoxFit
                                                                   .scaleDown,
                                                               child: Text(
-                                                                traveldata[index]
+                                                                traveldata[
+                                                                        index]
                                                                     .hostPhoneExt,
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
                                                                 style: TextStyle(
-                                                                    fontSize: 16),
+                                                                    fontSize:
+                                                                        16),
                                                               ),
                                                             )),
                                                       ),
@@ -1224,7 +1257,8 @@ class _AddCity extends State<AddCity> {
                                           alignment: Alignment.bottomLeft,
                                           child: DashboardEditFieldHeader(
                                               "Travelling to",
-                                              AppConstants.TEXT_BACKGROUND_COLOR),
+                                              AppConstants
+                                                  .TEXT_BACKGROUND_COLOR),
                                         ),
                                         SizedBox(
                                           width: 5.0.w,
@@ -1248,18 +1282,7 @@ class _AddCity extends State<AddCity> {
                                       ],
                                     ),
                                     !getbool(traveldata[index].isClientLocation)
-                                        ?
-                                        // DashboardCustomEditField(
-                                        //         "Location",
-                                        //         true,
-                                        //         Icons.arrow_drop_down_sharp,
-                                        //         1,
-                                        //         onChange: (text) {
-                                        //           traveldata[index].officeLocation =
-                                        //               text;
-                                        //         },
-                                        //       )
-                                        Container(
+                                        ? Container(
                                             width: 90.0.w,
                                             height: 40,
                                             child: FormField<PostLocationData>(
@@ -1281,8 +1304,8 @@ class _AddCity extends State<AddCity> {
                                                         PostLocationData>(
                                                       hint: Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
-                                                                left: 10),
+                                                            const EdgeInsets
+                                                                .only(left: 10),
                                                         child: Text("Location"),
                                                       ),
                                                       value: traveldata[index]
@@ -1311,11 +1334,9 @@ class _AddCity extends State<AddCity> {
                                                                   PostLocationData>(
                                                                 value: value,
                                                                 child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .only(
-                                                                          left:
-                                                                              10),
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left: 10),
                                                                   child: Text(value
                                                                       .locationName),
                                                                 ),
@@ -1337,8 +1358,8 @@ class _AddCity extends State<AddCity> {
                                                   Icons.arrow_drop_down_sharp,
                                                   2,
                                                   onChange: (text) {
-                                                    traveldata[index].clientName =
-                                                        text;
+                                                    traveldata[index]
+                                                        .clientName = text;
                                                   },
                                                 ),
                                                 DashboardCustomEditField(
@@ -1359,8 +1380,9 @@ class _AddCity extends State<AddCity> {
                                                       Expanded(
                                                         flex: 1,
                                                         child: Container(
-                                                          margin: EdgeInsets.only(
-                                                              top: 5),
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 5),
                                                           child: Row(
                                                             children: [
                                                               traveldata[index]
@@ -1386,8 +1408,7 @@ class _AddCity extends State<AddCity> {
                                                                             (value) {
                                                                       this.setState(
                                                                           () {
-                                                                        traveldata[index]
-                                                                                .clientNumberExt =
+                                                                        traveldata[index].clientNumberExt =
                                                                             "+" +
                                                                                 value.phoneCode;
                                                                         clientPhoneCountry =
@@ -1400,17 +1421,13 @@ class _AddCity extends State<AddCity> {
                                                                   child:
                                                                       Container(
                                                                     child: Align(
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .centerRight,
-                                                                        child:
-                                                                            FittedBox(
+                                                                        alignment: Alignment.centerRight,
+                                                                        child: FittedBox(
                                                                           fit: BoxFit
                                                                               .scaleDown,
                                                                           child:
                                                                               Text(
-                                                                            traveldata[index]
-                                                                                .clientNumberExt,
+                                                                            traveldata[index].clientNumberExt,
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
@@ -1449,7 +1466,8 @@ class _AddCity extends State<AddCity> {
                                             ),
                                           ),
                                     Container(
-                                      margin: EdgeInsets.only(top: 5, bottom: 10),
+                                      margin:
+                                          EdgeInsets.only(top: 5, bottom: 10),
                                       padding: EdgeInsets.all(5),
                                       child: Row(
                                         children: [
@@ -1458,16 +1476,18 @@ class _AddCity extends State<AddCity> {
                                               children: [
                                                 Text(
                                                   "Travelling with dependent(s)?",
-                                                  style: TextStyle(fontSize: 15),
+                                                  style:
+                                                      TextStyle(fontSize: 15),
                                                 ),
                                                 GestureDetector(
                                                   onTap: () async {
                                                     var dependantList =
                                                         traveldata[index]
                                                             .myDependentList;
-                                                    if (checkSelectedDependents(dependantList)) {
-
-                                                      if (dependantList != null) {
+                                                    if (checkSelectedDependents(
+                                                        dependantList)) {
+                                                      if (dependantList !=
+                                                          null) {
                                                         dynamic Dependents =
                                                             await Navigator
                                                                 .pushNamed(
@@ -1478,19 +1498,25 @@ class _AddCity extends State<AddCity> {
                                                                   dependantList
                                                             });
                                                         this.setState(() {
-                                                          traveldata[index].isDependent=checkSelectedDependents(Dependents);
+                                                          traveldata[index]
+                                                                  .isDependent =
+                                                              checkSelectedDependents(
+                                                                  Dependents);
                                                         });
-
                                                       }
-                                                    } else {
-
-
-                                                    }
+                                                    } else {}
                                                   },
                                                   child: Icon(
-                                                    Icons.remove_red_eye_outlined,
+                                                    Icons
+                                                        .remove_red_eye_outlined,
                                                     size: 25,
-                                                    color: traveldata[index].myDependentList!=null&&checkSelectedDependents(traveldata[index].myDependentList)
+                                                    color: traveldata[index]
+                                                                    .myDependentList !=
+                                                                null &&
+                                                            checkSelectedDependents(
+                                                                traveldata[
+                                                                        index]
+                                                                    .myDependentList)
                                                         ? AppConstants
                                                             .APP_THEME_COLOR
                                                         : Colors.black12,
@@ -1500,7 +1526,9 @@ class _AddCity extends State<AddCity> {
                                             ),
                                             flex: 12,
                                           ),
-                                          Expanded(child: SizedBox()),
+                                          Expanded(
+                                            child: SizedBox(),
+                                          ),
                                           Expanded(
                                             flex: 2,
                                             child: Container(
@@ -1517,11 +1545,10 @@ class _AddCity extends State<AddCity> {
                                                         null
                                                     ? true
                                                     : false,
-                                                activeColor:
-                                                    AppConstants.APP_THEME_COLOR,
-                                                value:
-                                                    traveldata[index].isDependent,
-
+                                                activeColor: AppConstants
+                                                    .APP_THEME_COLOR,
+                                                value: traveldata[index]
+                                                    .isDependent,
                                                 ondisabled: (va) {
                                                   if (va) {
                                                     scrolltotop();
@@ -1543,24 +1570,32 @@ class _AddCity extends State<AddCity> {
                                                       traveldata[index]
                                                           .myDependentList;
 
-                                                  if (traveldata[index].isDependent) {
+                                                  if (traveldata[index]
+                                                      .isDependent) {
                                                     if (dependantList != null) {
                                                       dynamic Dependents =
                                                           await Navigator
-                                                              .pushNamed(context,
+                                                              .pushNamed(
+                                                                  context,
                                                                   '/Dependents',
                                                                   arguments: {
-                                                            "list": dependantList
+                                                            "list":
+                                                                dependantList
                                                           });
 
-                                                                this.setState(() {
-                                                                  traveldata[index].isDependent=checkSelectedDependents(Dependents);
-                                                                });
-
+                                                      this.setState(() {
+                                                        traveldata[index]
+                                                                .isDependent =
+                                                            checkSelectedDependents(
+                                                                Dependents);
+                                                      });
                                                     }
-                                                  }
-                                                  else{
-                                                    traveldata[index].myDependentList=resetSelectedDependents(traveldata[index].myDependentList);
+                                                  } else {
+                                                    traveldata[index]
+                                                            .myDependentList =
+                                                        resetSelectedDependents(
+                                                            traveldata[index]
+                                                                .myDependentList);
                                                   }
                                                 },
                                               ),
@@ -1594,17 +1629,16 @@ class _AddCity extends State<AddCity> {
                       side: BorderSide(color: AppConstants.APP_THEME_COLOR)),
                   onPressed: () async {
                     req_data.travelCity = traveldata;
-                   if( Validator(req_data)){
-                     if (req_data != null) {
-                       dynamic Dependents = await Navigator.pushNamed(
-                           context, '/AddNewTravel2',
-                           arguments: {"list": req_data});
-                     }
-                    }else{
-
-                     showDefaultSnackbar(ctx,"Please fill the Mandatory fields");
-                   }
-
+                    if (Validator(req_data)) {
+                      if (req_data != null) {
+                        dynamic Dependents = await Navigator.pushNamed(
+                            context, '/AddNewTravel2',
+                            arguments: {"list": req_data});
+                      }
+                    } else {
+                      showDefaultSnackbar(
+                          ctx, "Please fill the Mandatory fields");
+                    }
                   },
                   color: AppConstants.APP_THEME_COLOR,
                   textColor: Colors.white,
@@ -1729,13 +1763,13 @@ class _AddCity extends State<AddCity> {
   checkSelectedDependents(List<SecondDependentData> dependentList) {
     for (int i = 0; i < dependentList.length; i++) {
       if (dependentList[i].isSelected) {
-
         return true;
       }
     }
 
     return false;
   }
+
   resetSelectedDependents(List<SecondDependentData> dependentList) {
     for (int i = 0; i < dependentList.length; i++) {
       dependentList[i].isSelected = false;
@@ -1744,40 +1778,32 @@ class _AddCity extends State<AddCity> {
     return dependentList;
   }
 
-  Validator(TravelReqPayLoad formdata){
-
-
-    if(formdata.projectName!=null&&formdata.projectName.isEmpty){
+  Validator(TravelReqPayLoad formdata) {
+    if (formdata.projectName != null && formdata.projectName.isEmpty) {
       return false;
     }
 
-    for(int i=0;i<formdata.travelCity.length;i++){
-      var cityTravel= formdata.travelCity[i];
-      if(cityTravel.travellingCountry==null||cityTravel.travellingCountry.isEmpty){
-
+    for (int i = 0; i < formdata.travelCity.length; i++) {
+      var cityTravel = formdata.travelCity[i];
+      if (cityTravel.travellingCountry == null ||
+          cityTravel.travellingCountry.isEmpty) {
         return false;
-      }
-      else if(cityTravel.travellingCountryTo==null||cityTravel.travellingCountryTo.isEmpty){
-
+      } else if (cityTravel.travellingCountryTo == null ||
+          cityTravel.travellingCountryTo.isEmpty) {
         return false;
-      }
-      else if(formdata.travelCity.length<2){
-       if(cityTravel.returnDate==null||cityTravel.returnDate.isEmpty){
-
+      } else if (formdata.travelCity.length < 2) {
+        if (cityTravel.returnDate == null || cityTravel.returnDate.isEmpty) {
+          return false;
+        }
+      } else if (cityTravel.hostHrName == null ||
+          cityTravel.hostHrName.isEmpty) {
         return false;
-      }
-      }
-
-      else if(cityTravel.hostHrName==null||cityTravel.hostHrName.isEmpty){
-
+      } else if (cityTravel.hostPhoneExt == null ||
+          cityTravel.hostPhoneExt.isEmpty ||
+          cityTravel.hostPhoneNo.isEmpty) {
         return false;
-      }
-      else if(cityTravel.hostPhoneExt==null||cityTravel.hostPhoneExt.isEmpty||cityTravel.hostPhoneNo.isEmpty){
-
-        return false;
-      }
-      else if(cityTravel.officeLocation==null||cityTravel.officeLocation.isEmpty){
-
+      } else if (cityTravel.officeLocation == null ||
+          cityTravel.officeLocation.isEmpty) {
         return false;
       }
     }

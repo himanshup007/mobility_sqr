@@ -4,7 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
-import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
+import 'package:mobility_sqr/ModelClasses/Approval.dart';
+
 
 part 'travel_req_event.dart';
 part 'travel_req_state.dart';
@@ -25,7 +26,7 @@ class TravelReqBloc extends Bloc<TravelReqEvent, TravelReqState> {
     if (event is FetchTravelReq) {
 
       try {
-        final GetTravelRequest quote = await repository.fetch_travel_req();
+        final ApprovalModal quote = await repository.fetch_travel_req();
         yield TravelReqLoaded(travelRequest: quote);
       }
       catch (_) {

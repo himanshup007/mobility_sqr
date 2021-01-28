@@ -24,7 +24,7 @@ class Repository {
   Future<ForgetPassModel> send_resetEmail(String email) =>
       appApiProvider.resetPass(email);
 
-  Future<GetTravelRequest> fetch_travel_req() async {
+  Future<ApprovalModal> fetch_travel_req() async {
     return await appApiProvider.getTravelRequest();
   }
 

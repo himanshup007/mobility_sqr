@@ -5,8 +5,10 @@ import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestFResponse.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestForApprovalModel.dart';
+import 'package:mobility_sqr/ModelClasses/showHide.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:mobility_sqr/Widgets/ViewAgenda.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
@@ -14,28 +16,34 @@ import 'package:intl/intl.dart';
 import 'package:mobility_sqr/Widgets/bordered_box.dart';
 import 'dart:async';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
+
 class TravelReqView extends StatefulWidget {
   @override
   _TravelReqViewState createState() => _TravelReqViewState();
 }
 
 class _TravelReqViewState extends State<TravelReqView> {
-  ApiProvider _apiProvider= ApiProvider();
-  SubmitRequestForApprovalModel body= SubmitRequestForApprovalModel();
-
+  ApiProvider _apiProvider = ApiProvider();
+  SubmitRequestForApprovalModel body = SubmitRequestForApprovalModel();
+  ItemScrollController itemScrollController = ItemScrollController();
   BuildContext dialogContext;
-  bool showcost=false;
+  bool showcost = false;
   final _listview_controller = ScrollController();
+  List<dynamic> userdetails = [];
+Data list=Data();
+int where;
+  var  args;
   scrolltotop() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_listview_controller.hasClients) {
         Timer(
             Duration(milliseconds: 1),
-                () => _listview_controller.animateTo(
-              _listview_controller.position.maxScrollExtent,
-              duration: Duration(seconds: 1),
-              curve: Curves.fastOutSlowIn,
-            ));
+                () =>
+                _listview_controller.animateTo(
+                  _listview_controller.position.maxScrollExtent,
+                  duration: Duration(seconds: 1),
+                  curve: Curves.fastOutSlowIn,
+                ));
       }
     });
   }
@@ -45,18 +53,51 @@ class _TravelReqViewState extends State<TravelReqView> {
       if (_listview_controller.hasClients) {
         Timer(
             Duration(milliseconds: 1),
-                () => _listview_controller.animateTo(
-              _listview_controller.position.minScrollExtent,
-              duration: Duration(seconds: 1),
-              curve: Curves.fastOutSlowIn,
-            ));
+                () =>
+                _listview_controller.animateTo(
+                  _listview_controller.position.minScrollExtent,
+                  duration: Duration(seconds: 1),
+                  curve: Curves.fastOutSlowIn,
+                ));
       }
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        args = ModalRoute.of(context).settings.arguments;
+      });
+      list = args['EmployeeData'];
+      where=args['where'];
+      initalizingData(list);
+    });
+
+  }
+
+  initalizingData(list) {
+    for (int i = 0; i < list.details.length; i++) {
+      showHide data = new showHide();
+      if (i == 0) {
+        data.name = "data${1}";
+        data.hide = false;
+      } else {
+        data.name = "data${1}";
+        data.hide = true;
+      }
+      userdetails.add(data);
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    final Map args = ModalRoute.of(context).settings.arguments;
-    Data list = args['EmployeeData'];
+    final Map args = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
+     list = args['EmployeeData'];
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -82,6 +123,7 @@ class _TravelReqViewState extends State<TravelReqView> {
               margin: EdgeInsets.symmetric(horizontal: 5.0.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     flex: 1,
@@ -119,7 +161,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                       child: travelTextView(
                           "Visa Request ID",
                           list.details.isNotEmpty &&
-                                  IsNullCheck(list.details[0].visaNumber)
+                              IsNullCheck(list.details[0].visaNumber)
                               ? list.details[0].visaNumber
                               : " ",
                           AppConstants.TEXT_BACKGROUND_COLOR),
@@ -141,414 +183,509 @@ class _TravelReqViewState extends State<TravelReqView> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-              child: Row(
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                        child: CustomColumnEditText(
-                            "",
-                            list.details[0].sourceCity,
-                            list.details[0].travellingCountry,
-                            "From",
-                            1,
-                            true)),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Center(
-                        child: ImageIcon(
-                      AssetImage(
-                        'assets/images/myprofile_sidemenu_icon.png',
-                      ),
-                      size: 80,
-                    )),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                        child: CustomColumnEditText(
-                            "",
-                            list.details[0].destinationCity,
-                            list.details[0].travellingCountryTo,
-                            "To",
-                            1,
-                            true)),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        child: CustomColumnEditText(
-                            "",
-                            getDepartureTime(list.details[0].departureDate),
-                            list.details[0].travellingCountry,
-                            "Departure",
-                            2,
-                            false)),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        child: CustomColumnEditText(
-                            "",
-                            getDepartureTime(list.details[0].returnDate),
-                            list.details[0].travellingCountryTo,
-                            "Return",
-                            2,
-                            false)),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Text(
-                            "Purpose  of travel :",
-                            style: TextStyle(fontSize: 12),
+                  Container(
+                    margin:
+                    EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+                    height: 3.0.h,
+                    alignment: Alignment.centerLeft,
+                    child: new ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            itemScrollController.scrollTo(
+                                index: index,
+                                duration: Duration(milliseconds: 400),
+                                curve: Curves.easeInOutCubic);
+                            this.setState(() {
+                              for (int i = 0; i < list.details.length; i++) {
+                                if (i == index) {
+                                  userdetails[i].hide = false;
+                                } else {
+                                  userdetails[i].hide = true;
+                                }
+                              }
+                            });
+                          },
+                          child: Container(
+                            width: 20,
+                            height: 3.0.h,
+                            margin: EdgeInsets.only(right: 3),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: manageColor(userdetails[index].hide),
+                              ),
+                            ),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "${index + 1}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color:
+                                  manageColor(userdetails[index].hide),
+                                ),
+                              ),
+                            ),
                           ),
-                          Text(
-                            " ${list.details[0].travelPurpose}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: AppConstants.TEXT_BACKGROUND_COLOR),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                        Text(
-                          "Do you need accomodation? ",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        Text(
-                          "${checkAccomodation(list.details[0].isAccmodationRequired)}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: AppConstants.TEXT_BACKGROUND_COLOR),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Divider(
-              height: 2,
-              thickness: 2,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Stack(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 5.0.w, right: 5.0.w, top: 20),
-                  child: Row(children: <Widget>[
-                    Text(
-                      "Host Contact",
-                      style: TextStyle(
-                          color: AppConstants.APP_THEME_COLOR,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
-                    Expanded(
-                        child: Divider(
-                            color: AppConstants.APP_THEME_COLOR,
-                            indent: 5,
-                            thickness: 1)),
-                  ]),
-                ),
-                Align(
-                    alignment: Alignment.bottomRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        showCustomDialogClass(
-                            context,
-                            AddAgendaView(list.remark,  onclose: () {
-                              Navigator.of(context,
-                                  rootNavigator: true)
-                                  .pop();
-                            },));
-
+                        );
                       },
-                      child: Container(
-                          height: 30,
-                          width: 80,
-                          margin: EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                              border: Border(
-                            bottom: BorderSide(color: Colors.transparent),
-                            left: BorderSide(
-                                //                   <--- left side
-                                color: AppConstants.APP_THEME_COLOR),
-                            top: BorderSide(
-                                //                    <--- top side
-                                color: AppConstants.APP_THEME_COLOR),
-                            right: BorderSide(
-                              //                   <--- left side
-                              color: AppConstants.APP_THEME_COLOR,
-                            ),
-                          )),
-                          child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Row(
-                              children: [
-                                Text(
-                                  "View Agenda",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: AppConstants.APP_THEME_COLOR,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          )),
-                    )),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      child: travelTextView(
-                          "Name",
-                          IsNullCheck(list.details[0].hostHrName)
-                              ? list.details[0].hostHrName
-                              : " ",
-                          AppConstants.TEXT_BACKGROUND_COLOR),
+                      itemCount: userdetails.length,
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        child: travelTextView(
-                            "Phone",
-                            IsNullCheck(list.details[0].hostPhoneNo)
-                                ? list.details[0].hostPhoneNo
-                                : " ",
-                            AppConstants.TEXT_BACKGROUND_COLOR)),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
+                ]),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      child: travelTextView(
-                          "Travelling to",
-                          IsNullCheck(list.details[0].isClientLocation)
-                              ? isClientLocation(
-                                  list.details[0].isClientLocation)
-                              : " ",
-                          AppConstants.TEXT_BACKGROUND_COLOR),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        child: travelTextView(
-                            "Address",
-                            addressCheck(
-                                list.details[0].clientAddress,
-                                list.details[0].officeLocation,
-                                list.details[0].isClientLocation),
-                            AppConstants.TEXT_BACKGROUND_COLOR)),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
+              width: 100.0.w,
               height: 2,
-              thickness: 2,
+              margin: EdgeInsets.symmetric(horizontal: 15,vertical: 2),
+              color: AppConstants.APP_THEME_COLOR,
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 1.0.h),
-              child: Row(
-                children: [
-                  Text(
-                    "Travelling with dependent(s)?",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "${checkdependent(list.details[0].isDependent)}",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            !list.details[0].isDependent
-                ? Column(
-                    children: [
-                      //   for (var item in list.dependent)
-                      Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(
-                                color: AppConstants.TEXT_BACKGROUND_COLOR,
-                                width: 0.3)),
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5.0.w, vertical: 0.5.h),
-                        child: Column(
+            list.details.length>0?ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: 55.0.h, minHeight: 55.0.h),
+                child: ScrollablePositionedList.builder(
+                    itemScrollController: itemScrollController,
+                    physics: NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: list.details.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        width: 100.0.w,
+                        child: ListView(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Row(
-                                      children: [
-                                        Text("Name :",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: AppConstants
-                                                    .TEXT_BACKGROUND_COLOR)),
-                                        Text("Brajesh Singh",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: AppConstants
-                                                    .TEXT_BACKGROUND_COLOR))
-                                      ],
-                                    ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                        child: CustomColumnEditText(
+                                            "",
+                                            list.details[index].sourceCity,
+                                            list.details[index].travellingCountry,
+                                            "From",
+                                            1,
+                                            true)),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Row(
-                                      children: [
-                                        Text("Relation: ",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: AppConstants
-                                                    .TEXT_BACKGROUND_COLOR)),
-                                        Text("Parent",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: AppConstants
-                                                    .TEXT_BACKGROUND_COLOR))
-                                      ],
-                                    ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Center(
+                                        child: ImageIcon(
+                                          AssetImage(
+                                            'assets/images/myprofile_sidemenu_icon.png',
+                                          ),
+                                          size: 80,
+                                        )),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                        child: CustomColumnEditText(
+                                            "",
+                                            list.details[index].destinationCity,
+                                            list.details[index]
+                                                .travellingCountryTo,
+                                            "To",
+                                            1,
+                                            true)),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Row(
-                                      children: [
-                                        Text("Visa Number :",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: AppConstants
-                                                    .TEXT_BACKGROUND_COLOR)),
-                                        Text("VI0478",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: AppConstants
-                                                    .TEXT_BACKGROUND_COLOR))
-                                      ],
-                                    ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                        child: CustomColumnEditText(
+                                            "",
+                                            getDepartureTime(list.details[index]
+                                                .departureDate),
+                                            list.details[index].travellingCountry,
+                                            "Departure",
+                                            2,
+                                            false)),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: FittedBox(
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                        child: CustomColumnEditText(
+                                            "",
+                                            getDepartureTime(
+                                                list.details[index].returnDate),
+                                            list.details[index]
+                                                .travellingCountryTo,
+                                            "Return",
+                                            2,
+                                            false)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
                                     child: Container(
                                       child: Row(
                                         children: [
-                                          Text("Passport Status: ",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: AppConstants
-                                                      .TEXT_BACKGROUND_COLOR)),
-                                          Text("PA9980",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18,
-                                                  color: AppConstants
-                                                      .TEXT_BACKGROUND_COLOR))
+                                          Text(
+                                            "Purpose  of travel :",
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          Text(
+                                            " ${list.details[index]
+                                                .travelPurpose}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: AppConstants
+                                                    .TEXT_BACKGROUND_COLOR),
+                                          ),
                                         ],
                                       ),
                                     ),
                                   ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Do you need accomodation? ",
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          Text(
+                                            "${checkAccomodation(
+                                                list.details[index]
+                                                    .isAccmodationRequired)}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: AppConstants
+                                                    .TEXT_BACKGROUND_COLOR),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: 5.0.w, right: 5.0.w, top: 22),
+                                  child: Row(children: <Widget>[
+                                    Text(
+                                      "Host Contact",
+                                      style: TextStyle(
+                                          color: AppConstants.APP_THEME_COLOR,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Expanded(
+                                        child: Divider(
+                                            color: AppConstants.APP_THEME_COLOR,
+                                            indent: 5,
+                                            thickness: 1)),
+                                  ]),
+                                ),
+                                Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showCustomDialogClass(
+                                            context,
+                                            AddAgendaView(
+                                              list.remark,
+                                              onclose: () {
+                                                Navigator.of(
+                                                    context, rootNavigator: true)
+                                                    .pop();
+                                              },
+                                            ));
+                                      },
+                                      child: Container(
+                                          height: 30,
+                                          width: 80,
+                                          margin: EdgeInsets.only(right: 20),
+                                          decoration: BoxDecoration(
+                                            border:Border.all(color:AppConstants.APP_THEME_COLOR),
+                                              borderRadius:BorderRadius.all(Radius.circular(5)), color:AppConstants.APP_THEME_COLOR),
+                                          child: FittedBox(
+                                            fit: BoxFit.fitWidth,
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "View Agenda",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.w700,
+                                                      fontSize: 15),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                    )),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      child: travelTextView(
+                                          "Name",
+                                          IsNullCheck(
+                                              list.details[index].hostHrName)
+                                              ? list.details[index].hostHrName
+                                              : " ",
+                                          AppConstants.TEXT_BACKGROUND_COLOR),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                        child: travelTextView(
+                                            "Phone",
+                                            IsNullCheck(
+                                                list.details[index].hostPhoneNo)
+                                                ? list.details[index].hostPhoneNo
+                                                : " ",
+                                            AppConstants.TEXT_BACKGROUND_COLOR)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      child: travelTextView(
+                                          "Travelling to",
+                                          IsNullCheck(
+                                              list.details[index].isClientLocation)
+                                              ? isClientLocation(
+                                              list.details[index].isClientLocation)
+                                              : " ",
+                                          AppConstants.TEXT_BACKGROUND_COLOR),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                        child: travelTextView(
+                                            "Address",
+                                            addressCheck(
+                                                list.details[index].clientAddress,
+                                                list.details[index].officeLocation,
+                                                list.details[index].isClientLocation),
+                                            AppConstants.TEXT_BACKGROUND_COLOR)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 5.0.w, vertical: 1.0.h),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Travelling with dependent(s)?",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    "${checkdependent(
+                                        list.details[index].isDependent)}",
+                                    style: TextStyle(fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            list.details[index].isDependent
+                                ? Column(
+                              children: [
+                                   for (var item in list.dependent)
+                                Container(
+                                  padding: EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(5)),
+                                      border: Border.all(
+                                          color: AppConstants
+                                              .TEXT_BACKGROUND_COLOR,
+                                          width: 0.3)),
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 5.0.w, vertical: 0.5.h),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              child: Row(
+                                                children: [
+                                                  Text("Name :",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR)),
+                                                  Text("${item.dependentName}",
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .bold,
+                                                          fontSize: 16,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR))
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              child: Row(
+                                                children: [
+                                                  Text("Relation: ",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR)),
+                                                  Text("${item.dependentRelation}",
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .bold,
+                                                          fontSize: 14,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR))
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              child: Row(
+                                                children: [
+                                                  Text("Visa Number :",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR)),
+                                                  Text("${item.dependentVisa}",
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .bold,
+                                                          fontSize: 14,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR))
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              child: Row(
+                                                children: [
+                                                  Text("Passport Status: ",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR)),
+                                                  Text("${item.dependentPassport}",
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .bold,
+                                                          fontSize: 14,
+                                                          color: AppConstants
+                                                              .TEXT_BACKGROUND_COLOR))
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
+                            )
+                                : SizedBox(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Divider(
+                              height: 2,
+                              thickness: 5,
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  )
-                : SizedBox(),
-            SizedBox(
-              height: 10,
-            ),
-            Divider(
-              height: 2,
-              thickness: 5,
-            ),
+                      );
+                    }
+                )):SizedBox(),
+
             Container(
               margin: EdgeInsets.only(left: 5.0.w, right: 5.0.w, top: 20),
               child: Row(children: <Widget>[
@@ -588,8 +725,8 @@ class _TravelReqViewState extends State<TravelReqView> {
                         child: travelTextView(
                             "Phone",
                             IsNullCheck(list.homePhoneExt)
-                                ? list.homePhoneExt+ "-" + list.homePhoneNumber
-                                : " "     ,
+                                ? list.homePhoneExt + "-" + list.homePhoneNumber
+                                : " ",
                             AppConstants.TEXT_BACKGROUND_COLOR)),
                   ),
                 ],
@@ -611,7 +748,9 @@ class _TravelReqViewState extends State<TravelReqView> {
                             style: TextStyle(fontSize: 12),
                           ),
                           Text(
-                            " ${IsNullCheck(list.isLaptopRequired) ? checkAccomodation(list.isLaptopRequired) : " "}",
+                            " ${IsNullCheck(list.isLaptopRequired)
+                                ? checkAccomodation(list.isLaptopRequired)
+                                : " "}",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -655,7 +794,7 @@ class _TravelReqViewState extends State<TravelReqView> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 5.0.w),
               child: Text(
-                "${IsNullCheck(list.remark) ?list.remark:" "}",
+                "${IsNullCheck(list.remark) ? list.remark : " "}",
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -677,12 +816,12 @@ class _TravelReqViewState extends State<TravelReqView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if(!showcost){
+                      if (!showcost) {
                         scrolltotop();
                       }
 
                       this.setState(() {
-                        showcost=!showcost;
+                        showcost = !showcost;
                       });
                     },
                     child: Container(
@@ -691,7 +830,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                         margin: EdgeInsets.only(top: 2),
                         decoration: BoxDecoration(
                             border:
-                                Border.all(color: AppConstants.APP_THEME_COLOR),
+                            Border.all(color: AppConstants.APP_THEME_COLOR),
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: Row(
                           children: [
@@ -703,36 +842,41 @@ class _TravelReqViewState extends State<TravelReqView> {
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15),
                             ),
-                            showcost?Icon(
+                            !showcost
+                                ? Icon(
                               Icons.keyboard_arrow_down_sharp,
                               color: AppConstants.APP_THEME_COLOR,
                               size: 20,
-                            ):Icon(
-                              Icons.keyboard_arrow_up_rounded,
-                              color: AppConstants.APP_THEME_COLOR,
-                              size: 20)
+                            )
+                                : Icon(Icons.keyboard_arrow_up_rounded,
+                                color: AppConstants.APP_THEME_COLOR,
+                                size: 20)
                           ],
                         )),
                   ),
                 ],
               ),
             ),
-            showcost?Container(
+            showcost
+                ? Container(
               child: Column(children: [
                 Divider(
                   height: 1,
                   color: AppConstants.TEXT_BACKGROUND_COLOR,
                 ),
                 Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 5.0.w, vertical: .5.h),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: 5.0.w, vertical: .5.h),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
                       margin: EdgeInsets.only(top: 5),
                       child: travelTextView(
                           "City Name",
-                          "${IsNullCheck(list.details[0].destinationCity) ? list.details[0].destinationCity + "(${IsNullCheck(list.expenceCureency)?list.expenceCureency:" "})" : " "}",
+                          "${IsNullCheck(list.details[0].destinationCity) ? list
+                              .details[0].destinationCity +
+                              "(${IsNullCheck(list.expenceCureency) ? list
+                                  .expenceCureency : " "})" : " "}",
                           AppConstants.TEXT_BACKGROUND_COLOR),
                     ),
                   ),
@@ -742,211 +886,230 @@ class _TravelReqViewState extends State<TravelReqView> {
                   color: AppConstants.TEXT_BACKGROUND_COLOR,
                 ),
                 Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 1.0.h),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: 5.0.w, vertical: 1.0.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       travelTextViewHori(
                           "Per-diems",
-                          "${IsNullCheck(list.details[0].perDiemCost) ? list.details[0].perDiemCost : "-"}",
+                          "${IsNullCheck(list.details[0].perDiemCost) ? list
+                              .details[0].perDiemCost : "-"}",
                           AppConstants.TEXT_BACKGROUND_COLOR),
                       travelTextViewHori(
                           "Airfare",
-                          "${IsNullCheck(list.details[0].airfareCost) ? list.details[0].airfareCost : "-"}",
+                          "${IsNullCheck(list.details[0].airfareCost) ? list
+                              .details[0].airfareCost : "-"}",
                           AppConstants.TEXT_BACKGROUND_COLOR),
                       travelTextViewHori(
                           "Hotel",
-                          "${IsNullCheck(list.details[0].hotelCost) ? list.details[0].hotelCost : "-"}",
+                          "${IsNullCheck(list.details[0].hotelCost) ? list
+                              .details[0].hotelCost : "-"}",
                           AppConstants.TEXT_BACKGROUND_COLOR),
                       travelTextViewHori(
                           "Transportation",
-                          "${IsNullCheck(list.details[0].transportationCost) ? list.details[0].transportationCost : "-"}",
+                          "${IsNullCheck(list.details[0].transportationCost)
+                              ? list.details[0].transportationCost
+                              : "-"}",
                           AppConstants.TEXT_BACKGROUND_COLOR),
                       travelTextViewHori(
                           "Total Cost",
-                          "${IsNullCheck(list.details[0].totalCost) ? list.details[0].totalCost : "-"}",
+                          "${IsNullCheck(list.details[0].totalCost) ? list
+                              .details[0].totalCost : "-"}",
                           AppConstants.TEXT_BACKGROUND_COLOR),
                     ],
                   ),
                 ),
                 Container(
                   width: 100.0.w,
-
                   child: RaisedButton(
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                       
-                        side: BorderSide(color: AppConstants.APP_THEME_COLOR)),
-                    onPressed: () async {
-
-                    },
+                        side: BorderSide(
+                            color: AppConstants.APP_THEME_COLOR)),
+                    onPressed: () async {},
                     color: AppConstants.APP_THEME_COLOR,
                     textColor: Colors.white,
-                    child: Text("Total Cost(${IsNullCheck(list.expenceCureency)?list.expenceCureency:" "}) : ${IsNullCheck(list.details[0].totalCost)?list.details[0].totalCost: " "} ",
+                    child: Text(
+                        "Total Cost(${IsNullCheck(list.expenceCureency) ? list
+                            .expenceCureency : " "}) : ${IsNullCheck(list
+                            .details[0].totalCost)
+                            ? list.details[0].totalCost
+                            : " "} ",
                         style: TextStyle(fontSize: 14)),
                   ),
                 ),
               ]),
-            ):SizedBox(),
+            )
+                : SizedBox(),
             Container(
-              margin:
-              EdgeInsets.symmetric(horizontal: 5.0.w,),
+              margin: EdgeInsets.symmetric(
+                horizontal: 5.0.w,
+              ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
                   margin: EdgeInsets.only(top: 5),
                   child: travelTextView(
                       "Approver Remarks",
-                      "${IsNullCheck(list.requestNotes) ?list.requestNotes:" "}",
+                      "${IsNullCheck(list.requestNotes)
+                          ? list.requestNotes
+                          : " "}",
                       AppConstants.TEXT_BACKGROUND_COLOR),
                 ),
               ),
             ),
-            Divider(
-              height: 1,
-              color: AppConstants.TEXT_BACKGROUND_COLOR,
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children:[
-                  Text("Remarks",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: AppConstants.TEXT_BACKGROUND_COLOR),)
-               ,Icon(Icons.note_add,color: AppConstants.APP_THEME_COLOR,)
-                ]
-
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.done,
-                maxLines: 7,
-                maxLength: 1000,
-                onChanged: (text){
-                  body.requestNotes=text;
-                },
-                style: TextStyle(
-                  fontSize: 16.0, height: 1.0, color: Colors.black,),
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: AppConstants.APP_THEME_COLOR))),
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            where==5?Container(
+              child: Column(
                 children: [
-                  FlatButton(
-                    child: Text(
-                      'SAVE',
-                      style: TextStyle(fontSize: 18.0),
-                      textAlign: TextAlign.center,
-                    ),
-                    height: 40,
-                    minWidth: 165,
-                    textColor: Colors.amber[600],
-
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: Colors.amber[600],
-                          width: 1,
-                          style: BorderStyle.solid
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-
-                    ),
-                    onPressed: () {
-
-
-                      //Navigator.pushNamed(context, '/Dashboard');
-                    },
+                  Divider(
+                    height: 1,
+                    color: AppConstants.TEXT_BACKGROUND_COLOR,
                   ),
-                  // SizedBox(width: 5),
-                  FlatButton(
-                    child: Text(
-                      'SUBMIT',
-                      style: TextStyle(fontSize: 18.0),
-                      textAlign: TextAlign.center,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Remarks",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: AppConstants.TEXT_BACKGROUND_COLOR),
+                          ),
+                          Icon(
+                            Icons.note_add,
+                            color: AppConstants.APP_THEME_COLOR,
+                          )
+                        ]),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.done,
+                      maxLines: 7,
+                      maxLength: 1000,
+                      onChanged: (text) {
+                        body.requestNotes = text;
+                      },
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        height: 1.0,
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: AppConstants.APP_THEME_COLOR))),
                     ),
-                    height: 40,
-                    minWidth: 165,
-                    textColor: Colors.white,
-                    color: AppConstants.APP_THEME_COLOR,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  ),
+                  SizedBox(
+                    height: MediaQuery
+                        .of(context)
+                        .viewInsets
+                        .bottom,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FlatButton(
+                          child: Text(
+                            'Reject',
+                            style: TextStyle(fontSize: 18.0),
+                            textAlign: TextAlign.center,
+                          ),
+                          height: 40,
+                          minWidth: 165,
+                          textColor: Colors.amber[600],
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Colors.amber[600],
+                                width: 1,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onPressed: () {
+                            //Navigator.pushNamed(context, '/Dashboard');
+                          },
+                        ),
+                        // SizedBox(width: 5),
+                        FlatButton(
+                          child: Text(
+                            'Approve',
+                            style: TextStyle(fontSize: 18.0),
+                            textAlign: TextAlign.center,
+                          ),
+                          height: 40,
+                          minWidth: 165,
+                          textColor: Colors.white,
+                          color: AppConstants.APP_THEME_COLOR,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onPressed: () async {
+                            body.modifiedBy = list.empEmail;
+                            body.orgId = list.organization;
+                            body.module = "Travel";
+                            body.approveAction = "A";
+                            body.approvalLevel = list.approvalLevel;
+                            body.currentTicketOwner = list.empEmail;
+                            body.takeOwnership = "";
+                            body.transferTo = "";
+                            body.travelReqId = list.travelReqId;
+
+                            if (body.requestNotes.isNotEmpty) {
+                              _onLoading();
+                              await _apiProvider.Post_Travel_Req_For_Approval(body)
+                                  .then((value) => handleNavigation(value))
+                                  .catchError((error) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(dialogContext);
+                              });
+                            } else {
+                              showDefaultSnackbar(
+                                  context, "Please provide the remark");
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                    onPressed: () async {
-
-
-                      body.modifiedBy=list.empEmail;
-                      body.orgId=list.organization;
-                      body.module="Travel";
-                      body.approveAction="A";
-                      body.approvalLevel=list.approvalLevel;
-                      body.currentTicketOwner=list.empEmail;
-                      body.takeOwnership="";
-                      body.transferTo="";
-                      body.travelReqId=list.travelReqId;
-
-
-
-                      if(body.requestNotes.isNotEmpty){
-                        _onLoading();
-                        await _apiProvider.Post_Travel_Req_For_Approval(body).then((value) =>
-                        handleNavigation(value)
-
-
-                        ).catchError( (error) {
-                          Navigator.of(context, rootNavigator: true).pop(dialogContext);
-                        });
-                      }else{
-                        showDefaultSnackbar(context, "Please provide the remark");
-                      }
-
-                    },
                   ),
                 ],
               ),
-            ),
+            ):SizedBox(),
+
+
           ],
         ),
       ),
     );
   }
 
-  handleNavigation(value){
-    if(value.status){
+  handleNavigation(value) {
+    if (value.status) {
       Navigator.of(context, rootNavigator: true).pop(dialogContext);
-      showAlertDialog(context,value.massage);
-
-    }
-    else{
+      showAlertDialog(context, value.massage);
+    } else {
       Navigator.of(context, rootNavigator: true).pop(dialogContext);
-      showAlertDialog(context,"Failed");
+      showAlertDialog(context, "Failed");
     }
-
   }
-  showAlertDialog(BuildContext context,String text) {
 
+  showAlertDialog(BuildContext context, String text) {
     // set up the button
     Widget okButton = FlatButton(
-  child: Text("OK",style: TextStyle(color: AppConstants.APP_THEME_COLOR),),
+      child: Text(
+        "OK",
+        style: TextStyle(color: AppConstants.APP_THEME_COLOR),
+      ),
       onPressed: () {
-
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              '/ApprovalsScreen',
-                  (Route<dynamic> route) => false);
-
-
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/ApprovalsScreen', (Route<dynamic> route) => false);
       },
     );
 
@@ -968,11 +1131,11 @@ class _TravelReqViewState extends State<TravelReqView> {
       },
     );
   }
+
   void _onLoading() {
     showDialog(
       context: context,
       barrierDismissible: false,
-
       builder: (BuildContext context) {
         dialogContext = context;
         return Container(
@@ -990,121 +1153,129 @@ class _TravelReqViewState extends State<TravelReqView> {
     );
   }
 
-}
 
-travelTextView(String header, String text, Color textColor) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text('${header}',
-          style: TextStyle(fontSize: 16), textAlign: TextAlign.start),
-      SizedBox(
-        height: 1.0.w,
-      ),
-      AutoSizeText(
-        '${text}',
-        style: TextStyle(
-          color: textColor,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.start,
-        minFontSize: 14,
-      )
-    ],
-  );
-}
-
-travelTextViewHori(String header, String text, Color textColor) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text('${header}',
-          style: TextStyle(fontSize: 14), textAlign: TextAlign.start),
-      SizedBox(
-        height: 1.0.w,
-      ),
-      AutoSizeText(
-        '${text}',
-        style: TextStyle(
-          color: textColor,
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.start,
-        minFontSize: 12,
-      )
-    ],
-  );
-}
-
-checkBillable(value) {
-  if (value) {
-    return "Billable";
-  } else {
-    return "Non-Billable";
+  manageColor(bool show) {
+    if (show == false) {
+      return AppConstants.APP_THEME_COLOR;
+    } else {
+      return Colors.grey;
+    }
   }
-}
 
-checkAccomodation(value) {
-  if (value != null) {
+  travelTextView(String header, String text, Color textColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('${header}',
+            style: TextStyle(fontSize: 16), textAlign: TextAlign.start),
+        SizedBox(
+          height: 1.0.w,
+        ),
+        AutoSizeText(
+          '${text}',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.start,
+          minFontSize: 14,
+        )
+      ],
+    );
+  }
+
+  travelTextViewHori(String header, String text, Color textColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('${header}',
+            style: TextStyle(fontSize: 14), textAlign: TextAlign.start),
+        SizedBox(
+          height: 1.0.w,
+        ),
+        AutoSizeText(
+          '${text}',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.start,
+          minFontSize: 12,
+        )
+      ],
+    );
+  }
+
+  checkBillable(value) {
+    if (value) {
+      return "Billable";
+    } else {
+      return "Non-Billable";
+    }
+  }
+
+  checkAccomodation(value) {
+    if (value != null) {
+      if (value) {
+        return "Yes";
+      } else {
+        return "No";
+      }
+    } else {
+      return " ";
+    }
+  }
+
+  IsNullCheck(dynamic data) {
+    if (data == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  getDepartureTime(String date) {
+    final depatureDate = DateTime.parse(date);
+    final String datestring = DateFormat("ddMMM yy").format(depatureDate);
+    return datestring;
+  }
+
+  isClientLocation(value) {
+    if (!value) {
+      return "Office location";
+    } else {
+      return "Client location";
+    }
+  }
+
+  addressCheck(String clientlocation, String hostlocation, bool location) {
+    try {
+      print(clientlocation);
+      print(hostlocation);
+    } catch (e) {}
+
+    if (location) {
+      if (clientlocation != null) {
+        return clientlocation;
+      } else {
+        return "";
+      }
+    } else {
+      if (hostlocation != null) {
+        return hostlocation;
+      } else {
+        return "";
+      }
+    }
+  }
+
+  checkdependent(value) {
     if (value) {
       return "Yes";
     } else {
       return "No";
     }
-  } else {
-    return " ";
-  }
-}
-
-IsNullCheck(dynamic data) {
-  if (data == null) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-getDepartureTime(String date) {
-  final depatureDate = DateTime.parse(date);
-  final String datestring = DateFormat("ddMMM yy").format(depatureDate);
-  return datestring;
-}
-
-isClientLocation(value) {
-  if (!value) {
-    return "Office location";
-  } else {
-    return "Client location";
-  }
-}
-
-addressCheck(String clientlocation, String hostlocation, bool location) {
-  try {
-    print(clientlocation);
-    print(hostlocation);
-  } catch (e) {}
-
-  if (location) {
-    if (clientlocation != null) {
-      return clientlocation;
-    } else {
-      return "";
-    }
-  } else {
-    if (hostlocation != null) {
-      return hostlocation;
-    } else {
-      return "";
-    }
-  }
-}
-
-checkdependent(value) {
-  if (value) {
-    return "Yes";
-  } else {
-    return "No";
   }
 }

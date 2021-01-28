@@ -102,7 +102,7 @@ class ApiProvider {
     return passModel;
   }
 
-  Future<GetTravelRequest> getTravelRequest() async {
+  Future<ApprovalModal> getTravelRequest() async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     getDialCode();
 
@@ -127,8 +127,8 @@ class ApiProvider {
         'Authorization': 'Bearer ${token}',
       },
     );
-    GetTravelRequest listTravelReq =
-        GetTravelRequest.fromJson(jsonDecode(response.body));
+    ApprovalModal listTravelReq =
+    ApprovalModal.fromJson(jsonDecode(response.body));
     print("${response.statusCode}");
     print("${response.body}");
     return listTravelReq;

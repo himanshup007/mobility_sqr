@@ -18,13 +18,22 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   final Repository repository = Repository();
 
   BuildContext dialogContext;
-
+  var headertext;
+  var args;
   final GlobalKey loaderkey = GlobalKey<NavigatorState>();
-
+var where;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        args = ModalRoute.of(context).settings.arguments;
+      });
+      where = args['where'];
+      headertext=args['header'];
+
+    });
+
   }
 
   @override
@@ -33,10 +42,13 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
+          leading: new IconButton(
+              icon: new Icon(Icons.arrow_back),
+              onPressed: (){_onWillPop();}),
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Colors.white38,
           elevation: 0,
-          title: Text("Approvals",
+          title: Text("$headertext",
               style: TextStyle(color: Colors.black, fontSize: 17.0)),
           centerTitle: true,
         ),
@@ -76,9 +88,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                       child: FadeInAnimation(
                                         child: GestureDetector(
                                             onTap: () {
-                                              Navigator.pushNamed(context, '/TravelReqView',arguments: {"EmployeeData":state.approvalModal.data[index]});
+                                              Navigator.pushNamed(context, '/TravelReqView',arguments: {"EmployeeData":state.approvalModal.data[index],"where":where});
                                             },
-                                            child: Cell(state.approvalModal.data[index])),
+                                            child: Cell(state.approvalModal.data[index],where)),
                                       ),
                                     ),
                                   );
@@ -167,8 +179,10 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
 class Cell extends StatefulWidget {
   Data fact;
   Function(bool) changeValue;
+  int where;
+  Cell(this.fact,this.where, {this.changeValue});
 
-  Cell(this.fact, {this.changeValue});
+
 
   @override
   _CellState createState() => _CellState();
@@ -203,7 +217,7 @@ class _CellState extends State<Cell> {
                             children: [
                               TextWidget(
                                   "From Date", 13.0, null, Colors.black54, 4.0),
-                              TextWidget(getDepartureDate(widget.fact.expenceDepartureDate), 13.0,
+                              TextWidget(getDepartureDate(widget.fact.details.length>0?widget.fact.details[0].departureDate:" "), 13.0,
                                   FontWeight.w600, null, 0),
                             ],
                           ),
@@ -214,7 +228,7 @@ class _CellState extends State<Cell> {
                             children: [
                               TextWidget(
                                   "To Date", 13.0, null, Colors.black54, 4.0),
-                              TextWidget(getDepartureDate(widget.fact.expenceReturnDate), 13.0,
+                              TextWidget(getDepartureDate(widget.fact.details.length>0?widget.fact.details[widget.fact.details.length-1].returnDate:" "), 13.0,
                                   FontWeight.w600, null, 0),
                             ],
                           ),
@@ -244,7 +258,7 @@ class _CellState extends State<Cell> {
               ),
               Expanded(
                 flex: 1,
-                child: Checkbox(
+                child: widget.where==5?Checkbox(
                   checkColor: Colors.white,
                   activeColor: AppConstants.APP_THEME_COLOR,
                   value: widget.fact.isSelected,
@@ -254,7 +268,7 @@ class _CellState extends State<Cell> {
                     });
                     widget.changeValue(value);
                   },
-                ),
+                ):SizedBox(),
               ),
             ],
           ),
@@ -299,11 +313,18 @@ class TextWidget extends StatelessWidget {
   }
 }
 getDepartureDate(String date) {
+  print(date);
   if (date == "") {
     return "";
   } else {
+    try{
+
+
     var depatureDate = DateTime.parse(date.toString());
     final String datestring = DateFormat("dd/MMM/yyyy").format(depatureDate);
     return datestring;
+    } catch(e){
+      return " ";
+    }
   }
 }
