@@ -135,15 +135,16 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                       // ],
                                     ),
                                     child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           flex: 8,
                                           child: Container(
-                                            height: 100.0.h,
+                                           // height: 100.0.h,
                                             child: Column(
-
+                                             // crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Align(
                                                     alignment:
@@ -201,9 +202,9 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Container(
-                                              padding:
-                                              EdgeInsets.all(5),
-                                              height: 100.0.h,
+                                              // padding:
+                                              //  EdgeInsets.all(15),
+                                              //height: 100.0.h,
                                               child: Text(
                                                 state.projectIdModel.data[index]
                                                     .pid,
@@ -221,7 +222,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                                   Container(color: Colors.black12,height: 1,),
 
                                   SizedBox(
-                                    height: 10,
+                                    height: 5,
                                   )
                                 ],
                               ),
