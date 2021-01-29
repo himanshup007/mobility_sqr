@@ -5,7 +5,6 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:sizer/sizer.dart';
 
-
 class Dependents extends StatefulWidget {
   @override
   _DependentsState createState() => _DependentsState();
@@ -14,11 +13,8 @@ class Dependents extends StatefulWidget {
 class _DependentsState extends State<Dependents> {
   var checkedValue = false;
 
-
-
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -38,7 +34,7 @@ class _DependentsState extends State<Dependents> {
         body: Column(
           children: [
             Expanded(
-              flex: 12,
+              flex: 11,
               child: ListView.builder(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 shrinkWrap: false,
@@ -47,7 +43,7 @@ class _DependentsState extends State<Dependents> {
                   return Column(
                     children: [
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
                             list[index].isSelected = !list[index].isSelected;
                           });
@@ -57,20 +53,19 @@ class _DependentsState extends State<Dependents> {
                             Expanded(
                               flex: 8,
                               child: Container(
-
                                 child: Column(
                                   children: [
                                     SizedBox(height: 18),
                                     RowWidget("Name", list[index].name),
                                     SizedBox(height: 8),
-                                    RowWidget("Relation",
-                                        list[index].relationship),
+                                    RowWidget(
+                                        "Relation", list[index].relationship),
                                     SizedBox(height: 8),
                                     RowWidget(
                                         "Visa Number", list[index].empCode),
                                     SizedBox(height: 8),
                                     RowWidget(
-                                        "Passport Number",list[index].city),
+                                        "Passport Number", list[index].city),
                                     SizedBox(height: 8),
                                     RowWidget("Visa Validity", "Valid"),
                                     //SizedBox(height: 8),
@@ -104,28 +99,35 @@ class _DependentsState extends State<Dependents> {
                 },
               ),
             ),
+
+            SizedBox(height: 5),
+
             Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
-               child: FlatButton(
-                 minWidth: MediaQuery.of(context).size.width,
-                child: Text(
-                'DONE',
-                style: TextStyle(fontSize: 17.0),
-                textAlign: TextAlign.center,
+              flex: 1,
+               child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: AppConstants.APP_THEME_COLOR),
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppConstants.APP_THEME_COLOR
+                ),
+                child: FlatButton(
+                  child: Text(
+                    'DONE',
+                    style: TextStyle(
+                      fontSize: 21.0,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
 
+                  minWidth: 90.0.w,
                   textColor: Colors.white,
-                  color: AppConstants.APP_THEME_COLOR,
-                  shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                  ),
                   onPressed: () {
-                Navigator.pop(context,list);
+                    Navigator.pop(context, list);
                   },
                 ),
-                   ),
+              ),
+
             ),
           ],
         ));
