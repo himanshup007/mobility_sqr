@@ -7,10 +7,15 @@ class CustomColumnEditText extends StatefulWidget {
   VoidCallback onTap;
   String placename, countryname, hint, header;
   int Type;
-  bool hide=false;
+  bool hide = false;
 
-  CustomColumnEditText(@required this.hint, @required this.placename,
-      @required this.countryname, @required this.header,@required this.Type,this.hide,
+  CustomColumnEditText(
+      @required this.hint,
+      @required this.placename,
+      @required this.countryname,
+      @required this.header,
+      @required this.Type,
+      this.hide,
       {this.onTap});
 
   @override
@@ -18,8 +23,6 @@ class CustomColumnEditText extends StatefulWidget {
 }
 
 class _CustomColumnEditTextState extends State<CustomColumnEditText> {
-
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -55,10 +58,15 @@ class _CustomColumnEditTextState extends State<CustomColumnEditText> {
                       decoration: InputDecoration(
                         hintStyle: TextStyle(fontSize: 12),
                         hintText: widget.hint,
-                        suffixIcon: widget.Type==1?Icon(
-                          Icons.search,
-                          color: AppConstants.APP_THEME_COLOR,
-                        ):Icon(Icons.calendar_today,color: AppConstants.APP_THEME_COLOR,),
+                        suffixIcon: widget.Type == 1
+                            ? Icon(
+                                Icons.search,
+                                color: AppConstants.APP_THEME_COLOR,
+                              )
+                            : Icon(
+                                Icons.calendar_today,
+                                color: AppConstants.APP_THEME_COLOR,
+                              ),
                         border: widget.placename == ''
                             ? OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -78,17 +86,29 @@ class _CustomColumnEditTextState extends State<CustomColumnEditText> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
+                              flex: 2,
                               child: AutoSizeText(
                                 widget.placename,
                                 minFontSize: 12,
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold ),
-
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            widget.hide?SizedBox():Expanded(child:widget.Type==1?Icon(Icons.search,color: AppConstants.APP_THEME_COLOR,):Icon(Icons.calendar_today,color: AppConstants.APP_THEME_COLOR,),
-                            ),
-                            ],
+                            widget.hide
+                                ? SizedBox(width: 0,height: 0,)
+                                : Expanded(
+                              flex: 1,
+                                    child: widget.Type == 1
+                                        ? Icon(
+                                            Icons.search,
+                                            color: AppConstants.APP_THEME_COLOR,
+                                          )
+                                        : Icon(
+                                            Icons.calendar_today,
+                                            color: AppConstants.APP_THEME_COLOR,
+                                          ),
+                                  ),
+                          ],
                         ),
                       ),
                     )),

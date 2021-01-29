@@ -340,30 +340,34 @@ class _TravelReqViewState extends State<TravelReqView> {
                                 children: [
                                   Expanded(
                                     flex: 1,
-                                    child: Container(
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "Purpose  of travel :",
-                                            style: TextStyle(fontSize: 12),
-                                          ),
-                                          Text(
-                                            " ${list.details[index]
-                                                .travelPurpose}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: AppConstants
-                                                    .TEXT_BACKGROUND_COLOR),
-                                          ),
-                                        ],
+                                    child: FittedBox(
+                                      fit:BoxFit.fill,
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Purpose  of travel :",
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                            AutoSizeText(
+                                              " ${list.details[index]
+                                                  .travelPurpose}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: AppConstants
+                                                      .TEXT_BACKGROUND_COLOR),minFontSize: 10,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
+                                  SizedBox(width: 10,),
                                   Expanded(
                                     flex: 1,
                                     child: FittedBox(
-                                      fit: BoxFit.fitWidth,
+                                      fit: BoxFit.fill,
                                       child: Row(
                                         children: [
                                           Text(
