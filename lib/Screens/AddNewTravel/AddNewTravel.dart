@@ -68,6 +68,9 @@ class _AddCity extends State<AddCity> {
 
   bool dependentEyeBtn = false;
 
+  final ItemPositionsListener itemPositionsListener =
+  ItemPositionsListener.create();
+
   @override
   void initState() {
     super.initState();
@@ -149,6 +152,33 @@ class _AddCity extends State<AddCity> {
     } else {
       return Colors.grey;
     }
+  }
+  removeCityReq(){
+
+
+    traveldata.removeAt(index);
+    userdetails.removeAt(index);
+index=index-1;
+
+itemScrollController.scrollTo(
+    index: userdetails.length - 1,
+    duration: Duration(milliseconds: 400),
+    curve: Curves.easeInOutCubic);
+    for (int i = 0;
+    i < userdetails.length;
+    i++) {
+      if (i == userdetails.length - 1) {
+        userdetails[i].hide = false;
+      } else {
+        userdetails[i].hide = true;
+      }
+    }
+
+    this.setState(() {
+      userdetails = userdetails;
+      traveldata=traveldata;
+    });
+    positionsView();
   }
 
   AddNewReq() {
@@ -456,7 +486,11 @@ class _AddCity extends State<AddCity> {
                                               purposecontext)
                                           .add(ResetBloc());
                                     }
-                                  } else {}
+                                  } else if(string == 'Delete'){
+
+                                    removeCityReq();
+                                  }
+                                  else{}
                                 },
                                 itemBuilder: (BuildContext context) {
                                   return {'Add City', 'Delete'}
@@ -496,6 +530,7 @@ class _AddCity extends State<AddCity> {
                       child: ScrollablePositionedList.builder(
                         itemScrollController: itemScrollController,
                         scrollDirection: Axis.horizontal,
+                        itemPositionsListener: itemPositionsListener,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
@@ -1696,7 +1731,24 @@ class _AddCity extends State<AddCity> {
         ),
       ),
     );
+
+
+
   }
+
+ positionsView () {
+   ValueListenableBuilder<Iterable<ItemPosition>>(
+     valueListenable: itemPositionsListener.itemPositions,
+     builder: (context, positions, child) {
+       int min;
+       int max;
+       if (positions.isNotEmpty) {
+
+
+       }
+     },
+   );
+ }
 
   getValue(value) {
     if (value == 'true') {
