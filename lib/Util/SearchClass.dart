@@ -50,8 +50,10 @@ class _SearchPlaceState extends State<SearchPlace> {
               Expanded(
                 flex: 1,
                 child: TextFormField(
+                  autofocus: true,
                   decoration: InputDecoration(
                     labelText: "Place Name",
+                    hintText: "Search Location",
                     suffixIcon: Icon(
                       Icons.search,
                       color: AppConstants.APP_THEME_COLOR,
@@ -82,7 +84,7 @@ class _SearchPlaceState extends State<SearchPlace> {
                     key: _myKey,
                     builder: (context, state) {
                       if (state is SearchClassLoading) {
-                        return showMobilityLoader();
+                        return showMobilityLoader(true);
                       }
                       if (state is SearchInitial) {}
                       if (state is SearchClassEmpty) {
@@ -100,18 +102,18 @@ class _SearchPlaceState extends State<SearchPlace> {
                           height: 50.0.h,
                           child: Center(
                               child: Container(
-                                width: 100.0.w,
-                                height: 50.0.h,
-                                child: Column(
-                            children: [
+                            width: 100.0.w,
+                            height: 50.0.h,
+                            child: Column(
+                              children: [
                                 Image.asset(
                                   "assets/images/no_data_found.png",
                                   color: AppConstants.APP_THEME_COLOR,
                                 ),
                                 Text("${state.message}"),
-                            ],
-                          ),
-                              )),
+                              ],
+                            ),
+                          )),
                         );
                       }
                       if (state is SearchClassLoaded) {

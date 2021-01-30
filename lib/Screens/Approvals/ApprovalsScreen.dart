@@ -38,6 +38,10 @@ var where;
 
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context).settings.arguments;
+   final navi=args["where"];
+
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -63,8 +67,14 @@ var where;
                   child: BlocBuilder<AprrovalsBloc, AprrovalsState>(
                       builder: (context, state) {
                         if (state is AprrovalsInitial) {
-                          BlocProvider.of<AprrovalsBloc>(context)
-                              .add(Fetch_travel_req_approver());
+                          if(navi==2){
+                            BlocProvider.of<AprrovalsBloc>(context)
+                                .add(Fetch_previous_req());
+                          }else{
+                            BlocProvider.of<AprrovalsBloc>(context)
+                                .add(Fetch_travel_req_approver());
+                          }
+
                         }
                         if (state is AprrovalsLoading) {}
                         if (state is AprrovalsError) {

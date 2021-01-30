@@ -23,6 +23,7 @@ class _Username_Screen extends State<Username_Screen> {
   final tokengetter = TokenGetter();
   String Email = "";
   BuildContext dialogContext;
+  final appsharedprefs=TokenGetter();
 
   @override
   void dispose() {
@@ -271,22 +272,20 @@ class _Username_Screen extends State<Username_Screen> {
   }
 
   UserData() async {
-    var userinfo = await bloc.setUserInfo();
+  await bloc.setUserInfo().then((value) =>
+    methodName(value)
+    );
+
+  }
+  methodName (dynamic userinfo) async {
     if (userinfo != null) {
+      await  appsharedprefs.saveUserInfo(userinfo);
       getTimeforPush(userinfo);
     }
   }
 
   void getTimeforPush(userinfo) {
-    Future.delayed(Duration(seconds: 3), () {
-      try{
-      //  Navigator.of(context, rootNavigator: true).pop(dialogContext);
-      }
-      catch(e){
-        print(e);
-      }
-
-
+    Future.delayed(Duration.zero, () {
       if (userinfo.data.termandcondtion == "1") {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/Dashboard', (Route<dynamic> route) => false);

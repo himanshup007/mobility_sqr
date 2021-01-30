@@ -95,7 +95,6 @@ class UsernameBloc {
 
   Future<UserInfo> setUserInfo()  async {
     UserInfo userInfo =  await  _repository.fetch_user_info(email);
-    await appsharedprefs.saveUserInfo(userInfo);
     return userInfo;
   }
 

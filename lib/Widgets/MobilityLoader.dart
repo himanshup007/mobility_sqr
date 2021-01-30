@@ -3,8 +3,9 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:loading_animations/loading_animations.dart';
 
-showMobilityLoader(){
-  return Container(
+showMobilityLoader(bool show){
+  return show?Container(
+
     height: 100.0.h,
     width: 100.0.w,
     color: Colors.transparent,
@@ -14,5 +15,5 @@ showMobilityLoader(){
         backgroundColor: AppConstants.APP_THEME_COLOR,
       ),
     ),
-  );
+  ):SizedBox();
 }

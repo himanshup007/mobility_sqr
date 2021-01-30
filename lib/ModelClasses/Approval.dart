@@ -81,6 +81,7 @@ class Data {
   String empCode;
   String firstName;
   String lastName;
+  List<VisaRequests> visaRequests;
   List<Details> details;
   List<Dependent> dependent;
 
@@ -138,6 +139,7 @@ class Data {
         this.empCode,
         this.firstName,
         this.lastName,
+        this.visaRequests,
         this.details,
         this.dependent});
 
@@ -176,6 +178,7 @@ class Data {
     expenceFromCountry = json['expence_fromCountry'];
     expenceReturnDate = json['expence_returnDate'];
     expenceToCountry = json['expence_toCountry'];
+
     column1 = json['column1'];
     column2 = json['column2'];
     column3 = json['column3'];
@@ -194,6 +197,12 @@ class Data {
     empCode = json['emp_code'];
     firstName = json['first_name'];
     lastName = json['last_name'];
+    if (json['visa_requests'] != null) {
+      visaRequests = new List<VisaRequests>();
+      json['visa_requests'].forEach((v) {
+        visaRequests.add(new VisaRequests.fromJson(v));
+      });
+    }
     if (json['details'] != null) {
       details = new List<Details>();
       json['details'].forEach((v) {
@@ -268,6 +277,21 @@ class Data {
     if (this.dependent != null) {
       data['dependent'] = this.dependent.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+class VisaRequests {
+  String visaReqId;
+
+  VisaRequests({this.visaReqId});
+
+  VisaRequests.fromJson(Map<String, dynamic> json) {
+    visaReqId = json['visa_req_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['visa_req_id'] = this.visaReqId;
     return data;
   }
 }

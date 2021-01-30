@@ -28,5 +28,15 @@ class AprrovalsBloc extends Bloc<AprrovalsEvent, AprrovalsState> {
         yield AprrovalsError("Couldn't Fetch Data");
       }
     }
+    if (event is Fetch_previous_req) {
+
+      try {
+        final ApprovalModal quote = await repository.fetch_travel_req();
+        yield AprrovalsLoaded(approvalModal: quote);
+      }
+      catch (_) {
+        yield AprrovalsError("Couldn't Fetch Data");
+      }
+    }
   }
 }

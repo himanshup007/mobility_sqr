@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
@@ -67,7 +68,8 @@ class ApiProvider {
     Map data = {"email": username};
     //encode Map to JSON
     var body = json.encode(data);
-    String token = await _TokenGetter.getAcessToken() ?? "";
+  //  String token = await _TokenGetter.getAcessToken() ?? "";
+    String token = await getToken_byReresh();
     var response = await http.post(
       AppConstants.BASE_URL + AppConstants.GET_USER_INFO,
       headers: {
@@ -437,7 +439,32 @@ class ApiProvider {
       throw Exception('error');
     }
 
+  }
 
 
+  Future<ActionHistoryModel> get_travel_status_summary(String travelreqId) async {
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+    Map<String, String> queryParams = {
+     "travel_req_id": travelreqId,
+      "org_id": userInfo.data.orgId
+    };
+    String token = await getToken_byReresh();
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.ACTION_HISTORY_SUMMARY + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      ActionHistoryModel myresponse =
+      ActionHistoryModel.fromJson(jsonDecode(response.body));
+
+      return myresponse;
+    } else {
+      throw Exception('error');
+    }
   }
 }

@@ -44,7 +44,8 @@ class _ForgetPass extends State<ForgetPass> {
         SizerUtil()
             .init(constraints, Orientation.portrait); //initialize SizerUtil
         return Scaffold(
-          body: Container(
+          body: Builder(
+            builder: (ctx) =>Container(
             width: 100.0.w,
             color: Colors.white,
             child: Column(
@@ -89,12 +90,12 @@ class _ForgetPass extends State<ForgetPass> {
                       ),
                       onPressed: () async {
 
-                        FocusScope.of(context).unfocus();
+                        FocusScope.of(ctx).unfocus();
                         _onLoading();
                       String msg=  await bloc.sendResetEmail();
-                        showDefaultSnackbar(context,
+                        showDefaultSnackbar(ctx,
                             "$msg");
-                        Navigator.of(context, rootNavigator: true).pop(dialogContext);
+                        Navigator.of(ctx, rootNavigator: true).pop(dialogContext);
                       }),
                 ),
                 GestureDetector(
@@ -117,6 +118,7 @@ class _ForgetPass extends State<ForgetPass> {
               ],
             ),
           ),
+          )
         );
       });
     });

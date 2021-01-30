@@ -20,6 +20,7 @@ class AppConstants {
   static final String POST_TRAVEL_REQ="/get_add/travel_request/";
   static final String GET_APPROVAL_LIST="/get_travel_request_approver/";
   static final String POST_REQUEST_FOR_APPROVAL="/get_post_approve_travelvisa_request/";
+  static final String ACTION_HISTORY_SUMMARY="/get_travel_status_summary/";
 
 
 

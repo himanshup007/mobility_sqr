@@ -12,3 +12,10 @@ class Fetch_travel_req_approver extends AprrovalsEvent {
   @override
   List<Object> get props => [];
 }
+
+class Fetch_previous_req extends AprrovalsEvent{
+  const Fetch_previous_req();
+  @override
+  List<Object> get props => [];
+
+}

@@ -52,8 +52,10 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
               Expanded(
                 flex: 1,
                 child: TextFormField(
+                  autofocus: true,
                   decoration: InputDecoration(
                     labelText: "Project ID",
+                    hintText: "Search Project",
                     suffixIcon: Icon(
                       Icons.search,
                       color: AppConstants.APP_THEME_COLOR,
@@ -84,7 +86,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                     key: _myKey,
                     builder: (context, state) {
                       if (state is ProjectIdLoading) {
-                        return showMobilityLoader();
+                        return showMobilityLoader(true);
                       }
                       if (state is ProjectIdInitial) {}
 

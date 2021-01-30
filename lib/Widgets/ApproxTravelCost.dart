@@ -25,11 +25,17 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
   PerDiemModel perDiem;
    TravelReqPayLoad list;
   int _current = 0;
+
+  Country _selectedDialogCountry;
+
   _ApproxTravelCostState(this.list,this.perDiem);
 
 
   Widget build(BuildContext context) {
-    List<Widget> CostList = list.travelCity.map((item) => Container(
+    List<Widget> CostList = list.travelCity.map((item) {
+      int index = list.travelCity.indexOf(item);
+      return
+        Container(
         child: Container(
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -74,7 +80,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
               SizedBox(height: 30),
               ApproxTravelRowWidget("City Name", "${item.destinationCity+"("+item.currency+")"}"),
               SizedBox(height: 30),
-              ApproxTravelRowWidget("Per-diems", "${item.perDiamValue}"),
+              ApproxTravelRowWidget("Per-diems", "${list.travelCity[index].perDiemCost}"),
               SizedBox(height: 30),
               Row(
                 children: [
@@ -111,17 +117,17 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                 ],
               ),
               SizedBox(height: 30),
-              ApproxTravelRowWidget("Hotel", "-"),
+              ApproxTravelRowWidget("Hotel", "${list.travelCity[index].hotelCost}"),
               SizedBox(height: 30),
-              ApproxTravelRowWidget("Transportation", "-"),
+              ApproxTravelRowWidget("Transportation", "${list.travelCity[index].transportationCost}"),
               SizedBox(height: 30),
-              ApproxTravelRowWidget("Total", "10000"),
+              ApproxTravelRowWidget("Total", "${list.travelCity[index].totalCost}"),
               SizedBox(height: 30),
               ApproxTravelRowWidget("Total (Currency)", "10,000"),
             ],
           ),
-        )
-    )).toList();
+      ));
+      }).toList();
     return Container(
       height: 100.0.h,
       width: 100.0.w,
@@ -176,7 +182,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
           Text("+${country.currencyCode}"),
           SizedBox(width: 8.0),
           Flexible(child: Text(country.name))
-        ],
+        ]
       );
 
   void _openCurrencyPickerDialog() => showDialog(
@@ -189,6 +195,8 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                 searchInputDecoration: InputDecoration(hintText: 'Search...'),
                 isSearchable: true,
                 title: Text('Select your Currency'),
+                onValuePicked: (Country country) =>
+                    setState(() => _selectedDialogCountry = country),
                 itemBuilder: _buildDialogItem)),
       );
 }
@@ -228,3 +236,56 @@ class ApproxTravelRowWidget extends StatelessWidget {
     );
   }
 }
+
+
+
+class CostModel{
+  double _hotel=0;
+  double _transportation=0;
+  double _perDiems=0;
+  double _airfare=0;
+  double _total=0;
+  double _totalCurrency=0;
+
+
+  CostModel(this._hotel, this._transportation, this._perDiems, this._airfare,
+      this._total, this._totalCurrency);
+
+  double get hotel => _hotel;
+
+  set hotel(double value) {
+    _hotel = value;
+  }
+
+  double get transportation => _transportation;
+
+  set transportation(double value) {
+    _transportation = value;
+  }
+
+  double get perDiems => _perDiems;
+
+  set perDiems(double value) {
+    _perDiems = value;
+  }
+
+  double get airfare => _airfare;
+
+  set airfare(double value) {
+    _airfare = value;
+  }
+
+  double get total => _total;
+
+  set total(double value) {
+    _total = value;
+  }
+
+  double get totalCurrency => _totalCurrency;
+
+  set totalCurrency(double value) {
+    _totalCurrency = value;
+  }
+}
+
+

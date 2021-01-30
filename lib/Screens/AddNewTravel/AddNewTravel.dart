@@ -71,7 +71,7 @@ class _AddCity extends State<AddCity> {
   @override
   void initState() {
     super.initState();
-    req_data.isBillable = true;
+
 
     ProjectTextController = new TextEditingController();
     getDialCode();
@@ -86,7 +86,7 @@ class _AddCity extends State<AddCity> {
 
   initalizeValues() {
     showHide data;
-
+    req_data.isBillable = true;
     data = new showHide();
     data.name = "data${1}";
     data.hide = false;
@@ -99,7 +99,7 @@ class _AddCity extends State<AddCity> {
     modelClass.travellingCountry = "";
     modelClass.destinationCity = "";
     modelClass.sourceCity = "";
-    modelClass.departureDate = DateTime.now().toString();
+    modelClass.departureDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toString();
     modelClass.returnDate = "";
     modelClass.isClientLocation = false.toString();
     modelClass.accmodationStartDate = modelClass.departureDate;
@@ -335,7 +335,7 @@ class _AddCity extends State<AddCity> {
                               child: RadioBtn(
                                 "Billable",
                                 "Non-Billable",
-                                1,
+                                returnBillableValue(req_data.isBillable),
                                 "Billable",
                                 billable: (value) {
                                   req_data.isBillable = value;
@@ -978,6 +978,13 @@ class _AddCity extends State<AddCity> {
                                                           alignment: Alignment
                                                               .centerLeft,
                                                         ),
+                                                        SizedBox(height: 40,),
+                                                        Container(
+                                                          margin: EdgeInsets.symmetric(horizontal: 10),
+                                                          child: (
+                                                            Text("${CheckVisaNote(traveldata[0].departureDate,traveldata[index].visaExpiryDate)}",style: TextStyle(color: Colors.red,fontSize: 18),)
+                                                          ),
+                                                        )
                                                       ],
                                                     ),
                                                   ),
@@ -1573,7 +1580,7 @@ class _AddCity extends State<AddCity> {
                                                 inactiveColor: Colors.grey,
                                                 disabled: traveldata[index]
                                                             .myDependentList ==
-                                                        null
+                                                        null||traveldata[index].travelPurpose==null||traveldata[index].travelPurpose.toLowerCase()=="business"
                                                     ? true
                                                     : false,
                                                 activeColor: AppConstants
@@ -1583,8 +1590,14 @@ class _AddCity extends State<AddCity> {
                                                 ondisabled: (va) {
                                                   if (va) {
                                                     scrolltotop();
-                                                    showDefaultSnackbar(context,
-                                                        "Please select destination Point");
+                                                    if(traveldata[index].travelPurpose==null){
+                                                      showDefaultSnackbar(context,
+                                                          "Please select Select Purpose of Travel");
+                                                    }else{
+                                                      showDefaultSnackbar(context,
+                                                          "Please select destination Point");
+                                                    }
+
                                                   }
                                                 },
                                                 onToggle: (value) async {
@@ -1662,7 +1675,8 @@ class _AddCity extends State<AddCity> {
                     req_data.travelCity = traveldata;
                     if (Validator(req_data)) {
                       if (req_data != null) {
-                        dynamic Dependents = await Navigator.pushNamed(
+                        CostValueSetter(req_data);
+                 await Navigator.pushNamed(
                             context, '/AddNewTravel2',
                             arguments: {"list": req_data,"perDiem":perDiemModel});
                       }
@@ -1691,7 +1705,68 @@ class _AddCity extends State<AddCity> {
       return 1;
     }
   }
+  CostValueSetter(TravelReqPayLoad ReqBody) {
 
+      for (int index = 0; index < ReqBody.travelCity.length; index++) {
+        SetValueInital(ReqBody, index);
+      }
+
+
+  }
+
+  SetValueInital(TravelReqPayLoad list, int index) {
+
+    var transportvalue = list.travelCity[index].transportCost;
+    DateTime dateStart;
+    DateTime dateEnd;
+    if(index>0){
+       dateStart = DateTime.parse('${list.travelCity[index-1].departureDate}');
+       dateEnd = DateTime.parse('${list.travelCity[index].departureDate}');
+    }else{
+       dateStart = DateTime.parse('${list.travelCity[index].departureDate}');
+       dateEnd = DateTime.parse('${list.travelCity[index].returnDate}');
+    }
+
+    final differenceInTravelDates = dateEnd.difference(dateStart).inDays;
+
+    list.travelCity[index].transportationCost =
+        (double.parse(transportvalue) * differenceInTravelDates)
+            .toStringAsFixed(2);
+
+    var perDiemValue = list.travelCity[index].perDiamValue;
+
+    list.travelCity[index].perDiemCost =
+        (double.parse(perDiemValue) * differenceInTravelDates)
+            .toStringAsFixed(2);
+
+
+    if (list.travelCity[index].isAccmodationRequired) {
+
+      DateTime accomationStart =
+      DateTime.parse('${list.travelCity[index].accmodationStartDate}');
+      DateTime accomationEnd =
+      DateTime.parse('${list.travelCity[index].accmodationEndDate}');
+      final difference = accomationEnd
+          .difference(accomationStart)
+          .inDays;
+      final value =
+      (double.parse(perDiemValue) * difference).toStringAsFixed(2);
+
+      list.travelCity[index].hotelCost = value;
+    } else {
+      list.travelCity[index].hotelCost = " ";
+    }
+
+    if(list.travelCity[index].hotelCost==" "){
+      list.travelCity[index].totalCost =(double.parse(list.travelCity[index].perDiemCost)+double.parse(list.travelCity[index].transportCost)).toStringAsFixed(2);
+
+    }
+    else{
+      list.travelCity[index].totalCost =(double.parse(list.travelCity[index].perDiemCost)+double.parse(list.travelCity[index].hotelCost)+double.parse(list.travelCity[index].transportCost)).toStringAsFixed(2);
+
+    }
+
+    }
   Future<Null> selectDate(
       BuildContext context, DateTime inital_date, DateTime end_date,
       {Function(String) datevalue}) async {
@@ -1863,12 +1938,36 @@ class _AddCity extends State<AddCity> {
 
   }
 
-  SaveCostData(value) {
+  SaveCostData(PerDiemModel value) {
     perDiemModel = value;
-
     traveldata[index].perDiamValue = value.perDiem;
     traveldata[index].transportCost = value.transportation;
     traveldata[index].currency = value.currency;
+    traveldata[index].hotelCost=value.accommodationLimit;
 
   }
+
+  CheckVisaNote(String req_data, String visaExpiryDate) {
+
+
+    final differenceInTravelDates = DateTime.parse(visaExpiryDate).difference(DateTime.parse(req_data)).inDays;
+    if(differenceInTravelDates<0){
+
+      return "*The selected visa is not valid for this travel. Please apply for new visa";
+
+    }else{
+return" ";
+    }
+
+
+  }
+}
+
+returnBillableValue(bool isBillable){
+  if(isBillable){
+    return 1;
+  }else{
+    return 2;
+  }
+
 }

@@ -198,6 +198,14 @@ class _DashboardState extends State<Dashboard> {
                             return Container(
                               height: 65.0.w,
                               width: 100.0.w,
+                              // decoration: BoxDecoration(
+                              //   image:  DecorationImage(
+                              //     image: AssetImage(
+                              //         'assets/images/dashboard_bg.jpg'),
+                              //     fit: BoxFit.fill,
+                              //   ),   //Image.asset(
+                              //
+                              // ),
                               margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
                               child: Scrollbar(
                                 isAlwaysShown: true,
@@ -236,7 +244,9 @@ class _DashboardState extends State<Dashboard> {
                                                     child: Container(
                                                       height: 60.0.w,
                                                       width: 40.0.w,
+
                                                       decoration: BoxDecoration(
+                                                         color: Colors.white,
                                                         border: Border.all(
                                                             color: AppConstants
                                                                 .TEXT_BACKGROUND_COLOR,
@@ -388,6 +398,8 @@ class _DashboardState extends State<Dashboard> {
                                                                     )
                                                                   ],
                                                                 ),
+
+
                                                                 Container(
                                                                   width:
                                                                       100.0.w,
