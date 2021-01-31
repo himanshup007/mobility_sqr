@@ -1449,7 +1449,7 @@ class _TravelReqViewState extends State<TravelReqView> {
   }
 
   getDepartureTime(String date) {
-    final depatureDate = DateTime.parse(date);
+    final depatureDate = DateTime.parse(date).toLocal();
     final String datestring = DateFormat("ddMMM yy").format(depatureDate);
     return datestring;
   }

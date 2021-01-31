@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
@@ -28,6 +29,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
   Country homePhoneCountry;
   ApiProvider _appApiProvider = ApiProvider();
   var dialCode;
+
 
   BuildContext dialogContext;
 
@@ -79,9 +81,10 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                 )),
             Container(
               height: 46.0,
-              child: TextField(
+              child: TextFormField(
                 style:
                 TextStyle(fontSize: 16.0, height: 1.0, color: Colors.black),
+                initialValue: list.homeContactName!=null?list.homeContactName:"",
                 onChanged: (text) {
                   list.homeContactName = text;
                 },
@@ -143,15 +146,39 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                   ),
                   Expanded(
                     flex: 12,
-                    child: DashboardCustomEditField(
-                      "Enter Phone No",
-                      false,
-                      Icons.ac_unit,
-                      1,
-                      onChange: (text) {
-                        list.homePhoneNumber = text;
-                      },
-                    ),
+                    child: GestureDetector(
+                      child: Container(
+
+                        child: TextFormField(
+                          initialValue: list.homePhoneNumber!=null?list.homePhoneNumber:"",
+                          textAlignVertical: TextAlignVertical.center,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                          inputFormatters:[FilteringTextInputFormatter.digitsOnly],
+                          decoration: InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
+
+                              ),
+                              border: new UnderlineInputBorder(
+                                  borderSide: new BorderSide(color: Colors.black12)),
+                              hintText: "Enter Phone No",
+
+                              hintStyle: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: AppConstants.TEXT_BACKGROUND_COLOR,
+
+
+                              ),
+                              focusColor: AppConstants.APP_THEME_COLOR,
+
+                                  ),
+                          onChanged: (text){
+                           list.homePhoneNumber=text;
+                          },
+                        ),
+                      ),
+                    )
                   ),
                 ],
               ),
@@ -239,7 +266,8 @@ class AddNewTravel2State extends State<AddNewTravel2> {
             ),
             SizedBox(height: 10),
             Container(
-              child: TextField(
+              child: TextFormField(
+                initialValue: list.remark!=null?list.remark:"",
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.done,
                 maxLines: 7,
@@ -326,6 +354,8 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   onPressed: () {
+
+                    list=SetDependentList(list);
                     list.isTravelMultiCity = false;
                     list.isTravelMultiCountry = false;
                     list.createdBy = list.empEmail;
@@ -361,7 +391,26 @@ class AddNewTravel2State extends State<AddNewTravel2> {
   }
 
 
+SetDependentList(TravelReqPayLoad list){
+  DependentData dependentData;
+  for(int i=0;i<list.travelCity.length;i++){
 
+    for(int j=0;j<list.travelCity[i].myDependentList.length;j++){
+
+
+      if(list.travelCity[i].myDependentList[j].isSelected){
+        dependentData= new DependentData(dependentName:list.travelCity[i].myDependentList[j].name,dependentRelation: list.travelCity[i].myDependentList[j].relationship,reqId: "0");
+
+        list.travelCity[i].dependentData.add(dependentData );
+        dependentData=null;
+
+      }
+
+    }
+
+  }
+  return list;
+}
 
 
 

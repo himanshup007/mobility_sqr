@@ -329,7 +329,13 @@ class TravelCity {
   List<PostLocationData> _postLocationList;
   List<SecondDependentData> _myDependentList;
   SearchList _toCountryData ;
+  bool _hasVisa;
 
+  bool get hasVisa => _hasVisa;
+
+  set hasVisa(bool value) {
+    _hasVisa = value;
+  }
 
   SearchList get toCountryData => _toCountryData;
 
@@ -365,6 +371,7 @@ class TravelCity {
       {String TransportCost,
         SearchList toCountryData,
       List<SecondDependentData> myDependentList,
+        bool hasVisa,
       PostLocationData postLocationData,
       List<PostLocationData> postLocationList,
       List<PurposeData> purposeList,
@@ -401,6 +408,7 @@ class TravelCity {
       bool isDependent,
       String perDiemValue,
       List<DependentData> dependentData}) {
+    this._hasVisa=hasVisa;
     this._toCountryData=toCountryData;
     this._transportCost = TransportCost;
     this._perDiamValue = perDiemValue;

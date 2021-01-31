@@ -21,6 +21,7 @@ import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
 import 'package:mobility_sqr/Screens/Dashboard/AddAgenda.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/purpose_bloc.dart';
@@ -61,32 +62,38 @@ class _AddCity extends State<AddCity> {
   TextEditingController ProjectTextController;
   TravelReqPayLoad req_data = TravelReqPayLoad();
   BuildContext purposecontext;
-
+  UserInfo   info;
   ApiProvider _appApiProvider = ApiProvider();
   final _listview_controller = ScrollController();
-
+  var HomeCountryName;
+  final todays_date =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toIso8601String();
 
   bool dependentEyeBtn = false;
 
   final ItemPositionsListener itemPositionsListener =
-  ItemPositionsListener.create();
+      ItemPositionsListener.create();
+  final _userInfo = TokenGetter();
 
   @override
   void initState() {
     super.initState();
 
-
     ProjectTextController = new TextEditingController();
     getDialCode();
     initalizeValues();
     scrolltotop();
+    getvalues();
   }
 
   getDialCode() async {
     var _TokenGetter = TokenGetter();
     dialCode = await _TokenGetter.readDialCode() ?? "";
   }
-
+getvalues() async {
+     info = await _userInfo.readUserInfo() ?? null;
+   HomeCountryName = info.data.home;
+}
   initalizeValues() {
     showHide data;
     req_data.isBillable = true;
@@ -102,7 +109,9 @@ class _AddCity extends State<AddCity> {
     modelClass.travellingCountry = "";
     modelClass.destinationCity = "";
     modelClass.sourceCity = "";
-    modelClass.departureDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toString();
+    modelClass.departureDate =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .toIso8601String();
     modelClass.returnDate = "";
     modelClass.isClientLocation = false.toString();
     modelClass.accmodationStartDate = modelClass.departureDate;
@@ -120,30 +129,6 @@ class _AddCity extends State<AddCity> {
     req_data.haveLaptop = false;
     req_data.travelReqId = "";
     traveldata[index].dependentData = [];
-
-    TravelVisa visa = new TravelVisa();
-    visa.reqId = "0";
-    visa.projectId = "1001";
-    visa.projectName = "3M Lights on support";
-    visa.isBillable = true;
-    visa.fromCity = "United States";
-    visa.toCity = "United States";
-    visa.travelStartDate = "2021-01-08T06:52:36.397Z";
-    visa.travelEndDate = "2021-01-27T18:30:00.000Z";
-    visa.visaPurpose = "19";
-
-    visa.appliedVisa = "Work";
-    visa.requestNotes = "";
-    visa.visaStatus = "1";
-    visa.empEmail = "Emp112";
-    visa.organization = "ORG150866";
-    visa.visaReqId = "";
-    visa.isDependent = true;
-    visa.dependentRelation = "SP";
-    visa.dependentName = "test9";
-    visa.country = "231";
-    visa.createdBy = "Emp112";
-    req_data.travelVisa = [visa];
   }
 
   manageColor(bool show) {
@@ -153,20 +138,17 @@ class _AddCity extends State<AddCity> {
       return Colors.grey;
     }
   }
-  removeCityReq(){
 
-
+  removeCityReq() {
     traveldata.removeAt(index);
     userdetails.removeAt(index);
-index=index-1;
+    index = index - 1;
 
-itemScrollController.scrollTo(
-    index: userdetails.length - 1,
-    duration: Duration(milliseconds: 400),
-    curve: Curves.easeInOutCubic);
-    for (int i = 0;
-    i < userdetails.length;
-    i++) {
+    itemScrollController.scrollTo(
+        index: userdetails.length - 1,
+        duration: Duration(milliseconds: 400),
+        curve: Curves.easeInOutCubic);
+    for (int i = 0; i < userdetails.length; i++) {
       if (i == userdetails.length - 1) {
         userdetails[i].hide = false;
       } else {
@@ -176,7 +158,7 @@ itemScrollController.scrollTo(
 
     this.setState(() {
       userdetails = userdetails;
-      traveldata=traveldata;
+      traveldata = traveldata;
     });
     positionsView();
   }
@@ -195,11 +177,20 @@ itemScrollController.scrollTo(
     modelClass.destinationCity = "";
     modelClass.sourceCity = "";
     modelClass.hide = index;
-    modelClass.departureDate = traveldata[index-1].returnDate==null?DateTime.now().toString():traveldata[index-1].returnDate;
+    modelClass.departureDate = traveldata[index - 1].returnDate == ""
+        ? DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .toIso8601String()
+        : traveldata[index - 1].returnDate;
 
-    if(traveldata.length>=2){
-      modelClass.departureDate=traveldata[index-1].departureDate==null?DateTime.now().toString():traveldata[index-1].departureDate;
+    if (traveldata.length >= 2) {
+      modelClass.departureDate = traveldata[index - 1].departureDate == null
+          ? DateTime(
+                  DateTime.now().year, DateTime.now().month, DateTime.now().day)
+              .toIso8601String()
+          : traveldata[index - 1].departureDate;
     }
+
     modelClass.returnDate = "";
     modelClass.accmodationStartDate = modelClass.departureDate;
     modelClass.accmodationEndDate = "";
@@ -486,11 +477,9 @@ itemScrollController.scrollTo(
                                               purposecontext)
                                           .add(ResetBloc());
                                     }
-                                  } else if(string == 'Delete'){
-
+                                  } else if (string == 'Delete') {
                                     removeCityReq();
-                                  }
-                                  else{}
+                                  } else {}
                                 },
                                 itemBuilder: (BuildContext context) {
                                   return {'Add City', 'Delete'}
@@ -665,11 +654,8 @@ itemScrollController.scrollTo(
                                                                     .toCountryData
                                                                     .countryName)
                                                             .then((value) =>
-
-
-                                                       SaveCostData(value)
-
-                                                        );
+                                                                SaveCostData(
+                                                                    value));
                                                       }
                                                     },
                                                   ),
@@ -685,52 +671,204 @@ itemScrollController.scrollTo(
                                         Expanded(
                                           flex: 1,
                                           child: CustomColumnEditText(
-                                            "Select Date",
-                                            "${getDepartureDate(traveldata[index].departureDate)}",
-                                            "${getDepatureDay(traveldata[index].departureDate)}",
-                                            "Departure",
-                                            2,
-                                            false,
-                                            onTap: () {
+                                              "Select Date",
+                                              "${getDepartureDate(traveldata[index].departureDate)}",
+                                              "${getDepatureDay(traveldata[index].departureDate)}",
+                                              "Departure",
+                                              2,
+                                              false, onTap: () {
+                                            if (index == 0) {
                                               selectDate(
                                                   context,
+                                                  DateTime.parse(todays_date),
+                                                  DateTime(2100),
                                                   DateTime.parse(
                                                       traveldata[index]
                                                           .departureDate),
-                                                  DateTime(2100),
                                                   datevalue: (data) {
                                                 this.setState(() {
                                                   traveldata[index]
                                                       .departureDate = data;
                                                 });
 
-                                                if(traveldata.length>1){
-                                                  try{
-                                                    for(int i=index;i<traveldata.length;i++){
+                                                try {
+                                                  final differenceInTravelDates =
+                                                      DateTime.parse(traveldata[
+                                                                  index + 1]
+                                                              .departureDate)
+                                                          .difference(DateTime
+                                                              .parse(traveldata[
+                                                                      index]
+                                                                  .departureDate))
+                                                          .inDays;
+
+                                                  if (differenceInTravelDates <
+                                                      0) {
+                                                    for (int i = index;
+                                                        i < traveldata.length;
+                                                        i++) {
+                                                      if (i + 1 !=
+                                                          traveldata.length) {
+                                                        this.setState(() {
+                                                          traveldata[i + 1]
+                                                                  .departureDate =
+                                                              traveldata[i]
+                                                                  .departureDate;
+                                                        });
+                                                      }
+                                                    }
+                                                  }
+                                                } catch (e) {}
+                                                try {
+                                                  final diffrencedepature =
+                                                      DateTime.parse(
+                                                              traveldata[index]
+                                                                  .returnDate)
+                                                          .difference(DateTime
+                                                              .parse(traveldata[
+                                                                      index]
+                                                                  .departureDate))
+                                                          .inDays;
+
+                                                  if (diffrencedepature < 0) {
+                                                    this.setState(() {
+                                                      traveldata[index]
+                                                              .returnDate =
+                                                          traveldata[index]
+                                                              .departureDate;
+                                                    });
+                                                  }
+                                                } catch (e) {}
+                                                // try {
+                                                //   final differenceInAccomodation =
+                                                //       DateTime.parse(traveldata[
+                                                //                   index]
+                                                //               .accmodationStartDate)
+                                                //           .difference(DateTime
+                                                //               .parse(traveldata[
+                                                //                       index]
+                                                //                   .departureDate))
+                                                //           .inDays;
+                                                //
+                                                //   if (differenceInAccomodation <
+                                                //       0) {
+                                                //     this.setState(() {
+                                                //       traveldata[index]
+                                                //               .accmodationStartDate =
+                                                //           traveldata[index]
+                                                //               .returnDate;
+                                                //     });
+                                                //   }
+                                                // } catch (e) {}
+
+                                                try {
+                                                  final differenceInAccomodation =
+                                                      DateTime.parse(traveldata[
+                                                                  index]
+                                                              .accmodationStartDate)
+                                                          .difference(DateTime
+                                                              .parse(traveldata[
+                                                                      index]
+                                                                  .departureDate))
+                                                          .inDays;
+
+                                                  var myvalue =
+                                                      traveldata[index]
+                                                          .departureDate;
+                                                  if (differenceInAccomodation <
+                                                      0) {
+                                                    for (int i = index;
+                                                        i < traveldata.length;
+                                                        i++) {
                                                       this.setState(() {
-                                                        traveldata[i+1]
-                                                            .departureDate = data;
+                                                        traveldata[i]
+                                                                .accmodationStartDate =
+                                                            myvalue;
+                                                        traveldata[i]
+                                                                .accmodationEndDate =
+                                                            myvalue;
                                                       });
                                                     }
-
-                                                  }catch(e){
-
                                                   }
-
-                                                }
-                                                if(traveldata.length>1){
-                                                  try{
-
-                                                    traveldata[index].accmodationStartDate=data;
-
-                                                  }catch(e){
-
-                                                  }
-                                                }
-
+                                                } catch (e) {}
                                               });
-                                            },
-                                          ),
+                                            } else {
+                                              selectDate(
+                                                  context,
+                                                  DateTime.parse(
+                                                      traveldata[index - 1]
+                                                          .departureDate),
+                                                  DateTime(2100),
+                                                  DateTime.parse(
+                                                      traveldata[index]
+                                                          .departureDate),
+                                                  datevalue: (data) {
+                                                this.setState(() {
+                                                  traveldata[index]
+                                                      .departureDate = data;
+                                                });
+                                                try {
+                                                  final differenceInTravelDates =
+                                                      DateTime.parse(traveldata[
+                                                                  index + 1]
+                                                              .departureDate)
+                                                          .difference(DateTime
+                                                              .parse(traveldata[
+                                                                      index]
+                                                                  .departureDate))
+                                                          .inDays;
+
+                                                  if (differenceInTravelDates <
+                                                      0) {
+                                                    for (int i = index;
+                                                        i < traveldata.length;
+                                                        i++) {
+                                                      if (i + 1 !=
+                                                          traveldata.length) {
+                                                        this.setState(() {
+                                                          traveldata[i + 1]
+                                                                  .departureDate =
+                                                              traveldata[i]
+                                                                  .departureDate;
+                                                        });
+                                                      }
+                                                    }
+                                                  }
+                                                } catch (e) {}
+
+                                                try {
+                                                  final differenceInAccomodation =
+                                                      DateTime.parse(traveldata[
+                                                                  index]
+                                                              .accmodationStartDate)
+                                                          .difference(DateTime
+                                                              .parse(traveldata[
+                                                                      index]
+                                                                  .departureDate))
+                                                          .inDays;
+
+                                                  var myvalue =
+                                                      traveldata[index]
+                                                          .departureDate;
+                                                  if (differenceInAccomodation <
+                                                      0) {
+                                                    for (int i = index;
+                                                        i < traveldata.length;
+                                                        i++) {
+                                                      this.setState(() {
+                                                        traveldata[i]
+                                                                .accmodationStartDate =
+                                                            myvalue;
+                                                        traveldata[i]
+                                                                .accmodationEndDate =
+                                                            myvalue;
+                                                      });
+                                                    }
+                                                  }
+                                                } catch (e) {}
+                                              });
+                                            }
+                                          }),
                                         ),
                                         SizedBox(
                                           width: 20,
@@ -752,10 +890,21 @@ itemScrollController.scrollTo(
                                                             traveldata[index]
                                                                 .departureDate),
                                                         DateTime(2100),
-                                                        datevalue: (data) {
+                                                        traveldata[index]
+                                                                    .returnDate ==
+                                                                ""
+                                                            ? DateTime.parse(
+                                                                traveldata[
+                                                                        index]
+                                                                    .departureDate)
+                                                            : DateTime.parse(
+                                                                traveldata[
+                                                                        index]
+                                                                    .returnDate),
+                                                        datevalue: (date) {
                                                       this.setState(() {
                                                         traveldata[index]
-                                                            .returnDate = data;
+                                                            .returnDate = date;
                                                       });
                                                     });
                                                   },
@@ -795,6 +944,7 @@ itemScrollController.scrollTo(
                                                             "list": travelList
                                                           });
                                                       print(purposelist);
+
                                                       bool iswork =
                                                           Check_visa_category(
                                                               purposelist);
@@ -1013,12 +1163,21 @@ itemScrollController.scrollTo(
                                                           alignment: Alignment
                                                               .centerLeft,
                                                         ),
-                                                        SizedBox(height: 40,),
+                                                        SizedBox(
+                                                          height: 40,
+                                                        ),
                                                         Container(
-                                                          margin: EdgeInsets.symmetric(horizontal: 10),
-                                                          child: (
-                                                            Text("${CheckVisaNote(traveldata[0].departureDate,traveldata[index].visaExpiryDate)}",style: TextStyle(color: Colors.red,fontSize: 18),)
-                                                          ),
+                                                          margin: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      10),
+                                                          child: (Text(
+                                                            "${CheckVisaNote(traveldata[index].departureDate, traveldata[index].visaExpiryDate)}",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 18),
+                                                          )),
                                                         )
                                                       ],
                                                     ),
@@ -1119,10 +1278,25 @@ itemScrollController.scrollTo(
                                                   onTap: () {
                                                     selectDate(
                                                         context,
-                                                        DateTime.parse(traveldata[
-                                                                index]
-                                                            .accmodationStartDate),
-                                                        DateTime(2100),
+                                                        DateTime.parse(
+                                                            traveldata[index]
+                                                                .departureDate),
+                                                        index == 0
+                                                            ? DateTime.parse(
+                                                                traveldata[index]
+                                                                    .returnDate)
+                                                            : accodomoationlastDateLogic(
+                                                                index,
+                                                                traveldata),
+                                                        traveldata[index]
+                                                                    .accmodationStartDate ==
+                                                                ""
+                                                            ? DateTime.parse(
+                                                                traveldata[index]
+                                                                    .departureDate)
+                                                            : DateTime.parse(
+                                                                traveldata[index]
+                                                                    .accmodationStartDate),
                                                         datevalue: (date) {
                                                       this.setState(() {
                                                         traveldata[index]
@@ -1154,9 +1328,19 @@ itemScrollController.scrollTo(
                                                         DateTime.parse(
                                                             accomodationLogic(
                                                                 traveldata,
+                                                                traveldata[index]
+                                                                    .returnDate,
+                                                                index)),
+                                                        traveldata[index]
+                                                                    .accmodationEndDate ==
+                                                                ""
+                                                            ? DateTime.parse(
+                                                                traveldata[index]
+                                                                    .accmodationStartDate)
+                                                            : DateTime.parse(
                                                                 traveldata[
                                                                         index]
-                                                                    .returnDate,index)),
+                                                                    .accmodationEndDate),
                                                         datevalue: (text) {
                                                       this.setState(() {
                                                         traveldata[index]
@@ -1189,19 +1373,21 @@ itemScrollController.scrollTo(
                                           ),
                                           flex: 4,
                                         ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            height: 10,
-                                            child: CircularCheckBox(
-                                              value: check_tick_mark(
-                                                  traveldata[index].agenda),
-                                              checkColor: Colors.white,
-                                              activeColor: Colors.green,
-                                              onChanged: (bool value) {},
-                                            ),
-                                          ),
-                                        ),
+                                        check_tick_mark(
+                                                traveldata[index].agenda)
+                                            ? Expanded(
+                                                flex: 1,
+                                                child: Container(
+                                                  height: 10,
+                                                  child: CircularCheckBox(
+                                                    value: true,
+                                                    checkColor: Colors.white,
+                                                    activeColor: Colors.green,
+                                                    onChanged: (bool value) {},
+                                                  ),
+                                                ),
+                                              )
+                                            : Expanded(child: SizedBox()),
                                         Expanded(
                                           child: customBorderBox(
                                               "Agenda", false, Icons.add,
@@ -1431,8 +1617,10 @@ itemScrollController.scrollTo(
                                                   Icons.arrow_drop_down_sharp,
                                                   2,
                                                   onChange: (text) {
-                                                    traveldata[index]
-                                                        .clientName = text;
+                                                    this.setState(() {
+                                                      traveldata[index]
+                                                          .clientName = text;
+                                                    });
                                                   },
                                                 ),
                                                 DashboardCustomEditField(
@@ -1441,8 +1629,10 @@ itemScrollController.scrollTo(
                                                   Icons.arrow_drop_down_sharp,
                                                   2,
                                                   onChange: (text) {
-                                                    traveldata[index]
-                                                        .clientAddress = text;
+                                                    this.setState(() {
+                                                      traveldata[index]
+                                                          .clientAddress = text;
+                                                    });
                                                   },
                                                 ),
                                                 Container(
@@ -1526,9 +1716,11 @@ itemScrollController.scrollTo(
                                                           Icons.ac_unit,
                                                           1,
                                                           onChange: (text) {
-                                                            traveldata[index]
-                                                                    .clientNumber =
-                                                                text;
+                                                            this.setState(() {
+                                                              traveldata[index]
+                                                                      .clientNumber =
+                                                                  text;
+                                                            });
                                                           },
                                                         ),
                                                       ),
@@ -1542,146 +1734,166 @@ itemScrollController.scrollTo(
                                       margin:
                                           EdgeInsets.only(top: 5, bottom: 10),
                                       padding: EdgeInsets.all(5),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
+                                      child: traveldata[index].travelPurpose !=
+                                                  null &&
+                                              traveldata[index].travelPurpose ==
+                                                  "Work"
+                                          ? Row(
                                               children: [
-                                                Text(
-                                                  "Travelling with dependent(s)?",
-                                                  style:
-                                                      TextStyle(fontSize: 15),
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Travelling with dependent(s)?",
+                                                        style: TextStyle(
+                                                            fontSize: 15),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          var dependantList =
+                                                              traveldata[index]
+                                                                  .myDependentList;
+                                                          if (checkSelectedDependents(
+                                                              dependantList)) {
+                                                            if (dependantList !=
+                                                                null) {
+                                                              dynamic
+                                                                  Dependents =
+                                                                  await Navigator.pushNamed(
+                                                                      context,
+                                                                      '/Dependents',
+                                                                      arguments: {
+                                                                    "list":
+                                                                        dependantList
+                                                                  });
+                                                              this.setState(() {
+                                                                traveldata[index]
+                                                                        .isDependent =
+                                                                    checkSelectedDependents(
+                                                                        Dependents);
+                                                              });
+                                                            }
+                                                          } else {}
+                                                        },
+                                                        child: Icon(
+                                                          Icons
+                                                              .remove_red_eye_outlined,
+                                                          size: 25,
+                                                          color: traveldata[index]
+                                                                          .myDependentList !=
+                                                                      null &&
+                                                                  checkSelectedDependents(
+                                                                      traveldata[
+                                                                              index]
+                                                                          .myDependentList)
+                                                              ? AppConstants
+                                                                  .APP_THEME_COLOR
+                                                              : Colors.black12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  flex: 12,
                                                 ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    var dependantList =
-                                                        traveldata[index]
-                                                            .myDependentList;
-                                                    if (checkSelectedDependents(
-                                                        dependantList)) {
-                                                      if (dependantList !=
-                                                          null) {
-                                                        dynamic Dependents =
-                                                            await Navigator
-                                                                .pushNamed(
-                                                                    context,
-                                                                    '/Dependents',
-                                                                    arguments: {
-                                                              "list":
-                                                                  dependantList
-                                                            });
+                                                Expanded(
+                                                  child: SizedBox(),
+                                                ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: 4),
+                                                    child: CustomFlutterSwitch(
+                                                      height: 25.0,
+                                                      width: 20.0,
+                                                      padding: 2.0,
+                                                      toggleSize: 20.0,
+                                                      borderRadius: 12.0,
+                                                      inactiveColor:
+                                                          Colors.grey,
+                                                      disabled: traveldata[
+                                                                          index]
+                                                                      .myDependentList ==
+                                                                  null ||
+                                                              traveldata[index]
+                                                                      .travelPurpose ==
+                                                                  null ||
+                                                              traveldata[index]
+                                                                      .travelPurpose
+                                                                      .toLowerCase() ==
+                                                                  "business"
+                                                          ? true
+                                                          : false,
+                                                      activeColor: AppConstants
+                                                          .APP_THEME_COLOR,
+                                                      value: traveldata[index]
+                                                          .isDependent,
+                                                      ondisabled: (va) {
+                                                        if (va) {
+                                                          scrolltotop();
+                                                          if (traveldata[index]
+                                                                  .travelPurpose ==
+                                                              null) {
+                                                            showDefaultSnackbar(
+                                                                context,
+                                                                "Please select Select Purpose of Travel");
+                                                          } else {
+                                                            showDefaultSnackbar(
+                                                                context,
+                                                                "Please select destination Point");
+                                                          }
+                                                        }
+                                                      },
+                                                      onToggle: (value) async {
+                                                        scrolltobottom();
+
                                                         this.setState(() {
                                                           traveldata[index]
                                                                   .isDependent =
-                                                              checkSelectedDependents(
-                                                                  Dependents);
+                                                              !traveldata[index]
+                                                                  .isDependent;
                                                         });
-                                                      }
-                                                    } else {}
-                                                  },
-                                                  child: Icon(
-                                                    Icons
-                                                        .remove_red_eye_outlined,
-                                                    size: 25,
-                                                    color: traveldata[index]
-                                                                    .myDependentList !=
-                                                                null &&
-                                                            checkSelectedDependents(
-                                                                traveldata[
-                                                                        index]
-                                                                    .myDependentList)
-                                                        ? AppConstants
-                                                            .APP_THEME_COLOR
-                                                        : Colors.black12,
+
+                                                        var dependantList =
+                                                            traveldata[index]
+                                                                .myDependentList;
+
+                                                        if (traveldata[index]
+                                                            .isDependent) {
+                                                          if (dependantList !=
+                                                              null) {
+                                                            dynamic Dependents =
+                                                                await Navigator
+                                                                    .pushNamed(
+                                                                        context,
+                                                                        '/Dependents',
+                                                                        arguments: {
+                                                                  "list":
+                                                                      dependantList
+                                                                });
+
+                                                            this.setState(() {
+                                                              traveldata[index]
+                                                                      .isDependent =
+                                                                  checkSelectedDependents(
+                                                                      Dependents);
+                                                            });
+                                                          }
+                                                        } else {
+                                                          traveldata[index]
+                                                                  .myDependentList =
+                                                              resetSelectedDependents(
+                                                                  traveldata[
+                                                                          index]
+                                                                      .myDependentList);
+                                                        }
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
                                               ],
-                                            ),
-                                            flex: 12,
-                                          ),
-                                          Expanded(
-                                            child: SizedBox(),
-                                          ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: Container(
-                                              margin: EdgeInsets.only(right: 4),
-                                              child: CustomFlutterSwitch(
-                                                height: 25.0,
-                                                width: 20.0,
-                                                padding: 2.0,
-                                                toggleSize: 20.0,
-                                                borderRadius: 12.0,
-                                                inactiveColor: Colors.grey,
-                                                disabled: traveldata[index]
-                                                            .myDependentList ==
-                                                        null||traveldata[index].travelPurpose==null||traveldata[index].travelPurpose.toLowerCase()=="business"
-                                                    ? true
-                                                    : false,
-                                                activeColor: AppConstants
-                                                    .APP_THEME_COLOR,
-                                                value: traveldata[index]
-                                                    .isDependent,
-                                                ondisabled: (va) {
-                                                  if (va) {
-                                                    scrolltotop();
-                                                    if(traveldata[index].travelPurpose==null){
-                                                      showDefaultSnackbar(context,
-                                                          "Please select Select Purpose of Travel");
-                                                    }else{
-                                                      showDefaultSnackbar(context,
-                                                          "Please select destination Point");
-                                                    }
-
-                                                  }
-                                                },
-                                                onToggle: (value) async {
-                                                  scrolltobottom();
-
-                                                  this.setState(() {
-                                                    traveldata[index]
-                                                            .isDependent =
-                                                        !traveldata[index]
-                                                            .isDependent;
-                                                  });
-
-                                                  var dependantList =
-                                                      traveldata[index]
-                                                          .myDependentList;
-
-                                                  if (traveldata[index]
-                                                      .isDependent) {
-                                                    if (dependantList != null) {
-                                                      dynamic Dependents =
-                                                          await Navigator
-                                                              .pushNamed(
-                                                                  context,
-                                                                  '/Dependents',
-                                                                  arguments: {
-                                                            "list":
-                                                                dependantList
-                                                          });
-
-                                                      this.setState(() {
-                                                        traveldata[index]
-                                                                .isDependent =
-                                                            checkSelectedDependents(
-                                                                Dependents);
-                                                      });
-                                                    }
-                                                  } else {
-                                                    traveldata[index]
-                                                            .myDependentList =
-                                                        resetSelectedDependents(
-                                                            traveldata[index]
-                                                                .myDependentList);
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                            )
+                                          : SizedBox(),
                                     ),
                                   ],
                                 ),
@@ -1710,10 +1922,15 @@ itemScrollController.scrollTo(
                     req_data.travelCity = traveldata;
                     if (Validator(req_data)) {
                       if (req_data != null) {
+                        req_data.travelVisa=[];
+
+                       req_data.travelVisa.addAll(GenerateVisa(req_data,info,HomeCountryName));
                         CostValueSetter(req_data);
-                 await Navigator.pushNamed(
-                            context, '/AddNewTravel2',
-                            arguments: {"list": req_data,"perDiem":perDiemModel});
+                        await Navigator.pushNamed(context, '/AddNewTravel2',
+                            arguments: {
+                              "list": req_data,
+                              "perDiem": perDiemModel
+                            });
                       }
                     } else {
                       showDefaultSnackbar(
@@ -1731,24 +1948,18 @@ itemScrollController.scrollTo(
         ),
       ),
     );
-
-
-
   }
 
- positionsView () {
-   ValueListenableBuilder<Iterable<ItemPosition>>(
-     valueListenable: itemPositionsListener.itemPositions,
-     builder: (context, positions, child) {
-       int min;
-       int max;
-       if (positions.isNotEmpty) {
-
-
-       }
-     },
-   );
- }
+  positionsView() {
+    ValueListenableBuilder<Iterable<ItemPosition>>(
+      valueListenable: itemPositionsListener.itemPositions,
+      builder: (context, positions, child) {
+        int min;
+        int max;
+        if (positions.isNotEmpty) {}
+      },
+    );
+  }
 
   getValue(value) {
     if (value == 'true') {
@@ -1757,26 +1968,23 @@ itemScrollController.scrollTo(
       return 1;
     }
   }
+
   CostValueSetter(TravelReqPayLoad ReqBody) {
-
-      for (int index = 0; index < ReqBody.travelCity.length; index++) {
-        SetValueInital(ReqBody, index);
-      }
-
-
+    for (int index = 0; index < ReqBody.travelCity.length; index++) {
+      SetValueInital(ReqBody, index);
+    }
   }
 
   SetValueInital(TravelReqPayLoad list, int index) {
-
     var transportvalue = list.travelCity[index].transportCost;
     DateTime dateStart;
     DateTime dateEnd;
-    if(index>0){
-       dateStart = DateTime.parse('${list.travelCity[index-1].departureDate}');
-       dateEnd = DateTime.parse('${list.travelCity[index].departureDate}');
-    }else{
-       dateStart = DateTime.parse('${list.travelCity[index].departureDate}');
-       dateEnd = DateTime.parse('${list.travelCity[index].returnDate}');
+    if (index > 0) {
+      dateStart = DateTime.parse('${list.travelCity[index - 1].departureDate}');
+      dateEnd = DateTime.parse('${list.travelCity[index].departureDate}');
+    } else {
+      dateStart = DateTime.parse('${list.travelCity[index].departureDate}');
+      dateEnd = DateTime.parse('${list.travelCity[index].returnDate}');
     }
 
     final differenceInTravelDates = dateEnd.difference(dateStart).inDays;
@@ -1791,40 +1999,40 @@ itemScrollController.scrollTo(
         (double.parse(perDiemValue) * differenceInTravelDates)
             .toStringAsFixed(2);
 
-
     if (list.travelCity[index].isAccmodationRequired) {
-
       DateTime accomationStart =
-      DateTime.parse('${list.travelCity[index].accmodationStartDate}');
+          DateTime.parse('${list.travelCity[index].accmodationStartDate}');
       DateTime accomationEnd =
-      DateTime.parse('${list.travelCity[index].accmodationEndDate}');
-      final difference = accomationEnd
-          .difference(accomationStart)
-          .inDays;
+          DateTime.parse('${list.travelCity[index].accmodationEndDate}');
+      final difference = accomationEnd.difference(accomationStart).inDays;
       final value =
-      (double.parse(perDiemValue) * difference).toStringAsFixed(2);
+          (double.parse(perDiemValue) * difference).toStringAsFixed(2);
 
       list.travelCity[index].hotelCost = value;
     } else {
       list.travelCity[index].hotelCost = " ";
     }
 
-    if(list.travelCity[index].hotelCost==" "){
-      list.travelCity[index].totalCost =(double.parse(list.travelCity[index].perDiemCost)+double.parse(list.travelCity[index].transportCost)).toStringAsFixed(2);
-
+    if (list.travelCity[index].hotelCost == " ") {
+      list.travelCity[index].totalCost =
+          (double.parse(list.travelCity[index].perDiemCost) +
+                  double.parse(list.travelCity[index].transportCost))
+              .toStringAsFixed(2);
+    } else {
+      list.travelCity[index].totalCost =
+          (double.parse(list.travelCity[index].perDiemCost) +
+                  double.parse(list.travelCity[index].hotelCost) +
+                  double.parse(list.travelCity[index].transportCost))
+              .toStringAsFixed(2);
     }
-    else{
-      list.travelCity[index].totalCost =(double.parse(list.travelCity[index].perDiemCost)+double.parse(list.travelCity[index].hotelCost)+double.parse(list.travelCity[index].transportCost)).toStringAsFixed(2);
+  }
 
-    }
-
-    }
-  Future<Null> selectDate(
-      BuildContext context, DateTime inital_date, DateTime end_date,
+  Future<Null> selectDate(BuildContext context, DateTime first_date,
+      DateTime end_date, DateTime initalDate,
       {Function(String) datevalue}) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: inital_date,
+        initialDate: initalDate,
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light().copyWith(
@@ -1838,10 +2046,10 @@ itemScrollController.scrollTo(
             child: child,
           );
         },
-        firstDate: inital_date,
+        firstDate: first_date,
         lastDate: end_date);
     if (picked != null) {
-      datevalue(picked.toIso8601String());
+      datevalue(picked.toUtc().toIso8601String());
     }
   }
 
@@ -1909,6 +2117,7 @@ itemScrollController.scrollTo(
       this.setState(() {
         traveldata[index].visaNumber = data.data[0].documentNumber;
         traveldata[index].visaExpiryDate = data.data[0].expirationDate;
+        traveldata[index].hasVisa = data.status;
       });
     } else {
       this.setState(() {
@@ -1951,43 +2160,48 @@ itemScrollController.scrollTo(
       //     cityTravel.travellingCountryTo.isEmpty) {
       //   return false;
       // }
-      else if (cityTravel.hostHrName == null ||
-          cityTravel.hostHrName.isEmpty) {
+
+      if (cityTravel.hostHrName == null || cityTravel.hostHrName.isEmpty) {
         return false;
-      }
-      else if (cityTravel.hostPhoneExt == null ||
+      } else if (cityTravel.hostPhoneExt == null ||
           cityTravel.hostPhoneExt.isEmpty ||
           cityTravel.hostPhoneNo.isEmpty) {
         return false;
-      } else if (cityTravel.officeLocation == null ||
-          cityTravel.officeLocation.isEmpty) {
-        return false;
+      } else if (cityTravel.isClientLocation != null &&
+          getvaluefromstringbool(cityTravel.isClientLocation)) {
+        if (cityTravel.clientName == null && cityTravel.clientName.isEmpty) {
+          return false;
+        }
+      } else {
+        if (cityTravel.officeLocation == null ||
+            cityTravel.officeLocation.isEmpty) {
+          return false;
+        }
       }
     }
 
     return true;
   }
 
-  accomodationLogic(List<TravelCity> travel_list, String date,int index) {
-    if(travel_list.length==1){
+  getvaluefromstringbool(value) {
+    if (value == "true") {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
+  accomodationLogic(List<TravelCity> travel_list, String date, int index) {
+    if (travel_list.length == 1) {
       return travel_list[index].returnDate;
     }
-    if(travel_list.length-1==index){
+    if (travel_list.length - 1 == index) {
       return travel_list[index].departureDate;
-    }
-   else if(travel_list.length>1){
-
-
-        return travel_list[index+1].departureDate;
-
-
-    }
-    else {
-
+    } else if (travel_list.length > 1) {
+      return travel_list[index + 1].departureDate;
+    } else {
       return date;
     }
-
   }
 
   SaveCostData(PerDiemModel value) {
@@ -1995,31 +2209,112 @@ itemScrollController.scrollTo(
     traveldata[index].perDiamValue = value.perDiem;
     traveldata[index].transportCost = value.transportation;
     traveldata[index].currency = value.currency;
-    traveldata[index].hotelCost=value.accommodationLimit;
-
+    traveldata[index].hotelCost = value.accommodationLimit;
   }
 
   CheckVisaNote(String req_data, String visaExpiryDate) {
-
-
-    final differenceInTravelDates = DateTime.parse(visaExpiryDate).difference(DateTime.parse(req_data)).inDays;
-    if(differenceInTravelDates<0){
-
+    final differenceInTravelDates = DateTime.parse(visaExpiryDate)
+        .difference(DateTime.parse(req_data))
+        .inDays;
+    if (differenceInTravelDates < 0) {
       return "*The selected visa is not valid for this travel. Please apply for new visa";
+    } else {
+      return " ";
+    }
+  }
+}
 
-    }else{
-return" ";
+returnBillableValue(bool isBillable) {
+  if (isBillable) {
+    return 1;
+  } else {
+    return 2;
+  }
+}
+
+accodomoationlastDateLogic(index, List<TravelCity> traveldata) {
+  if (index != traveldata.length - 1) {
+    return DateTime.parse(traveldata[index + 1].departureDate);
+  } else {
+    return DateTime.parse(traveldata[index].departureDate);
+  }
+}
+
+GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
+  bool isHomeCountry = false;
+
+
+  List<TravelVisa> visalist= new List<TravelVisa>();
+  TravelVisa visa;
+  for (int i = 0; i < mydata.travelCity.length; i++) {
+    if (homeCountryName.trim().toLowerCase() ==
+        mydata.travelCity[i].travellingCountryTo.trim().toLowerCase()) {
+      isHomeCountry = true;
+    }
+    if(!isHomeCountry){
+      if (mydata.travelCity[i].hasVisa==null||mydata.travelCity[i].hasVisa||checkVisaApplicable(mydata.travelCity[i].departureDate,
+          mydata.travelCity[i].visaExpiryDate)) {
+
+  visa= new TravelVisa();
+        visa.reqId = "0";
+        visa.projectId = mydata.project;
+        visa.projectName = mydata.projectName;
+        visa.isBillable = mydata.isBillable;
+        visa.fromCity = mydata.travelCity[i].travellingCountry;
+        visa.toCity = mydata.travelCity[i].travellingCountryTo;
+        visa.travelStartDate =  DateTime.parse(mydata.travelCity[i].departureDate).toUtc().toIso8601String();
+        if(i==0){
+          visa.travelEndDate = DateTime.parse(mydata.travelCity[i].returnDate).toUtc().toIso8601String();
+        }else if(i!=mydata.travelCity.length-1){
+          visa.travelEndDate=DateTime.parse(mydata.travelCity[i+1].departureDate).toUtc().toIso8601String();
+        }
+        else{
+          visa.travelEndDate=DateTime.parse(mydata.travelCity[1].departureDate).toUtc().toIso8601String();
+        }
+
+        if(mydata.travelCity[i].travelPurpose=="Work"){
+          visa.visaPurpose = "19";
+        }else{
+          visa.visaPurpose = "6";
+        }
+
+
+
+        visa.appliedVisa = mydata.travelCity[i].travelPurpose;
+        visa.requestNotes = "";
+        visa.visaStatus = "1";
+        visa.empEmail = info.data.empCode;
+        visa.organization = info.data.orgId;
+        visa.visaReqId = "";
+        visa.isDependent = false;
+        visa.dependentRelation = "223";
+        visa.dependentName = "23";
+        visa.country ="123";
+        visa.createdBy = info.data.empCode;
+        visalist.add(visa);
+        isHomeCountry=false;
+      } else {
+
+
+      }
     }
 
 
   }
+
+
+  return visalist;
+
+
 }
 
-returnBillableValue(bool isBillable){
-  if(isBillable){
-    return 1;
-  }else{
-    return 2;
+checkVisaApplicable(String depatureDate, String visaExpiryDate) {
+  final differenceInTravelDates = DateTime.parse(visaExpiryDate)
+      .difference(DateTime.parse(depatureDate))
+      .inDays;
+  if (differenceInTravelDates < 0) {
+    return false;
+  } else {
+    return true;
   }
-
 }
