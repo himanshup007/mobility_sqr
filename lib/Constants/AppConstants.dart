@@ -21,6 +21,7 @@ class AppConstants {
   static final String GET_APPROVAL_LIST="/get_travel_request_approver/";
   static final String POST_REQUEST_FOR_APPROVAL="/get_post_approve_travelvisa_request/";
   static final String ACTION_HISTORY_SUMMARY="/get_travel_status_summary/";
+  static final String GET_TRAVEL_REQ_VIEW="/get_view_travel_request/";
 
 
 

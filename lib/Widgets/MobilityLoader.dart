@@ -8,7 +8,7 @@ showMobilityLoader(bool show){
 
     height: 100.0.h,
     width: 100.0.w,
-    color: Colors.transparent,
+    color: Colors.black26,
     child: Center(
       child: LoadingBouncingGrid.circle(
         size: 50,

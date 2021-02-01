@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
+import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/Screens/Approvals/bloc/aprrovals_bloc.dart';
+import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:sizer/sizer.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -18,28 +21,40 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   final Repository repository = Repository();
 
   BuildContext dialogContext;
-  var headertext;
+  var headertext= "Previous Travels";
   var args;
   final GlobalKey loaderkey = GlobalKey<NavigatorState>();
-var where;
+  ApiProvider _appApiProvider = ApiProvider();
+  var where;
+  bool showloader= false;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        args = ModalRoute.of(context).settings.arguments;
+        args = ModalRoute
+            .of(context)
+            .settings
+            .arguments;
       });
-      where = args['where'];
-      headertext=args['header'];
+      try{
+        where = args['where'];
+      }
+      catch(e){
 
+      }
+
+      headertext = args['header'];
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
-    args = ModalRoute.of(context).settings.arguments;
-   final navi=args["where"];
+    args = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
+    final navi = args["where"];
 
 
     return WillPopScope(
@@ -48,7 +63,9 @@ var where;
         appBar: AppBar(
           leading: new IconButton(
               icon: new Icon(Icons.arrow_back),
-              onPressed: (){_onWillPop();}),
+              onPressed: () {
+                _onWillPop();
+              }),
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Colors.white38,
           elevation: 0,
@@ -56,99 +73,119 @@ var where;
               style: TextStyle(color: Colors.black, fontSize: 17.0)),
           centerTitle: true,
         ),
-        body: Container(
-          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: BlocProvider(
-            create: (context) => AprrovalsBloc(repository),
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 15,
-                  child: BlocBuilder<AprrovalsBloc, AprrovalsState>(
-                      builder: (context, state) {
-                        if (state is AprrovalsInitial) {
-                          if(navi==2){
-                            BlocProvider.of<AprrovalsBloc>(context)
-                                .add(Fetch_previous_req());
-                          }else{
-                            BlocProvider.of<AprrovalsBloc>(context)
-                                .add(Fetch_travel_req_approver());
-                          }
+        body: Stack(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: BlocProvider(
+                create: (context) => AprrovalsBloc(repository),
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 15,
+                      child: BlocBuilder<AprrovalsBloc, AprrovalsState>(
+                          builder: (context, state) {
+                            if (state is AprrovalsInitial) {
+                              if (navi == 2) {
+                                BlocProvider.of<AprrovalsBloc>(context)
+                                    .add(Fetch_previous_req());
+                              } else {
+                                BlocProvider.of<AprrovalsBloc>(context)
+                                    .add(Fetch_travel_req_approver());
+                              }
+                            }
+                            if (state is AprrovalsLoading) {}
+                            if (state is AprrovalsError) {
+                              return Center(
+                                child: Text('Oops Something Went Wrong!'),
+                              );
+                            }
+                            if (state is AprrovalsLoaded) {
+                              return AnimationLimiter(
+                                child: ListView.builder(
+                                    shrinkWrap: false,
+                                    itemCount: state.approvalModal.data.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return AnimationConfiguration.staggeredList(
+                                        position: index,
+                                        duration: const Duration(milliseconds: 375),
+                                        child: SlideAnimation(
+                                          horizontalOffset: 50.0,
+                                          child: FadeInAnimation(
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  this.setState(() {
+                                                    showloader=true;
+                                                  });
+                                                  _appApiProvider
+                                                      .fetchViewTravelReq(
+                                                      state.approvalModal
+                                                          .data[index].travelReqId)
+                                                      .then((value) =>
+                                                      this.setState(() {
+                                                        showloader=false;
+                                                        NavigationHandler(value,context,where);
+                                                      })
+                                                    ).catchError((onError)=>
+                                                  this.setState(() {
+                                                    showloader=false;
+                                                  })
+                                                  );
+                                                },
+                                                child: Cell(
+                                                    state.approvalModal.data[index],
+                                                    where)),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              );
+                            }
 
-                        }
-                        if (state is AprrovalsLoading) {}
-                        if (state is AprrovalsError) {
-
-                          return Center(
-                            child: Text('Oops Something Went Wrong!'),
-                          );
-                        }
-                        if (state is AprrovalsLoaded) {
-
-                          return AnimationLimiter(
-                            child: ListView.builder(
-                                shrinkWrap: false,
-                                itemCount: state.approvalModal.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return  AnimationConfiguration.staggeredList(
-                                    position: index,
-                                    duration: const Duration(milliseconds: 375),
-                                    child: SlideAnimation(
-                                     horizontalOffset: 50.0,
-                                      child: FadeInAnimation(
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              Navigator.pushNamed(context, '/TravelReqView',arguments: {"EmployeeData":state.approvalModal.data[index],"where":where});
-                                            },
-                                            child: Cell(state.approvalModal.data[index],where)),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                          );
-                        }
-
-                        return Container(
-                          height: 100.0.h,
-                          width: 100.0.w,
-                          color: Colors.transparent,
-                          child: Center(
-                            child: LoadingBouncingGrid.circle(
-                              size: 50,
-                              backgroundColor: AppConstants.APP_THEME_COLOR,
-                            ),
-                          ),
-                        );
-                      }),
+                            return Container(
+                              height: 100.0.h,
+                              width: 100.0.w,
+                              color: Colors.transparent,
+                              child: Center(
+                                child: LoadingBouncingGrid.circle(
+                                  size: 50,
+                                  backgroundColor: AppConstants.APP_THEME_COLOR,
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+                    // navi==2?Expanded(
+                    //   flex: 1,
+                    //   child: Center(
+                    //     child: Container(
+                    //       width: MediaQuery
+                    //           .of(context)
+                    //           .size
+                    //           .width * 0.95,
+                    //       height: 5.0.h,
+                    //       child: FlatButton(
+                    //         child: Text(
+                    //           'SELECT',
+                    //           style: TextStyle(fontSize: 20.0),
+                    //           textAlign: TextAlign.center,
+                    //         ),
+                    //         textColor: Colors.white,
+                    //         color: AppConstants.APP_THEME_COLOR,
+                    //         shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(10),
+                    //         ),
+                    //         onPressed: () {},
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ):SizedBox(),
+                  ],
                 ),
-                // navi==2?Expanded(
-                //   flex: 1,
-                //   child: Center(
-                //     child: Container(
-                //       width: MediaQuery
-                //           .of(context)
-                //           .size
-                //           .width * 0.95,
-                //       height: 5.0.h,
-                //       child: FlatButton(
-                //         child: Text(
-                //           'SELECT',
-                //           style: TextStyle(fontSize: 20.0),
-                //           textAlign: TextAlign.center,
-                //         ),
-                //         textColor: Colors.white,
-                //         color: AppConstants.APP_THEME_COLOR,
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(10),
-                //         ),
-                //         onPressed: () {},
-                //       ),
-                //     ),
-                //   ),
-                // ):SizedBox(),
-              ],
+              ),
             ),
-          ),
+            showMobilityLoader(showloader)
+          ],
         ),
       ),
     );
@@ -160,6 +197,13 @@ var where;
         '/Dashboard', (Route<dynamic> route) => false);
   }
 }
+  NavigationHandler(GetTravelRequest value,BuildContext context,where) {
+
+
+    Navigator.pushNamed(context, '/TravelReqView',arguments: {"EmployeeData":value.data,"where":where});
+
+  }
+
 
 class Cell extends StatefulWidget {
   Data fact;

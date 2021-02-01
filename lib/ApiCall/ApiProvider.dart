@@ -467,4 +467,30 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
+  Future<GetTravelRequest> fetchViewTravelReq(String TravelReqId) async {
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+    Map<String, String> queryParams = {
+      "travel_req_id": TravelReqId,
+     "org_id": userInfo.data.orgId
+    };
+    String token = await getToken_byReresh();
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_TRAVEL_REQ_VIEW + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      GetTravelRequest myresponse =
+      GetTravelRequest.fromJson(jsonDecode(response.body));
+
+      return myresponse;
+    } else {
+      throw Exception('error');
+    }
+  }
 }

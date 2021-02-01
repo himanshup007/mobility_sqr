@@ -629,6 +629,7 @@ getvalues() async {
                                                             .then((value) =>
                                                                 this.setState(
                                                                     () {
+
                                                                   traveldata[index]
                                                                           .postLocationList =
                                                                       value
@@ -1146,7 +1147,7 @@ getvalues() async {
                                                                         .center,
                                                               ),
                                                               Text(
-                                                                "${traveldata[index].visaExpiryDate}",
+                                                                "${setFormattedDate(traveldata[index].visaExpiryDate)}",
                                                                 style:
                                                                     TextStyle(
                                                                   fontWeight:
@@ -1836,7 +1837,7 @@ getvalues() async {
                                                               null) {
                                                             showDefaultSnackbar(
                                                                 context,
-                                                                "Please select Select Purpose of Travel");
+                                                                "Please select  Purpose of Travel");
                                                           } else {
                                                             showDefaultSnackbar(
                                                                 context,
@@ -2325,4 +2326,10 @@ checkVisaApplicable(String depatureDate, String visaExpiryDate) {
   } else {
     return true;
   }
+}
+
+setFormattedDate(String date) {
+  final depatureDate = DateTime.parse(date).toLocal();
+  final String datestring = DateFormat("dd-MMM-yyyy").format(depatureDate);
+  return datestring;
 }

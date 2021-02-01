@@ -80,8 +80,8 @@ class SecondDependentData {
   Null _column12;
   String _empCode;
   Null _organization;
-  String _empPassport;
-  String _empVisa;
+  EmpPassport _empPassport;
+  dynamic _empVisa;
 
   SecondDependentData(
       {int id,
@@ -125,8 +125,8 @@ class SecondDependentData {
         Null column12,
         String empCode,
         Null organization,
-        String empPassport,
-        String empVisa}) {
+        EmpPassport empPassport,
+        dynamic empVisa}) {
     this._id = id;
     this._isSelected=isSelected;
     this._dateCreated = dateCreated;
@@ -261,10 +261,13 @@ class SecondDependentData {
   set empCode(String empCode) => _empCode = empCode;
   Null get organization => _organization;
   set organization(Null organization) => _organization = organization;
-  String get empPassport => _empPassport;
-  set empPassport(String empPassport) => _empPassport = empPassport;
-  String get empVisa => _empVisa;
-  set empVisa(String empVisa) => _empVisa = empVisa;
+
+
+  EmpPassport get empPassport => _empPassport;
+
+  set empPassport(EmpPassport value) {
+    _empPassport = value;
+  }
 
   SecondDependentData.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -307,8 +310,19 @@ class SecondDependentData {
     _column12 = json['column12'];
     _empCode = json['emp_code'];
     _organization = json['organization'];
-    _empPassport = json['emp_passport'];
-    _empVisa = json['emp_visa'];
+    empPassport = json['emp_passport'] != null
+        ? new EmpPassport.fromJson(json['emp_passport'])
+        : null;
+    if(json['emp_visa']==""){
+      empVisa = json['emp_visa'] != null
+          ? json['emp_visa']
+          : null;
+    }else{
+      empVisa = json['emp_visa'] != null
+          ? new EmpVisa.fromJson(json['emp_visa'])
+          : null;
+    }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -355,6 +369,280 @@ class SecondDependentData {
     data['organization'] = this._organization;
     data['emp_passport'] = this._empPassport;
     data['emp_visa'] = this._empVisa;
+    return data;
+  }
+
+  dynamic get empVisa => _empVisa;
+
+  set empVisa(dynamic value) {
+    _empVisa = value;
+  }
+}class EmpPassport {
+  int id;
+  String dateCreated;
+  String dateModified;
+  String createdBy;
+  String modifiedBy;
+  bool status;
+  bool passportStatus;
+  String passportNumber;
+  String passportExpiryDate;
+  bool isdependent;
+  String relation;
+  String nationality;
+  String countryOfIssue;
+  String placeOfIssue;
+  String dateOfIssue;
+  String dateOfExpiration;
+  bool duplicatePassport;
+  String pagesPassport;
+  String photo;
+  Null column1;
+  Null column2;
+  Null column3;
+  Null column4;
+  Null column5;
+  Null column6;
+  Null column7;
+  Null column8;
+  Null column9;
+  Null column10;
+  Null column11;
+  Null column12;
+  String empCode;
+  Null organization;
+
+  EmpPassport(
+      {this.id,
+        this.dateCreated,
+        this.dateModified,
+        this.createdBy,
+        this.modifiedBy,
+        this.status,
+        this.passportStatus,
+        this.passportNumber,
+        this.passportExpiryDate,
+        this.isdependent,
+        this.relation,
+        this.nationality,
+        this.countryOfIssue,
+        this.placeOfIssue,
+        this.dateOfIssue,
+        this.dateOfExpiration,
+        this.duplicatePassport,
+        this.pagesPassport,
+        this.photo,
+        this.column1,
+        this.column2,
+        this.column3,
+        this.column4,
+        this.column5,
+        this.column6,
+        this.column7,
+        this.column8,
+        this.column9,
+        this.column10,
+        this.column11,
+        this.column12,
+        this.empCode,
+        this.organization});
+
+  EmpPassport.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    dateCreated = json['date_created'];
+    dateModified = json['date_modified'];
+    createdBy = json['created_by'];
+    modifiedBy = json['modified_by'];
+    status = json['status'];
+    passportStatus = json['passport_status'];
+    passportNumber = json['passport_number'];
+    passportExpiryDate = json['passport_expiry_date'];
+    isdependent = json['isdependent'];
+    relation = json['relation'];
+    nationality = json['nationality'];
+    countryOfIssue = json['country_of_issue'];
+    placeOfIssue = json['place_of_issue'];
+    dateOfIssue = json['date_of_issue'];
+    dateOfExpiration = json['date_of_expiration'];
+    duplicatePassport = json['duplicate_passport'];
+    pagesPassport = json['pages_passport'];
+    photo = json['photo'];
+    column1 = json['column1'];
+    column2 = json['column2'];
+    column3 = json['column3'];
+    column4 = json['column4'];
+    column5 = json['column5'];
+    column6 = json['column6'];
+    column7 = json['column7'];
+    column8 = json['column8'];
+    column9 = json['column9'];
+    column10 = json['column10'];
+    column11 = json['column11'];
+    column12 = json['column12'];
+    empCode = json['emp_code'];
+    organization = json['organization'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['date_created'] = this.dateCreated;
+    data['date_modified'] = this.dateModified;
+    data['created_by'] = this.createdBy;
+    data['modified_by'] = this.modifiedBy;
+    data['status'] = this.status;
+    data['passport_status'] = this.passportStatus;
+    data['passport_number'] = this.passportNumber;
+    data['passport_expiry_date'] = this.passportExpiryDate;
+    data['isdependent'] = this.isdependent;
+    data['relation'] = this.relation;
+    data['nationality'] = this.nationality;
+    data['country_of_issue'] = this.countryOfIssue;
+    data['place_of_issue'] = this.placeOfIssue;
+    data['date_of_issue'] = this.dateOfIssue;
+    data['date_of_expiration'] = this.dateOfExpiration;
+    data['duplicate_passport'] = this.duplicatePassport;
+    data['pages_passport'] = this.pagesPassport;
+    data['photo'] = this.photo;
+    data['column1'] = this.column1;
+    data['column2'] = this.column2;
+    data['column3'] = this.column3;
+    data['column4'] = this.column4;
+    data['column5'] = this.column5;
+    data['column6'] = this.column6;
+    data['column7'] = this.column7;
+    data['column8'] = this.column8;
+    data['column9'] = this.column9;
+    data['column10'] = this.column10;
+    data['column11'] = this.column11;
+    data['column12'] = this.column12;
+    data['emp_code'] = this.empCode;
+    data['organization'] = this.organization;
+    return data;
+  }
+}
+
+class EmpVisa {
+  int id;
+  String countryCode;
+  String documentType;
+  String documentTitle;
+  bool isdependent;
+  String relation;
+  String documentNumber;
+  String issueDate;
+  String issuePlace;
+  String issuingAuthority;
+  String expirationDate;
+  bool isValidated;
+  String validFrom;
+  String attachmentId;
+  Null column1;
+  Null column2;
+  Null column3;
+  Null column4;
+  Null column5;
+  Null column6;
+  Null column7;
+  Null column8;
+  Null column9;
+  Null column10;
+  Null column11;
+  Null column12;
+  String empCode;
+  Null organization;
+
+  EmpVisa(
+      {this.id,
+        this.countryCode,
+        this.documentType,
+        this.documentTitle,
+        this.isdependent,
+        this.relation,
+        this.documentNumber,
+        this.issueDate,
+        this.issuePlace,
+        this.issuingAuthority,
+        this.expirationDate,
+        this.isValidated,
+        this.validFrom,
+        this.attachmentId,
+        this.column1,
+        this.column2,
+        this.column3,
+        this.column4,
+        this.column5,
+        this.column6,
+        this.column7,
+        this.column8,
+        this.column9,
+        this.column10,
+        this.column11,
+        this.column12,
+        this.empCode,
+        this.organization});
+
+  EmpVisa.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    countryCode = json['country_code'];
+    documentType = json['document_type'];
+    documentTitle = json['document_title'];
+    isdependent = json['isdependent'];
+    relation = json['relation'];
+    documentNumber = json['document_number'];
+    issueDate = json['issue_date'];
+    issuePlace = json['issue_place'];
+    issuingAuthority = json['issuing_authority'];
+    expirationDate = json['expiration_date'];
+    isValidated = json['is_validated'];
+    validFrom = json['valid_from'];
+    attachmentId = json['attachment_id'];
+    column1 = json['column1'];
+    column2 = json['column2'];
+    column3 = json['column3'];
+    column4 = json['column4'];
+    column5 = json['column5'];
+    column6 = json['column6'];
+    column7 = json['column7'];
+    column8 = json['column8'];
+    column9 = json['column9'];
+    column10 = json['column10'];
+    column11 = json['column11'];
+    column12 = json['column12'];
+    empCode = json['emp_code'];
+    organization = json['organization'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['country_code'] = this.countryCode;
+    data['document_type'] = this.documentType;
+    data['document_title'] = this.documentTitle;
+    data['isdependent'] = this.isdependent;
+    data['relation'] = this.relation;
+    data['document_number'] = this.documentNumber;
+    data['issue_date'] = this.issueDate;
+    data['issue_place'] = this.issuePlace;
+    data['issuing_authority'] = this.issuingAuthority;
+    data['expiration_date'] = this.expirationDate;
+    data['is_validated'] = this.isValidated;
+    data['valid_from'] = this.validFrom;
+    data['attachment_id'] = this.attachmentId;
+    data['column1'] = this.column1;
+    data['column2'] = this.column2;
+    data['column3'] = this.column3;
+    data['column4'] = this.column4;
+    data['column5'] = this.column5;
+    data['column6'] = this.column6;
+    data['column7'] = this.column7;
+    data['column8'] = this.column8;
+    data['column9'] = this.column9;
+    data['column10'] = this.column10;
+    data['column11'] = this.column11;
+    data['column12'] = this.column12;
+    data['emp_code'] = this.empCode;
+    data['organization'] = this.organization;
     return data;
   }
 }

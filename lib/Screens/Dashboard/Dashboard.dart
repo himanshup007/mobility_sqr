@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/Screens/Dashboard/bloc/travel_req_bloc.dart';
 import 'dart:math' as math;
@@ -31,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
   UserInfo info = UserInfo();
   String UserName = '';
   String ProfileImage = null;
-
+  ApiProvider _appApiProvider = ApiProvider();
   getprofile() async {
     try {
       info = await widget._userInfo.readUserInfo() ?? null;
@@ -231,15 +233,12 @@ class _DashboardState extends State<Dashboard> {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          '/TravelReqView',
-                                                          arguments: {
-                                                            "EmployeeData": state
-                                                                .travelRequest
-                                                                .data[Index],
-                                                            "where": 2
-                                                          });
+                                                      _appApiProvider
+                                                          .fetchViewTravelReq(
+                                                          state.travelRequest
+                                                              .data[Index].travelReqId)
+                                                          .then((value) =>
+                                                          NavigationHandler(value,context,2));
                                                     },
                                                     child: Container(
                                                       height: 60.0.w,
@@ -740,4 +739,9 @@ showAlertDialog(BuildContext context, String text) {
       return alert;
     },
   );
+}
+NavigationHandler(GetTravelRequest value,BuildContext context,where) {
+
+  Navigator.pushNamed(context, '/TravelReqView',arguments: {"EmployeeData":value.data,"where":where});
+
 }
