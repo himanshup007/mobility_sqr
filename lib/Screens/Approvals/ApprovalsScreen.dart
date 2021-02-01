@@ -121,31 +121,31 @@ var where;
                         );
                       }),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.95,
-                      height: 5.0.h,
-                      child: FlatButton(
-                        child: Text(
-                          'SELECT',
-                          style: TextStyle(fontSize: 20.0),
-                          textAlign: TextAlign.center,
-                        ),
-                        textColor: Colors.white,
-                        color: AppConstants.APP_THEME_COLOR,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                ),
+                // navi==2?Expanded(
+                //   flex: 1,
+                //   child: Center(
+                //     child: Container(
+                //       width: MediaQuery
+                //           .of(context)
+                //           .size
+                //           .width * 0.95,
+                //       height: 5.0.h,
+                //       child: FlatButton(
+                //         child: Text(
+                //           'SELECT',
+                //           style: TextStyle(fontSize: 20.0),
+                //           textAlign: TextAlign.center,
+                //         ),
+                //         textColor: Colors.white,
+                //         color: AppConstants.APP_THEME_COLOR,
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(10),
+                //         ),
+                //         onPressed: () {},
+                //       ),
+                //     ),
+                //   ),
+                // ):SizedBox(),
               ],
             ),
           ),
@@ -241,20 +241,20 @@ class _CellState extends State<Cell> {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: widget.where==5?Checkbox(
-                  checkColor: Colors.white,
-                  activeColor: AppConstants.APP_THEME_COLOR,
-                  value: widget.fact.isSelected,
-                  onChanged: (bool value) {
-                    this.setState(() {
-                      widget.fact.isSelected = !widget.fact.isSelected;
-                    });
-                    widget.changeValue(value);
-                  },
-                ):SizedBox(),
-              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: widget.where==5?Checkbox(
+              //     checkColor: Colors.white,
+              //     activeColor: AppConstants.APP_THEME_COLOR,
+              //     value: widget.fact.isSelected,
+              //     onChanged: (bool value) {
+              //       this.setState(() {
+              //         widget.fact.isSelected = !widget.fact.isSelected;
+              //       });
+              //       widget.changeValue(value);
+              //     },
+              //   ):SizedBox(),
+              // ),
             ],
           ),
           SizedBox(height: 10),
