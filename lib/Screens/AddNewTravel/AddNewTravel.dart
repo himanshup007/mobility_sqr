@@ -924,6 +924,14 @@ getvalues() async {
                                                 margin:
                                                     EdgeInsets.only(bottom: 5),
                                                 decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors
+                                                            .grey,
+                                                        blurRadius:
+                                                        10.0,
+                                                      ),
+                                                    ],
                                                     borderRadius:
                                                         BorderRadius.all(
                                                       Radius.circular(5),

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'Mobility SQR',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        highlightColor: Color(0xffffc600),
+        // highlightColor: Color(0xffffc600),
         unselectedWidgetColor: AppConstants.APP_THEME_COLOR,
         appBarTheme: AppBarTheme(
           color: Colors.white,
