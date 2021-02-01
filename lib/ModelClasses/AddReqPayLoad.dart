@@ -308,6 +308,7 @@ class TravelCity {
   dynamic _perDiemCost;
   dynamic _transportationCost;
   dynamic _totalCost;
+  dynamic _accomodationLimit;
   String _reportingCurrency;
   String _currency;
   String _agenda;
@@ -330,6 +331,12 @@ class TravelCity {
   List<SecondDependentData> _myDependentList;
   SearchList _toCountryData ;
   bool _hasVisa;
+
+  dynamic get accomodationLimit => _accomodationLimit;
+
+  set accomodationLimit(dynamic value) {
+    _accomodationLimit = value;
+  }
 
   bool get hasVisa => _hasVisa;
 
@@ -389,6 +396,7 @@ class TravelCity {
       dynamic perDiemCost,
       dynamic transportationCost,
       dynamic totalCost,
+        dynamic accomodationLimit,
       String reportingCurrency,
       String currency,
       String agenda,
@@ -407,7 +415,9 @@ class TravelCity {
       String hostPhoneExt,
       bool isDependent,
       String perDiemValue,
+
       List<DependentData> dependentData}) {
+    this._accomodationLimit=accomodationLimit;
     this._hasVisa=hasVisa;
     this._toCountryData=toCountryData;
     this._transportCost = TransportCost;

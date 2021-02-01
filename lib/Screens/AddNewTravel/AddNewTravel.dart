@@ -2005,8 +2005,14 @@ getvalues() async {
       DateTime accomationEnd =
           DateTime.parse('${list.travelCity[index].accmodationEndDate}');
       final difference = accomationEnd.difference(accomationStart).inDays;
-      final value =
-          (double.parse(perDiemValue) * difference).toStringAsFixed(2);
+      var value;
+      if(difference==0){
+         value =
+        (double.parse(list.travelCity[index].accomodationLimit)).toStringAsFixed(2);
+      }else{
+         value =
+        (double.parse(list.travelCity[index].accomodationLimit) * difference).toStringAsFixed(2);
+      }
 
       list.travelCity[index].hotelCost = value;
     } else {
@@ -2016,13 +2022,13 @@ getvalues() async {
     if (list.travelCity[index].hotelCost == " ") {
       list.travelCity[index].totalCost =
           (double.parse(list.travelCity[index].perDiemCost) +
-                  double.parse(list.travelCity[index].transportCost))
+                  double.parse(list.travelCity[index].transportationCost))
               .toStringAsFixed(2);
     } else {
       list.travelCity[index].totalCost =
           (double.parse(list.travelCity[index].perDiemCost) +
                   double.parse(list.travelCity[index].hotelCost) +
-                  double.parse(list.travelCity[index].transportCost))
+                  double.parse(list.travelCity[index].transportationCost))
               .toStringAsFixed(2);
     }
   }
@@ -2032,6 +2038,7 @@ getvalues() async {
       {Function(String) datevalue}) async {
     final DateTime picked = await showDatePicker(
         context: context,
+
         initialDate: initalDate,
         builder: (BuildContext context, Widget child) {
           return Theme(
@@ -2049,7 +2056,7 @@ getvalues() async {
         firstDate: first_date,
         lastDate: end_date);
     if (picked != null) {
-      datevalue(picked.toUtc().toIso8601String());
+      datevalue(picked.toLocal().toIso8601String());
     }
   }
 
@@ -2209,7 +2216,8 @@ getvalues() async {
     traveldata[index].perDiamValue = value.perDiem;
     traveldata[index].transportCost = value.transportation;
     traveldata[index].currency = value.currency;
-    traveldata[index].hotelCost = value.accommodationLimit;
+   // traveldata[index].hotelCost = value.accommodationLimit;
+    traveldata[index].accomodationLimit=value.accommodationLimit;
   }
 
   CheckVisaNote(String req_data, String visaExpiryDate) {

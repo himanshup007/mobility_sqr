@@ -97,12 +97,18 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                     flex: 1,
                     child: Container(
                       height: 35,
-                      child: TextField(
+                      child: TextFormField(
                         keyboardType:
                         TextInputType.numberWithOptions(signed: true),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
+                        onChanged: (text){
+                         this.setState(() {
+                           list.travelCity[index].totalCost=    list.travelCity[index].totalCost+double.parse(text);
+                         });
+
+                        },
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 18.0),
                         decoration: InputDecoration(
@@ -237,55 +243,5 @@ class ApproxTravelRowWidget extends StatelessWidget {
   }
 }
 
-
-
-class CostModel{
-  double _hotel=0;
-  double _transportation=0;
-  double _perDiems=0;
-  double _airfare=0;
-  double _total=0;
-  double _totalCurrency=0;
-
-
-  CostModel(this._hotel, this._transportation, this._perDiems, this._airfare,
-      this._total, this._totalCurrency);
-
-  double get hotel => _hotel;
-
-  set hotel(double value) {
-    _hotel = value;
-  }
-
-  double get transportation => _transportation;
-
-  set transportation(double value) {
-    _transportation = value;
-  }
-
-  double get perDiems => _perDiems;
-
-  set perDiems(double value) {
-    _perDiems = value;
-  }
-
-  double get airfare => _airfare;
-
-  set airfare(double value) {
-    _airfare = value;
-  }
-
-  double get total => _total;
-
-  set total(double value) {
-    _total = value;
-  }
-
-  double get totalCurrency => _totalCurrency;
-
-  set totalCurrency(double value) {
-    _totalCurrency = value;
-  }
-}
 
 
