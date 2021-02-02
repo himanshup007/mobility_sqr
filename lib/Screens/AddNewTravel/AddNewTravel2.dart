@@ -366,7 +366,6 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                   onPressed: () {
 
                     try{
-
                       list=SetDependentList(list);
                     }catch(e){
 

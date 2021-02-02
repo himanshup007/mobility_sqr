@@ -26,6 +26,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
    TravelReqPayLoad list;
   int _current = 0;
 
+  double mytotal=0.0;
   Country _selectedDialogCountry;
 
   _ApproxTravelCostState(this.list,this.perDiem);
@@ -33,106 +34,118 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
 
   Widget build(BuildContext context) {
     List<Widget> CostList = list.travelCity.map((item) {
-      int index = list.travelCity.indexOf(item);
-      return
-        Container(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  SizedBox(height: 40,),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      "Reporting Currency",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: AppConstants.APP_THEME_COLOR,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.0),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _openCurrencyPickerDialog();
-                          },
-                          child: Container(
-                            child: Text(
-                              "Select Currency",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20.0),
-                            ),
-                          ),
-                        ),
-                        Icon(Icons.arrow_drop_down)
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(height: 30),
-              ApproxTravelRowWidget("City Name", "${item.destinationCity+"("+item.currency+")"}"),
-              SizedBox(height: 30),
-              ApproxTravelRowWidget("Per-diems", "${list.travelCity[index].perDiemCost}"),
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      "Airfare",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 20.0),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      height: 35,
-                      child: TextFormField(
-                        keyboardType:
-                        TextInputType.numberWithOptions(signed: true),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        onChanged: (text){
-                         this.setState(() {
-                           list.travelCity[index].totalCost=    list.travelCity[index].totalCost+double.parse(text);
-                         });
+       int index = list.travelCity.indexOf(item);
 
-                        },
+      return
+        FittedBox(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(height: 40,),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "Reporting Currency",
+                        textAlign: TextAlign.left,
                         style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 18.0),
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color:
-                                    AppConstants.APP_THEME_COLOR))),
+                            color: AppConstants.APP_THEME_COLOR,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20.0),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30),
-              ApproxTravelRowWidget("Hotel", "${list.travelCity[index].hotelCost}"),
-              SizedBox(height: 30),
-              ApproxTravelRowWidget("Transportation", "${list.travelCity[index].transportationCost}"),
-              SizedBox(height: 30),
-              ApproxTravelRowWidget("Total", "${list.travelCity[index].totalCost}"),
-              SizedBox(height: 30),
-              ApproxTravelRowWidget("Total (Currency)", "10,000"),
-            ],
-          ),
-      ));
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _openCurrencyPickerDialog();
+                            },
+                            child: Container(
+                              child: Text(
+                                "Select Currency",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20.0),
+                              ),
+                            ),
+                          ),
+                          Icon(Icons.arrow_drop_down)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 30),
+                ApproxTravelRowWidget("City Name", "${item.destinationCity+"("+item.currency+")"}"),
+                SizedBox(height: 30),
+                ApproxTravelRowWidget("Per-diems", "${list.travelCity[index].perDiemCost}"),
+                SizedBox(height: 30),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "Airfare",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 20.0),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: 35,
+                        child: TextFormField(
+                          initialValue: list.travelCity[index].myAirFare.toString(),
+                          keyboardType:
+                          TextInputType.numberWithOptions(signed: true),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          onChanged: (text){
+                            if (text == ""){
+                              text = 0.0.toString();
+                            }
+                            this.setState(() {
+                              list.travelCity[index].myAirFare=double.parse(text);
+                            });
+
+                      this.setState(() {
+                        list.travelCity[index].myTotalCost=list.travelCity[index].hotelCost!=" "?double.parse(list.travelCity[index].hotelCost):0.0+double.parse(list.travelCity[index].transportationCost)+double.parse(list.travelCity[index].perDiemCost)+double.parse(text);
+
+                      });
+
+                          },
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 18.0),
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color:
+                                      AppConstants.APP_THEME_COLOR))),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30),
+                ApproxTravelRowWidget("Hotel", "${list.travelCity[index].hotelCost}"),
+                SizedBox(height: 30),
+                ApproxTravelRowWidget("Transportation", "${list.travelCity[index].transportationCost}"),
+                SizedBox(height: 30),
+                ApproxTravelRowWidget("Total", "${ list.travelCity[index].myTotalCost==0.0?list.travelCity[index].totalCost:list.travelCity[index].myTotalCost}"),
+                SizedBox(height: 30),
+                ApproxTravelRowWidget("Total (Currency)", "10,000"),
+
+              ],
+            ),
+      ),
+        );
       }).toList();
     return Container(
       height: 100.0.h,

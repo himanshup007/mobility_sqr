@@ -1935,6 +1935,7 @@ getvalues() async {
 
                        req_data.travelVisa.addAll(GenerateVisa(req_data,info,HomeCountryName));
                         CostValueSetter(req_data);
+                        resetValue(req_data);
                         await Navigator.pushNamed(context, '/AddNewTravel2',
                             arguments: {
                               "list": req_data,
@@ -2340,4 +2341,14 @@ setFormattedDate(String date) {
   final depatureDate = DateTime.parse(date).toLocal();
   final String datestring = DateFormat("dd-MMM-yyyy").format(depatureDate);
   return datestring;
+}
+
+resetValue(TravelReqPayLoad req_data){
+
+  for(int i=0;i<req_data.travelCity.length;i++){
+
+    req_data.travelCity[i].myTotalCost=0.0;
+
+  }
+
 }

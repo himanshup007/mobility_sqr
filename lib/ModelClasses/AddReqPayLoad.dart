@@ -31,6 +31,7 @@ class TravelReqPayLoad {
   String _expenceCureency;
   Country _homeCountry;
 
+
   TravelReqPayLoad(
       {String travelReqId,
       String project,
@@ -82,6 +83,7 @@ class TravelReqPayLoad {
     this._expenceReturnDate = expenceReturnDate;
     this._expenceEstimatedCost = expenceEstimatedCost;
     this._expenceCureency = expenceCureency;
+
   }
 
   Country get homeCountry => _homeCountry;
@@ -274,6 +276,13 @@ class TravelCity {
   String _sourceCity;
   String _perDiamValue;
   String _transportCost;
+  double _myTotalCost=0.0;
+  double _myAirFare=0.0;
+  double get myTotalCost => _myTotalCost;
+
+  set myTotalCost(double value) {
+    _myTotalCost = value;
+  }
 
   int get hide => _hide;
 
@@ -331,6 +340,12 @@ class TravelCity {
   List<SecondDependentData> _myDependentList;
   SearchList _toCountryData ;
   bool _hasVisa;
+
+  double get myAirFare => _myAirFare;
+
+  set myAirFare(double value) {
+    _myAirFare = value;
+  }
 
   dynamic get accomodationLimit => _accomodationLimit;
 
@@ -415,9 +430,12 @@ class TravelCity {
       String hostPhoneExt,
       bool isDependent,
       String perDiemValue,
+        double myTotalCost,
+        double airFare,
 
       List<DependentData> dependentData}) {
     this._accomodationLimit=accomodationLimit;
+    this._myAirFare=airFare;
     this._hasVisa=hasVisa;
     this._toCountryData=toCountryData;
     this._transportCost = TransportCost;
@@ -458,6 +476,8 @@ class TravelCity {
     this._isDependent = isDependent;
     this._dependentData = dependentData;
     this._postLocationList = postLocationList;
+    this._myTotalCost=myTotalCost;
+
   }
 
   String get sourceCity => _sourceCity;
