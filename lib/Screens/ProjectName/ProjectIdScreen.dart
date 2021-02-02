@@ -86,7 +86,7 @@ class _ProjectIdScreen extends State<ProjectIdScreen> {
                     key: _myKey,
                     builder: (context, state) {
                       if (state is ProjectIdLoading) {
-                        return showMobilityLoader(true);
+                        return showMobilityLoader(true,Colors.transparent);
                       }
                       if (state is ProjectIdInitial) {}
 

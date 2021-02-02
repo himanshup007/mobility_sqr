@@ -567,7 +567,7 @@ class _DashboardState extends State<Dashboard> {
                                                                                 ),
                                                                               ),
                                                                             )
-                                                                          : Expanded(
+                                                                          :state.travelRequest.data[Index].travelReqStatus=='2' ?Expanded(
                                                                               flex:
                                                                                   1,
                                                                               child:
@@ -580,7 +580,47 @@ class _DashboardState extends State<Dashboard> {
                                                                                   labelInsets: LabelInsets(baselineShift: 3, start: 1),
                                                                                 ),
                                                                               ),
-                                                                            )
+                                                                            ):state.travelRequest.data[Index].travelReqStatus=='1' ?Expanded(
+                                                                        flex:
+                                                                        1,
+                                                                        child:
+                                                                        Container(
+                                                                          foregroundDecoration:
+                                                                          const RotatedCornerDecoration(
+                                                                            color: Colors.yellow,
+                                                                            geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                                            textSpan: TextSpan(text: 'Saved', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
+                                                                            labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                                          ),
+                                                                        ),
+                                                                      ):state.travelRequest.data[Index].travelReqStatus=='5' ?Expanded(
+                                                                        flex:
+                                                                        1,
+                                                                        child:
+                                                                        Container(
+                                                                          foregroundDecoration:
+                                                                          const RotatedCornerDecoration(
+                                                                            color: Colors.red,
+                                                                            geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                                            textSpan: TextSpan(text: 'Rejected', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
+                                                                            labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                                          ),
+                                                                        ),
+                                                                      ):
+                                                                      Expanded(
+                                                                        flex:
+                                                                        1,
+                                                                        child:
+                                                                        Container(
+                                                                          foregroundDecoration:
+                                                                          const RotatedCornerDecoration(
+                                                                            color: Colors.red,
+                                                                            geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                                            textSpan: TextSpan(text: 'Closed', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
+                                                                            labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                                          ),
+                                                                        ),
+                                                                      )
                                                                     ],
                                                                   ),
                                                                 ),
@@ -697,7 +737,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
             ),
-            showMobilityLoader(showloader)
+            showMobilityLoader(showloader,Colors.black26)
           ],
         ),
       ),

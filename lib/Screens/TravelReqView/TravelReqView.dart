@@ -141,8 +141,8 @@ class _TravelReqViewState extends State<TravelReqView> {
         ),
         centerTitle: true,
       ),
-      body: LayoutBuilder(builder: (BuildContext context, constraints) {
-        return Container(
+      body:
+         Container(
           height: 100.0.h,
           width: 100.0.w,
           child: Stack(
@@ -289,7 +289,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                       ),
                       list.details.length > 0
                           ? Container(
-                              height: constraints.maxHeight*.8,
+                              height: 65.0.h,
                               child: ScrollablePositionedList.builder(
                                   itemScrollController: itemScrollController,
                                   physics: NeverScrollableScrollPhysics(),
@@ -299,7 +299,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                       (BuildContext context, int index) {
                                     return SizedBox(
                                       width: 100.0.w,
-                                      height: constraints.maxHeight,
+                                      height: 65.0.h,
                                       child: Column(
                                         children: [
                                           Container(
@@ -1357,11 +1357,11 @@ class _TravelReqViewState extends State<TravelReqView> {
                   ),
                 ),
               ),
-              showMobilityLoader(showloader)
+              showMobilityLoader(showloader,Colors.black26)
             ],
           ),
-        );
-      }),
+        )
+
     );
   }
 
@@ -1596,4 +1596,8 @@ SetVisaReqId(MyModelData list) {
     }
     return travelVisaReq;
   }
+}
+
+manageHeight(){
+
 }

@@ -184,7 +184,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                 ),
               ),
             ),
-            showMobilityLoader(showloader)
+            showMobilityLoader(showloader,Colors.transparent)
           ],
         ),
       ),
@@ -349,7 +349,7 @@ getDepartureDate(String date) {
     try{
 
 
-    var depatureDate = DateTime.parse(date.toString());
+    var depatureDate = DateTime.parse(date.toString()).toLocal();
     final String datestring = DateFormat("dd/MMM/yyyy").format(depatureDate);
     return datestring;
     } catch(e){

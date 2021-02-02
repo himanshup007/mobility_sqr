@@ -84,7 +84,7 @@ class _SearchPlaceState extends State<SearchPlace> {
                     key: _myKey,
                     builder: (context, state) {
                       if (state is SearchClassLoading) {
-                        return showMobilityLoader(true);
+                        return showMobilityLoader(true,Colors.transparent);
                       }
                       if (state is SearchInitial) {}
                       if (state is SearchClassEmpty) {
