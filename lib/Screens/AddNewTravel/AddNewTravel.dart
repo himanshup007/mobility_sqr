@@ -551,6 +551,9 @@ getvalues() async {
                                                         context,
                                                         '/SearchPlace');
                                                 if (fromplace != null) {
+                                                  SearchList from=fromplace;
+                                                  if(traveldata[index].destinationCity!= null&&traveldata[index].destinationCity!=from.city){
+
                                                   this.setState(() {
                                                     traveldata[index]
                                                             .sourceCity =
@@ -558,7 +561,14 @@ getvalues() async {
                                                     traveldata[index]
                                                             .travellingCountry =
                                                         fromplace.countryName;
+                                                    traveldata[index].travelPurpose=null;
                                                   });
+                                                }
+                                                  else{
+                                                    showDefaultSnackbar(
+                                                        context,
+                                                        "From and To airports can not be the same");
+                                                  }
                                                 }
                                               },
                                             ),
@@ -601,65 +611,75 @@ getvalues() async {
                                                           .pushNamed(context,
                                                               '/SearchPlace');
                                                       if (data != null) {
-                                                        this.setState(() {
-                                                          traveldata[index]
-                                                                  .toCountryData =
-                                                              data;
+                                                        SearchList toCountryData=data;
+                                                        if(traveldata[index].sourceCity!= toCountryData.city){
+                                                          this.setState(() {
+                                                            traveldata[index]
+                                                                .toCountryData =
+                                                                data;
 
-                                                          traveldata[index]
-                                                                  .destinationCity =
-                                                              traveldata[index]
+                                                            traveldata[index]
+                                                                .destinationCity =
+                                                                traveldata[index]
+                                                                    .toCountryData
+                                                                    .city;
+                                                            traveldata[index]
+                                                                .travellingCountryTo =
+                                                                traveldata[index]
+                                                                    .toCountryData
+                                                                    .countryName;
+                                                            traveldata[index].currentCountryCode= traveldata[index]
+                                                                .toCountryData.country;
+                                                          });
+
+                                                          BlocProvider.of<
+                                                              PurposeBloc>(
+                                                              context)
+                                                              .add(FetchPurposelist(
+                                                              toData
+                                                                  .iataCode));
+                                                          _appApiProvider.GetPostLocation(
+                                                              traveldata[
+                                                              index]
                                                                   .toCountryData
-                                                                  .city;
-                                                          traveldata[index]
-                                                                  .travellingCountryTo =
-                                                              traveldata[index]
+                                                                  .countryName)
+                                                              .then((value) =>
+                                                              this.setState(
+                                                                      () {
+
+                                                                    traveldata[index]
+                                                                        .postLocationList =
+                                                                        value
+                                                                            .data;
+                                                                  }));
+
+                                                          _appApiProvider.GetDependentList(
+                                                              traveldata[
+                                                              index]
                                                                   .toCountryData
-                                                                  .countryName;
-                                                        });
+                                                                  .countryName)
+                                                              .then((value) =>
+                                                              this.setState(
+                                                                      () {
+                                                                    traveldata[index]
+                                                                        .myDependentList =
+                                                                        value;
+                                                                  }));
 
-                                                        BlocProvider.of<
-                                                                    PurposeBloc>(
-                                                                context)
-                                                            .add(FetchPurposelist(
-                                                                toData
-                                                                    .iataCode));
-                                                        _appApiProvider.GetPostLocation(
-                                                                traveldata[
-                                                                        index]
-                                                                    .toCountryData
-                                                                    .countryName)
-                                                            .then((value) =>
-                                                                this.setState(
-                                                                    () {
+                                                          _appApiProvider.GetPerDiem(
+                                                              traveldata[
+                                                              index]
+                                                                  .toCountryData
+                                                                  .countryName)
+                                                              .then((value) =>
+                                                              SaveCostData(
+                                                                  value));
+                                                        }else{
+                                                          showDefaultSnackbar(
+                                                              context,
+                                                              "From and To airports can not be the same");
+                                                        }
 
-                                                                  traveldata[index]
-                                                                          .postLocationList =
-                                                                      value
-                                                                          .data;
-                                                                }));
-
-                                                        _appApiProvider.GetDependentList(
-                                                                traveldata[
-                                                                        index]
-                                                                    .toCountryData
-                                                                    .countryName)
-                                                            .then((value) =>
-                                                                this.setState(
-                                                                    () {
-                                                                  traveldata[index]
-                                                                          .myDependentList =
-                                                                      value;
-                                                                }));
-
-                                                        _appApiProvider.GetPerDiem(
-                                                                traveldata[
-                                                                        index]
-                                                                    .toCountryData
-                                                                    .countryName)
-                                                            .then((value) =>
-                                                                SaveCostData(
-                                                                    value));
                                                       }
                                                     },
                                                   ),
@@ -2273,7 +2293,7 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
       isHomeCountry = true;
     }
     if(!isHomeCountry){
-      if (mydata.travelCity[i].hasVisa==null||mydata.travelCity[i].hasVisa||checkVisaApplicable(mydata.travelCity[i].departureDate,
+      if (mydata.travelCity[i].hasVisa==null||!mydata.travelCity[i].hasVisa||checkVisaApplicable(mydata.travelCity[i].departureDate,
           mydata.travelCity[i].visaExpiryDate)) {
 
   visa= new TravelVisa();
@@ -2310,7 +2330,7 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
         visa.isDependent = false;
         visa.dependentRelation = "";
         visa.dependentName = "";
-        visa.country ="123";
+        visa.country =mydata.travelCity[i].currentCountryCode;
         visa.createdBy = info.data.empCode;
         visalist.add(visa);
         isHomeCountry=false;

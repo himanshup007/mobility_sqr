@@ -409,7 +409,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                           }
                         }
 
-                        //list.travelVisa.addAll(GenerateVisa(list,info,HomeCountryName));
+                        list.travelVisa.addAll(GenerateVisa(list,info,HomeCountryName));
 
                         if (list.travelCity.length > 1) {
                           list.isTravelMultiCity = true;
@@ -543,7 +543,7 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info, String homeCountryName) {
                   .toIso8601String();
         } else {
           visa.travelEndDate =
-              DateTime.parse(mydata.travelCity[1 + 1].departureDate)
+              DateTime.parse(mydata.travelCity[i + 1].departureDate)
                   .toUtc()
                   .toIso8601String();
         }
@@ -565,7 +565,7 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info, String homeCountryName) {
             mydata.travelCity[i].dependentData[j].dependentRelation;
         visa.dependentName =
             mydata.travelCity[i].dependentData[j].dependentName;
-        visa.country = "123";
+        visa.country =mydata.travelCity[i].currentCountryCode;
         visa.createdBy = info.data.empCode;
         visalist.add(visa);
         isHomeCountry = false;

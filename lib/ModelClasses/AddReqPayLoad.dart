@@ -280,6 +280,14 @@ class TravelCity {
   String _myAirFare="0";
   Currency_Data _currency_data;
 
+  String _currentCountryCode;
+
+
+  String get currentCountryCode => _currentCountryCode;
+
+  set currentCountryCode(String value) {
+    _currentCountryCode = value;
+  }
 
   Currency_Data get currency_data => _currency_data;
 
@@ -442,6 +450,8 @@ class TravelCity {
         double myTotalCost,
         String airFare,
 
+        String currentCountryCode,
+
       List<DependentData> dependentData}) {
     this._currency_data=currency_data;
     this._accomodationLimit=accomodationLimit;
@@ -487,6 +497,7 @@ class TravelCity {
     this._dependentData = dependentData;
     this._postLocationList = postLocationList;
     this._myTotalCost=myTotalCost;
+    this._currentCountryCode=currentCountryCode;
 
   }
 

@@ -50,7 +50,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
-
+//===============================================================================================
   Future<UserToken> postRequest(String username, String password) async {
     Map data = {"username": username, "password": password};
     //encode Map to JSON
@@ -85,7 +85,7 @@ class ApiProvider {
     print("${response.body}");
     return userToken;
   }
-
+//=============================================================================================
   Future<ForgetPassModel> resetPass(String email) async {
     Map data = {"email": email};
     //encode Map to JSON
@@ -104,7 +104,7 @@ class ApiProvider {
     print("${response.body}");
     return passModel;
   }
-
+//=======================================================================================================
   Future<ApprovalModal> getTravelRequest() async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     getDialCode();
@@ -136,7 +136,7 @@ class ApiProvider {
     print("${response.body}");
     return listTravelReq;
   }
-
+//========================================================================================================
   Future<SearchModel> getLocation(String locationName) async {
     String token = await getToken_byReresh();
 
@@ -161,7 +161,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
-
+//===========================================================================================================
   getToken_byReresh() async {
     String refresh_token = await _TokenGetter.getRefreshToken() ?? "";
 
@@ -181,7 +181,7 @@ class ApiProvider {
 
     return token;
   }
-
+//======================================================================================================
   Future<PurposeModelClass> getPurposeList(String iata) async {
     String token = await getToken_byReresh();
 
@@ -207,7 +207,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
-
+//=============================================================================================================
   Future<DialCode> getDialCode() async {
     final http.Response response = await http.get(
       '${AppConstants.BASE_URL + AppConstants.DIAL_CODE + "?dial_code="}',
