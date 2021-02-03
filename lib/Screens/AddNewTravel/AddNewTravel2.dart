@@ -36,7 +36,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
   UserInfo info;
 
   String HomeCountryName;
-
+  TravelReqPayLoad list;
 
 
   getDialCode() async {
@@ -61,7 +61,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
         .of(context)
         .settings
         .arguments;
-    TravelReqPayLoad list = args['list'];
+     list = args['list'];
     PerDiemModel perDiem = args['perDiem'];
     setValues(list);
 
@@ -375,8 +375,15 @@ class AddNewTravel2State extends State<AddNewTravel2> {
 
                     //list.travelVisa.addAll(GenerateVisa(list,info,HomeCountryName));
 
-                    list.isTravelMultiCity = false;
-                    list.isTravelMultiCountry = false;
+if(list.travelCity.length>1){
+  list.isTravelMultiCity = true;
+  list.isTravelMultiCountry = true;
+}else{
+  list.isTravelMultiCity = false;
+  list.isTravelMultiCountry = false;
+
+}
+
                     list.createdBy = list.empEmail;
                     list.expenceCureency = "USD";
                     list.expenceFromCountry =

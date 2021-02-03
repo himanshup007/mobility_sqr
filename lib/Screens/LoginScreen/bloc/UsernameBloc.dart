@@ -64,6 +64,10 @@ class UsernameBloc {
     _userFetcher.close();
     _userFetcher = StreamController<bool>();
   }
+  newPasswordStream(){
+    _isPassValidController.close();
+    _isPassValidController = StreamController<UserToken>();
+  }
 
   void backbtn() {
     _isEmailValidController.sink.add(false);
@@ -87,10 +91,14 @@ class UsernameBloc {
   }
 
 
-  Future<void> passwordValidate() async {
+  Future<UserToken> passwordValidate() async {
     UserToken isUser = await _repository.fetch_user_token(email, password);
 
     _isPassValidController.sink.add(isUser);
+
+    return isUser;
+
+
   }
 
   Future<UserInfo> setUserInfo()  async {

@@ -594,6 +594,9 @@ getvalues() async {
                                                     1,
                                                     false,
                                                     onTap: () async {
+                                                      traveldata[index]
+                                                          .postLocationData =
+                                                          null;
                                                       var data = await Navigator
                                                           .pushNamed(context,
                                                               '/SearchPlace');

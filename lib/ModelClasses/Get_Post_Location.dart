@@ -1,3 +1,5 @@
+
+import 'package:equatable/equatable.dart';
 class PostLocationResponse {
   String _message;
   int _statusCode;
@@ -45,7 +47,7 @@ class PostLocationResponse {
   }
 }
 
-class PostLocationData {
+class PostLocationData  extends Equatable {
   int _id;
   String _dateCreated;
   String _dateModified;
@@ -80,7 +82,7 @@ class PostLocationData {
   String _column10;
   String _column11;
   String _column12;
-  Null _organization;
+  dynamic _organization;
 
   PostLocationData(
       {int id,
@@ -117,7 +119,7 @@ class PostLocationData {
         String column10,
         String column11,
         String column12,
-        Null organization}) {
+        dynamic organization}) {
     this._id = id;
     this._dateCreated = dateCreated;
     this._dateModified = dateModified;
@@ -225,8 +227,8 @@ class PostLocationData {
   set column11(String column11) => _column11 = column11;
   String get column12 => _column12;
   set column12(String column12) => _column12 = column12;
-  Null get organization => _organization;
-  set organization(Null organization) => _organization = organization;
+  dynamic get organization => _organization;
+  set organization(dynamic organization) => _organization = organization;
 
 PostLocationData.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -305,4 +307,50 @@ PostLocationData.fromJson(Map<String, dynamic> json) {
     data['organization'] = this._organization;
     return data;
   }
+
+  @override
+  bool get stringify {
+
+  }
+
+  @override
+
+  List<Object> get props => [ id,
+     dateCreated,
+     dateModified,
+     createdBy,
+     modifiedBy,
+     locationCode,
+     locationName,
+     description,
+     status,
+     group,
+     timezone,
+     effectiveStartDate,
+     effectiveEndDate,
+     addressLine1,
+     city,
+     county,
+     state,
+     zip,
+     country,
+     primaryPhone,
+     secondaryPhone,
+     fax,
+     column1,
+     column2,
+     column3,
+     column4,
+     column5,
+     column6,
+     column7,
+     column8,
+     column9,
+     column10,
+     column11,
+     column12,
+     organization];
+
+
+
 }

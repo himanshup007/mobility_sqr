@@ -80,7 +80,7 @@ class SecondDependentData {
   Null _column12;
   String _empCode;
   Null _organization;
-  EmpPassport _empPassport;
+  dynamic _empPassport;
   dynamic _empVisa;
 
   SecondDependentData(
@@ -125,7 +125,7 @@ class SecondDependentData {
         Null column12,
         String empCode,
         Null organization,
-        EmpPassport empPassport,
+        dynamic empPassport,
         dynamic empVisa}) {
     this._id = id;
     this._isSelected=isSelected;
@@ -263,9 +263,9 @@ class SecondDependentData {
   set organization(Null organization) => _organization = organization;
 
 
-  EmpPassport get empPassport => _empPassport;
+  dynamic get empPassport => _empPassport;
 
-  set empPassport(EmpPassport value) {
+  set empPassport(dynamic value) {
     _empPassport = value;
   }
 
@@ -310,9 +310,17 @@ class SecondDependentData {
     _column12 = json['column12'];
     _empCode = json['emp_code'];
     _organization = json['organization'];
-    empPassport = json['emp_passport'] != null
-        ? new EmpPassport.fromJson(json['emp_passport'])
-        : null;
+
+    if( json['emp_passport']==""){
+      empPassport = json['emp_passport'] != null
+          ? json['emp_passport']
+          : null;
+    }else{
+      empPassport = json['emp_passport'] != null
+          ? new EmpPassport.fromJson(json['emp_passport'])
+          : null;
+    }
+
     if(json['emp_visa']==""){
       empVisa = json['emp_visa'] != null
           ? json['emp_visa']

@@ -199,9 +199,9 @@ class MyModelData {
         details.add(new Details.fromJson(v));
       });
     }
-    if (json['dependent'] != null) {
+    if (json['dependents'] != null) {
       dependent = new List<Dependent>();
-      json['dependent'].forEach((v) {
+      json['dependents'].forEach((v) {
         dependent.add(new Dependent.fromJson(v));
       });
     }
@@ -279,7 +279,7 @@ class MyModelData {
       data['details'] = this.details.map((v) => v.toJson()).toList();
     }
     if (this.dependent != null) {
-      data['dependent'] = this.dependent.map((v) => v.toJson()).toList();
+      data['dependents'] = this.dependent.map((v) => v.toJson()).toList();
     }
     if (this.visaRequests != null) {
       data['visa_requests'] = this.visaRequests.map((v) => v.toJson()).toList();
@@ -539,115 +539,193 @@ class Details {
   }
 }
 class Dependent {
-  dynamic id;
-  String dateCreated;
-  String dateModified;
-  String createdBy;
-  String modifiedBy;
-  bool status;
-  String reqId;
-  String dependentRelation;
-  String dependentName;
-  String dependentPassport;
-  String dependentVisa;
-  dynamic column1;
-  dynamic column2;
-  dynamic column3;
-  dynamic column4;
-  dynamic column5;
-  dynamic column6;
-  dynamic column7;
-  dynamic column8;
-  dynamic column9;
-  dynamic column10;
-  dynamic column11;
-  dynamic column12;
-  String travelReqId;
-  dynamic organization;
+  int _id;
+  String _dateCreated;
+  String _dateModified;
+  String _createdBy;
+  String _modifiedBy;
+  bool _status;
+  String _reqId;
+  String _dependentRelation;
+  String _dependentName;
+  String _dependentPassport;
+  String _dependentVisa;
+  Null _column1;
+  Null _column2;
+  Null _column3;
+  Null _column4;
+  Null _column5;
+  Null _column6;
+  Null _column7;
+  Null _column8;
+  Null _column9;
+  Null _column10;
+  Null _column11;
+  Null _column12;
+  String _travelReqId;
+  Null _organization;
 
   Dependent(
-      {this.id,
-        this.dateCreated,
-        this.dateModified,
-        this.createdBy,
-        this.modifiedBy,
-        this.status,
-        this.reqId,
-        this.dependentRelation,
-        this.dependentName,
-        this.dependentPassport,
-        this.dependentVisa,
-        this.column1,
-        this.column2,
-        this.column3,
-        this.column4,
-        this.column5,
-        this.column6,
-        this.column7,
-        this.column8,
-        this.column9,
-        this.column10,
-        this.column11,
-        this.column12,
-        this.travelReqId,
-        this.organization});
+      {int id,
+        String dateCreated,
+        String dateModified,
+        String createdBy,
+        String modifiedBy,
+        bool status,
+        String reqId,
+        String dependentRelation,
+        String dependentName,
+        String dependentPassport,
+        String dependentVisa,
+        Null column1,
+        Null column2,
+        Null column3,
+        Null column4,
+        Null column5,
+        Null column6,
+        Null column7,
+        Null column8,
+        Null column9,
+        Null column10,
+        Null column11,
+        Null column12,
+        String travelReqId,
+        Null organization}) {
+    this._id = id;
+    this._dateCreated = dateCreated;
+    this._dateModified = dateModified;
+    this._createdBy = createdBy;
+    this._modifiedBy = modifiedBy;
+    this._status = status;
+    this._reqId = reqId;
+    this._dependentRelation = dependentRelation;
+    this._dependentName = dependentName;
+    this._dependentPassport = dependentPassport;
+    this._dependentVisa = dependentVisa;
+    this._column1 = column1;
+    this._column2 = column2;
+    this._column3 = column3;
+    this._column4 = column4;
+    this._column5 = column5;
+    this._column6 = column6;
+    this._column7 = column7;
+    this._column8 = column8;
+    this._column9 = column9;
+    this._column10 = column10;
+    this._column11 = column11;
+    this._column12 = column12;
+    this._travelReqId = travelReqId;
+    this._organization = organization;
+  }
+
+  int get id => _id;
+  set id(int id) => _id = id;
+  String get dateCreated => _dateCreated;
+  set dateCreated(String dateCreated) => _dateCreated = dateCreated;
+  String get dateModified => _dateModified;
+  set dateModified(String dateModified) => _dateModified = dateModified;
+  String get createdBy => _createdBy;
+  set createdBy(String createdBy) => _createdBy = createdBy;
+  String get modifiedBy => _modifiedBy;
+  set modifiedBy(String modifiedBy) => _modifiedBy = modifiedBy;
+  bool get status => _status;
+  set status(bool status) => _status = status;
+  String get reqId => _reqId;
+  set reqId(String reqId) => _reqId = reqId;
+  String get dependentRelation => _dependentRelation;
+  set dependentRelation(String dependentRelation) =>
+      _dependentRelation = dependentRelation;
+  String get dependentName => _dependentName;
+  set dependentName(String dependentName) => _dependentName = dependentName;
+  String get dependentPassport => _dependentPassport;
+  set dependentPassport(String dependentPassport) =>
+      _dependentPassport = dependentPassport;
+  String get dependentVisa => _dependentVisa;
+  set dependentVisa(String dependentVisa) => _dependentVisa = dependentVisa;
+  dynamic get column1 => _column1;
+  set column1(dynamic column1) => _column1 = column1;
+  dynamic get column2 => _column2;
+  set column2(dynamic column2) => _column2 = column2;
+  dynamic get column3 => _column3;
+  set column3(dynamic column3) => _column3 = column3;
+  dynamic get column4 => _column4;
+  set column4(dynamic column4) => _column4 = column4;
+  dynamic get column5 => _column5;
+  set column5(dynamic column5) => _column5 = column5;
+  dynamic get column6 => _column6;
+  set column6(dynamic column6) => _column6 = column6;
+  dynamic get column7 => _column7;
+  set column7(dynamic column7) => _column7 = column7;
+  dynamic get column8 => _column8;
+  set column8(dynamic column8) => _column8 = column8;
+  dynamic get column9 => _column9;
+  set column9(dynamic column9) => _column9 = column9;
+  dynamic get column10 => _column10;
+  set column10(dynamic column10) => _column10 = column10;
+  dynamic get column11 => _column11;
+  set column11(dynamic column11) => _column11 = column11;
+  dynamic get column12 => _column12;
+  set column12(dynamic column12) => _column12 = column12;
+  String get travelReqId => _travelReqId;
+  set travelReqId(String travelReqId) => _travelReqId = travelReqId;
+  dynamic get organization => _organization;
+  set organization(dynamic organization) => _organization = organization;
 
   Dependent.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    dateCreated = json['date_created'];
-    dateModified = json['date_modified'];
-    createdBy = json['created_by'];
-    modifiedBy = json['modified_by'];
-    status = json['status'];
-    reqId = json['req_id'];
-    dependentRelation = json['dependent_relation'];
-    dependentName = json['dependent_name'];
-    dependentPassport = json['dependent_passport'];
-    dependentVisa = json['dependent_visa'];
-    column1 = json['column1'];
-    column2 = json['column2'];
-    column3 = json['column3'];
-    column4 = json['column4'];
-    column5 = json['column5'];
-    column6 = json['column6'];
-    column7 = json['column7'];
-    column8 = json['column8'];
-    column9 = json['column9'];
-    column10 = json['column10'];
-    column11 = json['column11'];
-    column12 = json['column12'];
-    travelReqId = json['travel_req_id'];
-    organization = json['organization'];
+    _id = json['id'];
+    _dateCreated = json['date_created'];
+    _dateModified = json['date_modified'];
+    _createdBy = json['created_by'];
+    _modifiedBy = json['modified_by'];
+    _status = json['status'];
+    _reqId = json['req_id'];
+    _dependentRelation = json['dependent_relation'];
+    _dependentName = json['dependent_name'];
+    _dependentPassport = json['dependent_passport'];
+    _dependentVisa = json['dependent_visa'];
+    _column1 = json['column1'];
+    _column2 = json['column2'];
+    _column3 = json['column3'];
+    _column4 = json['column4'];
+    _column5 = json['column5'];
+    _column6 = json['column6'];
+    _column7 = json['column7'];
+    _column8 = json['column8'];
+    _column9 = json['column9'];
+    _column10 = json['column10'];
+    _column11 = json['column11'];
+    _column12 = json['column12'];
+    _travelReqId = json['travel_req_id'];
+    _organization = json['organization'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['date_created'] = this.dateCreated;
-    data['date_modified'] = this.dateModified;
-    data['created_by'] = this.createdBy;
-    data['modified_by'] = this.modifiedBy;
-    data['status'] = this.status;
-    data['req_id'] = this.reqId;
-    data['dependent_relation'] = this.dependentRelation;
-    data['dependent_name'] = this.dependentName;
-    data['dependent_passport'] = this.dependentPassport;
-    data['dependent_visa'] = this.dependentVisa;
-    data['column1'] = this.column1;
-    data['column2'] = this.column2;
-    data['column3'] = this.column3;
-    data['column4'] = this.column4;
-    data['column5'] = this.column5;
-    data['column6'] = this.column6;
-    data['column7'] = this.column7;
-    data['column8'] = this.column8;
-    data['column9'] = this.column9;
-    data['column10'] = this.column10;
-    data['column11'] = this.column11;
-    data['column12'] = this.column12;
-    data['travel_req_id'] = this.travelReqId;
-    data['organization'] = this.organization;
+    data['id'] = this._id;
+    data['date_created'] = this._dateCreated;
+    data['date_modified'] = this._dateModified;
+    data['created_by'] = this._createdBy;
+    data['modified_by'] = this._modifiedBy;
+    data['status'] = this._status;
+    data['req_id'] = this._reqId;
+    data['dependent_relation'] = this._dependentRelation;
+    data['dependent_name'] = this._dependentName;
+    data['dependent_passport'] = this._dependentPassport;
+    data['dependent_visa'] = this._dependentVisa;
+    data['column1'] = this._column1;
+    data['column2'] = this._column2;
+    data['column3'] = this._column3;
+    data['column4'] = this._column4;
+    data['column5'] = this._column5;
+    data['column6'] = this._column6;
+    data['column7'] = this._column7;
+    data['column8'] = this._column8;
+    data['column9'] = this._column9;
+    data['column10'] = this._column10;
+    data['column11'] = this._column11;
+    data['column12'] = this._column12;
+    data['travel_req_id'] = this._travelReqId;
+    data['organization'] = this._organization;
     return data;
   }
 }
-

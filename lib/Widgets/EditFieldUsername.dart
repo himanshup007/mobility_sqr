@@ -67,6 +67,7 @@ class _EditFieldCustomState extends State<EditFieldCustom> {
               initialData: " ",
               builder: (context, snapshot) {
                 return TextField(
+                  textInputAction: TextInputAction.unspecified,
                   obscureText: _passwordVisible ? hidePass : false,
                   decoration: InputDecoration(
                     border: InputBorder.none,

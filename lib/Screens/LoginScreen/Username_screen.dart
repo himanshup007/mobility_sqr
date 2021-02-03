@@ -12,7 +12,7 @@ import 'package:mobility_sqr/Widgets/EditFieldUsername.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:sizer/sizer_util.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 class Username_Screen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _Username_Screen();
@@ -205,16 +205,20 @@ class _Username_Screen extends State<Username_Screen> {
                                       tokengetter.saveValue(
                                           snapshot.data.access,
                                           snapshot.data.refresh);
+
                                       UserData();
                                     }
                                   } else if (snapshot.hasData &&
-                                      snapshot.data.detail != null) {
-                                    Future.delayed(Duration(seconds: 3), () {
+                                      snapshot.data.detail != null&&snapshot.data.access==null) {
+
+                                    Future.delayed(Duration.zero, () {
                                       try {
                                         showDefaultSnackbar(
                                             context, snapshot.data.detail);
+
                                       } catch (e) {}
                                     });
+
                                   }
 
                                   return RaisedButton(
@@ -228,17 +232,17 @@ class _Username_Screen extends State<Username_Screen> {
                                         "NEXT",
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         _onLoading();
 
                                         FocusScope.of(context).unfocus();
-                                        bloc.passwordValidate();
-                                        Future.delayed(
-                                            Duration(seconds: 3), () {
-                                          Navigator.of(
-                                              context, rootNavigator: true)
-                                              .pop(dialogContext);
-                                        });
+                                       UserToken data= await bloc.passwordValidate();
+                                       if(data.refresh==null){
+                                         Navigator.of(
+                                             context, rootNavigator: true)
+                                             .pop(dialogContext);
+                                       }
+
                                       });
                                 }),
                           ),
@@ -284,8 +288,11 @@ class _Username_Screen extends State<Username_Screen> {
     }
   }
 
+
   void getTimeforPush(userinfo) {
-    Future.delayed(Duration.zero, () {
+    Navigator.of(
+        context, rootNavigator: true)
+        .pop(dialogContext);
       if (userinfo.data.termandcondtion == "1") {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/Dashboard', (Route<dynamic> route) => false);
@@ -293,7 +300,7 @@ class _Username_Screen extends State<Username_Screen> {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/Term&Condition', (Route<dynamic> route) => false);
       }
-    });
+
   }
 }
 
