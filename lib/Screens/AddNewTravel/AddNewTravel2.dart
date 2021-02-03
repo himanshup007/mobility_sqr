@@ -10,6 +10,7 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
+import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/TravelReqResponse.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
@@ -32,6 +33,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
   var _TokenGetter = TokenGetter();
 
   BuildContext dialogContext;
+  List<currency_data> _currencyConversiondata;
 
   UserInfo info;
 
@@ -49,10 +51,25 @@ class AddNewTravel2State extends State<AddNewTravel2> {
   }
   @override
   Future<void> initState() {
-    // TODO: implement initState
+
     super.initState();
     getDialCode();
     getvalues();
+  }
+  getValuesforCurrencyConversion() async {
+
+await _appApiProvider.get_currency_conversion().then((value) => setCurrencyValue(value) );
+
+
+  }
+  setCurrencyValue(CurrencyConversionModel value){
+    if(value.status=="Success"){
+      _currencyConversiondata=value.data;
+
+    }else{
+
+    }
+
   }
 
   @override

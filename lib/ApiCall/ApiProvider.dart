@@ -4,6 +4,7 @@ import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/DialCodeModel.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
@@ -493,4 +494,32 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
+
+  Future<CurrencyConversionModel> get_currency_conversion() async {
+
+    Map<String, String> queryParams = {
+      "status_type": "Active",
+
+    };
+    String token = await getToken_byReresh();
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_CURRENCY_CONVERSION + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      CurrencyConversionModel myresponse =
+      CurrencyConversionModel.fromJson(jsonDecode(response.body));
+
+      return myresponse;
+    } else {
+      throw Exception('error');
+    }
+  }
+
 }
