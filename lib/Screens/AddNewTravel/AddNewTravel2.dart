@@ -371,6 +371,20 @@ class AddNewTravel2State extends State<AddNewTravel2> {
 
                     }
 
+                    for(int i=0;i<list.travelCity.length;i++){
+
+                      if(list.travelCity.length>1){
+
+                      if(i==list.travelCity.length-1){
+                        list.travelCity[i].returnDate=list.travelCity[i].departureDate;
+                      }
+                      else{
+                        list.travelCity[i].returnDate=list.travelCity[i+1].departureDate;
+                      }
+
+                      }
+                    }
+
 
 
                     //list.travelVisa.addAll(GenerateVisa(list,info,HomeCountryName));
@@ -502,13 +516,13 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
         visa.fromCity = mydata.travelCity[i].travellingCountry;
         visa.toCity = mydata.travelCity[i].travellingCountryTo;
         visa.travelStartDate =  DateTime.parse(mydata.travelCity[i].departureDate).toUtc().toIso8601String();
-        if(i==0){
+        if(mydata.travelCity.length==1){
           visa.travelEndDate = DateTime.parse(mydata.travelCity[i].returnDate).toUtc().toIso8601String();
-        }else if(i!=mydata.travelCity.length-1){
-          visa.travelEndDate=DateTime.parse(mydata.travelCity[i+1].departureDate).toUtc().toIso8601String();
+        }else if(i==mydata.travelCity.length-1){
+          visa.travelEndDate=DateTime.parse(mydata.travelCity[i].departureDate).toUtc().toIso8601String();
         }
         else{
-          visa.travelEndDate=DateTime.parse(mydata.travelCity[1].departureDate).toUtc().toIso8601String();
+          visa.travelEndDate=DateTime.parse(mydata.travelCity[1+1].departureDate).toUtc().toIso8601String();
         }
 
         if(mydata.travelCity[i].travelPurpose=="Work"){

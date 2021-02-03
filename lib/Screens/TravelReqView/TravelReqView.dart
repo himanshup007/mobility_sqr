@@ -285,7 +285,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                    list.details.length > 0
                        ? LimitedBox(
                      maxWidth: 100.0.w,
-                     maxHeight:170.0.h,
+                     maxHeight:200.0.h,
                            child: ScrollablePositionedList.builder(
                                itemScrollController: itemScrollController,
                                physics: NeverScrollableScrollPhysics(),
@@ -295,7 +295,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                    (BuildContext context, int index) {
                                  return LimitedBox(
                                    maxWidth: 100.0.w,
-                                   maxHeight:170.0.h,
+                                   maxHeight:150.0.h,
                                    child: ListView(
 
                                      physics: NeverScrollableScrollPhysics(),
@@ -373,7 +373,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                        2,
                                                        false)),
                                              ),
-                                             Expanded(
+                                             if(!list.isTravelMultiCountry)Expanded(
                                                flex: 1,
                                                child: Container(
                                                    child: CustomColumnEditText(
@@ -1076,8 +1076,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                            ],
                                          ),
                                        ),
-                                       showcost
-                                           ? Container(
+                                       Container(
                                          child: Column(children: [
                                            Divider(
                                              height: 1,
@@ -1159,7 +1158,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                            ),
                                          ]),
                                        )
-                                           : SizedBox(),
+                                           ,
                                        Container(
                                          margin: EdgeInsets.symmetric(
                                            horizontal: 5.0.w,

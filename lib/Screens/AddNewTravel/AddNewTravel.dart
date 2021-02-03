@@ -1588,9 +1588,9 @@ getvalues() async {
                                                                   .postLocationData =
                                                               newValue;
                                                           traveldata[index]
-                                                                  .officeLocation =
-                                                              newValue
-                                                                  .locationName;
+                                                                  .officeLocation ="${newValue
+                                                              .locationName}";
+
                                                         });
                                                       },
                                                       items: traveldata[index]
@@ -2029,10 +2029,10 @@ getvalues() async {
 
       list.travelCity[index].hotelCost = value;
     } else {
-      list.travelCity[index].hotelCost = " ";
+      list.travelCity[index].hotelCost = "0";
     }
 
-    if (list.travelCity[index].hotelCost == " ") {
+    if (list.travelCity[index].hotelCost == "0") {
       list.travelCity[index].totalCost =
           (double.parse(list.travelCity[index].perDiemCost) +
                   double.parse(list.travelCity[index].transportationCost))
@@ -2284,13 +2284,13 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
         visa.fromCity = mydata.travelCity[i].travellingCountry;
         visa.toCity = mydata.travelCity[i].travellingCountryTo;
         visa.travelStartDate =  DateTime.parse(mydata.travelCity[i].departureDate).toUtc().toIso8601String();
-        if(i==0){
+        if(mydata.travelCity.length==1){
           visa.travelEndDate = DateTime.parse(mydata.travelCity[i].returnDate).toUtc().toIso8601String();
-        }else if(i!=mydata.travelCity.length-1){
-          visa.travelEndDate=DateTime.parse(mydata.travelCity[i+1].departureDate).toUtc().toIso8601String();
+        }else if(i==mydata.travelCity.length-1){
+          visa.travelEndDate=DateTime.parse(mydata.travelCity[i].departureDate).toUtc().toIso8601String();
         }
         else{
-          visa.travelEndDate=DateTime.parse(mydata.travelCity[1].departureDate).toUtc().toIso8601String();
+          visa.travelEndDate=DateTime.parse(mydata.travelCity[i+1].departureDate).toUtc().toIso8601String();
         }
 
         if(mydata.travelCity[i].travelPurpose=="Work"){
@@ -2308,8 +2308,8 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
         visa.organization = info.data.orgId;
         visa.visaReqId = "";
         visa.isDependent = false;
-        visa.dependentRelation = "223";
-        visa.dependentName = "23";
+        visa.dependentRelation = "";
+        visa.dependentName = "";
         visa.country ="123";
         visa.createdBy = info.data.empCode;
         visalist.add(visa);
@@ -2351,6 +2351,7 @@ resetValue(TravelReqPayLoad req_data){
   for(int i=0;i<req_data.travelCity.length;i++){
 
     req_data.travelCity[i].myTotalCost=0.0;
+    req_data.travelCity[i].myAirFare="0";
 
   }
 

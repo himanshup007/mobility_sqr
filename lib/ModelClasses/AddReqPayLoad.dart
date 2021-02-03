@@ -277,7 +277,7 @@ class TravelCity {
   String _perDiamValue;
   String _transportCost;
   double _myTotalCost=0.0;
-  double _myAirFare=0.0;
+  String _myAirFare="0";
   double get myTotalCost => _myTotalCost;
 
   set myTotalCost(double value) {
@@ -341,9 +341,9 @@ class TravelCity {
   SearchList _toCountryData ;
   bool _hasVisa;
 
-  double get myAirFare => _myAirFare;
+  String get myAirFare => _myAirFare;
 
-  set myAirFare(double value) {
+  set myAirFare(String value) {
     _myAirFare = value;
   }
 
@@ -431,7 +431,7 @@ class TravelCity {
       bool isDependent,
       String perDiemValue,
         double myTotalCost,
-        double airFare,
+        String airFare,
 
       List<DependentData> dependentData}) {
     this._accomodationLimit=accomodationLimit;

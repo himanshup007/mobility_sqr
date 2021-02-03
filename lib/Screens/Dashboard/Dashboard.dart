@@ -614,7 +614,7 @@ class _DashboardState extends State<Dashboard> {
                                                                         Container(
                                                                           foregroundDecoration:
                                                                           const RotatedCornerDecoration(
-                                                                            color: Colors.red,
+                                                                            color: Colors.green,
                                                                             geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
                                                                             textSpan: TextSpan(text: 'Closed', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
                                                                             labelInsets: LabelInsets(baselineShift: 3, start: 1),
