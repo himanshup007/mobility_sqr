@@ -62,7 +62,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
 
   getValuesforCurrencyConversion() async {
     await _appApiProvider
-        .get_currency_conversion()
+        .get_currency_active()
         .then((value) => setCurrencyValue(value)).catchError((onError)=>   this.setState(() {
       showloader=false;
     }));

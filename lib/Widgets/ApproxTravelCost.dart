@@ -100,7 +100,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                                               child: Column(
                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Text(value.currencyCode+", ${value.currencyName}",textAlign: TextAlign.end,),
+                                                  Text(value.currencyCode+" (${value.currencyName})",textAlign: TextAlign.end,),
                                                   Container(height: 1,color: Colors.black12,)
                                                 ],
                                               ),

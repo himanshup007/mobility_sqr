@@ -496,10 +496,36 @@ class ApiProvider {
   }
 
 
-  Future<CurrencyConversionModel> get_currency_conversion() async {
+  Future<CurrencyConversionModel> get_currency_active() async {
 
     Map<String, String> queryParams = {
       "status_type": "Active",
+
+    };
+    String token = await getToken_byReresh();
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_CURRENCY_ACTIVE + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      CurrencyConversionModel myresponse =
+      CurrencyConversionModel.fromJson(jsonDecode(response.body));
+
+      return myresponse;
+    } else {
+      throw Exception('error');
+    }
+  }
+  Future<CurrencyConversionModel> get_currency_conversion(String from_currency,String to_currency) async {
+
+    Map<String, String> queryParams = {
+      "from_currency": from_currency,
+      "to_currency": to_currency
 
     };
     String token = await getToken_byReresh();
