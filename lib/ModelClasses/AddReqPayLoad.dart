@@ -3,7 +3,7 @@ import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
-
+import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 class TravelReqPayLoad {
   String _travelReqId;
   String _project;
@@ -278,6 +278,15 @@ class TravelCity {
   String _transportCost;
   double _myTotalCost=0.0;
   String _myAirFare="0";
+  Currency_Data _currency_data;
+
+
+  Currency_Data get currency_data => _currency_data;
+
+  set currency_data(Currency_Data value) {
+    _currency_data = value;
+  }
+
   double get myTotalCost => _myTotalCost;
 
   set myTotalCost(double value) {
@@ -390,7 +399,7 @@ class TravelCity {
   }
 
   TravelCity(
-      {String TransportCost,
+      { Currency_Data currency_data,String TransportCost,
         SearchList toCountryData,
       List<SecondDependentData> myDependentList,
         bool hasVisa,
@@ -434,6 +443,7 @@ class TravelCity {
         String airFare,
 
       List<DependentData> dependentData}) {
+    this._currency_data=currency_data;
     this._accomodationLimit=accomodationLimit;
     this._myAirFare=airFare;
     this._hasVisa=hasVisa;

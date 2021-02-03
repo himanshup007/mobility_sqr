@@ -2,10 +2,10 @@ class CurrencyConversionModel {
   String _message;
   int _statusCode;
   bool _status;
-  List<currency_data> _data;
+  List<Currency_Data> _data;
 
   CurrencyConversionModel(
-      {String message, int statusCode, bool status, List<currency_data> data}) {
+      {String message, int statusCode, bool status, List<Currency_Data> data}) {
     this._message = message;
     this._statusCode = statusCode;
     this._status = status;
@@ -18,17 +18,17 @@ class CurrencyConversionModel {
   set statusCode(int statusCode) => _statusCode = statusCode;
   bool get status => _status;
   set status(bool status) => _status = status;
-  List<currency_data> get data => _data;
-  set data(List<currency_data> data) => _data = data;
+  List<Currency_Data> get data => _data;
+  set data(List<Currency_Data> data) => _data = data;
 
   CurrencyConversionModel.fromJson(Map<String, dynamic> json) {
     _message = json['message'];
     _statusCode = json['status_code'];
     _status = json['status'];
     if (json['data'] != null) {
-      _data = new List<currency_data>();
+      _data = new List<Currency_Data>();
       json['data'].forEach((v) {
-        _data.add(new currency_data.fromJson(v));
+        _data.add(new Currency_Data.fromJson(v));
       });
     }
   }
@@ -45,7 +45,7 @@ class CurrencyConversionModel {
   }
 }
 
-class currency_data {
+class Currency_Data {
   int _id;
   String _dateCreated;
   String _dateModified;
@@ -70,7 +70,7 @@ class currency_data {
   dynamic _column12;
   dynamic _organization;
 
-  currency_data(
+  Currency_Data(
       {int id,
         String dateCreated,
         String dateModified,
@@ -167,7 +167,7 @@ class currency_data {
   dynamic get organization => _organization;
   set organization(dynamic organization) => _organization = organization;
 
-  currency_data.fromJson(Map<String, dynamic> json) {
+  Currency_Data.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _dateCreated = json['date_created'];
     _dateModified = json['date_modified'];
