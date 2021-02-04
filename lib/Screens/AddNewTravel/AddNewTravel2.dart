@@ -581,3 +581,13 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info, String homeCountryName) {
 
   return visalist;
 }
+checkVisaApplicable(String depatureDate, String visaExpiryDate) {
+  final differenceInTravelDates = DateTime.parse(visaExpiryDate)
+      .difference(DateTime.parse(depatureDate))
+      .inDays;
+  if (differenceInTravelDates < 0) {
+    return true;
+  } else {
+    return false;
+  }
+}

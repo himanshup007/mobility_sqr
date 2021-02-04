@@ -1,3 +1,5 @@
+import 'CurrencyConversionModel.dart';
+
 class GetTravelRequest {
   String massage;
   bool status;
@@ -303,6 +305,8 @@ class VisaRequests {
   }
 }
 class Details {
+  Currency_Data currency_data;
+  double currencyTotal=0.0;
   int id;
   String dateCreated;
   String dateModified;
@@ -360,6 +364,19 @@ class Details {
   dynamic organization;
   dynamic assignmentType;
 
+
+  double get currencyTotalData => currencyTotal;
+
+  set currencyTotalData(double value) {
+    currencyTotal = value;
+  }
+
+  Currency_Data get currency_dataset=> currency_data;
+
+  set currency_dataset(Currency_Data value) {
+    currency_data = value;
+  }
+
   Details(
       {this.id,
         this.dateCreated,
@@ -416,6 +433,8 @@ class Details {
         this.column12,
         this.travelReqId,
         this.organization,
+        this.currency_data,
+        this.currencyTotal,
         this.assignmentType});
 
   Details.fromJson(Map<String, dynamic> json) {

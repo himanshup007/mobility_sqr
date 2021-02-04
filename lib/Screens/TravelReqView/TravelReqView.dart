@@ -4,6 +4,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
+import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestFResponse.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestForApprovalModel.dart';
@@ -12,6 +13,7 @@ import 'package:mobility_sqr/Screens/ActionHistory.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:mobility_sqr/Widgets/ViewAgenda.dart';
+import 'package:queue/queue.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sizer/sizer.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
@@ -40,7 +42,8 @@ class _TravelReqViewState extends State<TravelReqView> {
   ActionHistoryModel history_data;
   bool showloader = true;
   int index = 0;
-
+  List<Currency_Data> _currencyConversiondata;
+  final queue = Queue();
   scrolltotop() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_listview_controller.hasClients) {
@@ -80,13 +83,39 @@ class _TravelReqViewState extends State<TravelReqView> {
       where = args['where'];
       initalizingData(list);
       ApiCallForActionHistory(list.travelReqId);
+      getValuesforCurrencyConversion();
     });
   }
+
+  getValuesforCurrencyConversion() async {
+    await _apiProvider
+        .get_currency_active()
+        .then((value) => setCurrencyValue(value)).catchError((onError)=>   this.setState(() {
+      showloader=false;
+    }));
+  }
+  setCurrencyValue(CurrencyConversionModel value) {
+
+    if (value.message == "Success") {
+      this.setState(() {
+        showloader=false;
+        _currencyConversiondata = value.data;
+      });
+
+    } else {
+      this.setState(() {
+        showloader=false;
+
+      });
+    }
+  }
+
 
   initalizingData(list) {
     for (int i = 0; i < list.details.length; i++) {
       showHide data = new showHide();
       if (i == 0) {
+        data.name = "data${1}";
         data.name = "data${1}";
         data.hide = false;
       } else {
@@ -95,6 +124,34 @@ class _TravelReqViewState extends State<TravelReqView> {
       }
       userdetails.add(data);
     }
+  }
+
+  setThevalueforToCurrency(Currency_Data value, MyModelData list)  {
+
+
+    for(int i=0;i<list.details.length;i++){
+
+      queue.add(() async {
+        await   ApiCall( i,value,list);
+      }).then((result) => print("asa"));
+
+
+    }
+
+  }
+  ApiCall(int i, Currency_Data value, MyModelData list,) async {
+    await  _apiProvider
+        .get_currency_conversion(
+        list.details[i].currency, value.currencyCode)
+        .then((value) =>this.setState(() {
+          if(value.data.length>0){
+            list.details[i].currencyTotal=list.details[i].totalCost*double.parse(value.data[0].conversionRate);
+          }else{
+            list.details[i].currencyTotal=0.0;
+          }
+
+    })
+    );
   }
 
   @override
@@ -631,6 +688,40 @@ class _TravelReqViewState extends State<TravelReqView> {
                                 ],
                               ),
                             ),
+                            SizedBox(height: 10,),
+
+                            list.details[index].isClientLocation?Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      child: travelTextView(
+                                          "Client Name",
+                                          list.details[index]
+                                              .clientName
+                                             ,
+                                          AppConstants.TEXT_BACKGROUND_COLOR),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                        child: travelTextView(
+                                            "Client Number",
+                                            list.details[index]
+                                                .clientNumber+ list.details[index]
+                                                .clientNumber
+                                            ,
+                                            AppConstants
+                                                .TEXT_BACKGROUND_COLOR)),
+                                  ),
+                                ],
+                              ),
+                            ):SizedBox(),
                             Divider(
                               height: 2,
                               thickness: 2,
@@ -944,149 +1035,173 @@ class _TravelReqViewState extends State<TravelReqView> {
                             Container(
                               width: 100.0.w,
                               margin: EdgeInsets.symmetric(
-                                  horizontal: 5.0.w, vertical: 3.0.h),
+                                  horizontal: 5.0.w, vertical: 1.0.h),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "Approximate Travel Cost",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w800,
-                                        color:
-                                            AppConstants.TEXT_BACKGROUND_COLOR),
+                                  Expanded(
+                                    flex:2,
+                                    child: Text(
+                                      "Approximate Travel Cost",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w800,
+                                          color:
+                                              AppConstants.TEXT_BACKGROUND_COLOR),
+                                    ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (!showcost) {
-                                        scrolltotop();
-                                      }
-
-                                      this.setState(() {
-                                        showcost = !showcost;
-                                      });
-                                    },
+                                  Expanded(
+                                    flex:1,
                                     child: Container(
-                                        padding: EdgeInsets.all(5),
-                                        height: 30,
-                                        margin: EdgeInsets.only(top: 2),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: AppConstants
-                                                    .APP_THEME_COLOR),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5))),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              "Currency",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: AppConstants
-                                                      .APP_THEME_COLOR,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15),
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                          border: Border.all(color: AppConstants.APP_THEME_COLOR)
+                                      ),
+                                      child: FormField<Currency_Data>(
+                                        builder: (FormFieldState<Currency_Data> state) {
+                                          return InputDecorator(
+                                            decoration: InputDecoration(
+                                              fillColor: AppConstants.APP_THEME_COLOR,
+                                                hoverColor: AppConstants.APP_THEME_COLOR,
+
+                                                contentPadding: EdgeInsets.zero,
+                                                border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(5.0))),
+                                            child: DropdownButtonHideUnderline(
+                                              child: FittedBox(
+                                                child: DropdownButton<Currency_Data>(
+                                                  iconSize: 20,
+                                                  iconEnabledColor: AppConstants.APP_THEME_COLOR,
+                                                  hint: Padding(
+                                                    padding: const EdgeInsets.only(left: 20),
+                                                    child: Text("Currency"),
+                                                  ),
+                                                  value: list.details[index].currency_data,
+                                                  isDense: true,
+                                                  onChanged: (newValue) {
+                                                    setState(() {
+                                                      list.details[index].currency_data =
+                                                          newValue;
+                                                    });
+
+                                                    setThevalueforToCurrency(newValue,list);
+
+                                                  },
+                                                  items: _currencyConversiondata
+                                                      .map((Currency_Data value) {
+                                                    return DropdownMenuItem<Currency_Data>(
+                                                      value: value,
+                                                      child: Align(
+                                                        alignment: Alignment.center,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left: 5),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment.start,
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(
+                                                                value.currencyCode +
+                                                                    " (${value.currencyName})",
+                                                                textAlign: TextAlign.start,style: TextStyle(fontSize: 15,color:AppConstants.APP_THEME_COLOR),
+                                                              ),
+                                                              Container(
+                                                                height: 1,
+                                                                color: Colors.black12,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ),
                                             ),
-                                            !showcost
-                                                ? Icon(
-                                                    Icons
-                                                        .keyboard_arrow_down_sharp,
-                                                    color: AppConstants
-                                                        .APP_THEME_COLOR,
-                                                    size: 20,
-                                                  )
-                                                : Icon(
-                                                    Icons
-                                                        .keyboard_arrow_up_rounded,
-                                                    color: AppConstants
-                                                        .APP_THEME_COLOR,
-                                                    size: 20)
-                                          ],
-                                        )),
+                                          );
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              child: Column(children: [
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 5.0.w,),
+                              child:
+
+                                Column(
+                                  children: [
+                                    for (var item in list.details)
+
+                                      Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              margin: EdgeInsets.only(top: 5),
+                                              child: travelTextView(
+                                                  "City Name",
+                                                  "${IsNullCheck(item.destinationCity) ? item.destinationCity + "(${IsNullCheck(item.currency) ?item.currency : " "})" : " "}",
+                                                  AppConstants.TEXT_BACKGROUND_COLOR),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5,),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              travelTextViewHori(
+                                                  "Per-diems",
+                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].perDiemCost) ? item.perDiemCost : "-"}",
+                                                  Colors.black54),
+                                              travelTextViewHori(
+                                                  "Airfare",
+                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].airfareCost) ? item.airfareCost : "-"}",
+                                                  Colors.black54),
+                                              travelTextViewHori(
+                                                  "Hotel",
+                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].hotelCost) ? item.hotelCost : "-"}",
+                                                  Colors.black54),
+                                              travelTextViewHori(
+                                                  "Transportation",
+                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].transportationCost) ? item.transportationCost : "-"}",
+                                                  Colors.black54),
+                                              travelTextViewHori(
+                                                  "Total Cost",
+                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].totalCost) ? item.totalCost : "-"}",
+                                                  Colors.black54),
+                                            ],
+                                          ),
+                                          Divider(height: 1,thickness: 1,),
+                                          SizedBox(height: 10,),
+                                          Container(
+                                            width: 100.0.w,
+                                            child: RaisedButton(
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                      color:
+                                                      AppConstants.APP_THEME_COLOR)),
+                                              onPressed: () async {},
+                                              color: AppConstants.APP_THEME_COLOR,
+                                              textColor: Colors.white,
+                                              child: Text(
+                                                  "Total Cost(${IsNullCheck(item.currency) ? item.currency : " "}) : ${IsNullCheck(item.currencyTotal)? item.currencyTotal : " "} ",
+                                                  style: TextStyle(fontSize: 14)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+
+
                                 Divider(
                                   height: 1,
                                   color: AppConstants.TEXT_BACKGROUND_COLOR,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 5.0.w, vertical: .5.h),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      margin: EdgeInsets.only(top: 5),
-                                      child: travelTextView(
-                                          "City Name",
-                                          "${IsNullCheck(list.details[0].destinationCity) ? list.details[0].destinationCity + "(${IsNullCheck(list.expenceCureency) ? list.expenceCureency : " "})" : " "}",
-                                          AppConstants.TEXT_BACKGROUND_COLOR),
-                                    ),
-                                  ),
-                                ),
-                                Divider(
-                                  height: 1,
-                                  color: AppConstants.TEXT_BACKGROUND_COLOR,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 5.0.w, vertical: 1.0.h),
-                                  child: Column(
-                                    children: [
-                                      for (var item in list.details)
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            travelTextViewHori(
-                                                "Per-diems",
-                                                "${IsNullCheck(list.details[list.details.lastIndexOf(item)].perDiemCost) ? item.perDiemCost : "-"}",
-                                                AppConstants
-                                                    .TEXT_BACKGROUND_COLOR),
-                                            travelTextViewHori(
-                                                "Airfare",
-                                                "${IsNullCheck(list.details[list.details.lastIndexOf(item)].airfareCost) ? item.airfareCost : "-"}",
-                                                AppConstants
-                                                    .TEXT_BACKGROUND_COLOR),
-                                            travelTextViewHori(
-                                                "Hotel",
-                                                "${IsNullCheck(list.details[list.details.lastIndexOf(item)].hotelCost) ? item.hotelCost : "-"}",
-                                                AppConstants
-                                                    .TEXT_BACKGROUND_COLOR),
-                                            travelTextViewHori(
-                                                "Transportation",
-                                                "${IsNullCheck(list.details[list.details.lastIndexOf(item)].transportationCost) ? item.transportationCost : "-"}",
-                                                AppConstants
-                                                    .TEXT_BACKGROUND_COLOR),
-                                            travelTextViewHori(
-                                                "Total Cost",
-                                                "${IsNullCheck(list.details[list.details.lastIndexOf(item)].totalCost) ? item.totalCost : "-"}",
-                                                AppConstants
-                                                    .TEXT_BACKGROUND_COLOR),
-                                          ],
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  width: 100.0.w,
-                                  child: RaisedButton(
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color:
-                                                AppConstants.APP_THEME_COLOR)),
-                                    onPressed: () async {},
-                                    color: AppConstants.APP_THEME_COLOR,
-                                    textColor: Colors.white,
-                                    child: Text(
-                                        "Total Cost(${IsNullCheck(list.expenceCureency) ? list.expenceCureency : " "}) : ${IsNullCheck(GetTotalCost(list)) ? GetTotalCost(list) : " "} ",
-                                        style: TextStyle(fontSize: 14)),
-                                  ),
                                 ),
                               ]),
                             ),
@@ -1408,13 +1523,14 @@ class _TravelReqViewState extends State<TravelReqView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${header}',
-            style: TextStyle(fontSize: 14), textAlign: TextAlign.start),
+            style: TextStyle(fontSize: 14,color: Colors.black), textAlign: TextAlign.start,),
         SizedBox(
           height: 1.0.w,
         ),
         AutoSizeText(
           '${text}',
           style: TextStyle(
+
             color: textColor,
             fontSize: 13,
             fontWeight: FontWeight.bold,

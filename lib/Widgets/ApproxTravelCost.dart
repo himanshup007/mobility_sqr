@@ -78,7 +78,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                                 child: DropdownButton<Currency_Data>(
                                   hint: Padding(
                                     padding: const EdgeInsets.only(left: 10),
-                                    child: Text("Location"),
+                                    child: Text("Currency"),
                                   ),
                                   value: list.travelCity[index].currency_data,
                                   isDense: true,
