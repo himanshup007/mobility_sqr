@@ -44,6 +44,8 @@ class _TravelReqViewState extends State<TravelReqView> {
   int index = 0;
   List<Currency_Data> _currencyConversiondata;
   final queue = Queue();
+  var totalCurrencyCode="Currency";
+
   scrolltotop() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_listview_controller.hasClients) {
@@ -90,26 +92,24 @@ class _TravelReqViewState extends State<TravelReqView> {
   getValuesforCurrencyConversion() async {
     await _apiProvider
         .get_currency_active()
-        .then((value) => setCurrencyValue(value)).catchError((onError)=>   this.setState(() {
-      showloader=false;
-    }));
+        .then((value) => setCurrencyValue(value))
+        .catchError((onError) => this.setState(() {
+              showloader = false;
+            }));
   }
-  setCurrencyValue(CurrencyConversionModel value) {
 
+  setCurrencyValue(CurrencyConversionModel value) {
     if (value.message == "Success") {
       this.setState(() {
-        showloader=false;
+        showloader = false;
         _currencyConversiondata = value.data;
       });
-
     } else {
       this.setState(() {
-        showloader=false;
-
+        showloader = false;
       });
     }
   }
-
 
   initalizingData(list) {
     for (int i = 0; i < list.details.length; i++) {
@@ -126,32 +126,29 @@ class _TravelReqViewState extends State<TravelReqView> {
     }
   }
 
-  setThevalueforToCurrency(Currency_Data value, MyModelData list)  {
-
-
-    for(int i=0;i<list.details.length;i++){
-
+  setThevalueforToCurrency(Currency_Data value, MyModelData list) {
+    for (int i = 0; i < list.details.length; i++) {
       queue.add(() async {
-        await   ApiCall( i,value,list);
-      }).then((result) => print("asa"));
-
-
+        await ApiCall(i, value, list);
+      }).then((result) => print("found"));
     }
-
   }
-  ApiCall(int i, Currency_Data value, MyModelData list,) async {
-    await  _apiProvider
-        .get_currency_conversion(
-        list.details[i].currency, value.currencyCode)
-        .then((value) =>this.setState(() {
-          if(value.data.length>0){
-            list.details[i].currencyTotal=list.details[i].totalCost*double.parse(value.data[0].conversionRate);
-          }else{
-            list.details[i].currencyTotal=0.0;
-          }
 
-    })
-    );
+  ApiCall(
+    int i,
+    Currency_Data value,
+    MyModelData list,
+  ) async {
+    await _apiProvider
+        .get_currency_conversion(list.details[i].currency, value.currencyCode)
+        .then((value) => this.setState(() {
+              if (value.data.length > 0) {
+                list.details[i].currencyTotal = list.details[i].totalCost *
+                    double.parse(value.data[0].conversionRate);
+              } else {
+                list.details[i].currencyTotal = 0.0;
+              }
+            }));
   }
 
   @override
@@ -303,10 +300,11 @@ class _TravelReqViewState extends State<TravelReqView> {
                                   });
                                 },
                                 child: Container(
-                                  width: 20,
-                                  height: 3.0.h,
+                                  width: 30,
+                                  height: 4.0.h,
                                   margin: EdgeInsets.only(right: 3),
                                   decoration: BoxDecoration(
+                                    borderRadius:  BorderRadius.all(Radius.circular(5)),
                                     border: Border.all(
                                       color:
                                           manageColor(userdetails[index].hide),
@@ -688,40 +686,43 @@ class _TravelReqViewState extends State<TravelReqView> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 10,),
-
-                            list.details[index].isClientLocation?Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      child: travelTextView(
-                                          "Client Name",
-                                          list.details[index]
-                                              .clientName
-                                             ,
-                                          AppConstants.TEXT_BACKGROUND_COLOR),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            list.details[index].isClientLocation
+                                ? Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 5.0.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            child: travelTextView(
+                                                "Client Name",
+                                                list.details[index].clientName,
+                                                AppConstants
+                                                    .TEXT_BACKGROUND_COLOR),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                              child: travelTextView(
+                                                  "Client Number",
+                                                  list.details[index]
+                                                          .clientNumber +
+                                                      list.details[index]
+                                                          .clientNumber,
+                                                  AppConstants
+                                                      .TEXT_BACKGROUND_COLOR)),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                        child: travelTextView(
-                                            "Client Number",
-                                            list.details[index]
-                                                .clientNumber+ list.details[index]
-                                                .clientNumber
-                                            ,
-                                            AppConstants
-                                                .TEXT_BACKGROUND_COLOR)),
-                                  ),
-                                ],
-                              ),
-                            ):SizedBox(),
+                                  )
+                                : SizedBox(),
                             Divider(
                               height: 2,
                               thickness: 2,
@@ -1041,75 +1042,106 @@ class _TravelReqViewState extends State<TravelReqView> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    flex:2,
+                                    flex: 2,
                                     child: Text(
                                       "Approximate Travel Cost",
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w800,
-                                          color:
-                                              AppConstants.TEXT_BACKGROUND_COLOR),
+                                          color: AppConstants
+                                              .TEXT_BACKGROUND_COLOR),
                                     ),
                                   ),
                                   Expanded(
-                                    flex:1,
+                                    flex: 1,
                                     child: Container(
                                       height: 35,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                                          border: Border.all(color: AppConstants.APP_THEME_COLOR)
-                                      ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5)),
+                                          border: Border.all(
+                                              color: AppConstants
+                                                  .APP_THEME_COLOR)),
                                       child: FormField<Currency_Data>(
-                                        builder: (FormFieldState<Currency_Data> state) {
+                                        builder: (FormFieldState<Currency_Data>
+                                            state) {
                                           return InputDecorator(
                                             decoration: InputDecoration(
-                                              fillColor: AppConstants.APP_THEME_COLOR,
-                                                hoverColor: AppConstants.APP_THEME_COLOR,
-
+                                                fillColor: AppConstants
+                                                    .APP_THEME_COLOR,
+                                                hoverColor: AppConstants
+                                                    .APP_THEME_COLOR,
                                                 contentPadding: EdgeInsets.zero,
                                                 border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(5.0))),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0))),
                                             child: DropdownButtonHideUnderline(
                                               child: FittedBox(
-                                                child: DropdownButton<Currency_Data>(
+                                                child: DropdownButton<
+                                                    Currency_Data>(
                                                   iconSize: 20,
-                                                  iconEnabledColor: AppConstants.APP_THEME_COLOR,
+                                                  iconEnabledColor: AppConstants
+                                                      .APP_THEME_COLOR,
                                                   hint: Padding(
-                                                    padding: const EdgeInsets.only(left: 20),
-                                                    child: Text("Currency"),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 20),
+                                                    child: Text("Currency",textAlign: TextAlign.center,),
                                                   ),
-                                                  value: list.details[index].currency_data,
+
+                                                  value: list.details[index]
+                                                      .currency_data,
                                                   isDense: true,
                                                   onChanged: (newValue) {
                                                     setState(() {
-                                                      list.details[index].currency_data =
+                                                      list.details[index]
+                                                              .currency_data =
                                                           newValue;
+                                                      totalCurrencyCode=newValue.currencyCode;
                                                     });
 
-                                                    setThevalueforToCurrency(newValue,list);
-
+                                                    setThevalueforToCurrency(
+                                                        newValue, list);
                                                   },
                                                   items: _currencyConversiondata
-                                                      .map((Currency_Data value) {
-                                                    return DropdownMenuItem<Currency_Data>(
+                                                      .map((Currency_Data
+                                                          value) {
+                                                    return DropdownMenuItem<
+                                                        Currency_Data>(
                                                       value: value,
                                                       child: Align(
-                                                        alignment: Alignment.center,
+                                                        alignment:
+                                                            Alignment.center,
                                                         child: Padding(
-                                                          padding: const EdgeInsets.only(left: 5),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 5),
                                                           child: Column(
                                                             mainAxisAlignment:
-                                                            MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               Text(
                                                                 value.currencyCode +
                                                                     " (${value.currencyName})",
-                                                                textAlign: TextAlign.start,style: TextStyle(fontSize: 15,color:AppConstants.APP_THEME_COLOR),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: AppConstants
+                                                                        .APP_THEME_COLOR),
                                                               ),
                                                               Container(
                                                                 height: 1,
-                                                                color: Colors.black12,
+                                                                color: Colors
+                                                                    .black12,
                                                               )
                                                             ],
                                                           ),
@@ -1130,75 +1162,77 @@ class _TravelReqViewState extends State<TravelReqView> {
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(
-                                  horizontal: 5.0.w,),
-                              child:
-
-                                Column(
-                                  children: [
-                                    for (var item in list.details)
-
-                                      Column(
+                                horizontal: 5.0.w,
+                              ),
+                              child: Column(children: [
+                                for (var item in list.details)
+                                  Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          margin: EdgeInsets.only(top: 5),
+                                          child: travelTextView(
+                                              "City Name",
+                                              "${IsNullCheck(item.destinationCity) ? item.destinationCity + "(${IsNullCheck(item.currency) ? item.currency : " "})" : " "}",
+                                              AppConstants
+                                                  .TEXT_BACKGROUND_COLOR),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Container(
-                                              margin: EdgeInsets.only(top: 5),
-                                              child: travelTextView(
-                                                  "City Name",
-                                                  "${IsNullCheck(item.destinationCity) ? item.destinationCity + "(${IsNullCheck(item.currency) ?item.currency : " "})" : " "}",
-                                                  AppConstants.TEXT_BACKGROUND_COLOR),
-                                            ),
-                                          ),
-                                          SizedBox(height: 5,),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              travelTextViewHori(
-                                                  "Per-diems",
-                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].perDiemCost) ? item.perDiemCost : "-"}",
-                                                  Colors.black54),
-                                              travelTextViewHori(
-                                                  "Airfare",
-                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].airfareCost) ? item.airfareCost : "-"}",
-                                                  Colors.black54),
-                                              travelTextViewHori(
-                                                  "Hotel",
-                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].hotelCost) ? item.hotelCost : "-"}",
-                                                  Colors.black54),
-                                              travelTextViewHori(
-                                                  "Transportation",
-                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].transportationCost) ? item.transportationCost : "-"}",
-                                                  Colors.black54),
-                                              travelTextViewHori(
-                                                  "Total Cost",
-                                                  "${IsNullCheck(list.details[list.details.lastIndexOf(item)].totalCost) ? item.totalCost : "-"}",
-                                                  Colors.black54),
-                                            ],
-                                          ),
-                                          Divider(height: 1,thickness: 1,),
-                                          SizedBox(height: 10,),
-                                          Container(
-                                            width: 100.0.w,
-                                            child: RaisedButton(
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  side: BorderSide(
-                                                      color:
-                                                      AppConstants.APP_THEME_COLOR)),
-                                              onPressed: () async {},
-                                              color: AppConstants.APP_THEME_COLOR,
-                                              textColor: Colors.white,
-                                              child: Text(
-                                                  "Total Cost(${IsNullCheck(item.currency) ? item.currency : " "}) : ${IsNullCheck(item.currencyTotal)? item.currencyTotal : " "} ",
-                                                  style: TextStyle(fontSize: 14)),
-                                            ),
-                                          ),
+                                          travelTextViewHori(
+                                              "Per-diems",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].perDiemCost) ? item.perDiemCost : "-"}",
+                                              Colors.black54),
+                                          travelTextViewHori(
+                                              "Airfare",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].airfareCost) ? item.airfareCost : "-"}",
+                                              Colors.black54),
+                                          travelTextViewHori(
+                                              "Hotel",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].hotelCost) ? item.hotelCost : "-"}",
+                                              Colors.black54),
+                                          travelTextViewHori(
+                                              "Transportation",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].transportationCost) ? item.transportationCost : "-"}",
+                                              Colors.black54),
+                                          travelTextViewHori(
+                                              "Total Cost",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].totalCost) ? item.totalCost : "-"}",
+                                              Colors.black54),
                                         ],
                                       ),
-
-
-
+                                      Divider(
+                                        height: 1,
+                                        thickness: 1,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: 100.0.w,
+                                        child: RaisedButton(
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              side: BorderSide(
+                                                  color: AppConstants
+                                                      .APP_THEME_COLOR)),
+                                          onPressed: () async {},
+                                          color: AppConstants.APP_THEME_COLOR,
+                                          textColor: Colors.white,
+                                          child: Text(
+                                              "Total Cost(${ totalCurrencyCode}) : ${IsNullCheck(item.currencyTotal) ? item.currencyTotal==0.0?"  -":item.currencyTotal.toStringAsFixed(0) : " "} ",
+                                              style: TextStyle(fontSize: 14)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 Divider(
                                   height: 1,
                                   color: AppConstants.TEXT_BACKGROUND_COLOR,
@@ -1522,15 +1556,17 @@ class _TravelReqViewState extends State<TravelReqView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${header}',
-            style: TextStyle(fontSize: 14,color: Colors.black), textAlign: TextAlign.start,),
+        Text(
+          '${header}',
+          style: TextStyle(fontSize: 14, color: Colors.black),
+          textAlign: TextAlign.start,
+        ),
         SizedBox(
           height: 1.0.w,
         ),
         AutoSizeText(
           '${text}',
           style: TextStyle(
-
             color: textColor,
             fontSize: 13,
             fontWeight: FontWeight.bold,
@@ -1572,7 +1608,7 @@ class _TravelReqViewState extends State<TravelReqView> {
 
   getDepartureTime(String date) {
     final depatureDate = DateTime.parse(date).toLocal();
-    final String datestring = DateFormat("ddMMM yy").format(depatureDate);
+    final String datestring = DateFormat("dd MMM yy").format(depatureDate);
     return datestring;
   }
 

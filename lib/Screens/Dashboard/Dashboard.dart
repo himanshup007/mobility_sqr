@@ -15,7 +15,9 @@ import 'package:mobility_sqr/Widgets/MenuTile.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:mobility_sqr/Widgets/TileDashboard.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'DashboardConstants.dart';
@@ -34,7 +36,8 @@ class _DashboardState extends State<Dashboard> {
   String UserName = '';
   String ProfileImage = null;
   ApiProvider _appApiProvider = ApiProvider();
-
+  List<Model> models;
+  SharedPreferences prefs;
   bool showloader=false;
   getprofile() async {
     try {
@@ -52,11 +55,87 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   initState() {
+
     super.initState();
 
     getprofile();
-  }
+    models = [
+    Model(index: 0,
+    image:  'assets/images/new-travel-box.png',
+    first_text:'New',
+    second_text:'Travel',
+      where: 1
+         ),
+      Model(index: 1,
+    image:'assets/images/previous-travel-box.png',
+    first_text:'Previous',
+    second_text:'Travels',
+          where: 2
 
+      ),
+      Model(index: 2,
+        image:  'assets/images/travel-calendar-box.png',
+        first_text:'Travel',
+        second_text:'Calendar',
+          where: 3
+
+      ),
+      Model(index: 3,
+        image:      'assets/images/expense-master-box.png',
+
+        first_text:'Expenses',
+        second_text:'',
+          where: 4
+
+      ),
+      Model(index: 4,
+        image:   'assets/images/approver-box.png',
+        first_text:'Approvals',
+        second_text:'',
+          where: 5
+
+      ),
+      Model(index: 5,
+        image:  'assets/images/vault-box.png',
+        first_text: 'Vault',
+        second_text:'',
+          where: 6
+
+      ),
+
+
+
+    ];
+    config();
+  }
+  void config() async {
+    // Here we reset the default model based on  saved order
+    await SharedPreferences.getInstance().then((pref) {
+      prefs = pref;
+      List<String> lst = pref.getStringList('indexList');
+
+      List<Model> list = [];
+      if (lst != null && lst.isNotEmpty) {
+        list = lst
+            .map(
+              (String indx) => models
+              .where((Model item) => int.parse(indx) == item.index)
+              .first,
+        )
+            .toList();
+        models = list;
+      }
+      setState(() {});
+    });
+  }
+  void _onReorder(int oldIndex, int newIndex) async {
+    Model row = models.removeAt(oldIndex);
+    models.insert(newIndex, row);
+    setState(() {
+      prefs.setStringList(
+          'indexList', models.map((m) => m.index.toString()).toList());
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -650,89 +729,60 @@ class _DashboardState extends State<Dashboard> {
                           },
                         )),
                     Container(
-                      margin: EdgeInsets.fromLTRB(20, 10, 10, 0),
-                      height: 50.0.w,
-                      width: 100.0.w,
-                      child: Row(
+                      margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+
+                      child: ReorderableWrap(
+                        spacing: 0.0,
+                        runSpacing: 0,
+                        maxMainAxisCount: 2,
+                        minMainAxisCount: 2,
+
+                        onReorder: _onReorder,
                         children: [
                           TileDashboard(
-                            'assets/images/new-travel-box.png',
-                            'New',
-                            'Travel',
-                            onTap: () {
-                              getNavigator(context, 1);
-                            },
-                          ),
-                          SizedBox(
-                            width: 6.0.w,
+                             models[0],
+                            onTap: (where) => {
+                              getNavigator(context, where)
+
+                            }
+                            ),
+                          TileDashboard(
+                              models[1],
+                              onTap: (where) => {
+                                getNavigator(context, where)
+                              }
                           ),
                           TileDashboard(
-                            'assets/images/previous-travel-box.png',
-                            'Previous',
-                            'Travels',
-                            onTap: () {
-                              getNavigator(context, 2);
-                            },
+                              models[2],
+                              onTap: (where) => {
+                                getNavigator(context, where)
+                              }
                           ),
+                          TileDashboard(
+                              models[3],
+                              onTap: (where) => {
+                                getNavigator(context, where)
+                              }
+                          ),
+                          TileDashboard(
+                              models[4],
+                              onTap: (where) => {
+                                getNavigator(context, where)
+
+                              }
+                          ),
+                          TileDashboard(
+                              models[5],
+                              onTap: (where) => {
+                                getNavigator(context, where)
+
+                              }
+                          ),
+
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                      height: 50.0.w,
-                      width: 100.0.w,
-                      child: Row(
-                        children: [
-                          TileDashboard(
-                            'assets/images/travel-calendar-box.png',
-                            'Travel',
-                            'Calendar',
-                            onTap: () {
-                              getNavigator(context, 3);
-                            },
-                          ),
-                          SizedBox(
-                            width: 6.0.w,
-                          ),
-                          TileDashboard(
-                            'assets/images/expense-master-box.png',
-                            'Expenses',
-                            '',
-                            onTap: () {
-                              getNavigator(context, 4);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                      height: 50.0.w,
-                      width: 100.0.w,
-                      child: Row(
-                        children: [
-                          TileDashboard(
-                            'assets/images/approver-box.png',
-                            'Approvals',
-                            '',
-                            onTap: () {
-                              getNavigator(context, 5);
-                            },
-                          ),
-                          SizedBox(
-                            width: 6.0.w,
-                          ),
-                          TileDashboard(
-                            'assets/images/vault-box.png',
-                            'Vault',
-                            '',
-                            onTap: () {
-                              getNavigator(context, 6);
-                            },
-                          ),
-                        ],
-                      ),
-                    )
+
                   ],
                 ),
               ),
@@ -746,7 +796,7 @@ class _DashboardState extends State<Dashboard> {
 
   getDepartureTime(String date) {
     final depatureDate = DateTime.parse(date).toLocal();
-    final String datestring = DateFormat("ddMMM yy").format(depatureDate);
+    final String datestring = DateFormat("dd MMM yy").format(depatureDate);
     return datestring;
   }
 
@@ -804,4 +854,17 @@ NavigationHandler(GetTravelRequest value,BuildContext context,where) {
 
   Navigator.pushNamed(context, '/TravelReqView',arguments: {"EmployeeData":value.data,"where":where});
 
+}
+class Model {
+  int index;
+  int where;
+  String image;
+  String first_text;
+  String second_text;
+  Model({this.index, this.image, this.first_text,this.second_text,this.where});
+
+  @override
+  String toString() {
+    return '$index : $first_text';
+  }
 }

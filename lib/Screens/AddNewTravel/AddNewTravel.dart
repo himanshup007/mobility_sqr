@@ -404,13 +404,14 @@ getvalues() async {
                                   });
                                 },
                                 child: Container(
-                                  width: 20,
-                                  height: 3.0.h,
-                                  margin: EdgeInsets.only(right: 1),
+                                  width: 30,
+                                  height: 4.0.h,
+                                  margin: EdgeInsets.only(right: 3),
                                   decoration: BoxDecoration(
+                                    borderRadius:  BorderRadius.all(Radius.circular(5)),
                                     border: Border.all(
                                       color:
-                                          manageColor(userdetails[index].hide),
+                                      manageColor(userdetails[index].hide),
                                     ),
                                   ),
                                   child: Align(
