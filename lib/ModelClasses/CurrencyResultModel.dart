@@ -1,13 +1,11 @@
-import 'package:equatable/equatable.dart';
-
-class CurrencyConversionModel {
+class CurrencyResultModel {
   String _message;
   int _statusCode;
   bool _status;
-  List<Currency_Data> _data;
+  List<Data> _data;
 
-  CurrencyConversionModel(
-      {String message, int statusCode, bool status, List<Currency_Data> data}) {
+  CurrencyResultModel(
+      {String message, int statusCode, bool status, List<Data> data}) {
     this._message = message;
     this._statusCode = statusCode;
     this._status = status;
@@ -20,17 +18,17 @@ class CurrencyConversionModel {
   set statusCode(int statusCode) => _statusCode = statusCode;
   bool get status => _status;
   set status(bool status) => _status = status;
-  List<Currency_Data> get data => _data;
-  set data(List<Currency_Data> data) => _data = data;
+  List<Data> get data => _data;
+  set data(List<Data> data) => _data = data;
 
-  CurrencyConversionModel.fromJson(Map<String, dynamic> json) {
+  CurrencyResultModel.fromJson(Map<String, dynamic> json) {
     _message = json['message'];
     _statusCode = json['status_code'];
     _status = json['status'];
     if (json['data'] != null) {
-      _data = new List<Currency_Data>();
+      _data = new List<Data>();
       json['data'].forEach((v) {
-        _data.add(new Currency_Data.fromJson(v));
+        _data.add(new Data.fromJson(v));
       });
     }
   }
@@ -47,17 +45,18 @@ class CurrencyConversionModel {
   }
 }
 
-class Currency_Data  extends Equatable{
+class Data {
   int _id;
   String _dateCreated;
   String _dateModified;
-  String _createdBy;
-  String _modifiedBy;
+  dynamic _createdBy;
+  dynamic _modifiedBy;
   bool _status;
-  String _currencyCode;
-  String _currencyName;
-  String _currencyDescription;
-  String _statusType;
+  String _fromCurrency;
+  String _toCurrency;
+  String _conversionDate;
+  String _conversionRate;
+  String _statusCode;
   dynamic _column1;
   dynamic _column2;
   dynamic _column3;
@@ -72,17 +71,18 @@ class Currency_Data  extends Equatable{
   dynamic _column12;
   dynamic _organization;
 
-  Currency_Data(
+  Data(
       {int id,
         String dateCreated,
         String dateModified,
-        String createdBy,
-        String modifiedBy,
+        dynamic createdBy,
+        dynamic modifiedBy,
         bool status,
-        String currencyCode,
-        String currencyName,
-        String currencyDescription,
-        String statusType,
+        String fromCurrency,
+        String toCurrency,
+        String conversionDate,
+        String conversionRate,
+        String statusCode,
         dynamic column1,
         dynamic column2,
         dynamic column3,
@@ -102,10 +102,11 @@ class Currency_Data  extends Equatable{
     this._createdBy = createdBy;
     this._modifiedBy = modifiedBy;
     this._status = status;
-    this._currencyCode = currencyCode;
-    this._currencyName = currencyName;
-    this._currencyDescription = currencyDescription;
-    this._statusType = statusType;
+    this._fromCurrency = fromCurrency;
+    this._toCurrency = toCurrency;
+    this._conversionDate = conversionDate;
+    this._conversionRate = conversionRate;
+    this._statusCode = statusCode;
     this._column1 = column1;
     this._column2 = column2;
     this._column3 = column3;
@@ -127,21 +128,22 @@ class Currency_Data  extends Equatable{
   set dateCreated(String dateCreated) => _dateCreated = dateCreated;
   String get dateModified => _dateModified;
   set dateModified(String dateModified) => _dateModified = dateModified;
-  String get createdBy => _createdBy;
-  set createdBy(String createdBy) => _createdBy = createdBy;
-  String get modifiedBy => _modifiedBy;
-  set modifiedBy(String modifiedBy) => _modifiedBy = modifiedBy;
+  dynamic get createdBy => _createdBy;
+  set createdBy(dynamic createdBy) => _createdBy = createdBy;
+  dynamic get modifiedBy => _modifiedBy;
+  set modifiedBy(dynamic modifiedBy) => _modifiedBy = modifiedBy;
   bool get status => _status;
   set status(bool status) => _status = status;
-  String get currencyCode => _currencyCode;
-  set currencyCode(String currencyCode) => _currencyCode = currencyCode;
-  String get currencyName => _currencyName;
-  set currencyName(String currencyName) => _currencyName = currencyName;
-  String get currencyDescription => _currencyDescription;
-  set currencyDescription(String currencyDescription) =>
-      _currencyDescription = currencyDescription;
-  String get statusType => _statusType;
-  set statusType(String statusType) => _statusType = statusType;
+  String get fromCurrency => _fromCurrency;
+  set fromCurrency(String fromCurrency) => _fromCurrency = fromCurrency;
+  String get toCurrency => _toCurrency;
+  set toCurrency(String toCurrency) => _toCurrency = toCurrency;
+  String get conversionDate => _conversionDate;
+  set conversionDate(String conversionDate) => _conversionDate = conversionDate;
+  String get conversionRate => _conversionRate;
+  set conversionRate(String conversionRate) => _conversionRate = conversionRate;
+  String get statusCode => _statusCode;
+  set statusCode(String statusCode) => _statusCode = statusCode;
   dynamic get column1 => _column1;
   set column1(dynamic column1) => _column1 = column1;
   dynamic get column2 => _column2;
@@ -169,17 +171,18 @@ class Currency_Data  extends Equatable{
   dynamic get organization => _organization;
   set organization(dynamic organization) => _organization = organization;
 
-  Currency_Data.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _dateCreated = json['date_created'];
     _dateModified = json['date_modified'];
     _createdBy = json['created_by'];
     _modifiedBy = json['modified_by'];
     _status = json['status'];
-    _currencyCode = json['currency_code'];
-    _currencyName = json['currency_name'];
-    _currencyDescription = json['currency_description'];
-    _statusType = json['status_type'];
+    _fromCurrency = json['from_currency'];
+    _toCurrency = json['to_currency'];
+    _conversionDate = json['conversion_date'];
+    _conversionRate = json['conversion_rate'];
+    _statusCode = json['status_code'];
     _column1 = json['column1'];
     _column2 = json['column2'];
     _column3 = json['column3'];
@@ -203,10 +206,11 @@ class Currency_Data  extends Equatable{
     data['created_by'] = this._createdBy;
     data['modified_by'] = this._modifiedBy;
     data['status'] = this._status;
-    data['currency_code'] = this._currencyCode;
-    data['currency_name'] = this._currencyName;
-    data['currency_description'] = this._currencyDescription;
-    data['status_type'] = this._statusType;
+    data['from_currency'] = this._fromCurrency;
+    data['to_currency'] = this._toCurrency;
+    data['conversion_date'] = this._conversionDate;
+    data['conversion_rate'] = this._conversionRate;
+    data['status_code'] = this._statusCode;
     data['column1'] = this._column1;
     data['column2'] = this._column2;
     data['column3'] = this._column3;
@@ -222,32 +226,4 @@ class Currency_Data  extends Equatable{
     data['organization'] = this._organization;
     return data;
   }
-
-  @override
-
-  List<Object> get props => [
-   _id,
-   _dateCreated,
-   _dateModified,
-   _createdBy,
-   _modifiedBy,
-   _status,
-   _currencyCode,
-   _currencyName,
-   _currencyDescription,
-   _statusType,
-   _column1,
-   _column2,
-   _column3,
-   _column4,
-   _column5,
-   _column6,
-   _column7,
-   _column8,
-   _column9,
-   _column10,
-   _column11,
-   _column12,
-   _organization,
-  ];
 }

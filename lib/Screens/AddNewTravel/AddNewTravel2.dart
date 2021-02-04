@@ -53,7 +53,7 @@ class AddNewTravel2State extends State<AddNewTravel2> {
 
   @override
   Future<void> initState() {
-    // TODO: implement initState
+
     super.initState();
     getDialCode();
     getvalues();
@@ -358,84 +358,90 @@ class AddNewTravel2State extends State<AddNewTravel2> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FlatButton(
-                      child: Text(
-                        'SAVE',
-                        style: TextStyle(fontSize: 18.0),
-                        textAlign: TextAlign.center,
+                    Expanded(
+                      flex: 1,
+                      child: FlatButton(
+                        child: Text(
+                          'SAVE',
+                          style: TextStyle(fontSize: 18.0),
+                          textAlign: TextAlign.center,
+                        ),
+                        height: 40,
+                        minWidth: 165,
+                        textColor: Colors.amber[600],
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: Colors.amber[600],
+                              width: 1,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: () {
+                          //Navigator.pushNamed(context, '/Dashboard');
+                        },
                       ),
-                      height: 40,
-                      minWidth: 165,
-                      textColor: Colors.amber[600],
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Colors.amber[600],
-                            width: 1,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      onPressed: () {
-                        //Navigator.pushNamed(context, '/Dashboard');
-                      },
                     ),
-                    // SizedBox(width: 5),
-                    FlatButton(
-                      child: Text(
-                        'SUBMIT',
-                        style: TextStyle(fontSize: 18.0),
-                        textAlign: TextAlign.center,
-                      ),
-                      height: 40,
-                      minWidth: 165,
-                      textColor: Colors.white,
-                      color: AppConstants.APP_THEME_COLOR,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      onPressed: () {
-                        try {
-                          list = SetDependentList(list);
-                        } catch (e) {}
+                    SizedBox(width: 5),
+                    Expanded(
+                      flex: 1,
+                      child: FlatButton(
+                        child: Text(
+                          'SUBMIT',
+                          style: TextStyle(fontSize: 18.0),
+                          textAlign: TextAlign.center,
+                        ),
+                        height: 40,
+                        minWidth: 165,
+                        textColor: Colors.white,
+                        color: AppConstants.APP_THEME_COLOR,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: () {
+                          try {
+                            list = SetDependentList(list);
+                          } catch (e) {}
 
-                        for (int i = 0; i < list.travelCity.length; i++) {
-                          if (list.travelCity.length > 1) {
-                            if (i == list.travelCity.length - 1) {
-                              list.travelCity[i].returnDate =
-                                  list.travelCity[i].departureDate;
-                            } else {
-                              list.travelCity[i].returnDate =
-                                  list.travelCity[i + 1].departureDate;
+                          for (int i = 0; i < list.travelCity.length; i++) {
+                            if (list.travelCity.length > 1) {
+                              if (i == list.travelCity.length - 1) {
+                                list.travelCity[i].returnDate =
+                                    list.travelCity[i].departureDate;
+                              } else {
+                                list.travelCity[i].returnDate =
+                                    list.travelCity[i + 1].departureDate;
+                              }
                             }
                           }
-                        }
 
-                        list.travelVisa.addAll(GenerateVisa(list,info,HomeCountryName));
+                          list.travelVisa.addAll(GenerateVisa(list,info,HomeCountryName));
 
-                        if (list.travelCity.length > 1) {
-                          list.isTravelMultiCity = true;
-                          list.isTravelMultiCountry = true;
-                        } else {
-                          list.isTravelMultiCity = false;
-                          list.isTravelMultiCountry = false;
-                        }
+                          if (list.travelCity.length > 1) {
+                            list.isTravelMultiCity = true;
+                            list.isTravelMultiCountry = true;
+                          } else {
+                            list.isTravelMultiCity = false;
+                            list.isTravelMultiCountry = false;
+                          }
 
-                        list.createdBy = list.empEmail;
-                        list.expenceCureency = "USD";
-                        list.expenceFromCountry =
-                            list.travelCity[0].travellingCountry;
-                        list.expenceToCountry =
-                            list.travelCity[0].travellingCountryTo;
-                        list.expenceReturnDate = list.travelCity[0].returnDate;
-                        list.expenceDepartureDate =
-                            list.travelCity[0].departureDate;
-                        list.expenceEstimatedCost = "200";
-                        list.travelReqStatus = "1";
+                          list.createdBy = list.empEmail;
+                          list.expenceCureency = "USD";
+                          list.expenceFromCountry =
+                              list.travelCity[0].travellingCountry;
+                          list.expenceToCountry =
+                              list.travelCity[0].travellingCountryTo;
+                          list.expenceReturnDate = list.travelCity[0].returnDate;
+                          list.expenceDepartureDate =
+                              list.travelCity[0].departureDate;
+                          list.expenceEstimatedCost = "200";
+                          list.travelReqStatus = "1";
 
-                        _onLoading();
-                        var jsonbody = jsonEncode(list.toJson());
-                        _appApiProvider.PostTravelRequest(jsonbody)
-                            .then((response) => handleNavigation(response));
-                      },
+                          _onLoading();
+                          var jsonbody = jsonEncode(list.toJson());
+                          _appApiProvider.PostTravelRequest(jsonbody)
+                              .then((response) => handleNavigation(response));
+                        },
+                      ),
                     ),
                   ],
                 ),

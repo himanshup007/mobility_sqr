@@ -5,6 +5,7 @@ import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
+import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/DialCodeModel.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
@@ -521,7 +522,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
-  Future<CurrencyConversionModel> get_currency_conversion(String from_currency,String to_currency) async {
+  Future<CurrencyResultModel> get_currency_conversion(String from_currency,String to_currency) async {
 
     Map<String, String> queryParams = {
       "from_currency": from_currency,
@@ -539,8 +540,8 @@ class ApiProvider {
     );
 
     if (response.statusCode == 200) {
-      CurrencyConversionModel myresponse =
-      CurrencyConversionModel.fromJson(jsonDecode(response.body));
+      CurrencyResultModel myresponse =
+      CurrencyResultModel.fromJson(jsonDecode(response.body));
 
       return myresponse;
     } else {

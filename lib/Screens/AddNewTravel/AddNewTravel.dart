@@ -2248,7 +2248,7 @@ getvalues() async {
     perDiemModel = value;
     traveldata[index].perDiamValue = value.perDiem;
     traveldata[index].transportCost = value.transportation;
-    traveldata[index].currency = value.currency;
+    traveldata[index].currency = value.currencyCode;
    // traveldata[index].hotelCost = value.accommodationLimit;
     traveldata[index].accomodationLimit=value.accommodationLimit;
   }
@@ -2354,9 +2354,9 @@ checkVisaApplicable(String depatureDate, String visaExpiryDate) {
       .difference(DateTime.parse(depatureDate))
       .inDays;
   if (differenceInTravelDates < 0) {
-    return false;
-  } else {
     return true;
+  } else {
+    return false;
   }
 }
 

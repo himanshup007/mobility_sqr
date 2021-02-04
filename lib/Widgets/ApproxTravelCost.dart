@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
+import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:sizer/sizer.dart';
 import 'package:currency_pickers/country.dart';
@@ -32,6 +34,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
   List<Currency_Data> currencyConversiondata;
   double mytotal = 0.0;
   Country _selectedDialogCountry;
+  ApiProvider _apiProvider = ApiProvider();
 
   _ApproxTravelCostState(this.list, this.perDiem, this.currencyConversiondata);
 
@@ -66,49 +69,60 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                       child: FormField<Currency_Data>(
                         builder: (FormFieldState<Currency_Data> state) {
                           return InputDecorator(
-
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5.0))),
                             child: DropdownButtonHideUnderline(
-                              child: DropdownButton<Currency_Data>(
-                                hint: Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Text("Location"),
-                                ),
-                                value: list.travelCity[index].currency_data,
-                                isDense: true,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    list.travelCity[index].currency_data =
-                                        newValue;
-                                  });
-                                },
-                                items: list.travelCity[index]
-                                            .postLocationList !=
-                                        null
-                                    ? currencyConversiondata
-                                        .map((Currency_Data value) {
-                                        return DropdownMenuItem<Currency_Data>(
-                                          value: value,
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.only(left: 5),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Text(value.currencyCode+" (${value.currencyName})",textAlign: TextAlign.end,),
-                                                  Container(height: 1,color: Colors.black12,)
-                                                ],
+                              child: FittedBox(
+                                child: DropdownButton<Currency_Data>(
+                                  hint: Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text("Location"),
+                                  ),
+                                  value: list.travelCity[index].currency_data,
+                                  isDense: true,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      list.travelCity[index].currency_data =
+                                          newValue;
+                                    });
+
+                                    _apiProvider
+                                        .get_currency_conversion(
+                                            item.currency, newValue.currencyCode)
+                                        .then((value) =>
+                                            setReportingCurrencyTotal(
+                                                value, index));
+                                  },
+                                  items: currencyConversiondata
+                                      .map((Currency_Data value) {
+                                    return DropdownMenuItem<Currency_Data>(
+                                      value: value,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 5),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                value.currencyCode +
+                                                    " (${value.currencyName})",
+                                                textAlign: TextAlign.end,
                                               ),
-                                            ),
+                                              Container(
+                                                height: 1,
+                                                color: Colors.black12,
+                                              )
+                                            ],
                                           ),
-                                        );
-                                      }).toList()
-                                    : null,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                             ),
                           );
@@ -194,7 +208,10 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
               ApproxTravelRowWidget("Total",
                   "${list.travelCity[index].myTotalCost == 0.0 ? double.parse(list.travelCity[index].totalCost).toStringAsFixed(0) : list.travelCity[index].myTotalCost.toStringAsFixed(0)}"),
               SizedBox(height: 30),
-              ApproxTravelRowWidget("Total (Currency)", "10,000"),
+              ApproxTravelRowWidget(
+                  "Total Cost(Currency)",
+                  "${list.travelCity[index].myCurrencyTotal == null ? "-" : list.travelCity[index].myCurrencyTotal}"
+                  ),
             ],
           ),
         ),
@@ -238,28 +255,30 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
     );
   }
 
-  Widget _buildDialogItem(Country country) => Row(children: <Widget>[
-        CurrencyPickerUtils.getDefaultFlagImage(country),
-        SizedBox(width: 8.0),
-        Text("+${country.currencyCode}"),
-        SizedBox(width: 8.0),
-        Flexible(child: Text(country.name))
-      ]);
+  setReportingCurrencyTotal(CurrencyResultModel value, index) {
+    if (value.data.length > 0) {
 
-  void _openCurrencyPickerDialog() => showDialog(
-        context: context,
-        builder: (context) => Theme(
-            data: Theme.of(context).copyWith(primaryColor: Colors.pink),
-            child: CurrencyPickerDialog(
-                titlePadding: EdgeInsets.all(8.0),
-                searchCursorColor: Colors.pinkAccent,
-                searchInputDecoration: InputDecoration(hintText: 'Search...'),
-                isSearchable: true,
-                title: Text('Select your Currency'),
-                onValuePicked: (Country country) =>
-                    setState(() => _selectedDialogCountry = country),
-                itemBuilder: _buildDialogItem)),
-      );
+      var total= double.parse(
+          list.travelCity[index].hotelCost) +
+          double.parse(
+              list.travelCity[index].transportationCost) +
+          double.parse(
+              list.travelCity[index].perDiemCost) +
+          double.parse(list.travelCity[index].myAirFare);
+
+      this.setState(() {
+        list.travelCity[index].myCurrencyTotal =
+            (total *
+                    double.parse(double.parse(value.data[0].conversionRate).toStringAsFixed(2)))
+                .toStringAsFixed(0);
+      });
+    }
+    else{
+      this.setState(() {
+        list.travelCity[index].myCurrencyTotal ="-";
+      });
+    }
+  }
 }
 
 class ApproxTravelRowWidget extends StatelessWidget {

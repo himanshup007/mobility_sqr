@@ -4,6 +4,7 @@ import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
+
 class TravelReqPayLoad {
   String _travelReqId;
   String _project;
@@ -30,7 +31,6 @@ class TravelReqPayLoad {
   String _expenceEstimatedCost;
   String _expenceCureency;
   Country _homeCountry;
-
 
   TravelReqPayLoad(
       {String travelReqId,
@@ -83,7 +83,6 @@ class TravelReqPayLoad {
     this._expenceReturnDate = expenceReturnDate;
     this._expenceEstimatedCost = expenceEstimatedCost;
     this._expenceCureency = expenceCureency;
-
   }
 
   Country get homeCountry => _homeCountry;
@@ -276,12 +275,11 @@ class TravelCity {
   String _sourceCity;
   String _perDiamValue;
   String _transportCost;
-  double _myTotalCost=0.0;
-  String _myAirFare="0";
+  double _myTotalCost = 0.0;
+  String _myAirFare = "0";
   Currency_Data _currency_data;
 
   String _currentCountryCode;
-
 
   String get currentCountryCode => _currentCountryCode;
 
@@ -355,7 +353,8 @@ class TravelCity {
   List<DependentData> _dependentData;
   List<PostLocationData> _postLocationList;
   List<SecondDependentData> _myDependentList;
-  SearchList _toCountryData ;
+  SearchList _toCountryData;
+
   bool _hasVisa;
 
   String get myAirFare => _myAirFare;
@@ -405,12 +404,21 @@ class TravelCity {
   set transportCost(String value) {
     _transportCost = value;
   }
+  String _myCurrencyTotal;
+
+
+  String get myCurrencyTotal => _myCurrencyTotal;
+
+  set myCurrencyTotal(String value) {
+    _myCurrencyTotal = value;
+  }
 
   TravelCity(
-      { Currency_Data currency_data,String TransportCost,
-        SearchList toCountryData,
+      {Currency_Data currency_data,
+      String TransportCost,
+      SearchList toCountryData,
       List<SecondDependentData> myDependentList,
-        bool hasVisa,
+      bool hasVisa,
       PostLocationData postLocationData,
       List<PostLocationData> postLocationList,
       List<PurposeData> purposeList,
@@ -428,7 +436,7 @@ class TravelCity {
       dynamic perDiemCost,
       dynamic transportationCost,
       dynamic totalCost,
-        dynamic accomodationLimit,
+      dynamic accomodationLimit,
       String reportingCurrency,
       String currency,
       String agenda,
@@ -447,17 +455,16 @@ class TravelCity {
       String hostPhoneExt,
       bool isDependent,
       String perDiemValue,
-        double myTotalCost,
-        String airFare,
-
-        String currentCountryCode,
-
+      double myTotalCost,
+      String airFare,
+      String currentCountryCode,
+        String myCurrencyTotal,
       List<DependentData> dependentData}) {
-    this._currency_data=currency_data;
-    this._accomodationLimit=accomodationLimit;
-    this._myAirFare=airFare;
-    this._hasVisa=hasVisa;
-    this._toCountryData=toCountryData;
+    this._currency_data = currency_data;
+    this._accomodationLimit = accomodationLimit;
+    this._myAirFare = airFare;
+    this._hasVisa = hasVisa;
+    this._toCountryData = toCountryData;
     this._transportCost = TransportCost;
     this._perDiamValue = perDiemValue;
     this._myDependentList = myDependentList;
@@ -496,9 +503,9 @@ class TravelCity {
     this._isDependent = isDependent;
     this._dependentData = dependentData;
     this._postLocationList = postLocationList;
-    this._myTotalCost=myTotalCost;
-    this._currentCountryCode=currentCountryCode;
-
+    this._myTotalCost = myTotalCost;
+    this._currentCountryCode = currentCountryCode;
+    this._myCurrencyTotal=myCurrencyTotal;
   }
 
   String get sourceCity => _sourceCity;
