@@ -62,12 +62,13 @@ class _AddCity extends State<AddCity> {
   TextEditingController ProjectTextController;
   TravelReqPayLoad req_data = TravelReqPayLoad();
   BuildContext purposecontext;
-  UserInfo   info;
+  UserInfo info;
   ApiProvider _appApiProvider = ApiProvider();
   final _listview_controller = ScrollController();
   var HomeCountryName;
   final todays_date =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toIso8601String();
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+          .toIso8601String();
 
   bool dependentEyeBtn = false;
 
@@ -90,10 +91,12 @@ class _AddCity extends State<AddCity> {
     var _TokenGetter = TokenGetter();
     dialCode = await _TokenGetter.readDialCode() ?? "";
   }
-getvalues() async {
-     info = await _userInfo.readUserInfo() ?? null;
-   HomeCountryName = info.data.home;
-}
+
+  getvalues() async {
+    info = await _userInfo.readUserInfo() ?? null;
+    HomeCountryName = info.data.home;
+  }
+
   initalizeValues() {
     showHide data;
     req_data.isBillable = true;
@@ -408,10 +411,11 @@ getvalues() async {
                                   height: 4.0.h,
                                   margin: EdgeInsets.only(right: 3),
                                   decoration: BoxDecoration(
-                                    borderRadius:  BorderRadius.all(Radius.circular(5)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
                                     border: Border.all(
                                       color:
-                                      manageColor(userdetails[index].hide),
+                                          manageColor(userdetails[index].hide),
                                     ),
                                   ),
                                   child: Align(
@@ -552,22 +556,23 @@ getvalues() async {
                                                         context,
                                                         '/SearchPlace');
                                                 if (fromplace != null) {
-                                                  SearchList from=fromplace;
-                                                  if(traveldata[index].destinationCity!= null&&traveldata[index].destinationCity!=from.city){
-
-                                                  this.setState(() {
-                                                    traveldata[index]
-                                                            .sourceCity =
-                                                        fromplace.city;
-                                                    traveldata[index]
-                                                            .travellingCountry =
-                                                        fromplace.countryName;
-                                                    traveldata[index].travelPurpose=null;
-                                                  });
-                                                }
-                                                  else{
-                                                    showDefaultSnackbar(
-                                                        context,
+                                                  SearchList from = fromplace;
+                                                  if (traveldata[index]
+                                                              .destinationCity !=
+                                                          null &&
+                                                      traveldata[index]
+                                                              .destinationCity !=
+                                                          from.city) {
+                                                    this.setState(() {
+                                                      traveldata[index]
+                                                              .sourceCity =
+                                                          fromplace.city;
+                                                      traveldata[index]
+                                                              .travellingCountry =
+                                                          fromplace.countryName;
+                                                    });
+                                                  } else {
+                                                    showDefaultSnackbar(context,
                                                         "From and To airports can not be the same");
                                                   }
                                                 }
@@ -606,81 +611,97 @@ getvalues() async {
                                                     false,
                                                     onTap: () async {
                                                       traveldata[index]
-                                                          .postLocationData =
+                                                              .postLocationData =
                                                           null;
                                                       var data = await Navigator
                                                           .pushNamed(context,
                                                               '/SearchPlace');
+
                                                       if (data != null) {
-                                                        SearchList toCountryData=data;
-                                                        if(traveldata[index].sourceCity!= toCountryData.city){
+                                                        SearchList
+                                                            toCountryData =
+                                                            data;
+                                                        ;
+                                                        if (traveldata[index]
+                                                                .sourceCity !=
+                                                            toCountryData
+                                                                .city) {
                                                           this.setState(() {
                                                             traveldata[index]
-                                                                .toCountryData =
+                                                                .travelPurpose = '';
+                                                            traveldata[index]
+                                                                    .visaNumber =
+                                                                null;
+                                                            traveldata[index]
+                                                                    .toCountryData =
                                                                 data;
 
                                                             traveldata[index]
-                                                                .destinationCity =
-                                                                traveldata[index]
+                                                                    .destinationCity =
+                                                                traveldata[
+                                                                        index]
                                                                     .toCountryData
                                                                     .city;
                                                             traveldata[index]
-                                                                .travellingCountryTo =
-                                                                traveldata[index]
+                                                                    .travellingCountryTo =
+                                                                traveldata[
+                                                                        index]
                                                                     .toCountryData
                                                                     .countryName;
-                                                            traveldata[index].currentCountryCode= traveldata[index]
-                                                                .toCountryData.country;
+                                                            traveldata[index]
+                                                                    .currentCountryCode =
+                                                                traveldata[
+                                                                        index]
+                                                                    .toCountryData
+                                                                    .country;
                                                           });
 
                                                           BlocProvider.of<
-                                                              PurposeBloc>(
-                                                              context)
+                                                                      PurposeBloc>(
+                                                                  context)
                                                               .add(FetchPurposelist(
-                                                              toData
-                                                                  .iataCode));
+                                                                  toData
+                                                                      .iataCode));
                                                           _appApiProvider.GetPostLocation(
-                                                              traveldata[
-                                                              index]
-                                                                  .toCountryData
-                                                                  .countryName)
+                                                                  traveldata[
+                                                                          index]
+                                                                      .toCountryData
+                                                                      .countryName)
                                                               .then((value) =>
-                                                              this.setState(
+                                                                  this.setState(
                                                                       () {
-
                                                                     traveldata[index]
-                                                                        .postLocationList =
+                                                                            .postLocationList =
                                                                         value
                                                                             .data;
                                                                   }));
 
                                                           _appApiProvider.GetDependentList(
-                                                              traveldata[
-                                                              index]
-                                                                  .toCountryData
-                                                                  .countryName)
+                                                                  traveldata[
+                                                                          index]
+                                                                      .toCountryData
+                                                                      .countryName)
                                                               .then((value) =>
-                                                              this.setState(
+                                                                  this.setState(
                                                                       () {
                                                                     traveldata[index]
-                                                                        .myDependentList =
+                                                                            .myDependentList =
                                                                         value;
                                                                   }));
 
                                                           _appApiProvider.GetPerDiem(
-                                                              traveldata[
-                                                              index]
-                                                                  .toCountryData
-                                                                  .countryName)
+                                                                  traveldata[
+                                                                          index]
+                                                                      .toCountryData
+                                                                      .countryName)
                                                               .then((value) =>
-                                                              SaveCostData(
-                                                                  value));
-                                                        }else{
+                                                                  SaveCostData(
+                                                                      value));
+                                                        } else {
                                                           showDefaultSnackbar(
                                                               context,
                                                               "From and To airports can not be the same");
                                                         }
-
                                                       }
                                                     },
                                                   ),
@@ -950,10 +971,8 @@ getvalues() async {
                                                 decoration: BoxDecoration(
                                                     boxShadow: [
                                                       BoxShadow(
-                                                        color: Colors
-                                                            .grey,
-                                                        blurRadius:
-                                                        10.0,
+                                                        color: Colors.grey,
+                                                        blurRadius: 10.0,
                                                       ),
                                                     ],
                                                     borderRadius:
@@ -993,6 +1012,9 @@ getvalues() async {
                                                           traveldata[index]
                                                                   .travelPurpose =
                                                               'Business';
+                                                          traveldata[index]
+                                                                  .visaNumber =
+                                                              null;
                                                         });
                                                       }
 
@@ -1205,7 +1227,7 @@ getvalues() async {
                                                                   horizontal:
                                                                       10),
                                                           child: (Text(
-                                                            "${CheckVisaNote(traveldata[index].departureDate, traveldata[index].visaExpiryDate)}",
+                                                            "${CheckVisaNote(traveldata, traveldata[index].visaExpiryDate, index)}",
                                                             style: TextStyle(
                                                                 color:
                                                                     Colors.red,
@@ -1609,9 +1631,8 @@ getvalues() async {
                                                                   .postLocationData =
                                                               newValue;
                                                           traveldata[index]
-                                                                  .officeLocation ="${newValue
-                                                              .locationName}";
-
+                                                                  .officeLocation =
+                                                              "${newValue.locationName}";
                                                         });
                                                       },
                                                       items: traveldata[index]
@@ -1955,9 +1976,10 @@ getvalues() async {
                     req_data.travelCity = traveldata;
                     if (Validator(req_data)) {
                       if (req_data != null) {
-                        req_data.travelVisa=[];
+                        req_data.travelVisa = [];
 
-                       req_data.travelVisa.addAll(GenerateVisa(req_data,info,HomeCountryName));
+                        req_data.travelVisa.addAll(
+                            GenerateVisa(req_data, info, HomeCountryName));
                         CostValueSetter(req_data);
                         resetValue(req_data);
                         await Navigator.pushNamed(context, '/AddNewTravel2',
@@ -2040,12 +2062,13 @@ getvalues() async {
           DateTime.parse('${list.travelCity[index].accmodationEndDate}');
       final difference = accomationEnd.difference(accomationStart).inDays;
       var value;
-      if(difference==0){
-         value =
-        (double.parse(list.travelCity[index].accomodationLimit)).toStringAsFixed(2);
-      }else{
-         value =
-        (double.parse(list.travelCity[index].accomodationLimit) * difference).toStringAsFixed(2);
+      if (difference == 0) {
+        value = (double.parse(list.travelCity[index].accomodationLimit))
+            .toStringAsFixed(2);
+      } else {
+        value = (double.parse(list.travelCity[index].accomodationLimit) *
+                difference)
+            .toStringAsFixed(2);
       }
 
       list.travelCity[index].hotelCost = value;
@@ -2072,7 +2095,6 @@ getvalues() async {
       {Function(String) datevalue}) async {
     final DateTime picked = await showDatePicker(
         context: context,
-
         initialDate: initalDate,
         builder: (BuildContext context, Widget child) {
           return Theme(
@@ -2250,14 +2272,30 @@ getvalues() async {
     traveldata[index].perDiamValue = value.perDiem;
     traveldata[index].transportCost = value.transportation;
     traveldata[index].currency = value.currencyCode;
-   // traveldata[index].hotelCost = value.accommodationLimit;
-    traveldata[index].accomodationLimit=value.accommodationLimit;
+    // traveldata[index].hotelCost = value.accommodationLimit;
+    traveldata[index].accomodationLimit = value.accommodationLimit;
   }
 
-  CheckVisaNote(String req_data, String visaExpiryDate) {
-    final differenceInTravelDates = DateTime.parse(visaExpiryDate)
-        .difference(DateTime.parse(req_data))
-        .inDays;
+  CheckVisaNote(List<TravelCity> req_data, String visaExpiryDate, int index) {
+    var differenceInTravelDates;
+    if (req_data.length == 1) {
+      if (req_data[index].returnDate == "") {
+        differenceInTravelDates = 1;
+      } else {
+        differenceInTravelDates = DateTime.parse(visaExpiryDate)
+            .difference(DateTime.parse(req_data[index].returnDate))
+            .inDays;
+      }
+    } else if (req_data.length - 1 == index) {
+      differenceInTravelDates = DateTime.parse(visaExpiryDate)
+          .difference(DateTime.parse(req_data[index].departureDate))
+          .inDays;
+    } else {
+      differenceInTravelDates = DateTime.parse(visaExpiryDate)
+          .difference(DateTime.parse(req_data[index + 1].departureDate))
+          .inDays;
+    }
+
     if (differenceInTravelDates < 0) {
       return "*The selected visa is not valid for this travel. Please apply for new visa";
     } else {
@@ -2282,45 +2320,53 @@ accodomoationlastDateLogic(index, List<TravelCity> traveldata) {
   }
 }
 
-GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
+GenerateVisa(TravelReqPayLoad mydata, UserInfo info, String homeCountryName) {
   bool isHomeCountry = false;
 
-
-  List<TravelVisa> visalist= new List<TravelVisa>();
+  List<TravelVisa> visalist = new List<TravelVisa>();
   TravelVisa visa;
   for (int i = 0; i < mydata.travelCity.length; i++) {
     if (homeCountryName.trim().toLowerCase() ==
         mydata.travelCity[i].travellingCountryTo.trim().toLowerCase()) {
       isHomeCountry = true;
     }
-    if(!isHomeCountry){
-      if (mydata.travelCity[i].hasVisa==null||!mydata.travelCity[i].hasVisa||checkVisaApplicable(mydata.travelCity[i].departureDate,
-          mydata.travelCity[i].visaExpiryDate)) {
-
-  visa= new TravelVisa();
+    if (!isHomeCountry) {
+      if (mydata.travelCity[i].hasVisa == null ||
+          !mydata.travelCity[i].hasVisa ||
+          checkVisaApplicable(
+              mydata.travelCity, mydata.travelCity[i].visaExpiryDate, i)) {
+        visa = new TravelVisa();
         visa.reqId = "0";
         visa.projectId = mydata.project;
         visa.projectName = mydata.projectName;
         visa.isBillable = mydata.isBillable;
         visa.fromCity = mydata.travelCity[i].travellingCountry;
         visa.toCity = mydata.travelCity[i].travellingCountryTo;
-        visa.travelStartDate =  DateTime.parse(mydata.travelCity[i].departureDate).toUtc().toIso8601String();
-        if(mydata.travelCity.length==1){
-          visa.travelEndDate = DateTime.parse(mydata.travelCity[i].returnDate).toUtc().toIso8601String();
-        }else if(i==mydata.travelCity.length-1){
-          visa.travelEndDate=DateTime.parse(mydata.travelCity[i].departureDate).toUtc().toIso8601String();
-        }
-        else{
-          visa.travelEndDate=DateTime.parse(mydata.travelCity[i+1].departureDate).toUtc().toIso8601String();
+        visa.travelStartDate =
+            DateTime.parse(mydata.travelCity[i].departureDate)
+                .toUtc()
+                .toIso8601String();
+        if (mydata.travelCity.length == 1) {
+          visa.travelEndDate = DateTime.parse(mydata.travelCity[i].returnDate)
+              .toUtc()
+              .toIso8601String();
+        } else if (i == mydata.travelCity.length - 1) {
+          visa.travelEndDate =
+              DateTime.parse(mydata.travelCity[i].departureDate)
+                  .toUtc()
+                  .toIso8601String();
+        } else {
+          visa.travelEndDate =
+              DateTime.parse(mydata.travelCity[i + 1].departureDate)
+                  .toUtc()
+                  .toIso8601String();
         }
 
-        if(mydata.travelCity[i].travelPurpose=="Work"){
+        if (mydata.travelCity[i].travelPurpose == "Work") {
           visa.visaPurpose = "19";
-        }else{
+        } else {
           visa.visaPurpose = "6";
         }
-
-
 
         visa.appliedVisa = mydata.travelCity[i].travelPurpose;
         visa.requestNotes = "";
@@ -2331,29 +2377,38 @@ GenerateVisa(TravelReqPayLoad mydata, UserInfo info,String homeCountryName)  {
         visa.isDependent = false;
         visa.dependentRelation = "";
         visa.dependentName = "";
-        visa.country =mydata.travelCity[i].currentCountryCode;
+        visa.country = mydata.travelCity[i].currentCountryCode;
         visa.createdBy = info.data.empCode;
         visalist.add(visa);
-        isHomeCountry=false;
-      } else {
-
-
-      }
+        isHomeCountry = false;
+      } else {}
     }
-
-
   }
 
-
   return visalist;
-
-
 }
 
-checkVisaApplicable(String depatureDate, String visaExpiryDate) {
-  final differenceInTravelDates = DateTime.parse(visaExpiryDate)
-      .difference(DateTime.parse(depatureDate))
-      .inDays;
+checkVisaApplicable(
+    List<TravelCity> req_data, String visaExpiryDate, int index) {
+  var differenceInTravelDates;
+  if (req_data.length == 1) {
+    if (req_data[index].returnDate == "") {
+      differenceInTravelDates = 1;
+    } else {
+      differenceInTravelDates = DateTime.parse(visaExpiryDate)
+          .difference(DateTime.parse(req_data[index].returnDate))
+          .inDays;
+    }
+  } else if (req_data.length - 1 == index) {
+    differenceInTravelDates = DateTime.parse(visaExpiryDate)
+        .difference(DateTime.parse(req_data[index].departureDate))
+        .inDays;
+  } else {
+    differenceInTravelDates = DateTime.parse(visaExpiryDate)
+        .difference(DateTime.parse(req_data[index + 1].departureDate))
+        .inDays;
+  }
+
   if (differenceInTravelDates < 0) {
     return true;
   } else {
@@ -2367,13 +2422,9 @@ setFormattedDate(String date) {
   return datestring;
 }
 
-resetValue(TravelReqPayLoad req_data){
-
-  for(int i=0;i<req_data.travelCity.length;i++){
-
-    req_data.travelCity[i].myTotalCost=0.0;
-    req_data.travelCity[i].myAirFare="0";
-
+resetValue(TravelReqPayLoad req_data) {
+  for (int i = 0; i < req_data.travelCity.length; i++) {
+    req_data.travelCity[i].myTotalCost = 0.0;
+    req_data.travelCity[i].myAirFare = "0";
   }
-
 }

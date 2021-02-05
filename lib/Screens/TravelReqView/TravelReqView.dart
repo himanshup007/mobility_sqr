@@ -22,13 +22,14 @@ import 'package:intl/intl.dart';
 import 'package:mobility_sqr/Widgets/bordered_box.dart';
 import 'dart:async';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
-
+import 'package:intl/intl.dart';
 class TravelReqView extends StatefulWidget {
   @override
   _TravelReqViewState createState() => _TravelReqViewState();
 }
 
 class _TravelReqViewState extends State<TravelReqView> {
+  final FormatCurrency = new NumberFormat("#,##0", "en_US");
   ApiProvider _apiProvider = ApiProvider();
   SubmitRequestForApprovalModel body = SubmitRequestForApprovalModel();
   ItemScrollController itemScrollController = ItemScrollController();
@@ -613,6 +614,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     flex: 1,
@@ -635,7 +637,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                     .details[index].hostPhoneNo)
                                                 ? list.details[index]
                                                         .hostPhoneExt +
-                                                    " " +
+                                                    "-" +
                                                     list.details[index]
                                                         .hostPhoneNo
                                                 : " ",
@@ -653,6 +655,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     flex: 1,
@@ -713,7 +716,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                               child: travelTextView(
                                                   "Client Number",
                                                   list.details[index]
-                                                          .clientNumber +
+                                                          .clientNumberExt +"-"+
                                                       list.details[index]
                                                           .clientNumber,
                                                   AppConstants
@@ -723,6 +726,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                     ),
                                   )
                                 : SizedBox(),
+                            SizedBox(height: 10,),
                             Divider(
                               height: 2,
                               thickness: 2,
@@ -846,7 +850,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                                   color: AppConstants
                                                                       .TEXT_BACKGROUND_COLOR)),
                                                           AutoSizeText(
-                                                              "${item.dependentVisa}",
+                                                              "${!IsNullCheck(item.dependentVisa)?"N/A":item.dependentVisa}",
                                                               minFontSize: 5,
                                                               style: TextStyle(
                                                                   fontWeight:
@@ -872,7 +876,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                                   color: AppConstants
                                                                       .TEXT_BACKGROUND_COLOR)),
                                                           AutoSizeText(
-                                                              "${item.dependentPassport}",
+                                                              "${!IsNullCheck(item.dependentPassport)?"N/A":item.dependentPassport}",
                                                               minFontSize: 5,
                                                               style: TextStyle(
                                                                   fontWeight:
@@ -887,15 +891,14 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                   ),
                                                 ],
                                               ),
+
                                             ],
                                           ),
                                         ),
                                     ],
                                   )
                                 : SizedBox(),
-                            SizedBox(
-                              height: 10,
-                            ),
+
                             Divider(
                               height: 2,
                               thickness: 5,
@@ -1188,23 +1191,23 @@ class _TravelReqViewState extends State<TravelReqView> {
                                         children: [
                                           travelTextViewHori(
                                               "Per-diems",
-                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].perDiemCost) ? item.perDiemCost : "-"}",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].perDiemCost) ? FormatCurrency.format(item.perDiemCost.round()) : "-"}",
                                               Colors.black54),
                                           travelTextViewHori(
                                               "Airfare",
-                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].airfareCost) ? item.airfareCost : "-"}",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].airfareCost) ? FormatCurrency.format(item.airfareCost.round()) : "-"}",
                                               Colors.black54),
                                           travelTextViewHori(
                                               "Hotel",
-                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].hotelCost) ? item.hotelCost : "-"}",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].hotelCost) ? FormatCurrency.format(item.hotelCost.round()) : "-"}",
                                               Colors.black54),
                                           travelTextViewHori(
                                               "Transportation",
-                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].transportationCost) ? item.transportationCost : "-"}",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].transportationCost) ? FormatCurrency.format(item.transportationCost.round()) : "-"}",
                                               Colors.black54),
                                           travelTextViewHori(
                                               "Total Cost",
-                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].totalCost) ? item.totalCost : "-"}",
+                                              "${IsNullCheck(list.details[list.details.lastIndexOf(item)].totalCost) ? FormatCurrency.format(item.totalCost.round()) : "-"}",
                                               Colors.black54),
                                         ],
                                       ),
@@ -1227,7 +1230,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                           color: AppConstants.APP_THEME_COLOR,
                                           textColor: Colors.white,
                                           child: Text(
-                                              "Total Cost(${ totalCurrencyCode}) : ${IsNullCheck(item.currencyTotal) ? item.currencyTotal==0.0?"  -":item.currencyTotal.toStringAsFixed(0) : " "} ",
+                                              "Total Cost(${ totalCurrencyCode}) : ${IsNullCheck(item.currencyTotal) ? item.currencyTotal==0.0?"  -":FormatCurrency.format(item.currencyTotal.round()) : " "} ",
                                               style: TextStyle(fontSize: 14)),
                                         ),
                                       ),
@@ -1691,6 +1694,9 @@ SetVisaReqId(MyModelData list) {
       }
     }
     return travelVisaReq;
+  }
+  else{
+    return " ";
   }
 }
 

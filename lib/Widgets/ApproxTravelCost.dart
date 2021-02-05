@@ -11,7 +11,7 @@ import 'package:currency_pickers/country.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:currency_pickers/currency_pickers.dart';
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
-
+import 'package:intl/intl.dart';
 class ApproxTravelCost extends StatefulWidget {
   TravelReqPayLoad list;
   PerDiemModel perDiem;
@@ -35,7 +35,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
   double mytotal = 0.0;
   Country _selectedDialogCountry;
   ApiProvider _apiProvider = ApiProvider();
-
+  final FormatCurrency = new NumberFormat("#,##0", "en_US");
   _ApproxTravelCostState(this.list, this.perDiem, this.currencyConversiondata);
 
   Widget build(BuildContext context) {
@@ -206,11 +206,11 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                   "${double.parse(list.travelCity[index].transportationCost).toStringAsFixed(0)}"),
               SizedBox(height: 30),
               ApproxTravelRowWidget("Total",
-                  "${list.travelCity[index].myTotalCost == 0.0 ? double.parse(list.travelCity[index].totalCost).toStringAsFixed(0) : list.travelCity[index].myTotalCost.toStringAsFixed(0)}"),
+                  "${list.travelCity[index].myTotalCost == 0.0 ? double.parse(list.travelCity[index].totalCost).toStringAsFixed(0) : FormatCurrency.format(list.travelCity[index].myTotalCost)}"),
               SizedBox(height: 30),
               ApproxTravelRowWidget(
                   "Total Cost(Currency)",
-                  "${list.travelCity[index].myCurrencyTotal == null ? "-" : list.travelCity[index].myCurrencyTotal}"
+                  "${list.travelCity[index].myCurrencyTotal == null ? "-" : FormatCurrency.format(double.parse(list.travelCity[index].myCurrencyTotal))}"
                   ),
             ],
           ),
