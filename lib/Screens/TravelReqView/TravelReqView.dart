@@ -2,12 +2,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
+import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestFResponse.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestForApprovalModel.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
 import 'package:mobility_sqr/Screens/ActionHistory.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
@@ -46,7 +48,10 @@ class _TravelReqViewState extends State<TravelReqView> {
   List<Currency_Data> _currencyConversiondata;
   final queue = Queue();
   var totalCurrencyCode="Currency";
-
+  var HomeCountryName;
+  final _userInfo = TokenGetter();
+  UserInfo info;
+  var userEmail;
   scrolltotop() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_listview_controller.hasClients) {
@@ -60,7 +65,11 @@ class _TravelReqViewState extends State<TravelReqView> {
       }
     });
   }
-
+  getvalues() async {
+    info = await _userInfo.readUserInfo() ?? null;
+    HomeCountryName = info.data.home;
+    userEmail=info.data.empCode;
+  }
   scrolltobottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_listview_controller.hasClients) {
@@ -78,6 +87,7 @@ class _TravelReqViewState extends State<TravelReqView> {
   @override
   void initState() {
     super.initState();
+    getvalues();
     Future.delayed(Duration.zero, () {
       setState(() {
         args = ModalRoute.of(context).settings.arguments;
@@ -423,129 +433,132 @@ class _TravelReqViewState extends State<TravelReqView> {
                                 ],
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "Purpose  of travel :",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        AutoSizeText(
-                                          " ${list.details[index].travelPurpose}",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: AppConstants
-                                                  .TEXT_BACKGROUND_COLOR),
-                                          minFontSize: 10,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
+                            HomeCountryName.trim().toLowerCase() !=
+                                list.details[index].travellingCountryTo.trim().toLowerCase()? Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "Do you need accomodation? ",
-                                        style: TextStyle(fontSize: 14),
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Purpose  of travel :",
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            AutoSizeText(
+                                              " ${list.details[index].travelPurpose}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: AppConstants
+                                                      .TEXT_BACKGROUND_COLOR),
+                                              minFontSize: 10,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Text(
-                                        "${checkAccomodation(list.details[index].isAccmodationRequired)}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: AppConstants
-                                                .TEXT_BACKGROUND_COLOR),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Do you need accomodation? ",
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          Text(
+                                            "${checkAccomodation(list.details[index].isAccmodationRequired)}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: AppConstants
+                                                    .TEXT_BACKGROUND_COLOR),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            list.details[index].isAccmodationRequired
-                                ? Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 5.0.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                              child: CustomColumnEditText(
-                                                  "",
-                                                  getDepartureTime(list
-                                                      .details[index]
-                                                      .accmodationStartDate),
-                                                  " ",
-                                                  "Start Date",
-                                                  2,
-                                                  false)),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                              child: CustomColumnEditText(
-                                                  "",
-                                                  getDepartureTime(list
-                                                      .details[index]
-                                                      .accmodationEndDate),
-                                                  "",
-                                                  "End Date",
-                                                  2,
-                                                  false)),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Divider(
-                              height: 2,
-                              thickness: 2,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Stack(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      left: 5.0.w, right: 5.0.w, top: 22),
-                                  child: Row(children: <Widget>[
-                                    Text(
-                                      "Host Contact",
-                                      style: TextStyle(
-                                          color: AppConstants.APP_THEME_COLOR,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
-                                    ),
-                                    Expanded(
-                                        child: Divider(
-                                            color: AppConstants.APP_THEME_COLOR,
-                                            indent: 5,
-                                            thickness: 1)),
-                                  ]),
                                 ),
-                                list.details[index].agenda != null ||
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                list.details[index].isAccmodationRequired
+                                    ? Container(
+                                  margin:
+                                  EdgeInsets.symmetric(horizontal: 5.0.w),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            child: CustomColumnEditText(
+                                                "",
+                                                getDepartureTime(list
+                                                    .details[index]
+                                                    .accmodationStartDate),
+                                                " ",
+                                                "Start Date",
+                                                2,
+                                                false)),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            child: CustomColumnEditText(
+                                                "",
+                                                getDepartureTime(list
+                                                    .details[index]
+                                                    .accmodationEndDate),
+                                                "",
+                                                "End Date",
+                                                2,
+                                                false)),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                    : SizedBox(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Divider(
+                                  height: 2,
+                                  thickness: 2,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Stack(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 5.0.w, right: 5.0.w, top: 22),
+                                      child: Row(children: <Widget>[
+                                        Text(
+                                          "Host Contact",
+                                          style: TextStyle(
+                                              color: AppConstants.APP_THEME_COLOR,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
+                                        Expanded(
+                                            child: Divider(
+                                                color: AppConstants.APP_THEME_COLOR,
+                                                indent: 5,
+                                                thickness: 1)),
+                                      ]),
+                                    ),
+                                    list.details[index].agenda != null ||
                                         list.details[index].agenda
                                             .toString()
                                             .trim()
                                             .isNotEmpty
-                                    ? Align(
+                                        ? Align(
                                         alignment: Alignment.bottomRight,
                                         child: GestureDetector(
                                           onTap: () {
@@ -555,7 +568,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                   list.details[index].agenda,
                                                   onclose: () {
                                                     Navigator.of(context,
-                                                            rootNavigator: true)
+                                                        rootNavigator: true)
                                                         .pop();
                                                   },
                                                 ));
@@ -564,7 +577,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                               height: 30,
                                               width: 90,
                                               margin:
-                                                  EdgeInsets.only(right: 20),
+                                              EdgeInsets.only(right: 20),
                                               decoration: BoxDecoration(
                                                   boxShadow: [
                                                     BoxShadow(
@@ -576,8 +589,8 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                       color: AppConstants
                                                           .APP_THEME_COLOR),
                                                   borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(5)),
+                                                  BorderRadius.all(
+                                                      Radius.circular(5)),
                                                   color: AppConstants
                                                       .APP_THEME_COLOR),
                                               child: FittedBox(
@@ -586,16 +599,16 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                   children: [
                                                     Padding(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
+                                                      const EdgeInsets.all(
+                                                          8.0),
                                                       child: Text(
                                                         "View Agenda",
                                                         textAlign:
-                                                            TextAlign.center,
+                                                        TextAlign.center,
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight:
-                                                                FontWeight.w700,
+                                                            FontWeight.w700,
                                                             fontSize: 14),
                                                       ),
                                                     ),
@@ -603,301 +616,304 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                 ),
                                               )),
                                         ))
-                                    : SizedBox(),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-                              child: Row(
-                                mainAxisAlignment:
+                                        : SizedBox(),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                                  child: Row(
+                                    mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      child: travelTextView(
-                                          "Name",
-                                          IsNullCheck(list
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          child: travelTextView(
+                                              "Name",
+                                              IsNullCheck(list
                                                   .details[index].hostHrName)
-                                              ? list.details[index].hostHrName
-                                              : " ",
-                                          AppConstants.TEXT_BACKGROUND_COLOR),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                        child: travelTextView(
-                                            "Phone",
-                                            IsNullCheck(list
+                                                  ? list.details[index].hostHrName
+                                                  : " ",
+                                              AppConstants.TEXT_BACKGROUND_COLOR),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            child: travelTextView(
+                                                "Phone",
+                                                IsNullCheck(list
                                                     .details[index].hostPhoneNo)
-                                                ? list.details[index]
-                                                        .hostPhoneExt +
+                                                    ? list.details[index]
+                                                    .hostPhoneExt +
                                                     "-" +
                                                     list.details[index]
                                                         .hostPhoneNo
-                                                : " ",
-                                            AppConstants
-                                                .TEXT_BACKGROUND_COLOR)),
+                                                    : " ",
+                                                AppConstants
+                                                    .TEXT_BACKGROUND_COLOR)),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5.0.w),
-                              child: Row(
-                                mainAxisAlignment:
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                                  child: Row(
+                                    mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      child: travelTextView(
-                                          "Travelling to",
-                                          IsNullCheck(list.details[index]
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          child: travelTextView(
+                                              "Travelling to",
+                                              IsNullCheck(list.details[index]
                                                   .isClientLocation)
-                                              ? isClientLocation(list
+                                                  ? isClientLocation(list
                                                   .details[index]
                                                   .isClientLocation)
-                                              : " ",
-                                          AppConstants.TEXT_BACKGROUND_COLOR),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                        child: travelTextView(
-                                            "Address",
-                                            addressCheck(
-                                                list.details[index]
-                                                    .clientAddress,
-                                                list.details[index]
-                                                    .officeLocation,
-                                                list.details[index]
-                                                    .isClientLocation),
-                                            AppConstants
-                                                .TEXT_BACKGROUND_COLOR)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            list.details[index].isClientLocation
-                                ? Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 5.0.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
+                                                  : " ",
+                                              AppConstants.TEXT_BACKGROUND_COLOR),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
                                             child: travelTextView(
-                                                "Client Name",
-                                                list.details[index].clientName,
+                                                "Address",
+                                                addressCheck(
+                                                    list.details[index]
+                                                        .clientAddress,
+                                                    list.details[index]
+                                                        .officeLocation,
+                                                    list.details[index]
+                                                        .isClientLocation),
                                                 AppConstants
-                                                    .TEXT_BACKGROUND_COLOR),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                              child: travelTextView(
-                                                  "Client Number",
-                                                  list.details[index]
-                                                          .clientNumberExt +"-"+
-                                                      list.details[index]
-                                                          .clientNumber,
-                                                  AppConstants
-                                                      .TEXT_BACKGROUND_COLOR)),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(),
-                            SizedBox(height: 10,),
-                            Divider(
-                              height: 2,
-                              thickness: 2,
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 5.0.w, vertical: 1.0.h),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Travelling with dependent(s)?",
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "${checkdependent(list.details[index].isDependent)}",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            list.details[index].isDependent &&
-                                    list.dependent != null
-                                ? Column(
-                                    children: [
-                                      for (var item in list.dependent)
-                                        Container(
-                                          padding: EdgeInsets.all(6),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5)),
-                                              border: Border.all(
-                                                  color: AppConstants
-                                                      .TEXT_BACKGROUND_COLOR,
-                                                  width: 0.3)),
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 5.0.w,
-                                              vertical: 0.5.h),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText("Name :",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${item.dependentName}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 14,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText(
-                                                              "Relation: ",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${item.dependentRelation}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText(
-                                                              "Visa Number :",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${!IsNullCheck(item.dependentVisa)?"N/A":item.dependentVisa}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText(
-                                                              "Passport Status: ",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${!IsNullCheck(item.dependentPassport)?"N/A":item.dependentPassport}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
+                                                    .TEXT_BACKGROUND_COLOR)),
+                                      ),
                                     ],
-                                  )
-                                : SizedBox(),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                list.details[index].isClientLocation
+                                    ? Container(
+                                  margin:
+                                  EdgeInsets.symmetric(horizontal: 5.0.w),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          child: travelTextView(
+                                              "Client Name",
+                                              list.details[index].clientName,
+                                              AppConstants
+                                                  .TEXT_BACKGROUND_COLOR),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            child: travelTextView(
+                                                "Client Number",
+                                                list.details[index]
+                                                    .clientNumberExt +"-"+
+                                                    list.details[index]
+                                                        .clientNumber,
+                                                AppConstants
+                                                    .TEXT_BACKGROUND_COLOR)),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                    : SizedBox(),
+                                SizedBox(height: 10,),
+                                Divider(
+                                  height: 2,
+                                  thickness: 2,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 5.0.w, vertical: 1.0.h),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Travelling with dependent(s)?",
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "${checkdependent(list.details[index].isDependent)}",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                list.details[index].isDependent &&
+                                    list.dependent != null
+                                    ? Column(
+                                  children: [
+                                    for (var item in list.dependent)
+                                      Container(
+                                        padding: EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5)),
+                                            border: Border.all(
+                                                color: AppConstants
+                                                    .TEXT_BACKGROUND_COLOR,
+                                                width: 0.3)),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 5.0.w,
+                                            vertical: 0.5.h),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    child: Row(
+                                                      children: [
+                                                        AutoSizeText("Name :",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR)),
+                                                        AutoSizeText(
+                                                            "${item.dependentName}",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 14,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    child: Row(
+                                                      children: [
+                                                        AutoSizeText(
+                                                            "Relation: ",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontSize: 10,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR)),
+                                                        AutoSizeText(
+                                                            "${item.dependentRelation}",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 10,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    child: Row(
+                                                      children: [
+                                                        AutoSizeText(
+                                                            "Visa Number :",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontSize: 10,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR)),
+                                                        AutoSizeText(
+                                                            "${!IsNullCheck(item.dependentVisa)?"N/A":item.dependentVisa}",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 10,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    child: Row(
+                                                      children: [
+                                                        AutoSizeText(
+                                                            "Passport Status: ",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontSize: 10,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR)),
+                                                        AutoSizeText(
+                                                            "${!IsNullCheck(item.dependentPassport)?"N/A":item.dependentPassport}",
+                                                            minFontSize: 5,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 10,
+                                                                color: AppConstants
+                                                                    .TEXT_BACKGROUND_COLOR))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                )
+                                    : SizedBox(),
+
+                              ],
+                            ):SizedBox(),
 
                             Divider(
                               height: 2,
@@ -1353,7 +1369,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                   ),
                                                   onPressed: () async {
                                                     body.modifiedBy =
-                                                        list.empCode;
+                                                        userEmail;
                                                     body.orgId =
                                                         list.organization;
                                                     body.module = "Travel";
@@ -1361,7 +1377,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                     body.approvalLevel =
                                                         list.approvalLevel;
                                                     body.currentTicketOwner =
-                                                        list.empEmail;
+                                                        userEmail;
                                                     body.takeOwnership = "";
                                                     body.transferTo = "";
                                                     body.travelReqId =
@@ -1413,7 +1429,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                   ),
                                                   onPressed: () async {
                                                     body.modifiedBy =
-                                                        list.empCode;
+                                                        userEmail;
                                                     body.orgId =
                                                         list.organization;
                                                     body.module = "Travel";
@@ -1421,12 +1437,15 @@ class _TravelReqViewState extends State<TravelReqView> {
                                                     body.approvalLevel =
                                                         list.approvalLevel;
                                                     body.currentTicketOwner =
-                                                        list.empEmail;
+                                                        userEmail;
                                                     body.takeOwnership = "";
                                                     body.transferTo = "";
                                                     body.travelReqId =
                                                         list.travelReqId;
 
+                                                    if(body.requestNotes==null){
+                                                      body.requestNotes="";
+                                                    }
                                                     _onLoading();
                                                     await _apiProvider
                                                             .Post_Travel_Req_For_Approval(

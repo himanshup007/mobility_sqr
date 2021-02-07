@@ -812,7 +812,13 @@ class _DashboardState extends State<Dashboard> {
     } else if (where == 2) {
       Navigator.pushNamed(context, '/ApprovalsScreen',
           arguments: {"where": 2, "header": "Previous Travels"});
-    } else if (where == 5) {
+    }
+
+    else if(where ==3){
+      Navigator.pushNamed(context, '/TravelCalender',
+         );
+    }
+    else if (where == 5) {
       Navigator.pushNamed(context, '/ApprovalsScreen',
           arguments: {"where": 5, "header": "Approvals"});
     } else {

@@ -19,9 +19,12 @@ import 'Screens/AddNewTravel/AddNewTravel2.dart';
 import 'Screens/Dashboard/Dashboard.dart';
 import 'Screens/DependentsScreen/Dependents.dart';
 import 'Screens/ProjectName/ProjectIdScreen.dart';
+import 'Screens/TravelCalendar/TravelCalender.dart';
+
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -58,6 +61,8 @@ class MyApp extends StatelessWidget {
         '/SuccessfullyAdded':(context) => SuccessfullyAdded(),
         '/ApprovalsScreen':(context) => ApprovalsScreen(),
         '/TravelReqView':(context) =>TravelReqView(),
+        '/TravelCalender':(context) =>TravelCalender(),
+
       },
     );
   }
