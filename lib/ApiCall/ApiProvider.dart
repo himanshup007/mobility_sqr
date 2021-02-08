@@ -66,12 +66,12 @@ class ApiProvider {
     return userToken;
   }
 
-  Future<UserInfo> getUserData(String username) async {
+  Future<UserInfo> getUserData(String username,String token) async {
     Map data = {"email": username};
     //encode Map to JSON
     var body = json.encode(data);
-  //  String token = await _TokenGetter.getAcessToken() ?? "";
-    String token = await getToken_byReresh();
+   // String token = await _TokenGetter.getAcessToken() ?? "";
+ // String token = await getToken_byReresh();
     var response = await http.post(
       AppConstants.BASE_URL + AppConstants.GET_USER_INFO,
       headers: {

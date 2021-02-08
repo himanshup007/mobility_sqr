@@ -354,6 +354,14 @@ class TravelCity {
   List<PostLocationData> _postLocationList;
   List<SecondDependentData> _myDependentList;
   SearchList _toCountryData;
+  String airfareCost;
+
+
+  String get getAirfareCost => airfareCost;
+
+  set SetAirfareCost(String value) {
+    airfareCost = value;
+  }
 
   bool _hasVisa;
 
@@ -456,10 +464,13 @@ class TravelCity {
       bool isDependent,
       String perDiemValue,
       double myTotalCost,
-      String airFare,
+        String airfareCost,
+
+        String airFare,
       String currentCountryCode,
         String myCurrencyTotal,
       List<DependentData> dependentData}) {
+    this.airfareCost=airfareCost;
     this._currency_data = currency_data;
     this._accomodationLimit = accomodationLimit;
     this._myAirFare = airFare;
@@ -654,6 +665,7 @@ class TravelCity {
     _accmodationStartDate = json['accmodation_start_date'];
     _accmodationEndDate = json['accmodation_end_date'];
     _hotelCost = json['hotel_cost'];
+    airfareCost = json['airfare_cost'];
     _perDiemCost = json['per_diem_cost'];
     _transportationCost = json['transportation_cost'];
     _totalCost = json['total_cost'];
@@ -700,6 +712,7 @@ class TravelCity {
     data['reporting_currency'] = this._reportingCurrency;
     data['currency'] = this._currency;
     data['agenda'] = this._agenda;
+    data['airfare_cost'] = this.airfareCost;
     data['travel_purpose'] = this._travelPurpose;
     data['applicable_visa'] = this._applicableVisa;
     data['visa_number'] = this._visaNumber;

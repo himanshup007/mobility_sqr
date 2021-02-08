@@ -101,8 +101,8 @@ class UsernameBloc {
 
   }
 
-  Future<UserInfo> setUserInfo()  async {
-    UserInfo userInfo =  await  _repository.fetch_user_info(email);
+  Future<UserInfo> setUserInfo(String token)  async {
+    UserInfo userInfo =  await  _repository.fetch_user_info(email,token);
     return userInfo;
   }
 

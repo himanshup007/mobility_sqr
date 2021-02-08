@@ -206,7 +206,7 @@ class _Username_Screen extends State<Username_Screen> {
                                           snapshot.data.access,
                                           snapshot.data.refresh);
 
-                                      UserData();
+                                      UserData( snapshot.data.access);
                                     }
                                   } else if (snapshot.hasData &&
                                       snapshot.data.detail != null&&snapshot.data.access==null) {
@@ -275,8 +275,8 @@ class _Username_Screen extends State<Username_Screen> {
     );
   }
 
-  UserData() async {
-  await bloc.setUserInfo().then((value) =>
+  UserData(String token) async {
+  await bloc.setUserInfo(token).then((value) =>
     methodName(value)
     );
 

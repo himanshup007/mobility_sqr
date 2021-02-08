@@ -120,7 +120,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Travel Calender",style: TextStyle(color: Colors.black54),),
+        title: Text("Travel Calender",style: TextStyle(color: Colors.black),),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -134,8 +134,19 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
            _buildTableCalendarWithBuilders(),
 
           const SizedBox(height: 8.0),
-          Expanded(child: _buildEventList()),
+      //    Expanded(child: _buildEventList()),
         ],
+      ),
+      floatingActionButton:  FloatingActionButton(
+        hoverColor: Colors.black,
+        elevation: 10,
+        onPressed: () {
+          Navigator.pushNamed(context, '/AddEvent');
+        },
+        backgroundColor: AppConstants.APP_THEME_COLOR,
+        child: Icon(Icons.add,),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30.0))),
       ),
     );
   }
@@ -167,7 +178,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
   // More advanced TableCalendar configuration (using Builders & Styles)
   Widget _buildTableCalendarWithBuilders() {
     return TableCalendar(
-      rowHeight: MediaQuery.of(context).size.height/10,
+      rowHeight: MediaQuery.of(context).size.height/8,
 
       locale: 'en_us',
       calendarController: _calendarController,
@@ -192,7 +203,6 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
         decoration: BoxDecoration(
 
         ),
-
 
         leftChevronMargin: EdgeInsets.only(left: 60),
        rightChevronMargin: EdgeInsets.only(right: 60),

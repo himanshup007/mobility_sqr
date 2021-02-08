@@ -11,6 +11,7 @@ import 'package:mobility_sqr/Screens/Profile/Personal_info/Personal_Info_Screen.
 import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
+import 'package:mobility_sqr/Screens/TravelCalendar/AddEvent.dart';
 import 'package:mobility_sqr/Screens/TravelReqView/TravelReqView.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
 import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         // highlightColor: Color(0xffffc600),
         unselectedWidgetColor: AppConstants.APP_THEME_COLOR,
         appBarTheme: AppBarTheme(
+          elevation: 10,
           color: Colors.white,
         ),
       ),
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
         '/ApprovalsScreen':(context) => ApprovalsScreen(),
         '/TravelReqView':(context) =>TravelReqView(),
         '/TravelCalender':(context) =>TravelCalender(),
+        '/AddEvent':(context) =>AddEvent(),
 
       },
     );

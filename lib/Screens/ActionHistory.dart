@@ -124,13 +124,106 @@ class _ActionHistoryState extends State<ActionHistory> {
                 ],
               );
             },
+          ),
+          SizedBox(height: 40,),
+
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(child: Row(
+                    children: [
+                      Text("Approved"),
+                      SizedBox(width: 2,),
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: Colors.green ,
+                            shape: BoxShape.circle),
+                      ),
+                    ],
+                  )),
+                  Container(
+                    child: Row(
+                      children: [
+                        Text("Rejected"),
+                        SizedBox(width: 2,),
+                        Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                              color: Colors.red ,
+                              shape: BoxShape.circle),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Row(
+                      children: [
+                        Text("In Progress"),
+                        SizedBox(width: 2,),
+                        Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                              color: Colors.orange ,
+                              shape: BoxShape.circle),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(child: Row(
+                    children: [
+                      Text("Transferred"),
+                      SizedBox(width: 2,),
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: Colors.purple ,
+                            shape: BoxShape.circle),
+                      ),
+                    ],
+                  )),
+                  SizedBox(width: 35,),
+                  Container(
+                    child: Row(
+                      children: [
+                        Text("Closed"),
+                        SizedBox(width: 2,),
+                        Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                              color: Colors.lightGreenAccent ,
+                              shape: BoxShape.circle),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+
+
+            ],
           )
         ],
       ),
     );
   }
 
-  widgetRow(String role, String name, bool status, String Actiondate) {
+  widgetRow(String role, String name, String  status, String Actiondate) {
     return Container(
       padding: EdgeInsets.all(5),
       child: Row(
@@ -168,7 +261,7 @@ class _ActionHistoryState extends State<ActionHistory> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                  color: status ? Colors.green : Colors.orange,
+                  color: getColorViaStatus(status,name) ,
                   shape: BoxShape.circle),
             ),
           ),
@@ -186,28 +279,54 @@ class _ActionHistoryState extends State<ActionHistory> {
     );
   }
 
+  getColorViaStatus(String status, String name){
+
+    if(name != ""){
+
+
+    if(status=="1"){
+      return Colors.green;
+    }
+   else if(status=="2"){
+      return Colors.orange;
+    }
+  else  if(status=="3"){
+      return Colors.lightGreenAccent;
+    }
+  else   if(status=="4"){
+      return Colors.green;
+    }
+  else if(status=="5"){
+      return Colors.purple;
+    }else{
+      return Colors.orange;
+    }
+    }
+
+  }
+
   getList(i, values) {
     if (i == 0) {
       return widgetRow("Supervisor", values[i].supervisorName,
-          setStatusProgress(values[i].supervisorStatus), " ");
+          values[i].supervisorStatus, " ");
     }
     if (i == 1) {
       return widgetRow("Expense Approver", values[i].expenseApproverName,
-          setStatusProgress(values[i].expenseApproverStatus), " ");
+          values[i].expenseApproverStatus, " ");
     }
     if (i == 2) {
       return widgetRow("Project Manager", values[i].projectManagerName,
-          setStatusProgress(values[i].projectManagerStatus), " ");
+          values[i].projectManagerStatus, " ");
     }
     if (i == 3) {
       return widgetRow("Business Lead", values[i].businessLeadName,
-          setStatusProgress(values[i].businessLeadStatus), " ");
+          values[i].businessLeadStatus, " ");
     }
     if (i == 4) {
       return widgetRow(
           "Client Executive Lead",
           values[i].clientExecutiveLeadName,
-          setStatusProgress(values[i].clientExecutiveLeadStatus),
+         values[i].clientExecutiveLeadStatus,
           " ");
     }
   }

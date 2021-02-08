@@ -67,8 +67,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                 _onWillPop();
               }),
           iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white38,
-          elevation: 0,
+          backgroundColor: Colors.white,
+          elevation: 10,
           title: Text("$headertext",
               style: TextStyle(color: Colors.black, fontSize: 17.0)),
           centerTitle: true,
@@ -132,9 +132,12 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                                   })
                                                   );
                                                 },
-                                                child: Cell(
-                                                    state.approvalModal.data[index],
-                                                    where)),
+                                                child: Container(
+                                                  color: Colors.transparent,
+                                                  child: Cell(
+                                                      state.approvalModal.data[index],
+                                                      where),
+                                                )),
                                           ),
                                         ),
                                       );

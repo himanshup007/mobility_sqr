@@ -18,8 +18,8 @@ class Repository {
   Future<UserToken> fetch_user_token(String username, String password) =>
       appApiProvider.postRequest(username, password);
 
-  Future<UserInfo> fetch_user_info(String username) =>
-      appApiProvider.getUserData(username);
+  Future<UserInfo> fetch_user_info(String username,String token) =>
+      appApiProvider.getUserData(username,token);
 
   Future<ForgetPassModel> send_resetEmail(String email) =>
       appApiProvider.resetPass(email);

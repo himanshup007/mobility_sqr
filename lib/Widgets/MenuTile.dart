@@ -8,10 +8,8 @@ CustomMenuTitle(String image,String text,BuildContext context,
     ListTile(
       contentPadding:
       new EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
-      leading: ImageIcon(
-        AssetImage(image),
-        color: AppConstants.APP_THEME_COLOR,
-      ),
+      leading:
+      Image.asset(image, fit: BoxFit.contain,height: 25,width: 25,),
       title: Text(text),
       onTap: () => {
 

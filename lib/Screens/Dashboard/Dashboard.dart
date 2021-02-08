@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -210,7 +211,7 @@ class _DashboardState extends State<Dashboard> {
               CustomDivider(),
 
               CustomMenuTitle("assets/images/biometric-thumb.png",
-                  'Fingerprint Authentication', context,
+                  'BioMetric', context,
                   OnTouch: () {}),
               CustomDivider(),
               CustomMenuTitle("assets/images/change_password_sidemenu_icon.png",
@@ -420,7 +421,7 @@ class _DashboardState extends State<Dashboard> {
                                                                           .details
                                                                           .length >
                                                                           0
-                                                                          ? Text(
+                                                                          ? AutoSizeText(
                                                                         state
                                                                             .travelRequest
                                                                             .data[Index]
@@ -428,10 +429,12 @@ class _DashboardState extends State<Dashboard> {
                                                                             .destinationCity,
                                                                         textAlign:
                                                                         TextAlign.start,
+                                                                        maxLines: 1,
+                                                                        minFontSize: 10,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w900,
                                                                             color: AppConstants.TEXT_BACKGROUND_COLOR,
-                                                                            fontSize: 15),
+                                                                            fontSize: 14),
                                                                       )
                                                                           : SizedBox(),
                                                                     ),
@@ -533,6 +536,7 @@ class _DashboardState extends State<Dashboard> {
                                                                             .sourceCity,
                                                                         textAlign:
                                                                         TextAlign.start,
+                                                                        maxLines: 1,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w900,
                                                                             color: AppConstants.TEXT_BACKGROUND_COLOR,
@@ -555,7 +559,7 @@ class _DashboardState extends State<Dashboard> {
                                                                           .details
                                                                           .length >
                                                                           0
-                                                                          ? Text(
+                                                                          ? AutoSizeText(
                                                                         state
                                                                             .travelRequest
                                                                             .data[Index]
@@ -563,6 +567,7 @@ class _DashboardState extends State<Dashboard> {
                                                                             .travellingCountry,
                                                                         textAlign:
                                                                         TextAlign.start,
+                                                                        minFontSize: 10,
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight.w300,
                                                                             color: AppConstants.TEXT_BACKGROUND_COLOR,
@@ -603,10 +608,11 @@ class _DashboardState extends State<Dashboard> {
                                                                               margin:
                                                                                   EdgeInsets.symmetric(horizontal: 5),
                                                                               child: state.travelRequest.data[Index].details.length > 0
-                                                                                  ? Text(
+                                                                                  ? AutoSizeText(
                                                                                       getDepartureTime(state.travelRequest.data[Index].details[0].departureDate),
                                                                                       textAlign: TextAlign.start,
-                                                                                      style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black, fontSize: 18),
+                                                                                      minFontSize: 16,
+                                                                                      style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black, fontSize: 16),
                                                                                     )
                                                                                   : SizedBox(),
                                                                             ),
@@ -619,9 +625,10 @@ class _DashboardState extends State<Dashboard> {
                                                                                   5,
                                                                                   0),
                                                                               child: state.travelRequest.data[Index].details.length > 0
-                                                                                  ? Text(
+                                                                                  ? AutoSizeText(
                                                                                       getDepatureDate(state.travelRequest.data[Index].details[0].departureDate),
                                                                                       textAlign: TextAlign.start,
+                                                                                minFontSize: 16,
                                                                                       style: TextStyle(fontWeight: FontWeight.w500, color: AppConstants.TEXT_BACKGROUND_COLOR, fontSize: 13),
                                                                                     )
                                                                                   : SizedBox(),
@@ -682,6 +689,20 @@ class _DashboardState extends State<Dashboard> {
                                                                             color: Colors.red,
                                                                             geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
                                                                             textSpan: TextSpan(text: 'Rejected', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
+                                                                            labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                                                                          ),
+                                                                        ),
+                                                                      ):
+                                                                      state.travelRequest.data[Index].travelReqStatus=='6' ?Expanded(
+                                                                        flex:
+                                                                        1,
+                                                                        child:
+                                                                        Container(
+                                                                          foregroundDecoration:
+                                                                          const RotatedCornerDecoration(
+                                                                            color: Colors.purple,
+                                                                            geometry: const BadgeGeometry(width: 55, height: 55, alignment: BadgeAlignment.bottomRight),
+                                                                            textSpan: TextSpan(text: 'Transferred', style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
                                                                             labelInsets: LabelInsets(baselineShift: 3, start: 1),
                                                                           ),
                                                                         ),

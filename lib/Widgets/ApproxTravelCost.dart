@@ -16,9 +16,10 @@ class ApproxTravelCost extends StatefulWidget {
   TravelReqPayLoad list;
   PerDiemModel perDiem;
   List<Currency_Data> currencyConversiondata;
+  Function(String,int,String) airfare;
 
   ApproxTravelCost(
-      TravelReqPayLoad this.list, this.perDiem, this.currencyConversiondata);
+      TravelReqPayLoad this.list, this.perDiem, this.currencyConversiondata,{this.airfare});
 
   @override
   _ApproxTravelCostState createState() =>
@@ -137,7 +138,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                   "${item.destinationCity + "(" + item.currency + ")"}"),
               SizedBox(height: 30),
               ApproxTravelRowWidget("Per-diems",
-                  "${double.parse(list.travelCity[index].perDiemCost).toStringAsFixed(0)}"),
+                  "${double.parse(list.travelCity[index].perDiemCost).round()}"),
               SizedBox(height: 30),
               Row(
                 children: [
@@ -172,6 +173,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                           }
                           this.setState(() {
                             list.travelCity[index].myAirFare = text.toString();
+
                           });
 
                           this.setState(() {
@@ -182,6 +184,8 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
                                 double.parse(
                                     list.travelCity[index].perDiemCost) +
                                 double.parse(text);
+
+                            widget.airfare(  list.travelCity[index].myAirFare,index,list.travelCity[index].myTotalCost.toString());
                           });
                         },
                         maxLength: 10,
@@ -210,7 +214,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
               SizedBox(height: 30),
               ApproxTravelRowWidget(
                   "Total Cost(Currency)",
-                  "${list.travelCity[index].myCurrencyTotal == null ? "-" : FormatCurrency.format(double.parse(list.travelCity[index].myCurrencyTotal))}"
+                  "${list.travelCity[index].myCurrencyTotal == null ? "-" : FormatCurrency.format(double.parse(list.travelCity[index].myCurrencyTotal).round())}"
                   ),
             ],
           ),
@@ -269,7 +273,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
       this.setState(() {
         list.travelCity[index].myCurrencyTotal =
             (total *
-                    double.parse(double.parse(value.data[0].conversionRate).toStringAsFixed(2)))
+                    double.parse(double.parse(value.data[0].conversionRate).toString()))
                 .toStringAsFixed(0);
       });
     }

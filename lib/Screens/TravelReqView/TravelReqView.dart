@@ -195,8 +195,8 @@ class _TravelReqViewState extends State<TravelReqView> {
             ),
           ],
           iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white38,
-          elevation: 0,
+          backgroundColor: Colors.white,
+
           title: AutoSizeText(
             "${list.firstName + " " + list.lastName}",
             style: TextStyle(
@@ -215,7 +215,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5.0.w),
+                    margin: EdgeInsets.symmetric(horizontal: 5.0.w,vertical: 1.0.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
