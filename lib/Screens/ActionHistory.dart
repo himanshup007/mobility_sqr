@@ -296,8 +296,11 @@ class _ActionHistoryState extends State<ActionHistory> {
   else   if(status=="4"){
       return Colors.green;
     }
-  else if(status=="5"){
+  else if(status=="6"){
       return Colors.purple;
+    }
+    else if(status=="5"){
+      return Colors.red;
     }else{
       return Colors.orange;
     }
