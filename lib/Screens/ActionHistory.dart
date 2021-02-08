@@ -180,7 +180,7 @@ class _ActionHistoryState extends State<ActionHistory> {
               ),
               SizedBox(height: 10,),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(child: Row(
                     children: [

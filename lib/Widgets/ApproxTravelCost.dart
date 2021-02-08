@@ -214,7 +214,7 @@ class _ApproxTravelCostState extends State<ApproxTravelCost> {
               SizedBox(height: 30),
               ApproxTravelRowWidget(
                   "Total Cost(Currency)",
-                  "${list.travelCity[index].myCurrencyTotal == null ? "-" : FormatCurrency.format(double.parse(list.travelCity[index].myCurrencyTotal).round())}"
+                  "${list.travelCity[index].myCurrencyTotal == null||list.travelCity[index].myCurrencyTotal=="0"||list.travelCity[index].myCurrencyTotal=="-" ? "-" : FormatCurrency.format(double.parse(list.travelCity[index].myCurrencyTotal).round())}"
                   ),
             ],
           ),
