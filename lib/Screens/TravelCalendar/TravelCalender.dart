@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:mobility_sqr/CustomLibrary/Calender/lib/table_calendar.dart';
+
+
 
 class TravelCalender extends StatefulWidget {
   TravelCalender({Key key}) : super(key: key);
@@ -26,6 +28,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
   void initState() {
     super.initState();
     final _selectedDay = DateTime.now();
+    List<String> mydata= new List<String>();
 
     _events = {
       _selectedDay.subtract(Duration(days: 30)): [
@@ -251,7 +254,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
                 Positioned(
 
                   top: 10,
-                  child: _buildHolidaysMarker(date),
+                  child: _buildHolidaysMarker(date,events),
                 ),);
             children.add(
 
@@ -259,15 +262,15 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
             );
           }
 
-          if (holidays.isNotEmpty) {
-            children.add(
-              Positioned(
-                right: -2,
-                top: -2,
-                child: _buildHolidaysMarker(date),
-              ),
-            );
-          }
+          // if (holidays.isNotEmpty) {
+          //   children.add(
+          //     Positioned(
+          //       right: -2,
+          //       top: -2,
+          //       child: _buildHolidaysMarker(date,events),
+          //     ),
+          //   );
+          // }
 
           return children;
         },
@@ -300,7 +303,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
     );
   }
 
-  Widget _buildHolidaysMarker(DateTime date) {
+  Widget _buildHolidaysMarker(DateTime date, List<dynamic> events) {
     return  AnimatedContainer(
       duration: const Duration(milliseconds: 300),
 

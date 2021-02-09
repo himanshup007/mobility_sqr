@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppConstants {
 //==============================================================================URL
-//  static final String BASE_URL = "http://52.165.220.40:8888";           //PreProd for client
+ // static final String BASE_URL = "http://52.165.220.40:8888";           //PreProd for client
   static final String BASE_URL = "http://52.165.220.40:8080";       //Testing Url
+ //static final String BASE_URL = "http://52.165.220.40:8000";       //Prod Url
   static final String CHECK_USER = "/checkemployeeuser/";
   static final String ACCESS_TOKEN_FETCHER = "/api/login/";
   static final String GET_USER_INFO = "/emoloyeeinfo/";
