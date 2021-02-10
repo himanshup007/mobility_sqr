@@ -1,8 +1,12 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
+import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
@@ -31,8 +35,10 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
+
 class _DashboardState extends State<Dashboard> {
   var _ScrollController = ScrollController();
+  final LocalAuthentication auth = LocalAuthentication();
   UserInfo info = UserInfo();
   String UserName = '';
   String ProfileImage = null;
@@ -53,12 +59,18 @@ class _DashboardState extends State<Dashboard> {
       print(e);
     }
   }
+  getUserAuthBiometric() async {
+    Credential userCred = await widget._userInfo.readCredentials() ?? null;
+    // if(userCred!=null){
+    //   _authenticate();
+    // }
+  }
 
   @override
   initState() {
 
     super.initState();
-
+    getUserAuthBiometric();
     getprofile();
     models = [
     Model(index: 0,
@@ -813,6 +825,26 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
+
+
+  }
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+
+      authenticated = await auth.authenticateWithBiometrics(
+          localizedReason: 'Scan your fingerprint to authenticate',
+          useErrorDialogs: true,
+          stickyAuth: true);
+
+    } on PlatformException catch (e) {
+      AppSettings.openAppSettings();
+      print(e);
+    }
+    if (!mounted) return;
+
+    final String message = authenticated ? 'Authorized' : 'Not Authorized';
+
   }
 
   getDepartureTime(String date) {
@@ -882,6 +914,7 @@ NavigationHandler(GetTravelRequest value,BuildContext context,where) {
   Navigator.pushNamed(context, '/TravelReqView',arguments: {"EmployeeData":value.data,"where":where});
 
 }
+
 class Model {
   int index;
   int where;

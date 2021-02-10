@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,6 +55,20 @@ class TokenGetter {
     prefs.setString(AppConstants.USER_DIAL_CODE, json.encode(value));
   }
 
+  readCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    Credential credential=null;
+    try{
+       credential = Credential.fromJson( json.decode(prefs.getString(AppConstants.CREDENTIAL)));
+    }catch(e){
+      print(e);
+    }
 
+    return credential;
+  }
 
+  saveCredentials(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(AppConstants.CREDENTIAL, json.encode(value));
+  }
 }

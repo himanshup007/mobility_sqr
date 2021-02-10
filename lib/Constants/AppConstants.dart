@@ -46,6 +46,7 @@ class AppConstants {
   static const String REFRESH_TOKEN = "refresh_token";
   static const String USER_INFO = "User_Info";
   static const String USER_DIAL_CODE = "Dial_code";
+    static const String CREDENTIAL = "credentials";
 
 
 

@@ -1,9 +1,15 @@
+
+
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/bloc/UsernameBloc.dart';
@@ -21,10 +27,11 @@ class Username_Screen extends StatefulWidget {
 class _Username_Screen extends State<Username_Screen> {
   bool manageloginUI = false;
   final tokengetter = TokenGetter();
+  final apiProvider= ApiProvider();
   String Email = "";
   BuildContext dialogContext;
   final appsharedprefs=TokenGetter();
-
+  final LocalAuthentication auth = LocalAuthentication();
   @override
   void dispose() {
     bloc.dispose(); // call the dispose method to close our StreamController
@@ -35,6 +42,47 @@ class _Username_Screen extends State<Username_Screen> {
   void initState() {
     super.initState();
     bloc.flush();
+    Future.delayed(const Duration(seconds: 1), () =>  getUserAuthBiometric());
+
+  }
+  getUserAuthBiometric() async {
+    Credential userCred = await appsharedprefs.readCredentials() ?? null;
+
+    try{
+      if(userCred!=null){
+        if(userCred.checkBiometric==false){
+
+
+          _authenticate(userCred.username,userCred.password);
+        }
+
+      }
+    }catch(e){
+      print(e);
+    }
+
+  }
+  Future<void> _authenticate(String username, String password) async {
+    bool authenticated = false;
+    try {
+
+      authenticated = await auth.authenticateWithBiometrics(
+          localizedReason: 'Scan your fingerprint to authenticate',
+          useErrorDialogs: true,
+          stickyAuth: true);
+
+    } on PlatformException catch (e) {
+      AppSettings.openAppSettings();
+      print(e);
+    }
+    if (!mounted) return;
+
+    if(authenticated){
+      _onLoading();
+      apiProvider.postRequest(username,password).then((value) => UserDataAuth(value.access,username)) ;
+    }
+
+
   }
 
   @override
@@ -100,6 +148,7 @@ class _Username_Screen extends State<Username_Screen> {
                                                   });
                                                   bloc.flush();
                                                   bloc.fetchUserCheck(1);
+
                                                 },
                                                 child: Icon(Icons.arrow_back),
                                                 color: Colors.white,
@@ -281,12 +330,19 @@ class _Username_Screen extends State<Username_Screen> {
     );
 
   }
+  UserDataAuth(String token,String email) async {
+    await bloc.setUserInfoAuth(token,email).then((value) =>
+        methodName(value)
+    );
+
+  }
   methodName (dynamic userinfo) async {
     if (userinfo != null) {
       await  appsharedprefs.saveUserInfo(userinfo);
       getTimeforPush(userinfo);
     }
   }
+
 
 
   void getTimeforPush(userinfo) {

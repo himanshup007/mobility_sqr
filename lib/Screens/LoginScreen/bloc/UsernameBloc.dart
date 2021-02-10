@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
@@ -94,14 +95,30 @@ class UsernameBloc {
   Future<UserToken> passwordValidate() async {
     UserToken isUser = await _repository.fetch_user_token(email, password);
 
+
+      UserBiometricAuth(email, password);
+
+
     _isPassValidController.sink.add(isUser);
 
     return isUser;
 
 
   }
+  UserBiometricAuth(email,password) async {
+
+      Credential UserCredentials= Credential(username: email,password: password,checkbiometric: true);
+      await appsharedprefs.saveCredentials(UserCredentials);
+
+
+  }
+
 
   Future<UserInfo> setUserInfo(String token)  async {
+    UserInfo userInfo =  await  _repository.fetch_user_info(email,token);
+    return userInfo;
+  }
+  Future<UserInfo> setUserInfoAuth(String token,String email)  async {
     UserInfo userInfo =  await  _repository.fetch_user_info(email,token);
     return userInfo;
   }

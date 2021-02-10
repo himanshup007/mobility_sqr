@@ -4,6 +4,7 @@ import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
@@ -54,6 +55,9 @@ class ApiProvider {
 //===============================================================================================
   Future<UserToken> postRequest(String username, String password) async {
     Map data = {"username": username, "password": password};
+
+
+
     //encode Map to JSON
     var body = json.encode(data);
     var response = await http.post(
