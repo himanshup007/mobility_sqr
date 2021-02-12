@@ -46,6 +46,7 @@ class _DashboardState extends State<Dashboard> {
   List<Model> models;
   SharedPreferences prefs;
   bool showloader=false;
+  Credential userCred;
   getprofile() async {
     try {
       info = await widget._userInfo.readUserInfo() ?? null;
@@ -60,10 +61,28 @@ class _DashboardState extends State<Dashboard> {
     }
   }
   getUserAuthBiometric() async {
-    Credential userCred = await widget._userInfo.readCredentials() ?? null;
-    // if(userCred!=null){
-    //   _authenticate();
-    // }
+     userCred = await widget._userInfo.readCredentials() ?? null;
+    if(userCred!=null){
+      if(!userCred.checkBiometric){
+        showAlertDialogBiometric(context,userCred.checkBiometric,okPressed: (colorHandle){
+          this.setState(() {
+            userCred.checkBiometric=true;
+          });
+          _authenticate(userCred);
+        },cancelPressed: (colorHandle){
+          Navigator.of(context, rootNavigator: true).pop();
+        },disabledPressed: () async {
+          this.setState(() {
+            userCred.checkBiometric=false;
+          });
+
+          userCred=await widget._userInfo.saveCredentials(userCred);
+          Navigator.of(context, rootNavigator: true).pop();
+        });
+
+      }
+
+    }
   }
 
   @override
@@ -224,7 +243,26 @@ class _DashboardState extends State<Dashboard> {
 
               CustomMenuTitle("assets/images/biometric-thumb.png",
                   'BioMetric', context,
-                  OnTouch: () {}),
+                  OnTouch: () async {
+
+                Credential userCred= await widget._userInfo.readCredentials()??null;
+                    showAlertDialogBiometric(context,userCred.checkBiometric,okPressed: (colorhandle){
+                      _authenticate(userCred);
+                      this.setState(() {
+                        userCred.checkBiometric=true;
+                      });
+                    },cancelPressed: (colorhandle){
+
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },disabledPressed: () async {
+                      this.setState(() {
+                        userCred.checkBiometric=false;
+                      });
+                      userCred=await widget._userInfo.saveCredentials(userCred);
+                      Navigator.of(context, rootNavigator: true).pop();
+                    });
+
+                  }),
               CustomDivider(),
               CustomMenuTitle("assets/images/change_password_sidemenu_icon.png",
                   'Change Password', context,
@@ -828,7 +866,7 @@ class _DashboardState extends State<Dashboard> {
 
 
   }
-  Future<void> _authenticate() async {
+  Future<void> _authenticate(Credential userCred) async {
     bool authenticated = false;
     try {
 
@@ -842,8 +880,16 @@ class _DashboardState extends State<Dashboard> {
       print(e);
     }
     if (!mounted) return;
+    if(authenticated){
 
-    final String message = authenticated ? 'Authorized' : 'Not Authorized';
+      this.setState(() {
+        userCred.checkBiometric=true;
+      });
+
+      await widget._userInfo.saveCredentials(userCred);
+
+    }
+    Navigator.of(context, rootNavigator: true).pop();
 
   }
 
@@ -927,4 +973,116 @@ class Model {
   String toString() {
     return '$index : $first_text';
   }
+}
+
+showAlertDialogBiometric(BuildContext context,bool colorHandler,
+    {Function(bool) okPressed, Function(bool)  cancelPressed,VoidCallback disabledPressed}) {
+
+bool isEnabled=colorHandler;
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Stack(
+
+      children: [
+        Column(
+          children: [
+            Center(
+              child: Image.asset("assets/images/biometric-thumb.png", fit: BoxFit.contain,height: 50,width: 50,),
+            ),
+
+            Text("Biometric",style:TextStyle(color:Colors.purple)),
+          ],
+        ),
+        GestureDetector(child: Align(alignment:Alignment.topRight,child: Icon(Icons.close,size: 30,color:Colors.red,)),onTap: (){
+          cancelPressed(isEnabled);
+        },)
+      ],
+    ),
+    content: Container(
+      height:MediaQuery.of(context).size.height/4,
+      width:400,
+
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+              "You will be able to use your face or Fingerprint instead of your password to log in to MobilitySQR.",style:TextStyle(fontSize:14,fontWeight: FontWeight.bold)
+          ),
+          SizedBox(),
+          Text(
+              "To set this up Enable Biometric.",style:TextStyle(fontSize:14,fontWeight: FontWeight.bold)
+          ),
+
+          Row(
+            children: [
+              Expanded(
+                child: FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+
+                      side: BorderSide(color:AppConstants.APP_THEME_COLOR)),
+                  color:isEnabled? AppConstants.APP_THEME_COLOR:AppConstants.TEXT_BACKGROUND_COLOR,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(8.0),
+                  onPressed: () {
+                    okPressed(isEnabled);},
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: AutoSizeText(
+                      "Enable".toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 10.0,
+
+                      ),
+                      minFontSize: 8,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 30,),
+              Expanded(
+                child: FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+
+                      side: BorderSide(color:AppConstants.TEXT_BACKGROUND_COLOR,)),
+                  color: isEnabled?AppConstants.TEXT_BACKGROUND_COLOR:AppConstants.APP_THEME_COLOR,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(2.0),
+                  onPressed: () {disabledPressed();},
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AutoSizeText(
+                      "Disable".toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 10.0,
+
+                      ),
+                      minFontSize: 8,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(),
+          Text(
+              "Your User ID will be saved to this Device.",style:TextStyle(fontSize:14,fontWeight: FontWeight.bold)
+          ),
+        ],
+      ),
+    ),
+
+
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

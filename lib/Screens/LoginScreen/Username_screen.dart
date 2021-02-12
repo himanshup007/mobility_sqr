@@ -50,7 +50,7 @@ class _Username_Screen extends State<Username_Screen> {
 
     try{
       if(userCred!=null){
-        if(userCred.checkBiometric==false){
+        if(userCred.checkBiometric){
 
 
           _authenticate(userCred.username,userCred.password);

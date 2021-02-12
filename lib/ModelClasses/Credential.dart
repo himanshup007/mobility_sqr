@@ -14,7 +14,6 @@ class Credential {
     this._password = password;
     this._checkBiometric=checkBiometric;
   }
-
   String get username => _username;
   set username(String username) => _username = username;
   String get password => _password;

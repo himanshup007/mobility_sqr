@@ -107,7 +107,7 @@ class UsernameBloc {
   }
   UserBiometricAuth(email,password) async {
 
-      Credential UserCredentials= Credential(username: email,password: password,checkbiometric: true);
+      Credential UserCredentials= Credential(username: email,password: password,checkbiometric: false);
       await appsharedprefs.saveCredentials(UserCredentials);
 
 
