@@ -434,7 +434,7 @@ class _TravelReqViewState extends State<TravelReqView> {
                                   ],
                                 ),
                               ),
-                              HomeCountryName.trim().toLowerCase() !=
+                              HomeCountryName!=null&&HomeCountryName.trim().toLowerCase() !=
                                   list.details[index].travellingCountryTo.trim().toLowerCase()? Column(
                                 children: [
                                   Container(

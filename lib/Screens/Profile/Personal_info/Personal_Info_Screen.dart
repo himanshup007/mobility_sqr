@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:sizer/sizer.dart';
 
 class PersonalInfo extends StatefulWidget {
   @override
@@ -11,44 +12,48 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white38,
-        elevation: 0,
-        title:
-            Text("Personal Information", style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              this.setState(() {
-                iseditable = !iseditable;
-              });
-            },
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 13, 0),
-              height: 23,
-              width: 23,
-              child: Image.asset(
-                'assets/images/edit.png',
-                fit: BoxFit.contain,
-                color:
-                    iseditable ? Colors.black12 : AppConstants.APP_THEME_COLOR,
+    return SafeArea(
+     // bottom: true,
+      top: false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Colors.white38,
+          elevation: 0,
+          title:
+              Text("Personal Information", style: TextStyle(color: Colors.black)),
+          centerTitle: true,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                this.setState(() {
+                  iseditable = !iseditable;
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 13, 0),
+                height: 23,
+                width: 23,
+                child: Image.asset(
+                  'assets/images/edit.png',
+                  fit: BoxFit.contain,
+                  color:
+                      iseditable ? Colors.black12 : AppConstants.APP_THEME_COLOR,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 10,
-              child: Column(
+          ],
+        ),
+        body: Container(
+          height: 100.0.h,
+          child: Stack(
+            children: [
+              ListView(
+                shrinkWrap: true,
                 children: [
                   ColumnWidget('First Name', 'Enter First Name', iseditable, false),
+                  ColumnWidget('Middle Name', 'Enter Middle Name', iseditable, false),
                   ColumnWidget('Last Name', 'Enter Last Name', iseditable, false),
                   ColumnWidget('Phone Number', 'Enter Phone Number', iseditable, false),
                   ColumnWidget('Email Address', 'Enter Email Address', iseditable, false),
@@ -57,36 +62,39 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   ColumnWidget('Nationality', 'Select Nationality', false, true),
                 ],
               ),
-            ),
 
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Container(
-                   width: MediaQuery.of(context).size.width * 0.95,
-                   height: 45,
-                  child: FlatButton(
-                    child: Text(
-                      'DONE',
-                      style: TextStyle(fontSize: 20.0),
-                      textAlign: TextAlign.center,
+              Positioned(
+                bottom: 1,
+                right: 0,
+                left: 0,
+
+                child: Center(
+                  child: Container(
+                     width: MediaQuery.of(context).size.width * 0.95,
+                     height: 45,
+                    child: FlatButton(
+                      child: Text(
+                        'DONE',
+                        style: TextStyle(fontSize: 20.0),
+                        textAlign: TextAlign.center,
+                      ),
+                      textColor: Colors.white,
+                      color: AppConstants.APP_THEME_COLOR,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/Dashboard');
+                      },
                     ),
-                    textColor: Colors.white,
-                    color: AppConstants.APP_THEME_COLOR,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/Dashboard');
-                    },
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+
+          ),
 
         ),
-
       ),
     );
 

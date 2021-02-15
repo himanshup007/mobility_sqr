@@ -337,6 +337,7 @@ class _Username_Screen extends State<Username_Screen> {
 
   }
   methodName (dynamic userinfo) async {
+
     if (userinfo != null) {
       await  appsharedprefs.saveUserInfo(userinfo);
       getTimeforPush(userinfo);

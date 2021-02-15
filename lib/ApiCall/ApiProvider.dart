@@ -71,7 +71,7 @@ class ApiProvider {
   }
 
   Future<UserInfo> getUserData(String username,String token) async {
-    Map data = {"email": username};
+    Map data = {"email": username.trim()};
     //encode Map to JSON
     var body = json.encode(data);
    // String token = await _TokenGetter.getAcessToken() ?? "";

@@ -190,7 +190,8 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,
-     // availableGestures: AvailableGestures.all,
+     availableGestures: AvailableGestures.none,
+
 
       calendarStyle: CalendarStyle(
 
@@ -224,7 +225,9 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
           return FadeTransition(
             opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
             child: Container(
-
+              decoration:  BoxDecoration(
+                  border: Border.all(color: Colors.black26,width: .5)
+              ),
               child: Center(
                 child: Text(
                   '${date.day}',
@@ -237,7 +240,9 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
         todayDayBuilder: (context, date, _) {
           return Container(
 
-
+            decoration:  BoxDecoration(
+                border: Border.all(color: Colors.black26,width: .5)
+            ),
             child: Center(
               child: Text(
                 '${date.day}',
@@ -310,21 +315,24 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
       height: 30.0,
       child: Center(
 
-        child: !_calendarController.isToday(date)?Text(
+        child:
+    //    !_calendarController.isToday(date)?
+    Text(
           '${"Noida,IN"}',
           style: TextStyle().copyWith(
             color: AppConstants.APP_THEME_COLOR,
             fontWeight: FontWeight.bold,
             fontSize: 12.0,
           ),
-        ):Text(
-    '${"H"}',
-    style: TextStyle().copyWith(
-    color: AppConstants.APP_THEME_COLOR,
-    fontWeight: FontWeight.bold,
-    fontSize: 12.0,
-    ),
-      ),),
+    //     ):Text(
+    // '${"H"}',
+    // style: TextStyle().copyWith(
+    // color: AppConstants.APP_THEME_COLOR,
+    // fontWeight: FontWeight.bold,
+    // fontSize: 12.0,
+    // ),
+      ),
+       ),
     );
   }
 

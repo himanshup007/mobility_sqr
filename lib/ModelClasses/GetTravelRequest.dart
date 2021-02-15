@@ -159,7 +159,7 @@ class MyModelData {
     remark = json['remark'];
     homeContactName = json['home_contact_name'];
     homePhoneExt = json['home_phone_ext'];
-    homePhoneNumber = json['home_phone_number'];
+    homePhoneNumber = json['home_phone_number']??"";
     isLaptopRequired = json['is_laptop_required'];
     travelReqStatus = json['travel_req_status'];
     travelReqStatusNotes = json['travel_req_status_notes'];
