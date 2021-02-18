@@ -920,7 +920,13 @@ class _DashboardState extends State<Dashboard> {
     else if (where == 5) {
       Navigator.pushNamed(context, '/ApprovalsScreen',
           arguments: {"where": 5, "header": "Approvals"});
-    } else {
+    }
+    else if(where==6){
+      Navigator.pushNamed(context, '/VaultScreen',
+         );
+    }
+
+    else  {
       showAlertDialog(context, " Coming Soon");
     }
   }

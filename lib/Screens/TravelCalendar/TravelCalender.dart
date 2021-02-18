@@ -28,7 +28,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
   void initState() {
     super.initState();
     final _selectedDay = DateTime.now();
-    List<String> mydata= new List<String>();
+ 
 
     _events = {
       _selectedDay.subtract(Duration(days: 30)): [

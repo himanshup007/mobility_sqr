@@ -10,9 +10,11 @@ import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
 import 'package:mobility_sqr/Screens/Profile/Personal_info/Personal_Info_Screen.dart';
 import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
+import 'package:mobility_sqr/Screens/SplashScreen/SplashScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 import 'package:mobility_sqr/Screens/TravelCalendar/AddEvent.dart';
 import 'package:mobility_sqr/Screens/TravelReqView/TravelReqView.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/VaultScreen.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
 import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
 
@@ -23,6 +25,7 @@ import 'Screens/ProjectName/ProjectIdScreen.dart';
 import 'Screens/TravelCalendar/TravelCalender.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
+
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -48,7 +51,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: {
-        '/': (context) => Username_Screen(),
+      //  '/': (context) => Username_Screen(),
+        '/': (context) => SplashScreen(),
         '/AddCity': (context) => AddCity(),
         '/Dashboard': (context) => Dashboard(),
         '/Term&Condition': (context) => Terms(),
@@ -65,6 +69,8 @@ class MyApp extends StatelessWidget {
         '/TravelReqView':(context) =>TravelReqView(),
         '/TravelCalender':(context) =>TravelCalender(),
         '/AddEvent':(context) =>AddEvent(),
+        '/Username_Screen':(context) =>Username_Screen(),
+        '/VaultScreen':(context) => VaultScreen(),
 
       },
     );
