@@ -4,7 +4,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
 import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
-import 'package:mobility_sqr/ModelClasses/Approval.dart';
+
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestFResponse.dart';
@@ -21,10 +21,9 @@ import 'package:sizer/sizer.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
 import 'package:intl/intl.dart';
-import 'package:mobility_sqr/Widgets/bordered_box.dart';
 import 'dart:async';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
-import 'package:intl/intl.dart';
+
 class TravelReqView extends StatefulWidget {
   @override
   _TravelReqViewState createState() => _TravelReqViewState();
@@ -769,147 +768,10 @@ class _TravelReqViewState extends State<TravelReqView> {
                                   list.details[index].isDependent &&
                                       list.dependent != null
                                       ? Column(
-                                    children: [
-                                      for (var item in list.dependent)
-                                        Container(
-                                          padding: EdgeInsets.all(6),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5)),
-                                              border: Border.all(
-                                                  color: AppConstants
-                                                      .TEXT_BACKGROUND_COLOR,
-                                                  width: 0.3)),
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 5.0.w,
-                                              vertical: 0.5.h),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText("Name :",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${item.dependentName}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize: 14,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText(
-                                                              "Relation: ",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${item.dependentRelation}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText(
-                                                              "Visa Number :",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${!IsNullCheck(item.dependentVisa)?"N/A":item.dependentVisa}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      child: Row(
-                                                        children: [
-                                                          AutoSizeText(
-                                                              "Passport Status: ",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR)),
-                                                          AutoSizeText(
-                                                              "${!IsNullCheck(item.dependentPassport)?"N/A":item.dependentPassport}",
-                                                              minFontSize: 5,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize: 10,
-                                                                  color: AppConstants
-                                                                      .TEXT_BACKGROUND_COLOR))
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                    children:
+                                      setDependentsList(list.dependent,index)
 
-                                            ],
-                                          ),
-                                        ),
-                                    ],
+                                    ,
                                   )
                                       : SizedBox(),
 
@@ -1480,6 +1342,160 @@ class _TravelReqViewState extends State<TravelReqView> {
             ],
           ),
         ));
+  }
+
+  setDependentsList(List<Dependent> dependent, int index){
+    var dependentlist = List<Widget>();
+
+      for(int i=0;i<dependent.length;i++){
+
+        if(int.parse(dependent[i].reqId)==index){
+
+          dependentlist.add(   Container(
+            padding: EdgeInsets.all(6),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(5)),
+                border: Border.all(
+                    color: AppConstants
+                        .TEXT_BACKGROUND_COLOR,
+                    width: 0.3)),
+            margin: EdgeInsets.symmetric(
+                horizontal: 5.0.w,
+                vertical: 0.5.h),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            AutoSizeText("Name :",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR)),
+                            AutoSizeText(
+                                "${dependent[i].dependentName}",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontWeight:
+                                    FontWeight
+                                        .bold,
+                                    fontSize: 14,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR))
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            AutoSizeText(
+                                "Relation: ",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR)),
+                            AutoSizeText(
+                                "${dependent[i].dependentRelation}",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontWeight:
+                                    FontWeight
+                                        .bold,
+                                    fontSize: 10,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            AutoSizeText(
+                                "Visa Number :",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR)),
+                            AutoSizeText(
+                                "${!IsNullCheck(dependent[i].dependentVisa)?"N/A":dependent[i].dependentVisa}",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontWeight:
+                                    FontWeight
+                                        .bold,
+                                    fontSize: 10,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR))
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            AutoSizeText(
+                                "Passport Status: ",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR)),
+                            AutoSizeText(
+                                "${!IsNullCheck(dependent[i].dependentPassport)?"N/A":dependent[i].dependentPassport}",
+                                minFontSize: 5,
+                                style: TextStyle(
+                                    fontWeight:
+                                    FontWeight
+                                        .bold,
+                                    fontSize: 10,
+                                    color: AppConstants
+                                        .TEXT_BACKGROUND_COLOR))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+              ],
+            ),
+          ));
+
+
+  }
+      }
+
+
+return dependentlist;
   }
 
   handleNavigation(value) {

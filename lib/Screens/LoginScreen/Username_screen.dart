@@ -18,7 +18,7 @@ import 'package:mobility_sqr/Widgets/EditFieldUsername.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:sizer/sizer_util.dart';
 import 'package:sizer/sizer.dart';
-import 'package:mobility_sqr/ModelClasses/UserToken.dart';
+
 class Username_Screen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _Username_Screen();
@@ -105,7 +105,7 @@ class _Username_Screen extends State<Username_Screen> {
                         children: [
                           Container(
                             child: Image.asset(
-                                'assets/images/login_header.png'),
+                                'assets/images/login_header.png',width: 100.0.w,),
                           ),
                           Container(
                             margin: EdgeInsets.fromLTRB(30, 20, 20, 0),

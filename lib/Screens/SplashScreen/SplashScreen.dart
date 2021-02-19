@@ -30,14 +30,10 @@ class _SplashScreenState extends State<SplashScreen>
       (data) async {
         var file = RiveFile();
 
-        // Load the RiveFile from the binary data.
         var success = file.import(data);
         if (success) {
-          // The artboard is the root of the animation and is what gets drawn
-          // into the Rive widget.
           var artboard = file.mainArtboard;
-          // Add a controller to play back a known animation on the main/default
-          // artboard.We store a reference to it so we can toggle playback.
+
           artboard.addController(
             _controller = SimpleAnimation('go'),
           );
@@ -52,11 +48,8 @@ class _SplashScreenState extends State<SplashScreen>
         // Load the RiveFile from the binary data.
         var success = file.import(data);
         if (success) {
-          // The artboard is the root of the animation and is what gets drawn
-          // into the Rive widget.
           var artboard = file.mainArtboard;
-          // Add a controller to play back a known animation on the main/default
-          // artboard.We store a reference to it so we can toggle playback.
+
           artboard.addController(
             _controllerbg = SimpleAnimation('go'),
           );
@@ -65,11 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
       },
     );
     Timer(Duration(seconds: 4),
-            ()=> Navigator.of(context).pushReplacementNamed(
-                '/Username_Screen')
-
-
-    );
+        () => Navigator.of(context).pushReplacementNamed('/Username_Screen'));
   }
 
   @override
@@ -103,17 +92,16 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                 ),
                 Stack(
-
                   children: [
                     _riveArtboardbg == null
                         ? const SizedBox()
                         : Center(
-                          heightFactor: .5,
-                          child: Rive(
+                            heightFactor: .5,
+                            child: Rive(
                               artboard: _riveArtboardbg,
                               useArtboardSize: true,
                             ),
-                        ),
+                          ),
                     Container(
                       width: width,
                       margin: EdgeInsets.only(top: 80),
