@@ -175,15 +175,13 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
                                   children: [
                                     Container(
                                        width:100.0.w,
-                                        margin: EdgeInsets.symmetric(horizontal: 5),
+                                        height: 50,
+
                                         decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.red[500],
-                                            ),
-                                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:Radius.circular(20), ),
                                           color: Colors.red[500]
                                         ),
-                                        child: Text("Events")),
+                                        child: Center(child: Text("Events"))),
                                     ListTile(
                                         title: Text(
                                           '${_selectedEvents[index]}',
