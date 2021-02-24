@@ -181,9 +181,7 @@ class _AddCity extends State<AddCity> {
     modelClass.sourceCity = "";
     modelClass.hide = index;
     modelClass.departureDate = traveldata[index - 1].returnDate == ""
-        ? DateTime(
-                DateTime.now().year, DateTime.now().month, DateTime.now().day)
-            .toIso8601String()
+        ? traveldata[index-1].departureDate
         : traveldata[index - 1].returnDate;
 
     if (traveldata.length >= 2) {
@@ -920,7 +918,7 @@ class _AddCity extends State<AddCity> {
                                         SizedBox(
                                           width: 20,
                                         ),
-                                        getdepatureview()
+                                        getdepatureview(traveldata[index].travellingCountryTo)
                                             ? Expanded(
                                                 flex: 1,
                                                 child: CustomColumnEditText(
@@ -2036,7 +2034,16 @@ class _AddCity extends State<AddCity> {
 
   CostValueSetter(TravelReqPayLoad ReqBody) {
     for (int index = 0; index < ReqBody.travelCity.length; index++) {
-      SetValueInital(ReqBody, index);
+      if(HomeCountryName==ReqBody.travelCity[index].travellingCountryTo){
+
+        ReqBody.travelCity[index].transportationCost="0.0";
+        ReqBody.travelCity[index].perDiemCost="0.0";
+        ReqBody.travelCity[index].hotelCost="0.0";
+        ReqBody.travelCity[index].totalCost="0.0";
+      }else{
+        SetValueInital(ReqBody, index);
+      }
+
     }
   }
 
@@ -2167,8 +2174,8 @@ if(transportvalue==null){
     }
   }
 
-  getdepatureview() {
-    if (traveldata.length <= 1) {
+  getdepatureview(String travellingCountryTo) {
+    if (traveldata.length <= 1&&HomeCountryName!=travellingCountryTo) {
       return true;
     } else {
       return false;

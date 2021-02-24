@@ -79,9 +79,21 @@ class _Username_Screen extends State<Username_Screen> {
 
     if(authenticated){
       _onLoading();
-      apiProvider.postRequest(username,password).then((value) => UserDataAuth(value.access,username)) ;
+      apiProvider.postRequest(username,password).then((value) =>saveValues(value, username)) ;
+
+
+
+
     }
 
+
+
+  }
+
+
+  saveValues(value,username) async {
+    await  appsharedprefs.saveValue(value.accesstoken, value.refreshtoken);
+    UserDataAuth(value.access,username);
 
   }
 
@@ -254,7 +266,6 @@ class _Username_Screen extends State<Username_Screen> {
                                       tokengetter.saveValue(
                                           snapshot.data.access,
                                           snapshot.data.refresh);
-
                                       UserData( snapshot.data.access);
                                     }
                                   } else if (snapshot.hasData &&
@@ -264,6 +275,7 @@ class _Username_Screen extends State<Username_Screen> {
                                       try {
                                         showDefaultSnackbar(
                                             context, snapshot.data.detail);
+
 
                                       } catch (e) {}
                                     });
@@ -339,6 +351,7 @@ class _Username_Screen extends State<Username_Screen> {
   methodName (dynamic userinfo) async {
 
     if (userinfo != null) {
+
       await  appsharedprefs.saveUserInfo(userinfo);
       getTimeforPush(userinfo);
     }

@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/CustomLibrary/Calender/lib/table_calendar.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
-
+import 'package:sizer/sizer.dart';
 
 class TravelCalender extends StatefulWidget {
   TravelCalender({Key key}) : super(key: key);
@@ -17,6 +20,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
+
   final Map<DateTime, List> _holidays = {
     DateTime(2020, 1, 1): ['New Year\'s Day'],
     DateTime(2020, 1, 6): ['Epiphany'],
@@ -24,18 +28,24 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
     DateTime(2020, 4, 21): ['Easter Sunday'],
     DateTime(2020, 4, 22): ['Easter Monday'],
   };
+
+
+
+
+
   @override
   void initState() {
     super.initState();
     final _selectedDay = DateTime.now();
- 
+
+    for(int i=0;i<10;i++){
+
+
+    }
+
 
     _events = {
-      _selectedDay.subtract(Duration(days: 30)): [
-        'Event A0',
-        'Event B0',
-        'Event C0'
-      ],
+     DateTime.now().subtract(Duration(days: 1)):['ewds'],
       _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
       _selectedDay.subtract(Duration(days: 20)): [
         'Event A2',
@@ -137,7 +147,67 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
            _buildTableCalendarWithBuilders(),
 
           const SizedBox(height: 8.0),
-      //    Expanded(child: _buildEventList()),
+     //     Expanded(child: _buildEventList()),
+        Container(
+          height: 200,
+          child: DraggableScrollableSheet(
+              initialChildSize: 0.3,
+              minChildSize: 0.3,
+              maxChildSize: 0.8,
+              builder: (BuildContext context, myscrollController) {
+                return Container(
+
+                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.red[500],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                    child:
+
+                        ListView.builder(
+                          controller: myscrollController,
+                          itemCount: _selectedEvents.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return
+                                index==0?Column(
+                                  children: [
+                                    Container(
+                                       width:100.0.w,
+                                        margin: EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.red[500],
+                                            ),
+                                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                                          color: Colors.red[500]
+                                        ),
+                                        child: Text("Events")),
+                                    ListTile(
+                                        title: Text(
+                                          '${_selectedEvents[index]}',
+                                          style: TextStyle(color: Colors.black54),
+                                        )
+                                    ),
+                                  ],
+                                ):
+                                ListTile(
+                                    title: Text(
+                                      '${_selectedEvents[index]}',
+                                      style: TextStyle(color: Colors.black54),
+                                    )
+                                )
+                            ;
+
+                          },
+
+
+                    ),
+                );
+              }
+                ),
+        ),
         ],
       ),
       floatingActionButton:  FloatingActionButton(
@@ -157,6 +227,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
   // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar() {
     return TableCalendar(
+
       calendarController: _calendarController,
       events: _events,
 
@@ -193,6 +264,8 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
      availableGestures: AvailableGestures.none,
 
 
+
+
       calendarStyle: CalendarStyle(
 
         outsideDaysVisible: false,
@@ -208,6 +281,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
 
         ),
 
+
         leftChevronMargin: EdgeInsets.only(left: 60),
        rightChevronMargin: EdgeInsets.only(right: 60),
         leftChevronIcon: Icon(
@@ -218,6 +292,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
         centerHeaderTitle: true,
         formatButtonVisible: false,
       ),
+
       builders: CalendarBuilders(
 
 
@@ -286,23 +361,38 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
       },
       onVisibleDaysChanged: _onVisibleDaysChanged,
       onCalendarCreated: _onCalendarCreated,
+
     );
+
   }
 
   Widget _buildEventsMarker(DateTime date, List events) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-
-      width: 16.0,
       height: 40.0,
-      child: Center(
-        child: Text(
-          '${"W"}',
-          style: TextStyle().copyWith(
-            color: Colors.lightBlueAccent,
-            fontWeight: FontWeight.bold,
-            fontSize: 14.0,
-          ),
+      child:  Random().nextInt(100)%2==0?Container(
+        foregroundDecoration:
+        const RotatedCornerDecoration(
+          color: Colors.green,
+          geometry: const BadgeGeometry(width: 30, height: 30 , alignment: BadgeAlignment.bottomRight),
+          textSpan: TextSpan(text: 'p', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+          labelInsets: LabelInsets(baselineShift: 3, start: 1),
+        ),
+      ):Random().nextInt(100)%2==0?Container(
+    foregroundDecoration:
+    const RotatedCornerDecoration(
+    color: Colors.lightBlueAccent,
+    geometry: const BadgeGeometry(width: 30, height: 30 , alignment: BadgeAlignment.bottomRight),
+    textSpan: TextSpan(text: 'W', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+    labelInsets: LabelInsets(baselineShift: 3, start: 1),
+    ),
+      ):Container(
+        foregroundDecoration:
+        const RotatedCornerDecoration(
+          color: Colors.red,
+          geometry: const BadgeGeometry(width: 30, height: 30 , alignment: BadgeAlignment.bottomRight),
+          textSpan: TextSpan(text: 'H', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+          labelInsets: LabelInsets(baselineShift: 3, start: 1),
         ),
       ),
     );
@@ -311,7 +401,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
   Widget _buildHolidaysMarker(DateTime date, List<dynamic> events) {
     return  AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-
+    width: 50.0,
       height: 30.0,
       child: Center(
 
@@ -319,10 +409,12 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
     //    !_calendarController.isToday(date)?
     Text(
           '${"Noida,IN"}',
-          style: TextStyle().copyWith(
+          maxLines: 3,
+          style: TextStyle(
+
             color: AppConstants.APP_THEME_COLOR,
             fontWeight: FontWeight.bold,
-            fontSize: 12.0,
+            fontSize: 10.0,
           ),
     //     ):Text(
     // '${"H"}',
@@ -340,6 +432,7 @@ class _TravelCalenderState extends State<TravelCalender> with TickerProviderStat
 
   Widget _buildEventList() {
     return ListView(
+      shrinkWrap: true,
       children: _selectedEvents
           .map((event) => Container(
         decoration: BoxDecoration(

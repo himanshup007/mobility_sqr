@@ -32,6 +32,7 @@ class _CellWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
+
       duration: const Duration(milliseconds: 250),
       decoration:  BoxDecoration(
     border: Border.all(color: Colors.black26,width: .5)
