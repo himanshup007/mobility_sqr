@@ -32,9 +32,10 @@ class _CellWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-
+margin: EdgeInsets.all(2),
       duration: const Duration(milliseconds: 250),
       decoration:  BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
     border: Border.all(color: Colors.black26,width: .5)
     ),
      // margin: calendarStyle.cellMargin,

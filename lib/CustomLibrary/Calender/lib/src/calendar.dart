@@ -612,11 +612,14 @@ class _TableCalendarState extends State<TableCalendar>
   Widget _buildTableCell(DateTime date) {
     return LayoutBuilder(
       builder: (context, constraints) =>
-          Container(child:  ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: 100 ?? constraints.maxWidth,
-              minHeight: 50 ?? constraints.maxWidth,
+          Container(
 
+            child:  ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 80 ?? constraints.maxWidth,
+              minHeight: 60 ?? constraints.maxWidth,
+              maxWidth: 50 ?? constraints.maxWidth,
+              minWidth: 50 ?? constraints.maxWidth,
             ),
             child: _buildCell(date),
           ),
