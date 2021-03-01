@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:mobility_sqr/ApiCall/Repository.dart';
-import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 

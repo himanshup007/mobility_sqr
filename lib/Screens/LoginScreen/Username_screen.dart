@@ -8,7 +8,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';

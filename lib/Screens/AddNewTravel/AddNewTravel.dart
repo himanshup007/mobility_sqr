@@ -12,7 +12,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
@@ -25,6 +25,7 @@ import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/showHide.dart';
 import 'package:mobility_sqr/Screens/Dashboard/AddAgenda.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/purpose_bloc.dart';
+import 'package:mobility_sqr/Util/UtilClass.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/CountryCodePicker.dart';
 import 'package:mobility_sqr/Widgets/CustomColumnEditText.dart';
@@ -2120,31 +2121,7 @@ if(transportvalue==null){
     }
   }
 
-  Future<Null> selectDate(BuildContext context, DateTime first_date,
-      DateTime end_date, DateTime initalDate,
-      {Function(String) datevalue}) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: initalDate,
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.light().copyWith(
-              primaryColor: AppConstants.APP_THEME_COLOR,
-              accentColor: AppConstants.APP_THEME_COLOR,
-              colorScheme: ColorScheme.light(
-                primary: AppConstants.APP_THEME_COLOR,
-              ),
-              buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-            ),
-            child: child,
-          );
-        },
-        firstDate: first_date,
-        lastDate: end_date);
-    if (picked != null) {
-      datevalue(picked.toLocal().toIso8601String());
-    }
-  }
+
 
   getDepartureDate(String date) {
     if (date == "") {

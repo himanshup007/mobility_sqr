@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:mobility_sqr/Screens/Dashboard/Dashboard.dart';
+import 'package:mobility_sqr/ModelClasses/DragDropModel.dart';
+
 import 'package:sizer/sizer.dart';
 
 class TileDashboard extends StatelessWidget {
   final Function(int) onTap;
-  final Model model;
+  final DragDropModel model;
 
   TileDashboard(@required this.model, {this.onTap}) : assert(model != null);
 

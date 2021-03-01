@@ -26,8 +26,8 @@ class AppConstants {
   static final String GET_TRAVEL_REQ_VIEW="/get_view_travel_request/";
   static final String GET_CURRENCY_ACTIVE="/get_active_currency/";
   static final String GET_CURRENCY_CONVERSION="/get_currency_conversion/";
-
-
+  static final String GET_COUNTRY_LIST="/get_country_master/";
+  static final String GET_CITY_LIST="/get_state_master/";
 
 
 

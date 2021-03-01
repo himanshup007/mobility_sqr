@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:mobility_sqr/LocalStorage/TokenGetter.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
 import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
@@ -233,7 +234,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
-
+//========================================================================================================================
   Future<ProjectIdModel> GetProjectId(String pid) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
@@ -259,7 +260,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
-
+//========================================================================================================================
   Future<PostLocationResponse> GetPostLocation(String country) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
@@ -285,7 +286,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
-
+//========================================================================================================================
   Future<List<SecondDependentData>> GetDependentList(String country) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
@@ -311,7 +312,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
-
+//========================================================================================================================
   Future<PerDiemModel> GetPerDiem(String country) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
@@ -336,7 +337,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
-
+//========================================================================================================================
   Future<GetVisaModel> GetTravelVisa(
       String visaType, String visaCountryId) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -364,7 +365,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
-
+//========================================================================================================================
   Future<TravelReqResponseModel> PostTravelRequest(var data) async {
     //encode Map to JSON
 
@@ -387,7 +388,7 @@ class ApiProvider {
       } else {}
     }
   }
-
+//========================================================================================================================
   Future<ApprovalModal> fetch_approval_list() async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
@@ -415,7 +416,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
-
+//========================================================================================================================
   Future< SubmitRequestFResponse> Post_Travel_Req_For_Approval(
       SubmitRequestForApprovalModel model) async {
 
@@ -446,7 +447,7 @@ class ApiProvider {
     }
 
   }
-
+//========================================================================================================================
 
   Future<ActionHistoryModel> get_travel_status_summary(String travelreqId) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -473,7 +474,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
-
+//========================================================================================================================
   Future<GetTravelRequest> fetchViewTravelReq(String TravelReqId) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
@@ -500,7 +501,7 @@ class ApiProvider {
     }
   }
 
-
+//========================================================================================================================
   Future<CurrencyConversionModel> get_currency_active() async {
 
     Map<String, String> queryParams = {
@@ -526,6 +527,8 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
+  //========================================================================================================================
   Future<CurrencyResultModel> get_currency_conversion(String from_currency,String to_currency) async {
 
     Map<String, String> queryParams = {
@@ -553,4 +556,56 @@ class ApiProvider {
     }
   }
 
+  //=============================================================================================
+  Future<CountryListModel> getCountrylist({String countryId}) async {
+    String token = await getToken_byReresh();
+
+    Map<String, String> queryParams = {
+      'country':countryId,
+    };
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_COUNTRY_LIST + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      CountryListModel data = CountryListModel.fromJson(jsonDecode(response.body));
+
+      return data;
+    } else {
+      throw Exception('User Not Found');
+    }
+  }
+
+//=======================================================================================================
+Future<CountryListModel> getCitylist({String countryId}) async {
+  String token = await getToken_byReresh();
+
+  Map<String, String> queryParams = {
+    'country_id':countryId,
+  };
+  String queryString = Uri(queryParameters: queryParams).query;
+  final http.Response response = await http.get(
+    '${AppConstants.BASE_URL + AppConstants.GET_CITY_LIST + "?" + queryString}',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${token}',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    CountryListModel data = CountryListModel.fromJson(jsonDecode(response.body));
+
+    return data;
+  } else {
+    throw Exception('User Not Found');
+  }
 }
+}
+
