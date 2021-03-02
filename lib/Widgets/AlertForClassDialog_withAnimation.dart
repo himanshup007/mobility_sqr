@@ -49,3 +49,23 @@ import 'package:sizer/sizer.dart';
         );
       });
 }
+showCustomDialogCityClass(BuildContext context, Widget mywidget) {
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(32.0))),
+          contentPadding: EdgeInsets.only(top: 10.0),
+          content: FittedBox(
+            fit: BoxFit.fill,
+            child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                width: 100.0.w,height: 100.0.h,
+                child: mywidget
+            ),
+          ),
+        );
+      });
+}

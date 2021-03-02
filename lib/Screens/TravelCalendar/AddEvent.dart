@@ -1,3 +1,5 @@
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
@@ -24,9 +26,10 @@ class _AddEventState extends State<AddEvent> {
   ApiProvider _apiProvider = ApiProvider();
   List<String> _Countrylist;
   List<CountryModel> _CountrylistModel;
-  List<CountryModel> _citylistModel=List<CountryModel>();
-
+  List<CountryModel> _citylistModel = List<CountryModel>();
+  Country selCountry;
   CountryModel _selectedValue;
+  CountryModel _selectedCity;
 
   bool showloader = true;
 
@@ -35,7 +38,7 @@ class _AddEventState extends State<AddEvent> {
     super.initState();
 
     _apiProvider
-        .getCountrylist(countryId:"")
+        .getCountrylist(countryId: "")
         .then((value) => CountrySetter(value))
         .catchError((onError) => errorHandler(onError));
   }
@@ -43,13 +46,13 @@ class _AddEventState extends State<AddEvent> {
   CountrySetter(value) {
     this.setState(() {
       _Countrylist = getShortName(value);
-      _CountrylistModel=value.data;
+      _CountrylistModel = value.data;
       showloader = false;
     });
   }
 
   errorHandler(onError) {
-   // showDefaultSnackbar(context, onError.toString());
+    // showDefaultSnackbar(context, onError.toString());
     this.setState(() {
       showloader = false;
     });
@@ -129,55 +132,87 @@ class _AddEventState extends State<AddEvent> {
                       });
                     });
                   }),
-                  CustomEventWidget(_postjson.countryName, "Select Country",
-                      Icons.arrow_drop_down_sharp, context, onTap: () {
-                    openCustomCountryPickerDialog(context, callback: (value) {
-                      _selectedValue=fetchCountryData(value.isoCode,_CountrylistModel);
-                      this.setState(() {
-                        _postjson.countryName = value.name;
-                        showloader=true;
-                      });
-                      _apiProvider
-                          .getCitylist(countryId:_selectedValue.countryId)
-                          .then((value) => this.setState(() {
-                        _citylistModel=value.data;
-                        showloader=false;
-                          }))
-                          .catchError((onError) => this.setState(() {
-                            showloader=false;
-                          }));
-
-                    }, list: _Countrylist != null ? _Countrylist : "");
-                  }),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: selCountry != null
+                            ? Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey)),
+                                margin: EdgeInsets.only(bottom: 20),
+                                child: CountryPickerUtils.getDefaultFlagImage(
+                                    selCountry))
+                            : Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey)
+                            ),
+                            margin:EdgeInsets.only(bottom: 20),
+                          child: Icon(Icons.flag),
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Expanded(
+                        flex: 10,
+                        child: CustomEventWidget(
+                            _postjson.countryName,
+                            "Select Country",
+                            Icons.arrow_drop_down_sharp,
+                            context, onTap: () {
+                          openCustomCountryPickerDialog(context,
+                              callback: (value) {
+                            _selectedValue = fetchCountryData(
+                                value.isoCode, _CountrylistModel);
+                            this.setState(() {
+                              selCountry = value;
+                              _postjson.countryName = value.name;
+                              showloader = true;
+                            });
+                            _apiProvider
+                                .getCitylist(
+                                    countryId: _selectedValue.countryId)
+                                .then((value) => this.setState(() {
+                                      _citylistModel = value.data;
+                                      showloader = false;
+                                    }))
+                                .catchError((onError) => this.setState(() {
+                                      showloader = false;
+                                    }));
+                          }, list: _Countrylist != null ? _Countrylist : "");
+                        }),
+                      ),
+                    ],
+                  ),
                   CustomEventWidget(
                       _postjson.cityName,
                       'State/Country/Province',
                       Icons.arrow_drop_down_sharp,
-                      context,
-                      onTap: () {
-
-                        showCustomDialogClass(
-                            context,
-                            CityList(
-                             _citylistModel,
-                              onchange: (text) {
-                                Navigator.of(context,
-                                    rootNavigator: true)
-                                    .pop();
-                              },
-                              onclose: () {
-                                Navigator.of(context,
-                                    rootNavigator: true)
-                                    .pop();
-                              },
-                            ));
-                      }),
+                      context, onTap: () {
+                    showCustomDialogCityClass(
+                        context,
+                        CityList(
+                          _citylistModel,
+                          onchange: (cityModel) {
+                            this.setState(() {
+                              _selectedCity = cityModel;
+                              _postjson.cityName = cityModel.name;
+                            });
+                          },
+                          onclose: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                        ));
+                  }),
                   CustomEventWidget(_postjson.activity, 'Select Activities',
                       Icons.arrow_drop_down_sharp, context,
                       onTap: () {}),
+
+                  SizedBox(height: 40,),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 40,
+                    height: 50,
                     child: RaisedButton(
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -186,9 +221,11 @@ class _AddEventState extends State<AddEvent> {
                         color: AppConstants.APP_THEME_COLOR,
                         child: Text(
                           "SUBMIT",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white,fontSize: 18),
                         ),
-                        onPressed: () async {}),
+                        onPressed: () async {
+
+                        }),
                   )
                 ],
               ),
@@ -202,12 +239,9 @@ class _AddEventState extends State<AddEvent> {
 }
 
 fetchCountryData(String Isocode, List<CountryModel> countrylist) {
-
-  for(int i=0;i<countrylist.length;i++){
-    if(Isocode.trim()==countrylist[i].sortname.trim()){
-
+  for (int i = 0; i < countrylist.length; i++) {
+    if (Isocode.trim() == countrylist[i].sortname.trim()) {
       return countrylist[i];
     }
   }
-
 }

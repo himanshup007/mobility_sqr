@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/CustomLibrary/Calender/lib/table_calendar.dart';
@@ -7,6 +8,7 @@ import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
+
 class TravelCalender extends StatefulWidget {
   TravelCalender({Key key}) : super(key: key);
 
@@ -20,7 +22,7 @@ class _TravelCalenderState extends State<TravelCalender>
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
-  DateTime selectedDatebyUser= DateTime.now();
+  DateTime selectedDatebyUser = DateTime.now();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   final Map<DateTime, List> _holidays = {
     DateTime(2020, 1, 1): ['New Year\'s Day'],
@@ -106,7 +108,7 @@ class _TravelCalenderState extends State<TravelCalender>
   void _onDaySelected(DateTime day, List events, List holidays) {
     print('CALLBACK: _onDaySelected');
     setState(() {
-      selectedDatebyUser=day;
+      selectedDatebyUser = day;
       _selectedEvents = events;
     });
   }
@@ -136,64 +138,175 @@ class _TravelCalenderState extends State<TravelCalender>
         ),
       ),
       body: Stack(
+        children: [
+          Column(
+            children: [
+              _buildTableCalendarWithBuilders(),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          color: Color(0xFFF2F2F2),
+                          height: 30,
+                          width: 30,
 
-        children: <Widget>[
-          _buildTableCalendarWithBuilders(),
+                          child: ClayContainer(
+                            color: Color(0xFFF2F2F2),
+                            height: 20,
+                            width: 20,
+                            borderRadius: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.lightGreen,
+                                ),
 
-          _selectedEvents.length!=0?Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-
-              height: double.maxFinite,
-              child: DraggableScrollableSheet(
-                  initialChildSize: 0.1,
-                  minChildSize: 0.1,
-                  maxChildSize: 0.8,
-
-                  builder: (BuildContext context, myscrollController) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                          border: Border.all(
-                            color: Colors.red[500],
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      child: ListView.builder(
-                        controller: myscrollController,
-                        itemCount: _selectedEvents.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return index == 0
-                              ? Column(
-                                  children: [
-                                    Container(
-                                        width: 100.0.w,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              topRight: Radius.circular(20),
-                                            ),
-                                            color: Colors.red[500]),
-                                        child: Center(child: Text("Events",style: TextStyle(color: Colors.white,fontSize: 20),))),
-                                    ListTile(
+                        ),
+                        SizedBox(width:5 ,),
+                        Text("Personal")
+                      ],
+                    ),
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          color: Color(0xFFF2F2F2),
+                          height: 30,
+                          width: 30,
+                          child: ClayContainer(
+                            color: Color(0xFFF2F2F2),
+                            height: 20,
+                            width: 20,
+                            borderRadius: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),SizedBox(width:5 ,),
+                        Text("Holiday")
+                      ],
+                    ),
+                    SizedBox(
+                      width: 20,  height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          color: Color(0xFFF2F2F2),
+                          height: 30,
+                          width: 30,
+                          child: ClayContainer(
+                            color: Color(0xFFF2F2F2),
+                            height: 20,
+                            width: 20,
+                            borderRadius: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.lightBlueAccent,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),SizedBox(width:5 ,),
+                        Text("Work")
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          _selectedEvents.length != 0
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: double.maxFinite,
+                    child: DraggableScrollableSheet(
+                        initialChildSize: 0.1,
+                        minChildSize: 0.1,
+                        maxChildSize: 0.8,
+                        builder: (BuildContext context, myscrollController) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 4), // changes position of shadow
+                                  ),
+                                ],
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: ListView.builder(
+                              controller: myscrollController,
+                              itemCount: _selectedEvents.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return index == 0
+                                    ? Column(
+                                        children: [
+                                          Container(
+                                              width: 100.0.w,
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(20),
+                                                    topRight:
+                                                        Radius.circular(20),
+                                                  ),
+                                                  color: Colors.purple[600]),
+                                              child: Center(
+                                                  child: Text(
+                                                "Events",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20),
+                                              ))),
+                                          ListTile(
+                                              title: Text(
+                                            '${_selectedEvents[index]}',
+                                            style: TextStyle(
+                                                color: Colors.black54),
+                                          )),
+                                        ],
+                                      )
+                                    : ListTile(
                                         title: Text(
-                                      '${_selectedEvents[index]}',
-                                      style: TextStyle(color: Colors.black54),
-                                    )),
-                                  ],
-                                )
-                              : ListTile(
-                                  title: Text(
-                                  '${_selectedEvents[index]}',
-                                  style: TextStyle(color: Colors.black54),
-                                ));
-                        },
-                      ),
-                    );
-                  }),
-            ),
-          ):SizedBox(),
+                                        '${_selectedEvents[index]}',
+                                        style: TextStyle(color: Colors.black54),
+                                      ));
+                              },
+                            ),
+                          );
+                        }),
+                  ),
+                )
+              : SizedBox(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -209,9 +322,9 @@ class _TravelCalenderState extends State<TravelCalender>
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30.0))),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
-
 
   // More advanced TableCalendar configuration (using Builders & Styles)
   Widget _buildTableCalendarWithBuilders() {
@@ -258,27 +371,28 @@ class _TravelCalenderState extends State<TravelCalender>
             opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
             child: Container(
               margin: EdgeInsets.all(2),
-
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment(-1.0, 0.0),
-                    end: Alignment(1.0, 0.0,
+                    end: Alignment(
+                      1.0,
+                      0.0,
                     ),
-                  colors: [
-                    Color(0xFF9f559a),
-                    Color(0xFFb24698),
-                    Color(0xFF641d75),
-
-                  ],
-                  transform: GradientRotation(math.pi / 4),
-
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(color: AppConstants.APP_THEME_COLOR, width: .5)),
+                    colors: [
+                      Color(0xFF9f559a),
+                      Color(0xFFb24698),
+                      Color(0xFF641d75),
+                    ],
+                    transform: GradientRotation(math.pi / 4),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                      color: AppConstants.APP_THEME_COLOR, width: .5)),
               child: Center(
                 child: Text(
                   '${date.day}',
-                  style: TextStyle().copyWith(fontSize: 16.0,color: Colors.white),
+                  style:
+                      TextStyle().copyWith(fontSize: 16.0, color: Colors.white),
                 ),
               ),
             ),
@@ -313,16 +427,6 @@ class _TravelCalenderState extends State<TravelCalender>
             );
           }
 
-          // if (holidays.isNotEmpty) {
-          //   children.add(
-          //     Positioned(
-          //       right: -2,
-          //       top: -2,
-          //       child: _buildHolidaysMarker(date,events),
-          //     ),
-          //   );
-          // }
-
           return children;
         },
       ),
@@ -341,10 +445,8 @@ class _TravelCalenderState extends State<TravelCalender>
       height: 40.0,
       child: Random().nextInt(100) % 2 == 0
           ? Container(
-        margin: EdgeInsets.all(2),
-
+              margin: EdgeInsets.all(2),
               foregroundDecoration: const RotatedCornerDecoration(
-
                 color: Colors.green,
                 geometry: const BadgeGeometry(
                     width: 30,
@@ -359,7 +461,7 @@ class _TravelCalenderState extends State<TravelCalender>
             )
           : Random().nextInt(100) % 2 == 0
               ? Container(
-        margin: EdgeInsets.all(2),
+                  margin: EdgeInsets.all(2),
                   foregroundDecoration: const RotatedCornerDecoration(
                     color: Colors.lightBlueAccent,
                     geometry: const BadgeGeometry(
@@ -374,16 +476,14 @@ class _TravelCalenderState extends State<TravelCalender>
                   ),
                 )
               : Container(
-        margin: EdgeInsets.all(2),
+                  margin: EdgeInsets.all(2),
                   foregroundDecoration: const RotatedCornerDecoration(
                     color: Colors.red,
-
                     geometry: const BadgeGeometry(
                         width: 30,
                         height: 30,
                         alignment: BadgeAlignment.bottomRight),
                     textSpan: TextSpan(
-
                         text: 'H',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.bold)),
@@ -401,25 +501,19 @@ class _TravelCalenderState extends State<TravelCalender>
       child: Center(
         child:
             //    !_calendarController.isToday(date)?
-        Text(
+            Text(
           '${"Noida,IN"}',
           maxLines: 3,
           style: TextStyle(
-            color:   formatter.format(selectedDatebyUser)== formatter.format(date)?Colors.white:AppConstants.APP_THEME_COLOR,
+            color:
+                formatter.format(selectedDatebyUser) == formatter.format(date)
+                    ? Colors.white
+                    : AppConstants.APP_THEME_COLOR,
             fontWeight: FontWeight.bold,
             fontSize: 10.0,
           ),
-          //     ):Text(
-          // '${"H"}',
-          // style: TextStyle().copyWith(
-          // color: AppConstants.APP_THEME_COLOR,
-          // fontWeight: FontWeight.bold,
-          // fontSize: 12.0,
-          // ),
         ),
       ),
     );
   }
-
-
 }

@@ -34,15 +34,16 @@ class _CustomTextFieldState extends State<CustomEventWidget> {
         widget.onTap();
       },
       child: Container(
-        height: MediaQuery.of(context).size.height / 12,
+        height: MediaQuery.of(context).size.height / 14,
+
         child: TextField(
          controller:controller,
           autofocus: false,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 18),
           enabled: false,
           decoration: InputDecoration(
               hintText: widget.Hint,
-              contentPadding: EdgeInsets.only(top: 10,left: 10),
+              contentPadding: EdgeInsets.only(top: 10,left: 0),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
               ),

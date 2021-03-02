@@ -54,6 +54,8 @@ dependencies:
   app_settings: 4.0.4
   rive: ^0.6.2
   flare_flutter: ^2.0.6
+  clay_containers: ^0.2.3
+
 
 
 
