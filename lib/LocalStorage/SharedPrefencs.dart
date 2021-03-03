@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,4 +72,16 @@ class TokenGetter {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(AppConstants.CREDENTIAL, json.encode(value));
   }
+
+  readActivites() async {
+    final prefs = await SharedPreferences.getInstance();
+    Activities activities = Activities.fromJson( json.decode(prefs.getString(AppConstants.ACTIVITIES)));
+    return activities;
+  }
+
+  saveActivites(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(AppConstants.ACTIVITIES, json.encode(value));
+  }
+
 }

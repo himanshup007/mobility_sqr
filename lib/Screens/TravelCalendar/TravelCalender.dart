@@ -4,6 +4,8 @@ import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/CustomLibrary/Calender/lib/table_calendar.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
+import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
@@ -22,6 +24,7 @@ class _TravelCalenderState extends State<TravelCalender>
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
+
   DateTime selectedDatebyUser = DateTime.now();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   final Map<DateTime, List> _holidays = {
@@ -32,10 +35,14 @@ class _TravelCalenderState extends State<TravelCalender>
     DateTime(2020, 4, 22): ['Easter Monday'],
   };
 
+
   @override
   void initState() {
     super.initState();
     final _selectedDay = DateTime.now();
+
+
+
 
     _events = {
       DateTime.now().subtract(Duration(days: 1)): ['ewds'],

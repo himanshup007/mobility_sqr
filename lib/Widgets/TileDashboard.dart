@@ -17,6 +17,7 @@ class TileDashboard extends StatelessWidget {
         onTap(model.where);
       },
       child: Container(
+        color: Colors.transparent,
         height: 48.0.w,
         width: 48.0.w,
         margin: EdgeInsets.only(top: 10),

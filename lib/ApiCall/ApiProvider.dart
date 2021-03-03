@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
+import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
@@ -578,7 +579,7 @@ class ApiProvider {
 
       return data;
     } else {
-      throw Exception('User Not Found');
+      throw Exception('Server Error');
     }
   }
 
@@ -604,8 +605,30 @@ Future<CountryListModel> getCitylist({String countryId}) async {
 
     return data;
   } else {
-    throw Exception('User Not Found');
+    throw Exception('Server Error');
   }
 }
+
+//===============================================================================================================
+
+
+  Future<Activities> getActivities() async {
+    String token = await getToken_byReresh();
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_ACTIVITIES }',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Activities data = Activities.fromJson(jsonDecode(response.body));
+      return data;
+    } else {
+      throw Exception('Server Error');
+    }
+  }
 }
 

@@ -3,11 +3,14 @@ import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
+import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
 import 'package:mobility_sqr/ModelClasses/eventPost.dart';
 import 'package:mobility_sqr/Screens/Dashboard/AddAgenda.dart';
 import 'package:mobility_sqr/Screens/TravelCalendar/customEventWidget.dart';
 import 'package:mobility_sqr/Util/UtilClass.dart';
+import 'package:mobility_sqr/Widgets/ActivitiesList.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/CityList.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
@@ -30,13 +33,25 @@ class _AddEventState extends State<AddEvent> {
   Country selCountry;
   CountryModel _selectedValue;
   CountryModel _selectedCity;
-
+  Activity _selectedActivity;
+  TokenGetter mprefs= TokenGetter();
   bool showloader = true;
+  Activities activitylist;
 
+
+
+
+
+  readActivities() async {
+     activitylist=await mprefs.readActivites();
+   this.setState(() {
+     activitylist=activitylist;
+   });
+  }
   @override
   void initState() {
     super.initState();
-
+    readActivities();
     _apiProvider
         .getCountrylist(countryId: "")
         .then((value) => CountrySetter(value))
@@ -207,7 +222,22 @@ class _AddEventState extends State<AddEvent> {
                   }),
                   CustomEventWidget(_postjson.activity, 'Select Activities',
                       Icons.arrow_drop_down_sharp, context,
-                      onTap: () {}),
+                      onTap: () {
+                        showCustomDialogClass(
+                            context,
+                            ActivitiesList(
+                              activitylist.data,
+                              onchange: (Activity) {
+                                this.setState(() {
+                                  _selectedActivity=Activity;
+                                  _postjson.activity = Activity.activityName;
+                                });
+                              },
+                              onclose: () {
+                                Navigator.of(context, rootNavigator: true).pop();
+                              },
+                            ));
+                      }),
 
                   SizedBox(height: 40,),
                   Container(

@@ -265,12 +265,17 @@ class _AddCity extends State<AddCity> {
         backgroundColor: Colors.white,
         elevation: 10,
         titleSpacing: 0.0,
-        title: Text(
-          "New Request",
-          style: TextStyle(
-              color: AppConstants.TEXT_BACKGROUND_COLOR,
-              fontSize: 18,
-              fontWeight: FontWeight.w800),
+        title: Hero(
+          tag:"travel-req",
+          child: Material(
+            child: Text(
+              "New Request",
+              style: TextStyle(
+                  color: AppConstants.TEXT_BACKGROUND_COLOR,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800),
+            ),
+          ),
         ),
         actions: [GetNotificationIcon()],
         centerTitle: true,

@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
+import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/DragDropModel.dart';
+import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Util/UtilClass.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
@@ -88,11 +90,21 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  getActivites()async {
+   await _appApiProvider
+        .getActivities().then((value) => saveActivity(value));
+  }
+  saveActivity(Activities data) async {
+  await widget._userInfo.saveActivites(data);
+  }
+
   @override
   initState() {
     super.initState();
     getUserAuthBiometric();
     getprofile();
+    getActivites();
+
     models = [
       DragDropModel(
           index: 0,
@@ -728,8 +740,14 @@ class _DashboardState extends State<Dashboard> {
                         minMainAxisCount: 2,
                         onReorder: _onReorder,
                         children: [
-                          TileDashboard(models[0],
-                              onTap: (where) => {getNavigator(context, where)}),
+                          Hero(
+                            tag:"travel-req",
+                            child: Material(
+
+                              child: TileDashboard(models[0],
+                                  onTap: (where) => {getNavigator(context, where)}),
+                            ),
+                          ),
                           TileDashboard(models[1],
                               onTap: (where) => {getNavigator(context, where)}),
                           TileDashboard(models[2],
@@ -780,7 +798,13 @@ class _DashboardState extends State<Dashboard> {
 
   getNavigator(BuildContext context, int where) {
     if (where == 1) {
-      Navigator.pushNamed(context, '/AddCity');
+     // Navigator.pushNamed(context, '/AddCity');
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 700),
+              pageBuilder: (_, __, ___) => AddCity())
+    );
     } else if (where == 2) {
       Navigator.pushNamed(context, '/ApprovalsScreen',
           arguments: {"where": 2, "header": "Previous Travels"});
