@@ -46,46 +46,48 @@ class _CityListState extends State<ActivitiesList> {
               shrinkWrap: true,
               itemCount: widget.activityList.length,
               itemBuilder: (context, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        widget.onchange(widget.activityList[index]);
-                        widget.onclose();
-                      },
-                      child: ListTile(
-                        leading: Container(
-                          color: Color(0xFFF2F2F2),
-                          height: 30,
-                          width: 30,
-                          child: ClayContainer(
+                return Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          widget.onchange(widget.activityList[index]);
+                          widget.onclose();
+                        },
+                        child: ListTile(
+                          leading: Container(
                             color: Color(0xFFF2F2F2),
-                            height: 20,
-                            width: 20,
-                            borderRadius: 10,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  color: widget.activityList[index].id==1?Colors.lightBlueAccent:widget.activityList[index].id==2?Colors.green:widget.activityList[index].id==3?Colors.yellow:Colors.red,
+                            height: 30,
+                            width: 30,
+                            child: ClayContainer(
+                              color: Color(0xFFF2F2F2),
+                              height: 20,
+                              width: 20,
+                              borderRadius: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    color: widget.activityList[index].id==1?Colors.lightBlueAccent:widget.activityList[index].id==2?Colors.green:widget.activityList[index].id==3?Colors.yellow:Colors.red,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        title: Text(
-                          '${widget.activityList[index].activityName}',
-                          style: TextStyle(fontSize: 18),
+                          title: Text(
+                            '${widget.activityList[index].activityName}',
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
                       ),
-                    ),
-                    Divider(
-                      thickness: 1,
-                    )
-                  ],
+                      Divider(
+                        thickness: 1,
+                      )
+                    ],
+                  ),
                 );
               },
             ),
