@@ -91,10 +91,11 @@ class _Username_Screen extends State<Username_Screen> {
   }
 
 
-  saveValues(value,username) async {
-    await  appsharedprefs.saveValue(value.accesstoken, value.refreshtoken);
-    UserDataAuth(value.access,username);
+  saveValues(value,username)  {
 
+
+    UserDataAuth(value.access,username);
+    appsharedprefs.saveValue(value.accesstoken, value.refreshtoken);
   }
 
   @override

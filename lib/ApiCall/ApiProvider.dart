@@ -3,6 +3,8 @@ import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
+
+import 'package:mobility_sqr/ModelClasses/CalenderResponseModel.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
@@ -24,6 +26,7 @@ import 'package:mobility_sqr/ModelClasses/SubmitRequestForApprovalModel.dart';
 import 'package:mobility_sqr/ModelClasses/TravelReqResponse.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
+import 'package:mobility_sqr/ModelClasses/eventPost.dart';
 
 import '../Constants/AppConstants.dart';
 
@@ -54,11 +57,10 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
-//===============================================================================================
+
+//==================================================================================================
   Future<UserToken> postRequest(String username, String password) async {
     Map data = {"username": username, "password": password};
-
-
 
     //encode Map to JSON
     var body = json.encode(data);
@@ -72,12 +74,13 @@ class ApiProvider {
     return userToken;
   }
 
-  Future<UserInfo> getUserData(String username,String token) async {
+  //================================================================================================
+  Future<UserInfo> getUserData(String username, String token) async {
     Map data = {"email": username.trim()};
     //encode Map to JSON
     var body = json.encode(data);
-   // String token = await _TokenGetter.getAcessToken() ?? "";
- // String token = await getToken_byReresh();
+    // String token = await _TokenGetter.getAcessToken() ?? "";
+    // String token = await getToken_byReresh();
     var response = await http.post(
       AppConstants.BASE_URL + AppConstants.GET_USER_INFO,
       headers: {
@@ -92,7 +95,8 @@ class ApiProvider {
     print("${response.body}");
     return userToken;
   }
-//=============================================================================================
+
+//=====================================================================================================
   Future<ForgetPassModel> resetPass(String email) async {
     Map data = {"email": email};
     //encode Map to JSON
@@ -111,6 +115,7 @@ class ApiProvider {
     print("${response.body}");
     return passModel;
   }
+
 //=======================================================================================================
   Future<ApprovalModal> getTravelRequest() async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -138,11 +143,12 @@ class ApiProvider {
       },
     );
     ApprovalModal listTravelReq =
-    ApprovalModal.fromJson(jsonDecode(response.body));
+        ApprovalModal.fromJson(jsonDecode(response.body));
     print("${response.statusCode}");
     print("${response.body}");
     return listTravelReq;
   }
+
 //========================================================================================================
   Future<SearchModel> getLocation(String locationName) async {
     String token = await getToken_byReresh();
@@ -168,6 +174,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
+
 //===========================================================================================================
   getToken_byReresh() async {
     String refresh_token = await _TokenGetter.getRefreshToken() ?? "";
@@ -188,6 +195,7 @@ class ApiProvider {
 
     return token;
   }
+
 //======================================================================================================
   Future<PurposeModelClass> getPurposeList(String iata) async {
     String token = await getToken_byReresh();
@@ -214,6 +222,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
+
 //=============================================================================================================
   Future<DialCode> getDialCode() async {
     final http.Response response = await http.get(
@@ -235,6 +244,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
+
 //========================================================================================================================
   Future<ProjectIdModel> GetProjectId(String pid) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -261,6 +271,7 @@ class ApiProvider {
       throw Exception('User Not Found');
     }
   }
+
 //========================================================================================================================
   Future<PostLocationResponse> GetPostLocation(String country) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -287,6 +298,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
 //========================================================================================================================
   Future<List<SecondDependentData>> GetDependentList(String country) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -313,6 +325,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
 //========================================================================================================================
   Future<PerDiemModel> GetPerDiem(String country) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -338,6 +351,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
 //========================================================================================================================
   Future<GetVisaModel> GetTravelVisa(
       String visaType, String visaCountryId) async {
@@ -366,6 +380,7 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
 //========================================================================================================================
   Future<TravelReqResponseModel> PostTravelRequest(var data) async {
     //encode Map to JSON
@@ -389,6 +404,7 @@ class ApiProvider {
       } else {}
     }
   }
+
 //========================================================================================================================
   Future<ApprovalModal> fetch_approval_list() async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
@@ -417,11 +433,10 @@ class ApiProvider {
       throw Exception('error');
     }
   }
+
 //========================================================================================================================
-  Future< SubmitRequestFResponse> Post_Travel_Req_For_Approval(
+  Future<SubmitRequestFResponse> Post_Travel_Req_For_Approval(
       SubmitRequestForApprovalModel model) async {
-
-
     //encode Map to JSON
     var body = json.encode(model.toJson());
     print(body);
@@ -440,20 +455,21 @@ class ApiProvider {
 
     if (response.statusCode == 200) {
       SubmitRequestFResponse myresponse =
-      SubmitRequestFResponse.fromJson(jsonDecode(response.body));
+          SubmitRequestFResponse.fromJson(jsonDecode(response.body));
 
       return myresponse;
     } else {
       throw Exception('error');
     }
-
   }
+
 //========================================================================================================================
 
-  Future<ActionHistoryModel> get_travel_status_summary(String travelreqId) async {
+  Future<ActionHistoryModel> get_travel_status_summary(
+      String travelreqId) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
-     "travel_req_id": travelreqId,
+      "travel_req_id": travelreqId,
       "org_id": userInfo.data.orgId
     };
     String token = await getToken_byReresh();
@@ -468,19 +484,20 @@ class ApiProvider {
 
     if (response.statusCode == 200) {
       ActionHistoryModel myresponse =
-      ActionHistoryModel.fromJson(jsonDecode(response.body));
+          ActionHistoryModel.fromJson(jsonDecode(response.body));
 
       return myresponse;
     } else {
       throw Exception('error');
     }
   }
+
 //========================================================================================================================
   Future<GetTravelRequest> fetchViewTravelReq(String TravelReqId) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     Map<String, String> queryParams = {
       "travel_req_id": TravelReqId,
-     "org_id": userInfo.data.orgId
+      "org_id": userInfo.data.orgId
     };
     String token = await getToken_byReresh();
     String queryString = Uri(queryParameters: queryParams).query;
@@ -494,7 +511,7 @@ class ApiProvider {
 
     if (response.statusCode == 200) {
       GetTravelRequest myresponse =
-      GetTravelRequest.fromJson(jsonDecode(response.body));
+          GetTravelRequest.fromJson(jsonDecode(response.body));
 
       return myresponse;
     } else {
@@ -504,10 +521,8 @@ class ApiProvider {
 
 //========================================================================================================================
   Future<CurrencyConversionModel> get_currency_active() async {
-
     Map<String, String> queryParams = {
       "status_type": "Active",
-
     };
     String token = await getToken_byReresh();
     String queryString = Uri(queryParameters: queryParams).query;
@@ -521,7 +536,7 @@ class ApiProvider {
 
     if (response.statusCode == 200) {
       CurrencyConversionModel myresponse =
-      CurrencyConversionModel.fromJson(jsonDecode(response.body));
+          CurrencyConversionModel.fromJson(jsonDecode(response.body));
 
       return myresponse;
     } else {
@@ -530,12 +545,11 @@ class ApiProvider {
   }
 
   //========================================================================================================================
-  Future<CurrencyResultModel> get_currency_conversion(String from_currency,String to_currency) async {
-
+  Future<CurrencyResultModel> get_currency_conversion(
+      String from_currency, String to_currency) async {
     Map<String, String> queryParams = {
       "from_currency": from_currency,
       "to_currency": to_currency
-
     };
     String token = await getToken_byReresh();
     String queryString = Uri(queryParameters: queryParams).query;
@@ -549,7 +563,7 @@ class ApiProvider {
 
     if (response.statusCode == 200) {
       CurrencyResultModel myresponse =
-      CurrencyResultModel.fromJson(jsonDecode(response.body));
+          CurrencyResultModel.fromJson(jsonDecode(response.body));
 
       return myresponse;
     } else {
@@ -562,7 +576,7 @@ class ApiProvider {
     String token = await getToken_byReresh();
 
     Map<String, String> queryParams = {
-      'country':countryId,
+      'country': countryId,
     };
     String queryString = Uri(queryParameters: queryParams).query;
     final http.Response response = await http.get(
@@ -575,7 +589,8 @@ class ApiProvider {
     );
 
     if (response.statusCode == 200) {
-      CountryListModel data = CountryListModel.fromJson(jsonDecode(response.body));
+      CountryListModel data =
+          CountryListModel.fromJson(jsonDecode(response.body));
 
       return data;
     } else {
@@ -584,38 +599,38 @@ class ApiProvider {
   }
 
 //=======================================================================================================
-Future<CountryListModel> getCitylist({String countryId}) async {
-  String token = await getToken_byReresh();
+  Future<CountryListModel> getCitylist({String countryId}) async {
+    String token = await getToken_byReresh();
 
-  Map<String, String> queryParams = {
-    'country_id':countryId,
-  };
-  String queryString = Uri(queryParameters: queryParams).query;
-  final http.Response response = await http.get(
-    '${AppConstants.BASE_URL + AppConstants.GET_CITY_LIST + "?" + queryString}',
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}',
-    },
-  );
+    Map<String, String> queryParams = {
+      'country_id': countryId,
+    };
+    String queryString = Uri(queryParameters: queryParams).query;
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.GET_CITY_LIST + "?" + queryString}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    CountryListModel data = CountryListModel.fromJson(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+      CountryListModel data =
+          CountryListModel.fromJson(jsonDecode(response.body));
 
-    return data;
-  } else {
-    throw Exception('Server Error');
+      return data;
+    } else {
+      throw Exception('Server Error');
+    }
   }
-}
 
 //===============================================================================================================
-
 
   Future<Activities> getActivities() async {
     String token = await getToken_byReresh();
     final http.Response response = await http.get(
-      '${AppConstants.BASE_URL + AppConstants.GET_ACTIVITIES }',
+      '${AppConstants.BASE_URL + AppConstants.GET_ACTIVITIES}',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
@@ -629,6 +644,43 @@ Future<CountryListModel> getCitylist({String countryId}) async {
     } else {
       throw Exception('Server Error');
     }
+  }
+
+  //==================================================================================================================
+  Future<CalenderEventResponseModel> post_Calender_Event(
+      eventPost jsonModel) async {
+    //encode Map to JSON
+    var body = json.encode(jsonModel.toJson());
+    var response = await http.post(
+        AppConstants.BASE_URL + AppConstants.POST_CALENDER_EVENT,
+        headers: {"Content-Type": "application/json"},
+        body: body);
+    CalenderEventResponseModel calenderEventResponseModel =
+    CalenderEventResponseModel.fromJson(jsonDecode(response.body));
+    print("${response.statusCode}");
+    print("${response.body}");
+    return calenderEventResponseModel;
+  }
+//====================================================================================================================
+  Future<CalenderEventResponseModel> get_Calender_Event(
+      {String empCode}) async {
+
+
+   Map<String, String> queryParams = {
+     "emp_code":empCode
+   };
+   String queryString = Uri(queryParameters: queryParams).query;
+    //encode Map to JSON
+
+    var response = await http.get(
+        AppConstants.BASE_URL + AppConstants.POST_CALENDER_EVENT + queryString,
+        headers: {"Content-Type": "application/json"},
+       );
+    CalenderEventResponseModel calenderEventResponseModel =
+    CalenderEventResponseModel.fromJson(jsonDecode(response.body));
+    print("${response.statusCode}");
+    print("${response.body}");
+    return calenderEventResponseModel;
   }
 }
 

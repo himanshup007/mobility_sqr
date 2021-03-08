@@ -78,7 +78,9 @@ class _VaultScreenState extends State<VaultScreen> {
                         Expanded(
                           flex: 4,
                           child:
-                              tabWidget('assets/images/passport.png', "Passport"),
+                              tabWidget('assets/images/passport.png', "Passport",onClick: (){
+
+                              }),
                         ),
                         Expanded(flex: 1, child: SizedBox()),
                         Expanded(

@@ -5,7 +5,9 @@ import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/Activities.dart';
+
 import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/eventPost.dart';
 import 'package:mobility_sqr/Screens/Dashboard/AddAgenda.dart';
 import 'package:mobility_sqr/Screens/TravelCalendar/customEventWidget.dart';
@@ -34,23 +36,33 @@ class _AddEventState extends State<AddEvent> {
   CountryModel _selectedValue;
   CountryModel _selectedCity;
   Activity _selectedActivity;
-  TokenGetter mprefs= TokenGetter();
+  TokenGetter mprefs = TokenGetter();
   bool showloader = true;
   Activities activitylist;
 
+  String empCode = "";
 
-
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   readActivities() async {
-     activitylist=await mprefs.readActivites();
-   this.setState(() {
-     activitylist=activitylist;
-   });
+    activitylist = await mprefs.readActivites();
+    UserInfo info = await mprefs.readUserInfo() ?? null;
+    try {
+      if (info != null) {
+        this.setState(() {
+          empCode = info.data.empCode;
+          activitylist = activitylist;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
+
   @override
   void initState() {
     super.initState();
+
     readActivities();
     _apiProvider
         .getCountrylist(countryId: "")
@@ -85,7 +97,9 @@ class _AddEventState extends State<AddEvent> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
           "Add Event",
@@ -109,7 +123,7 @@ class _AddEventState extends State<AddEvent> {
                       "From", Icons.calendar_today, context, onTap: () {
                     selectDate(
                         context,
-                        DateTime.now(),
+                        DateTime(2010),
                         DateTime(2100),
                         _postjson.fromDate == null
                             ? DateTime.now()
@@ -160,15 +174,16 @@ class _AddEventState extends State<AddEvent> {
                                 child: CountryPickerUtils.getDefaultFlagImage(
                                     selCountry))
                             : Container(
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey)
-                            ),
-                            margin:EdgeInsets.only(bottom: 20),
-                          child: Icon(Icons.flag),
-                        ),
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey)),
+                                margin: EdgeInsets.only(bottom: 20),
+                                child: Icon(Icons.flag),
+                              ),
                       ),
-                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Expanded(
                         flex: 10,
                         child: CustomEventWidget(
@@ -183,6 +198,7 @@ class _AddEventState extends State<AddEvent> {
                             this.setState(() {
                               selCountry = value;
                               _postjson.countryName = value.name;
+                              _postjson.countryCode=_selectedValue.id.toString();
                               showloader = true;
                             });
                             _apiProvider
@@ -213,6 +229,7 @@ class _AddEventState extends State<AddEvent> {
                             this.setState(() {
                               _selectedCity = cityModel;
                               _postjson.cityName = cityModel.name;
+                              _postjson.cityCode=cityModel.id.toString();
                             });
                           },
                           onclose: () {
@@ -221,25 +238,25 @@ class _AddEventState extends State<AddEvent> {
                         ));
                   }),
                   CustomEventWidget(_postjson.activity, 'Select Activities',
-                      Icons.arrow_drop_down_sharp, context,
-                      onTap: () {
-                        showCustomDialogClass(
-                            context,
-                            ActivitiesList(
-                              activitylist.data,
-                              onchange: (Activity) {
-                                this.setState(() {
-                                  _selectedActivity=Activity;
-                                  _postjson.activity = Activity.activityName;
-                                });
-                              },
-                              onclose: () {
-                                Navigator.of(context, rootNavigator: true).pop();
-                              },
-                            ));
-                      }),
-
-                  SizedBox(height: 40,),
+                      Icons.arrow_drop_down_sharp, context, onTap: () {
+                    showCustomDialogCityClass(
+                        context,
+                        ActivitiesList(
+                          activitylist.data,
+                          onchange: (Activity) {
+                            this.setState(() {
+                              _selectedActivity = Activity;
+                              _postjson.activity = Activity.activityName;
+                            });
+                          },
+                          onclose: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                        ));
+                  }),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 50,
@@ -251,10 +268,11 @@ class _AddEventState extends State<AddEvent> {
                         color: AppConstants.APP_THEME_COLOR,
                         child: Text(
                           "SUBMIT",
-                          style: TextStyle(color: Colors.white,fontSize: 18),
+                          style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                         onPressed: () async {
 
+                          reqJsonBuild();
                         }),
                   )
                 ],
@@ -265,6 +283,22 @@ class _AddEventState extends State<AddEvent> {
         ],
       ),
     );
+  }
+
+  reqJsonBuild() {
+
+    _postjson.empCode = empCode;
+
+    if(_postjson.empCode!=null&&_postjson.cityCode!=null&&_postjson.fromDate!=null&&_postjson.toDate!=null&&_postjson.activity!=null){
+
+      _apiProvider.post_Calender_Event(_postjson).then((value) =>  Navigator.pop(context));
+
+
+    }
+    else{
+      eventSnackbar( _scaffoldKey.currentState, "Please fill the Mandatory Fields");
+    }
+
   }
 }
 

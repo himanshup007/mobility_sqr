@@ -2,10 +2,13 @@ import 'dart:math';
 
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
+import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/CustomLibrary/Calender/lib/table_calendar.dart';
 import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/Activities.dart';
+import 'package:mobility_sqr/ModelClasses/CalenderResponseModel.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
@@ -24,6 +27,7 @@ class _TravelCalenderState extends State<TravelCalender>
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
+  ApiProvider _apiProvider= ApiProvider();
 
   DateTime selectedDatebyUser = DateTime.now();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -35,11 +39,58 @@ class _TravelCalenderState extends State<TravelCalender>
     DateTime(2020, 4, 22): ['Easter Monday'],
   };
 
+  String empCode="";
+
+  TokenGetter mprefs=TokenGetter();
+
+
+  readUserInfo() async {
+
+    UserInfo info = await mprefs.readUserInfo() ?? null;
+    try {
+      if (info != null) {
+        this.setState(() {
+          empCode = info.data.empCode;
+        });
+
+       await _apiProvider.get_Calender_Event(empCode: empCode).then((value) => setCalendarValue(value));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  setCalendarValue(CalenderEventResponseModel events){
+    getTask1(events.data);
+
+  }
+  Future<Map<DateTime, List>> getTask1(List<CalendarEvent> event) async {
+    Map<DateTime, List> mapFetch = {};
+
+
+    for (int i = 0; i < event.length; i++) {
+
+      var createTime = DateTime.parse(event[i].fromDate);
+      var original = mapFetch[createTime];
+      if (original == null) {
+        print("null");
+        mapFetch[createTime] = [event[i].activity];
+      } else {
+        print(event[i].activity);
+        mapFetch[createTime] = List.from(original)
+          ..addAll([event[i].activity]);
+      }
+    }
+
+    return mapFetch;
+  }
 
   @override
   void initState() {
     super.initState();
     final _selectedDay = DateTime.now();
+
+    readUserInfo();
+
 
 
 

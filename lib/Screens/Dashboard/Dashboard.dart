@@ -345,14 +345,7 @@ class _DashboardState extends State<Dashboard> {
                                 return Container(
                                   height: 65.0.w,
                                   width: 100.0.w,
-                                  // decoration: BoxDecoration(
-                                  //   image:  DecorationImage(
-                                  //     image: AssetImage(
-                                  //         'assets/images/dashboard_bg.jpg'),
-                                  //     fit: BoxFit.fill,
-                                  //   ),   //Image.asset(
-                                  //
-                                  // ),
+
                                   margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
                                   child: Scrollbar(
                                     isAlwaysShown: true,

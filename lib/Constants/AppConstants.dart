@@ -30,6 +30,8 @@ class AppConstants {
   static final String GET_COUNTRY_LIST = "/get_country_master/";
   static final String GET_CITY_LIST = "/get_state_master/";
   static final String GET_ACTIVITIES = "/get_calender_activity/";
+  static final String POST_CALENDER_EVENT = "/post_get_calender_event/";
+
 
 
   //=======================================================================================/Colors
