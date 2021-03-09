@@ -31,6 +31,7 @@ class AppConstants {
   static final String GET_CITY_LIST = "/get_state_master/";
   static final String GET_ACTIVITIES = "/get_calender_activity/";
   static final String POST_CALENDER_EVENT = "/post_get_calender_event/";
+  static final String UPDATE_CALENDER_EVENT = "/delete_update_calender_event/";
 
 
 

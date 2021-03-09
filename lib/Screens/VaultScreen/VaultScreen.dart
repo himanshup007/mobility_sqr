@@ -170,18 +170,13 @@ class _VaultScreenState extends State<VaultScreen> {
 
           decoration: new BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-              gradient: new LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 148, 231, 225),
-                  Color.fromARGB(255, 62, 182, 226)
-                ],
-              )
+              color: Colors.purple
           ),
 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(image),
+              Image.asset(image,color: Colors.white,),
               SizedBox(
                 height: 20,
               ),

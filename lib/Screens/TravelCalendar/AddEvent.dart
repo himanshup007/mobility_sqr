@@ -5,6 +5,7 @@ import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/Activities.dart';
+import 'package:mobility_sqr/ModelClasses/CalenderResponseModel.dart';
 
 import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
@@ -21,6 +22,11 @@ import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:sizer/sizer.dart';
 
 class AddEvent extends StatefulWidget {
+
+  CalendarEvent event= CalendarEvent();
+  AddEvent({event}){
+    this.event=event;
+  }
   @override
   _AddEventState createState() => _AddEventState();
 }
@@ -42,6 +48,8 @@ class _AddEventState extends State<AddEvent> {
 
   String empCode = "";
 
+  int eventID=null;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   readActivities() async {
@@ -59,10 +67,26 @@ class _AddEventState extends State<AddEvent> {
     }
   }
 
+  EditReq(CalendarEvent event){
+    if(event!=null){
+
+
+     eventPost tempEvent=eventPost(empCode: event.empCode,fromDate: event.fromDate,toDate: event.toDate,countryCode:event.countryCode
+     ,countryName: event.countryName,cityCode: event.cityCode,cityName: event.cityName,activity: event.activity);
+
+      this.setState(() {
+        _postjson=tempEvent;
+        eventID=event.id;
+      });
+
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
-
+    EditReq(widget.event);
     readActivities();
     _apiProvider
         .getCountrylist(countryId: "")
@@ -250,6 +274,7 @@ key: _scaffoldKey,
                             });
                           },
                           onclose: () {
+
                             Navigator.of(context, rootNavigator: true).pop();
                           },
                         ));
@@ -291,7 +316,13 @@ key: _scaffoldKey,
 
     if(_postjson.empCode!=null&&_postjson.cityCode!=null&&_postjson.fromDate!=null&&_postjson.toDate!=null&&_postjson.activity!=null){
 
-      _apiProvider.post_Calender_Event(_postjson).then((value) =>  Navigator.pop(context));
+      if(eventID!=null){
+        _apiProvider.post_Calender_Event(_postjson).then((value) =>  Navigator.pop(context, value));
+      }else{
+        _apiProvider.update_Calendar_Event(_postjson,eventID).then((value) => Navigator.pop(context, value));
+      }
+
+
 
 
     }

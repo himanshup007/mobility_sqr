@@ -246,5 +246,17 @@ class CalendarEvent {
     data['column12'] = this._column12;
     data['emp_code'] = this._empCode;
     return data;
+
+
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CalendarEvent &&
+          runtimeType == other.runtimeType &&
+          _activity == other._activity;
+
+  @override
+  int get hashCode => _activity.hashCode;
 }

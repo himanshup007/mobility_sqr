@@ -656,31 +656,49 @@ class ApiProvider {
         headers: {"Content-Type": "application/json"},
         body: body);
     CalenderEventResponseModel calenderEventResponseModel =
-    CalenderEventResponseModel.fromJson(jsonDecode(response.body));
+        CalenderEventResponseModel.fromJson(jsonDecode(response.body));
     print("${response.statusCode}");
     print("${response.body}");
     return calenderEventResponseModel;
   }
+
 //====================================================================================================================
   Future<CalenderEventResponseModel> get_Calender_Event(
       {String empCode}) async {
-
-
-   Map<String, String> queryParams = {
-     "emp_code":empCode
-   };
-   String queryString = Uri(queryParameters: queryParams).query;
+    Map<String, String> queryParams = {"emp_code": empCode};
+    String queryString = Uri(queryParameters: queryParams).query;
     //encode Map to JSON
 
     var response = await http.get(
-        AppConstants.BASE_URL + AppConstants.POST_CALENDER_EVENT + queryString,
-        headers: {"Content-Type": "application/json"},
-       );
+      AppConstants.BASE_URL +
+          AppConstants.POST_CALENDER_EVENT +
+          "?" +
+          queryString,
+      headers: {"Content-Type": "application/json"},
+    );
     CalenderEventResponseModel calenderEventResponseModel =
-    CalenderEventResponseModel.fromJson(jsonDecode(response.body));
+        CalenderEventResponseModel.fromJson(jsonDecode(response.body));
+    print("${response.statusCode}");
+    print("${response.body}");
+    return calenderEventResponseModel;
+  }
+
+  //==================================================================================================================
+  Future<CalenderEventResponseModel> update_Calendar_Event(
+      eventPost jsonModel, int id) async {
+    //encode Map to JSON
+    var body = json.encode(jsonModel.toJson());
+    var response = await http.patch(
+        AppConstants.BASE_URL +
+            AppConstants.UPDATE_CALENDER_EVENT +
+            id.toString() +
+            "/",
+        headers: {"Content-Type": "application/json"},
+        body: body);
+    CalenderEventResponseModel calenderEventResponseModel =
+        CalenderEventResponseModel.fromJson(jsonDecode(response.body));
     print("${response.statusCode}");
     print("${response.body}");
     return calenderEventResponseModel;
   }
 }
-

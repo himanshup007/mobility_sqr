@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
@@ -9,6 +10,7 @@ import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/CalenderResponseModel.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
+import 'package:mobility_sqr/Screens/TravelCalendar/AddEvent.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
@@ -23,11 +25,11 @@ class TravelCalender extends StatefulWidget {
 
 class _TravelCalenderState extends State<TravelCalender>
     with TickerProviderStateMixin {
-  Map<DateTime, List> _events;
+  Map<DateTime, List> _events = Map<DateTime, List>();
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
-  ApiProvider _apiProvider= ApiProvider();
+  ApiProvider _apiProvider = ApiProvider();
 
   DateTime selectedDatebyUser = DateTime.now();
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -39,13 +41,11 @@ class _TravelCalenderState extends State<TravelCalender>
     DateTime(2020, 4, 22): ['Easter Monday'],
   };
 
-  String empCode="";
+  String empCode = "";
 
-  TokenGetter mprefs=TokenGetter();
-
+  TokenGetter mprefs = TokenGetter();
 
   readUserInfo() async {
-
     UserInfo info = await mprefs.readUserInfo() ?? null;
     try {
       if (info != null) {
@@ -53,35 +53,64 @@ class _TravelCalenderState extends State<TravelCalender>
           empCode = info.data.empCode;
         });
 
-       await _apiProvider.get_Calender_Event(empCode: empCode).then((value) => setCalendarValue(value));
+        await _apiProvider
+            .get_Calender_Event(empCode: empCode)
+            .then((value) => setCalendarValue(value));
       }
     } catch (e) {
       print(e);
     }
   }
-  setCalendarValue(CalenderEventResponseModel events){
-    getTask1(events.data);
 
+  setCalendarValue(CalenderEventResponseModel events) async {
+    var extracted_events = await getTask1(events.data.reversed.toList());
+
+    this.setState(() {
+      _events.addAll(extracted_events);
+    });
   }
+
   Future<Map<DateTime, List>> getTask1(List<CalendarEvent> event) async {
     Map<DateTime, List> mapFetch = {};
 
-
     for (int i = 0; i < event.length; i++) {
-
       var createTime = DateTime.parse(event[i].fromDate);
+      var endTime = DateTime.parse(event[i].toDate);
+
+      var difference = endTime.difference(createTime).inDays;
+
       var original = mapFetch[createTime];
       if (original == null) {
-        print("null");
-        mapFetch[createTime] = [event[i].activity];
+        mapFetch[createTime] = [event[i]];
       } else {
-        print(event[i].activity);
-        mapFetch[createTime] = List.from(original)
-          ..addAll([event[i].activity]);
+        mapFetch[createTime] = List.from(original)..addAll([event[i]]);
+      }
+
+      List<DateTime> extractedDays = extract_days(difference, createTime);
+
+      for (int j = 0; j < extractedDays.length; j++) {
+        var mydate = mapFetch[extractedDays[j]];
+
+        if (mydate == null) {
+          mapFetch[extractedDays[j]] = [event[i]];
+        } else {
+          mapFetch[extractedDays[j]] = List.from(mydate)..addAll([event[i]]);
+        }
       }
     }
-
     return mapFetch;
+  }
+
+  extract_days(int difference, DateTime from_date) {
+    List<DateTime> dates = List<DateTime>();
+
+    for (int i = 1; i <= difference; i++) {
+      DateTime mydates = from_date.add(Duration(days: i));
+
+      dates.add(mydates);
+    }
+
+    return dates;
   }
 
   @override
@@ -90,60 +119,6 @@ class _TravelCalenderState extends State<TravelCalender>
     final _selectedDay = DateTime.now();
 
     readUserInfo();
-
-
-
-
-
-    _events = {
-      DateTime.now().subtract(Duration(days: 1)): ['ewds'],
-      _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
-      _selectedDay.subtract(Duration(days: 20)): [
-        'Event A2',
-        'Event B2',
-        'Event C2',
-        'Event D2'
-      ],
-      _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
-      _selectedDay.subtract(Duration(days: 10)): [
-        'Event A4',
-        'Event B4',
-        'Event C4'
-      ],
-      _selectedDay.subtract(Duration(days: 4)): [
-        'Event A5',
-        'Event B5',
-        'Event C5'
-      ],
-      _selectedDay.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
-      _selectedDay: ['Event A7', 'Event B7', 'Event C7', 'Event D7'],
-      _selectedDay.add(Duration(days: 1)): [
-        'Event A8',
-        'Event B8',
-        'Event C8',
-        'Event D8'
-      ],
-      _selectedDay.add(Duration(days: 3)):
-          Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
-      _selectedDay.add(Duration(days: 7)): [
-        'Event A10',
-        'Event B10',
-        'Event C10'
-      ],
-      _selectedDay.add(Duration(days: 11)): ['Event A11', 'Event B11'],
-      _selectedDay.add(Duration(days: 17)): [
-        'Event A12',
-        'Event B12',
-        'Event C12',
-        'Event D12'
-      ],
-      _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
-      _selectedDay.add(Duration(days: 26)): [
-        'Event A14',
-        'Event B14',
-        'Event C14'
-      ],
-    };
 
     _selectedEvents = _events[_selectedDay] ?? [];
     _calendarController = CalendarController();
@@ -167,7 +142,7 @@ class _TravelCalenderState extends State<TravelCalender>
     print('CALLBACK: _onDaySelected');
     setState(() {
       selectedDatebyUser = day;
-      _selectedEvents = events;
+      _selectedEvents = events.toSet().toList();
     });
   }
 
@@ -210,7 +185,6 @@ class _TravelCalenderState extends State<TravelCalender>
                           color: Color(0xFFF2F2F2),
                           height: 30,
                           width: 30,
-
                           child: ClayContainer(
                             color: Color(0xFFF2F2F2),
                             height: 20,
@@ -220,16 +194,18 @@ class _TravelCalenderState extends State<TravelCalender>
                               padding: const EdgeInsets.all(5.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
                                   color: Colors.lightGreen,
                                 ),
-
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width:5 ,),
-                        Text("Personal")
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("Work")
                       ],
                     ),
                     SizedBox(
@@ -251,18 +227,23 @@ class _TravelCalenderState extends State<TravelCalender>
                               padding: const EdgeInsets.all(5.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
                                   color: Colors.red,
                                 ),
                               ),
                             ),
                           ),
-                        ),SizedBox(width:5 ,),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
                         Text("Holiday")
                       ],
                     ),
                     SizedBox(
-                      width: 20,  height: 20,
+                      width: 20,
+                      height: 20,
                     ),
                     Row(
                       children: [
@@ -279,14 +260,51 @@ class _TravelCalenderState extends State<TravelCalender>
                               padding: const EdgeInsets.all(5.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
                                   color: Colors.lightBlueAccent,
                                 ),
                               ),
                             ),
                           ),
-                        ),SizedBox(width:5 ,),
-                        Text("Work")
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("Business")
+                      ],
+                    ),
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          color: Color(0xFFF2F2F2),
+                          height: 30,
+                          width: 30,
+                          child: ClayContainer(
+                            color: Color(0xFFF2F2F2),
+                            height: 20,
+                            width: 20,
+                            borderRadius: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.yellow,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("Transit")
                       ],
                     ),
                   ],
@@ -327,37 +345,158 @@ class _TravelCalenderState extends State<TravelCalender>
                                     ? Column(
                                         children: [
                                           Container(
-                                              width: 100.0.w,
-                                              height: 70,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(20),
-                                                    topRight:
-                                                        Radius.circular(20),
-                                                  ),
-                                                  color: Colors.purple[600]),
-                                              child: Center(
-                                                  child: Text(
+                                            width: 100.0.w,
+                                            height: 70,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
+                                                ),
+                                                color: Colors.purple[600]),
+                                            child: Center(
+                                              child: Text(
                                                 "Events",
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20),
-                                              ))),
-                                          ListTile(
-                                              title: Text(
-                                            '${_selectedEvents[index]}',
-                                            style: TextStyle(
-                                                color: Colors.black54),
-                                          )),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 10),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      'Activity',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 8,
+                                                    child: Text(
+                                                      "Location",
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                      child: Text("Edit",style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                          FontWeight.w700),)),
+                                                ]),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 15,vertical: 10),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 5,
+                                                    child: AutoSizeText(
+                                                      '${_selectedEvents[index].activity}',
+                                                      minFontSize: 14,
+                                                      maxFontSize: 14,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 8,
+                                                    child: Text(
+                                                      "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      final result = await Navigator.push(
+                                                        context,
+                                                        // Create the SelectionScreen in the next step.
+                                                        MaterialPageRoute(builder: (context) => AddEvent(event: _selectedEvents[index],)),
+                                                      );
+
+                                                      setCalendarValue(result);
+                                                    },
+                                                    child: Expanded(
+                                                        flex: 2,
+                                                        child: Icon(Icons.edit)),
+                                                  ),
+                                                ]),
+                                          ),
                                         ],
                                       )
-                                    : ListTile(
-                                        title: Text(
-                                        '${_selectedEvents[index]}',
-                                        style: TextStyle(color: Colors.black54),
-                                      ));
+                                    :  Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 20,vertical: 10),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          flex: 5,
+                                          child: AutoSizeText(
+                                            '${_selectedEvents[index].activity}',
+                                            maxFontSize: 14,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+
+                                                fontWeight:
+                                                FontWeight.w400),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 8,
+                                          child: Text(
+                                            "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight:
+                                                FontWeight.w400),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            final result = await Navigator.push(
+                                              context,
+                                              // Create the SelectionScreen in the next step.
+                                              MaterialPageRoute(builder: (context) => AddEvent(event: _selectedEvents[index],)),
+                                            );
+
+                                            setCalendarValue(result);
+                                          },
+                                          child: Expanded(
+                                              flex: 2,
+                                              child: Icon(Icons.edit)),
+                                        ),
+                                      ]),
+                                );
                               },
                             ),
                           );
@@ -370,8 +509,15 @@ class _TravelCalenderState extends State<TravelCalender>
       floatingActionButton: FloatingActionButton(
         hoverColor: Colors.black,
         elevation: 10,
-        onPressed: () {
-          Navigator.pushNamed(context, '/AddEvent');
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            // Create the SelectionScreen in the next step.
+            MaterialPageRoute(builder: (context) => AddEvent()),
+          );
+
+          setCalendarValue(result);
+          // Navigator.pushNamed(context, '/AddEvent');
         },
         backgroundColor: AppConstants.APP_THEME_COLOR,
         child: Icon(
@@ -501,7 +647,7 @@ class _TravelCalenderState extends State<TravelCalender>
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: 40.0,
-      child: Random().nextInt(100) % 2 == 0
+      child: events[0].activity == 'Work'
           ? Container(
               margin: EdgeInsets.all(2),
               foregroundDecoration: const RotatedCornerDecoration(
@@ -511,13 +657,13 @@ class _TravelCalenderState extends State<TravelCalender>
                     height: 30,
                     alignment: BadgeAlignment.bottomRight),
                 textSpan: TextSpan(
-                    text: 'p',
+                    text: 'W',
                     style:
                         TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
                 labelInsets: LabelInsets(baselineShift: 3, start: 1),
               ),
             )
-          : Random().nextInt(100) % 2 == 0
+          : events[0].activity == 'Business'
               ? Container(
                   margin: EdgeInsets.all(2),
                   foregroundDecoration: const RotatedCornerDecoration(
@@ -527,27 +673,45 @@ class _TravelCalenderState extends State<TravelCalender>
                         height: 30,
                         alignment: BadgeAlignment.bottomRight),
                     textSpan: TextSpan(
-                        text: 'W',
+                        text: 'B',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.bold)),
                     labelInsets: LabelInsets(baselineShift: 3, start: 1),
                   ),
                 )
-              : Container(
-                  margin: EdgeInsets.all(2),
-                  foregroundDecoration: const RotatedCornerDecoration(
-                    color: Colors.red,
-                    geometry: const BadgeGeometry(
-                        width: 30,
-                        height: 30,
-                        alignment: BadgeAlignment.bottomRight),
-                    textSpan: TextSpan(
-                        text: 'H',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.bold)),
-                    labelInsets: LabelInsets(baselineShift: 3, start: 1),
-                  ),
-                ),
+              : events[0].activity == 'Holiday/Vacation'
+                  ? Container(
+                      margin: EdgeInsets.all(2),
+                      foregroundDecoration: const RotatedCornerDecoration(
+                        color: Colors.red,
+                        geometry: const BadgeGeometry(
+                            width: 30,
+                            height: 30,
+                            alignment: BadgeAlignment.bottomRight),
+                        textSpan: TextSpan(
+                            text: 'H',
+                            style: TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.bold)),
+                        labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.all(2),
+                      foregroundDecoration: const RotatedCornerDecoration(
+                        color: Colors.yellow,
+                        geometry: const BadgeGeometry(
+                            width: 30,
+                            height: 30,
+                            alignment: BadgeAlignment.bottomRight),
+                        textSpan: TextSpan(
+                            text: 'T',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87)),
+                        labelInsets: LabelInsets(baselineShift: 3, start: 1),
+                      ),
+                    ),
     );
   }
 
@@ -559,9 +723,10 @@ class _TravelCalenderState extends State<TravelCalender>
       child: Center(
         child:
             //    !_calendarController.isToday(date)?
-            Text(
-          '${"Noida,IN"}',
-          maxLines: 3,
+            AutoSizeText(
+          '${events[0].cityName}',
+          maxLines: 1,
+          minFontSize: 8,
           style: TextStyle(
             color:
                 formatter.format(selectedDatebyUser) == formatter.format(date)
