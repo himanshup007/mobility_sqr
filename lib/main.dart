@@ -14,6 +14,7 @@ import 'package:mobility_sqr/Screens/SplashScreen/SplashScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 import 'package:mobility_sqr/Screens/TravelCalendar/AddEvent.dart';
 import 'package:mobility_sqr/Screens/TravelReqView/TravelReqView.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/PassportScreen.dart';
 import 'package:mobility_sqr/Screens/VaultScreen/VaultScreen.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
 import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
         '/AddEvent':(context) =>AddEvent(),
         '/Username_Screen':(context) =>Username_Screen(),
         '/VaultScreen':(context) => VaultScreen(),
+
 
       },
     );

@@ -316,7 +316,7 @@ key: _scaffoldKey,
 
     if(_postjson.empCode!=null&&_postjson.cityCode!=null&&_postjson.fromDate!=null&&_postjson.toDate!=null&&_postjson.activity!=null){
 
-      if(eventID!=null){
+      if(eventID==null){
         _apiProvider.post_Calender_Event(_postjson).then((value) =>  Navigator.pop(context, value));
       }else{
         _apiProvider.update_Calendar_Event(_postjson,eventID).then((value) => Navigator.pop(context, value));

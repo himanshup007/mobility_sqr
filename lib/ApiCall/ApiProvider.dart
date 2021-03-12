@@ -8,7 +8,6 @@ import 'package:mobility_sqr/ModelClasses/CalenderResponseModel.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
-import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
@@ -17,6 +16,7 @@ import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
+import 'package:mobility_sqr/ModelClasses/PassportModel.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
@@ -26,6 +26,7 @@ import 'package:mobility_sqr/ModelClasses/SubmitRequestForApprovalModel.dart';
 import 'package:mobility_sqr/ModelClasses/TravelReqResponse.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
+import 'package:mobility_sqr/ModelClasses/VisaModel.dart';
 import 'package:mobility_sqr/ModelClasses/eventPost.dart';
 
 import '../Constants/AppConstants.dart';
@@ -694,6 +695,7 @@ class ApiProvider {
             id.toString() +
             "/",
         headers: {"Content-Type": "application/json"},
+
         body: body);
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -701,4 +703,61 @@ class ApiProvider {
     print("${response.body}");
     return calenderEventResponseModel;
   }
+
+
+
+  //======================================================================================================================
+
+
+  Future<PassportModel> get_employee_passport(
+      {String empCode}) async {
+    Map<String, String> queryParams = {"employee": empCode};
+    String queryString = Uri(queryParameters: queryParams).query;
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var response = await http.get(
+      AppConstants.BASE_URL +
+          AppConstants.GET_EMPLOYEE_PASSPORT +
+          "?" +
+          queryString,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${token}',
+        },
+    );
+    PassportModel passportModel =
+    PassportModel.fromJson(jsonDecode(response.body));
+    print("${response.statusCode}");
+    print("${response.body}");
+    return passportModel;
+  }
+
+
+
+  //========================================================================================================================
+  Future<VisaModel> get_employee_visa(
+      {String empCode}) async {
+    Map<String, String> queryParams = {"employee": empCode};
+    String queryString = Uri(queryParameters: queryParams).query;
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var response = await http.get(
+      AppConstants.BASE_URL +
+          AppConstants.GET_EMPLOYEE_VISA +
+          "?" +
+          queryString,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+    VisaModel visaModel =
+    VisaModel.fromJson(jsonDecode(response.body));
+    print("${response.statusCode}");
+    print("${response.body}");
+    return visaModel;
+  }
+
 }

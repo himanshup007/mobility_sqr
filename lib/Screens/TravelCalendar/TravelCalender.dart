@@ -364,41 +364,33 @@ class _TravelCalenderState extends State<TravelCalender>
                                           ),
                                           Container(
                                             margin: EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 10),
+                                                horizontal:30, vertical: 10),
                                             child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                    MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Expanded(
-                                                    flex: 2,
-                                                    child: Text(
-                                                      'Activity',
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                    ),
+                                                  Text(
+                                                    'Activity',
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w700),
                                                   ),
-                                                  Expanded(
-                                                    flex: 8,
-                                                    child: Text(
-                                                      "Location",
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                    ),
+                                                  Text(
+                                                    "Location",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w700),
                                                   ),
-                                                  Expanded(
-                                                    flex: 2,
-                                                      child: Text("Edit",style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                          FontWeight.w700),)),
+                                                  Text("Edit",style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                      FontWeight.w700),),
                                                 ]),
                                           ),
                                           Container(
@@ -406,31 +398,26 @@ class _TravelCalenderState extends State<TravelCalender>
                                                 horizontal: 15,vertical: 10),
                                             child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                    MainAxisAlignment.spaceAround,
                                                 children: [
-                                                  Expanded(
-                                                    flex: 5,
-                                                    child: AutoSizeText(
-                                                      '${_selectedEvents[index].activity}',
-                                                      minFontSize: 14,
-                                                      maxFontSize: 14,
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
+                                                  AutoSizeText(
+                                                    '${_selectedEvents[index].activity}',
+                                                    minFontSize: 14,
+                                                    maxFontSize: 14,maxLines: 1,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400),
                                                   ),
-                                                  Expanded(
-                                                    flex: 8,
-                                                    child: Text(
-                                                      "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
+                                                  SizedBox(),
+                                                  Text(
+                                                    "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
                                                   ),
                                                   GestureDetector(
                                                     onTap: () async {
@@ -442,9 +429,7 @@ class _TravelCalenderState extends State<TravelCalender>
 
                                                       setCalendarValue(result);
                                                     },
-                                                    child: Expanded(
-                                                        flex: 2,
-                                                        child: Icon(Icons.edit)),
+                                                    child: Icon(Icons.edit),
                                                   ),
                                                 ]),
                                           ),
@@ -455,31 +440,26 @@ class _TravelCalenderState extends State<TravelCalender>
                                       horizontal: 20,vertical: 10),
                                   child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                      MainAxisAlignment.spaceAround,
                                       children: [
-                                        Expanded(
-                                          flex: 5,
-                                          child: AutoSizeText(
-                                            '${_selectedEvents[index].activity}',
-                                            maxFontSize: 14,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16,
+                                        AutoSizeText(
+                                          '${_selectedEvents[index].activity.toString().contains("Holiday")?  "Holiday":_selectedEvents[index].activity}',maxLines: 1,
+                                          maxFontSize: 14,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
 
-                                                fontWeight:
-                                                FontWeight.w400),
-                                          ),
+                                              fontWeight:
+                                              FontWeight.w400),
                                         ),
-                                        Expanded(
-                                          flex: 8,
-                                          child: Text(
-                                            "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight:
-                                                FontWeight.w400),
-                                          ),
+                                        SizedBox(),
+                                        Text(
+                                          "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight:
+                                              FontWeight.w400),
                                         ),
                                         GestureDetector(
                                           onTap: () async {
@@ -491,9 +471,7 @@ class _TravelCalenderState extends State<TravelCalender>
 
                                             setCalendarValue(result);
                                           },
-                                          child: Expanded(
-                                              flex: 2,
-                                              child: Icon(Icons.edit)),
+                                          child: Icon(Icons.edit),
                                         ),
                                       ]),
                                 );
