@@ -5,9 +5,9 @@ import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/ActionHistoryModel.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:sizer/sizer.dart';
-import 'package:currency_pickers/country.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:currency_pickers/currency_pickers.dart';
+
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
 
 class ActionHistory extends StatefulWidget {
@@ -73,7 +73,10 @@ class _ActionHistoryState extends State<ActionHistory> {
                   child: Container(
                     child: Text(
                       "Role",
-                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
                       textAlign: TextAlign.start,
                     ),
                   ),
@@ -85,7 +88,10 @@ class _ActionHistoryState extends State<ActionHistory> {
                     child: Container(
                       child: Text(
                         "Name",
-                        style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
                     ),
                   ),
@@ -95,7 +101,10 @@ class _ActionHistoryState extends State<ActionHistory> {
                   child: Container(
                     child: Text(
                       "Status",
-                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
                     ),
                   ),
                 ),
@@ -125,23 +134,26 @@ class _ActionHistoryState extends State<ActionHistory> {
               );
             },
           ),
-          SizedBox(height: 40,),
-
+          SizedBox(
+            height: 40,
+          ),
           Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(child: Row(
+                  Container(
+                      child: Row(
                     children: [
                       Text("Approved"),
-                      SizedBox(width: 2,),
+                      SizedBox(
+                        width: 2,
+                      ),
                       Container(
                         height: 20,
                         width: 20,
                         decoration: BoxDecoration(
-                            color: Colors.green ,
-                            shape: BoxShape.circle),
+                            color: Colors.green, shape: BoxShape.circle),
                       ),
                     ],
                   )),
@@ -149,13 +161,14 @@ class _ActionHistoryState extends State<ActionHistory> {
                     child: Row(
                       children: [
                         Text("Rejected"),
-                        SizedBox(width: 2,),
+                        SizedBox(
+                          width: 2,
+                        ),
                         Container(
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
-                              color: Colors.red ,
-                              shape: BoxShape.circle),
+                              color: Colors.red, shape: BoxShape.circle),
                         ),
                       ],
                     ),
@@ -164,58 +177,63 @@ class _ActionHistoryState extends State<ActionHistory> {
                     child: Row(
                       children: [
                         Text("In Progress"),
-                        SizedBox(width: 2,),
+                        SizedBox(
+                          width: 2,
+                        ),
                         Container(
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
-                              color: Colors.orange ,
-                              shape: BoxShape.circle),
+                              color: Colors.orange, shape: BoxShape.circle),
                         ),
                       ],
                     ),
                   ),
-
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(child: Row(
+                  Container(
+                      child: Row(
                     children: [
                       Text("Transferred"),
-                      SizedBox(width: 2,),
+                      SizedBox(
+                        width: 2,
+                      ),
                       Container(
                         height: 20,
                         width: 20,
                         decoration: BoxDecoration(
-                            color: Colors.purple ,
-                            shape: BoxShape.circle),
+                            color: Colors.purple, shape: BoxShape.circle),
                       ),
                     ],
                   )),
-                  SizedBox(width: 35,),
+                  SizedBox(
+                    width: 35,
+                  ),
                   Container(
                     child: Row(
                       children: [
                         Text("Closed"),
-                        SizedBox(width: 2,),
+                        SizedBox(
+                          width: 2,
+                        ),
                         Container(
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
-                              color: Colors.lightGreenAccent ,
+                              color: Colors.lightGreenAccent,
                               shape: BoxShape.circle),
                         ),
                       ],
                     ),
                   ),
-
                 ],
               ),
-
-
             ],
           )
         ],
@@ -223,7 +241,7 @@ class _ActionHistoryState extends State<ActionHistory> {
     );
   }
 
-  widgetRow(String role, String name, String  status, String Actiondate) {
+  widgetRow(String role, String name, String status, String Actiondate) {
     return Container(
       padding: EdgeInsets.all(5),
       child: Row(
@@ -261,7 +279,7 @@ class _ActionHistoryState extends State<ActionHistory> {
               height: 20,
               width: 20,
               decoration: BoxDecoration(
-                  color: getColorViaStatus(status,name) ,
+                  color: getColorViaStatus(status, name),
                   shape: BoxShape.circle),
             ),
           ),
@@ -279,33 +297,24 @@ class _ActionHistoryState extends State<ActionHistory> {
     );
   }
 
-  getColorViaStatus(String status, String name){
-
-    if(name != ""){
-
-
-    if(status=="1"){
-      return Colors.green;
+  getColorViaStatus(String status, String name) {
+    if (name != "") {
+      if (status == "1") {
+        return Colors.green;
+      } else if (status == "2") {
+        return Colors.orange;
+      } else if (status == "3") {
+        return Colors.lightGreenAccent;
+      } else if (status == "4") {
+        return Colors.green;
+      } else if (status == "6") {
+        return Colors.purple;
+      } else if (status == "5") {
+        return Colors.red;
+      } else {
+        return Colors.orange;
+      }
     }
-   else if(status=="2"){
-      return Colors.orange;
-    }
-  else  if(status=="3"){
-      return Colors.lightGreenAccent;
-    }
-  else   if(status=="4"){
-      return Colors.green;
-    }
-  else if(status=="6"){
-      return Colors.purple;
-    }
-    else if(status=="5"){
-      return Colors.red;
-    }else{
-      return Colors.orange;
-    }
-    }
-
   }
 
   getList(i, values) {
@@ -329,7 +338,7 @@ class _ActionHistoryState extends State<ActionHistory> {
       return widgetRow(
           "Client Executive Lead",
           values[i].clientExecutiveLeadName,
-         values[i].clientExecutiveLeadStatus,
+          values[i].clientExecutiveLeadStatus,
           " ");
     }
   }

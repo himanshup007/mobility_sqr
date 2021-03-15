@@ -40,16 +40,19 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return MaterialApp(
       title: 'Mobility SQR',
       debugShowCheckedModeBanner: false,
+
       theme:
       ThemeData(
         // highlightColor: Color(0xffffc600),
         unselectedWidgetColor: AppConstants.APP_THEME_COLOR,
+
         appBarTheme: AppBarTheme(
           elevation: 10,
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
       routes: {

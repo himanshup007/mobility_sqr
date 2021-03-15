@@ -10,7 +10,9 @@ import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/Credential.dart';
 import 'package:mobility_sqr/ModelClasses/DragDropModel.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
+import 'package:mobility_sqr/Screens/SOS/SOS.dart';
 import 'package:mobility_sqr/Util/UtilClass.dart';
+import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/ApiCall/Repository.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
@@ -178,6 +180,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -195,12 +198,17 @@ class _DashboardState extends State<Dashboard> {
           centerTitle: false,
           iconTheme: IconThemeData(color: Colors.black),
           actions: [
-            Container(
-              height: 30,
-              width: 30,
-              child: Image.asset(
-                'assets/images/sos.png',
-                fit: BoxFit.contain,
+            GestureDetector(
+              onTap: (){
+                showCustomDialogCityClass(context,SOS(),50.0.h);
+              },
+              child: Container(
+                height: 30,
+                width: 30,
+                child: Image.asset(
+                  'assets/images/sos.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             SizedBox(

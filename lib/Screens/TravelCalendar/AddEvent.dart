@@ -259,7 +259,7 @@ key: _scaffoldKey,
                           onclose: () {
                             Navigator.of(context, rootNavigator: true).pop();
                           },
-                        ));
+                        ),100.0.h);
                   }),
                   CustomEventWidget(_postjson.activity, 'Select Activities',
                       Icons.arrow_drop_down_sharp, context, onTap: () {
@@ -277,7 +277,7 @@ key: _scaffoldKey,
 
                             Navigator.of(context, rootNavigator: true).pop();
                           },
-                        ));
+                        ),100.0.h);
                   }),
                   SizedBox(
                     height: 40,

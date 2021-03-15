@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:country_pickers/country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
@@ -7,9 +8,9 @@ import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:sizer/sizer.dart';
-import 'package:currency_pickers/country.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:currency_pickers/currency_pickers.dart';
+
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
 import 'package:intl/intl.dart';
 class ApproxTravelCost extends StatefulWidget {

@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:sizer/sizer.dart';
-import 'package:currency_pickers/country.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:currency_pickers/currency_pickers.dart';
+
 import 'package:mobility_sqr/ModelClasses/AddReqPayLoad.dart';
 
 class CurrencyClass extends StatefulWidget {

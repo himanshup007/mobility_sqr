@@ -49,7 +49,7 @@ import 'package:sizer/sizer.dart';
         );
       });
 }
-showCustomDialogCityClass(BuildContext context, Widget mywidget) {
+showCustomDialogCityClass(BuildContext context, Widget mywidget,double mheight) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -62,7 +62,7 @@ showCustomDialogCityClass(BuildContext context, Widget mywidget) {
             fit: BoxFit.fill,
             child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
-                width: 100.0.w,height: 100.0.h,
+                width: 100.0.w,height: mheight,
                 child: mywidget
             ),
           ),
