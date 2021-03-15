@@ -58,6 +58,9 @@ dependencies:
   folding_cell: ^1.0.0
   circular_countdown_timer: ^0.1.0
   url_launcher: ^6.0.2
+  location: ^2.3.5
+  geocoder: ^0.1.2
+  telephony: ^0.1.0
 
 
 

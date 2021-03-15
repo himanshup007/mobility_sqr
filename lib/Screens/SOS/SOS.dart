@@ -1,7 +1,10 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:clay_containers/clay_containers.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:location/location.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:telephony/telephony.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -13,12 +16,29 @@ class SOS extends StatefulWidget {
 class _SOSState extends State<SOS> {
   CountDownController _controller = CountDownController();
 
+  final Telephony telephony = Telephony.instance;
+  String location="";
 
+  final SmsSendStatusListener listener = (SendStatus status) {
+
+  };
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //_controller.start();
+    askPermissions();
+   location = _getLocation();
+
+
+  }
+
+  askPermissions() async {
+    bool permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
+    if(permissionsGranted){
+      print("Permission granted");
+    }else{
+      askPermissions();
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -103,6 +123,12 @@ class _SOSState extends State<SOS> {
                 onComplete: () {
                   // Here, do whatever you want
                  _makePhoneCall('tel:8505957287');
+                 telephony.sendSms(
+                     to: "8505957287",
+                     message: location,
+                     statusListener: listener
+                 );
+
                 },
               ),
               ),
@@ -112,6 +138,8 @@ class _SOSState extends State<SOS> {
       ),
     );
   }
+
+
 }
 
 
@@ -120,5 +148,34 @@ Future<void> _makePhoneCall(String url) async {
     await launch(url);
   } else {
     throw 'Could not launch $url';
+  }
+}
+_getLocation() async {
+  LocationData currentLocation;
+
+  var location = new Location();
+  try {
+    currentLocation = await location.getLocation();
+
+    double lat = currentLocation.latitude;
+    double lng = currentLocation.longitude;
+    // final response = await http.post(
+    //     "http://192.168.1.107/sahyog/views/sahyogflutter/helper/demo/geocode.php",
+    //     body: {
+    //       "lat": lat.toString(),
+    //       "lng": lng.toString(),
+    //       "action": "geo_loc",
+    //     });
+    // Map<String, dynamic> _data = jsonDecode(response.body);
+    final coordinates = new Coordinates(lat, lng);
+    var addresses =
+    await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first = addresses.first;
+    print("${first.featureName} : ${first.addressLine}");
+
+    return "${first.featureName} : ${first.addressLine}";
+  } catch (e) {
+    print("error");
+    print(e);
   }
 }

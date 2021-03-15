@@ -49,6 +49,10 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSFaceIDUsageDescription</key>
-    	<string>Sign In</string>
+	<string>Sign In</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>For SOS</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>For SOS</string>
 </dict>
 </plist>
