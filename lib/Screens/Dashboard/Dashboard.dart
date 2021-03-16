@@ -214,7 +214,7 @@ class _DashboardState extends State<Dashboard> {
             SizedBox(
               width: 40,
             ),
-            GetNotificationIcon(),
+            GetNotificationIcon(context),
           ],
         ),
         drawer: Drawer(

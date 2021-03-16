@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:folding_cell/folding_cell/widget.dart';
+import 'package:get/get.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/PassportModel.dart';
 import 'package:mobility_sqr/ModelClasses/VisaModel.dart';
@@ -44,39 +45,45 @@ class _VisaScreenState extends State<VisaScreen> {
             SizedBox(
               width: 40,
             ),
-            GetNotificationIcon(),
+            GetNotificationIcon(context),
           ],
         ),
-
         body: Container(
           color: Colors.white,
           height: 100.0.h,
           alignment: Alignment.topCenter,
           child: Stack(
             children: [
-                  ListView.builder(
-                  itemBuilder: (context, index) =>
-                      _renderContainer("key$index", index),
-                  itemCount: widget.visaDetaillist.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true),
+              Container(
+                height: Get.height,
+                child: ListView.builder(
+                    itemBuilder: (context, index) =>
+                        _renderContainer("key$index", index),
+                    itemCount: widget.visaDetaillist.length,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true),
+              ),
               Positioned(
-                bottom: 0,right: 0,
+                bottom: 0,
+                right: 0,
                 left: 0,
                 child: Container(
                   height: 60,
                   color: AppConstants.APP_THEME_COLOR,
                   child: RaisedButton(
                     color: AppConstants.APP_THEME_COLOR,
-                    child: Text(" Add New",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.white),),
-
-                    onPressed:() {
-
-                    },
+                    child: Text(
+                      " Add New",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                    onPressed: () {},
                   ),
                 ),
               )
-                ],
+            ],
           ),
         ),
       ),
@@ -102,8 +109,7 @@ class _VisaScreenState extends State<VisaScreen> {
     );
   }
 
-  Widget _buildFrontWidget(
-      mykey, List<VisaDetail> visaDetaillist, int index) {
+  Widget _buildFrontWidget(mykey, List<VisaDetail> visaDetaillist, int index) {
     return GestureDetector(
       onTap: () {
         mykey?.currentState?.toggleFold();
@@ -141,7 +147,8 @@ class _VisaScreenState extends State<VisaScreen> {
                         color: Colors.deepPurpleAccent,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
                         child: AutoSizeText(
                           "${visaDetaillist[index].countryCode.toUpperCase()}",
                           maxFontSize: 12,
@@ -201,7 +208,9 @@ class _VisaScreenState extends State<VisaScreen> {
           "${passportDetaillist.documentNumber}",
           style: _textStyle,
         ),
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 5,
+        ),
         Text(
           "Valid Through",
           style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w500),
@@ -217,8 +226,7 @@ class _VisaScreenState extends State<VisaScreen> {
   }
 
 // onPressed: () => _foldingCellKey?.currentState?.toggleFold(),
-  Widget _buildInnerWidget(
-      mykey, List<VisaDetail> visaDetaillist, int index) {
+  Widget _buildInnerWidget(mykey, List<VisaDetail> visaDetaillist, int index) {
     return Container(
       color: Color(0xFFecf2f9),
       padding: EdgeInsets.only(top: 10),
@@ -226,8 +234,10 @@ class _VisaScreenState extends State<VisaScreen> {
         children: [
           Align(
             alignment: Alignment.center,
-            child:  visaDetaillist[index].attachmentId!=""?Image.network(
-                '${AppConstants.BASE_URL + visaDetaillist[index].attachmentId}'):Text("No file Found"),
+            child: visaDetaillist[index].attachmentId != ""
+                ? Image.network(
+                    '${AppConstants.BASE_URL + visaDetaillist[index].attachmentId}')
+                : Text("No file Found"),
           ),
           Positioned(
             top: 0,

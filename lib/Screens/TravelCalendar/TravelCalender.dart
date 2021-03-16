@@ -57,6 +57,8 @@ class _TravelCalenderState extends State<TravelCalender>
             .get_Calender_Event(empCode: empCode)
             .then((value) => setCalendarValue(value));
       }
+
+
     } catch (e) {
       print(e);
     }
@@ -66,7 +68,12 @@ class _TravelCalenderState extends State<TravelCalender>
     var extracted_events = await getTask1(events.data.reversed.toList());
 
     this.setState(() {
+
       _events.addAll(extracted_events);
+
+DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
+      _selectedEvents = _events[mydate] ?? [];
+
     });
   }
 
@@ -364,60 +371,77 @@ class _TravelCalenderState extends State<TravelCalender>
                                           ),
                                           Container(
                                             margin: EdgeInsets.symmetric(
-                                                horizontal:30, vertical: 10),
+                                                horizontal:5.0.w, vertical: 10),
                                             child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.spaceBetween,
+
                                                 children: [
-                                                  Text(
-                                                    'Activity',
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w700),
+                                                  SizedBox(
+                                                    width: 20.0.w,
+                                                    child: Text(
+                                                      'Activity',textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
                                                   ),
-                                                  Text(
-                                                    "Location",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
+                                                  SizedBox(   width: 20.0.w,
+                                                    child: Text(
+                                                      "Location",
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ),
+                                                  SizedBox(   width: 20.0.w,
+
+                                                    child: Text("Edit",     textAlign: TextAlign.end,style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w700),
+                                                        FontWeight.w700),),
                                                   ),
-                                                  Text("Edit",style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                      FontWeight.w700),),
                                                 ]),
                                           ),
                                           Container(
                                             margin: EdgeInsets.symmetric(
-                                                horizontal: 15,vertical: 10),
+                                                horizontal: 5.0.w,vertical: 10),
                                             child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
+                                                    MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  AutoSizeText(
-                                                    '${_selectedEvents[index].activity}',
-                                                    minFontSize: 14,
-                                                    maxFontSize: 14,maxLines: 1,
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400),
+                                                  SizedBox(
+                                                    width: 20.0.w,
+                                                    child: AutoSizeText(
+                                                      '${_selectedEvents[index].activity.toString().contains("Holiday")?  "Holiday":_selectedEvents[index].activity}',maxLines: 1,
+                                                      minFontSize: 14,
+                                                      textAlign: TextAlign.center,
+                                                      maxFontSize: 14,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
                                                   ),
-                                                  SizedBox(),
-                                                  Text(
-                                                    "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w400),
+
+                                                  SizedBox(
+                                                    width: 35.0.w,
+                                                    child: Text(
+                                                      "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}", textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14,
+
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
                                                   ),
                                                   GestureDetector(
                                                     onTap: () async {
@@ -429,7 +453,11 @@ class _TravelCalenderState extends State<TravelCalender>
 
                                                       setCalendarValue(result);
                                                     },
-                                                    child: Icon(Icons.edit),
+                                                    child: SizedBox(
+                                                        width: 20.0.w,
+                                                        child: Align(
+                                                            alignment: Alignment.centerRight,
+                                                            child: Icon(Icons.edit))),
                                                   ),
                                                 ]),
                                           ),
@@ -437,29 +465,37 @@ class _TravelCalenderState extends State<TravelCalender>
                                       )
                                     :  Container(
                                   margin: EdgeInsets.symmetric(
-                                      horizontal: 20,vertical: 10),
+                                      horizontal: 5.0.w,vertical: 10),
+
                                   child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
-                                        AutoSizeText(
-                                          '${_selectedEvents[index].activity.toString().contains("Holiday")?  "Holiday":_selectedEvents[index].activity}',maxLines: 1,
-                                          maxFontSize: 14,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
+                                        SizedBox(
+                                          width:20.0.w,
+                                          child: AutoSizeText(
+                                            '${_selectedEvents[index].activity.toString().contains("Holiday")?  "Holiday":_selectedEvents[index].activity}',maxLines: 1,
+                                            maxFontSize: 14,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
 
-                                              fontWeight:
-                                              FontWeight.w400),
+                                                fontWeight:
+                                                FontWeight.w400),
+                                          ),
                                         ),
-                                        SizedBox(),
-                                        Text(
-                                          "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight:
-                                              FontWeight.w400),
+
+                                        SizedBox(
+                                          width: 35.0.w,
+                                          child: Text(
+                                            "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",   textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight:
+                                                FontWeight.w400),
+                                          ),
                                         ),
                                         GestureDetector(
                                           onTap: () async {
@@ -471,7 +507,11 @@ class _TravelCalenderState extends State<TravelCalender>
 
                                             setCalendarValue(result);
                                           },
-                                          child: Icon(Icons.edit),
+                                          child: SizedBox(
+                                              width: 20.0.w,
+                                              child: Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: Icon(Icons.edit))),
                                         ),
                                       ]),
                                 );
@@ -516,6 +556,8 @@ class _TravelCalenderState extends State<TravelCalender>
       calendarController: _calendarController,
       events: _events,
       holidays: _holidays,
+      initialSelectedDay: null,
+
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,

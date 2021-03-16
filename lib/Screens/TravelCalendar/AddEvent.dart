@@ -24,8 +24,9 @@ import 'package:sizer/sizer.dart';
 class AddEvent extends StatefulWidget {
 
   CalendarEvent event= CalendarEvent();
-  AddEvent({event}){
-    this.event=event;
+  DateTime day;
+  AddEvent({event,DateTime day}){
+    this.event=event;this.day=day;
   }
   @override
   _AddEventState createState() => _AddEventState();

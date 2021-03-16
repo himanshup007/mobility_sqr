@@ -16,6 +16,7 @@ import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
+import 'package:mobility_sqr/ModelClasses/NotificationModel.dart';
 import 'package:mobility_sqr/ModelClasses/PassportModel.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
@@ -695,7 +696,6 @@ class ApiProvider {
             id.toString() +
             "/",
         headers: {"Content-Type": "application/json"},
-
         body: body);
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -704,13 +704,9 @@ class ApiProvider {
     return calenderEventResponseModel;
   }
 
-
-
   //======================================================================================================================
 
-
-  Future<PassportModel> get_employee_passport(
-      {String empCode}) async {
+  Future<PassportModel> get_employee_passport({String empCode}) async {
     Map<String, String> queryParams = {"employee": empCode};
     String queryString = Uri(queryParameters: queryParams).query;
     //encode Map to JSON
@@ -720,24 +716,21 @@ class ApiProvider {
           AppConstants.GET_EMPLOYEE_PASSPORT +
           "?" +
           queryString,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ${token}',
-        },
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
     );
     PassportModel passportModel =
-    PassportModel.fromJson(jsonDecode(response.body));
+        PassportModel.fromJson(jsonDecode(response.body));
     print("${response.statusCode}");
     print("${response.body}");
     return passportModel;
   }
 
-
-
   //========================================================================================================================
-  Future<VisaModel> get_employee_visa(
-      {String empCode}) async {
+  Future<VisaModel> get_employee_visa({String empCode}) async {
     Map<String, String> queryParams = {"employee": empCode};
     String queryString = Uri(queryParameters: queryParams).query;
     //encode Map to JSON
@@ -753,11 +746,78 @@ class ApiProvider {
         'Authorization': 'Bearer ${token}',
       },
     );
-    VisaModel visaModel =
-    VisaModel.fromJson(jsonDecode(response.body));
+    VisaModel visaModel = VisaModel.fromJson(jsonDecode(response.body));
     print("${response.statusCode}");
     print("${response.body}");
     return visaModel;
   }
 
+  //=================================================================================================================
+  Future<NotificationModel> get_notifcations() async {
+
+
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+
+    Map<String, String> queryParams = {"email": userInfo.data.empCode,"org_id":userInfo.data.orgId};
+    String queryString = Uri(queryParameters: queryParams).query;
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var response = await http.get(
+      AppConstants.BASE_URL +
+          AppConstants.GET_EMPLOYEE_NOTIFICATIONS +
+          "?" +
+          queryString,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+    NotificationModel notificationModel = NotificationModel();
+    if (response.statusCode == 200) {
+      notificationModel = NotificationModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Error();
+    }
+
+    return notificationModel;
+  }
+
+//=============================================================================================
+  Future<bool> delete_notification({notiId}) async {
+
+
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+
+    Map data = {"email": userInfo.data.empCode,"id":notiId};
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var response = await http.post(
+      AppConstants.BASE_URL +
+          AppConstants.GET_EMPLOYEE_NOTIFICATIONS ,
+
+
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+
+      },
+        body:body,
+    );
+
+    if(response.body != null&&response.statusCode==201){
+
+      print("true");
+      return true;
+    }else{
+      print("false");
+      return false;
+    }
+
+
+  }
 }

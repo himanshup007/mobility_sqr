@@ -17,6 +17,17 @@ getPassportimeformat(String date) {
   final String datestring = DateFormat("dd/MMM/yy").format(depatureDate);
   return datestring;
 }
+
+getNotifcationDateUpper(String date){
+  final depatureDate = DateTime.parse(date).toLocal();
+  final String datestring = DateFormat("MMM dd").format(depatureDate);
+  return datestring;
+}
+getNotifcationDateLower(String date){
+  final depatureDate = DateTime.parse(date).toLocal();
+  final String datestring = DateFormat("yyyy").format(depatureDate);
+  return datestring;
+}
 getDepartureEventFormat(String date) {
   if(date==null){
     return  "";

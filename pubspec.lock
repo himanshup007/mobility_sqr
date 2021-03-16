@@ -223,6 +223,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.11"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.7"
   flutter_staggered_animations:
     dependency: "direct main"
     description:
@@ -254,13 +261,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  geocoder:
+  get:
     dependency: "direct main"
     description:
-      name: geocoder
+      name: get
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2"
+    version: "3.26.0"
   graphs:
     dependency: transitive
     description:
@@ -553,13 +560,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  telephony:
-    dependency: "direct main"
-    description:
-      name: telephony
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   term_glyph:
     dependency: transitive
     description:

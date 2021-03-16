@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/SuccesfullyAdded.dart';
@@ -7,6 +8,7 @@ import 'package:mobility_sqr/Screens/Approvals/ApprovalsScreen.dart';
 
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
+import 'package:mobility_sqr/Screens/Notification/NotificationScreen.dart';
 import 'package:mobility_sqr/Screens/Profile/Personal_info/Personal_Info_Screen.dart';
 import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 import 'package:mobility_sqr/Screens/PurposeScreen/PurposeScreen.dart';
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Mobility SQR',
       debugShowCheckedModeBanner: false,
 
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
 
         appBarTheme: AppBarTheme(
           elevation: 10,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
       routes: {
@@ -76,6 +78,7 @@ class MyApp extends StatelessWidget {
         '/AddEvent':(context) =>AddEvent(),
         '/Username_Screen':(context) =>Username_Screen(),
         '/VaultScreen':(context) => VaultScreen(),
+        '/NotificationScreen':(context)=>NotificationScreen()
 
 
       },

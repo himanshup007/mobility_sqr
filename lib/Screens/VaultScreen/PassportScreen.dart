@@ -49,7 +49,7 @@ class _PassportScreenState extends State<PassportScreen> {
           SizedBox(
             width: 40,
           ),
-          GetNotificationIcon(),
+          GetNotificationIcon(context),
         ],
       ),
       body: Container(

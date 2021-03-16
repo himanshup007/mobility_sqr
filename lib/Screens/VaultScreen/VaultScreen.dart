@@ -109,7 +109,7 @@ class _VaultScreenState extends State<VaultScreen> {
           SizedBox(
             width: 40,
           ),
-          GetNotificationIcon(),
+          GetNotificationIcon(context),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

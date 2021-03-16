@@ -277,7 +277,7 @@ class _AddCity extends State<AddCity> {
             ),
           ),
         ),
-        actions: [GetNotificationIcon()],
+        actions: [GetNotificationIcon(context)],
         centerTitle: true,
         iconTheme: IconThemeData(color: AppConstants.TEXT_BACKGROUND_COLOR),
       ),

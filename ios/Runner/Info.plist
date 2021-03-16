@@ -54,5 +54,7 @@
 	<string>For SOS</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>For SOS</string>
+	<key>NSContactsUsageDescription</key>
+	<string>For SOS</string>
 </dict>
 </plist>

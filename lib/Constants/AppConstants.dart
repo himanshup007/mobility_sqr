@@ -34,6 +34,7 @@ class AppConstants {
   static final String UPDATE_CALENDER_EVENT = "/delete_update_calender_event/";
   static final String GET_EMPLOYEE_PASSPORT = "/getemployee_passport_info/";
   static final String GET_EMPLOYEE_VISA = "/getemployee_visa_info/";
+  static final String GET_EMPLOYEE_NOTIFICATIONS = "/get_post_notification/";
 
 
 
