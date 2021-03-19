@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/ModelClasses/UserProfileModel.dart';
+import 'package:mobility_sqr/Util/UtilClass.dart';
+import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:sizer/sizer.dart';
 
 class PersonalInfo extends StatefulWidget {
@@ -9,18 +14,46 @@ class PersonalInfo extends StatefulWidget {
 
 class _PersonalInfoState extends State<PersonalInfo> {
   bool iseditable = false;
+  ScrollController _scrollController = ScrollController();
+ApiProvider _apiProvider =ApiProvider();
+  UserProfile _userProfile=UserProfile();
+  bool showhideloader=true;
 
   @override
+  void initState() {
+    super.initState();
+
+    _apiProvider.get_user_profile().then((value) => this.setState(() {
+      _userProfile=value.data[0];
+      showhideloader=false;
+    })).onError((error, stackTrace) => this.setState(() {
+      showhideloader=false;
+    }));
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+
+
+      _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.ease);
+
+    });
+
+  }
+  @override
   Widget build(BuildContext context) {
+
     return SafeArea(
      // bottom: true,
       top: false,
+      bottom: false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white38,
-          elevation: 0,
+          backgroundColor: Colors.white,
+
           title:
               Text("Personal Information", style: TextStyle(color: Colors.black)),
           centerTitle: true,
@@ -47,20 +80,35 @@ class _PersonalInfoState extends State<PersonalInfo> {
         ),
         body: Container(
           height: 100.0.h,
+          margin: EdgeInsets.only(top: 10),
           child: Stack(
             children: [
-              ListView(
-                shrinkWrap: true,
-                children: [
-                  ColumnWidget('First Name', 'Enter First Name', iseditable, false),
-                  ColumnWidget('Middle Name', 'Enter Middle Name', iseditable, false),
-                  ColumnWidget('Last Name', 'Enter Last Name', iseditable, false),
-                  ColumnWidget('Phone Number', 'Enter Phone Number', iseditable, false),
-                  ColumnWidget('Email Address', 'Enter Email Address', iseditable, false),
-                  ColumnWidget('Country of Birth', 'Select Country of Birth',false, true),
-                  ColumnWidget('Maratial Status', 'Select Maratial Status', false, true),
-                  ColumnWidget('Nationality', 'Select Nationality', false, true),
-                ],
+              Container(
+                height: Get.height*0.8,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  reverse: true,
+                  child: Column(
+                    children: [
+                      ColumnWidget('User Name', 'Enter User Name', iseditable, false,myText: _userProfile.userName,),
+                      ColumnWidget('Business Email', 'Enter Business Email', iseditable, false,myText: _userProfile.email,),
+                      ColumnWidget('First Name', 'Enter First Name', iseditable, false,myText: _userProfile.firstName,),
+                      ColumnWidget('Middle Name', 'Enter Middle Name', iseditable, false,myText: _userProfile.middleName,),
+                      ColumnWidget('Last Name', 'Enter Last Name', iseditable, false,myText: _userProfile.lastName,),
+                      ColumnWidget('Date of Joining', 'Enter Date', iseditable, true,icon: Icons.calendar_today_rounded,myText:_userProfile.dateCreated!=null?getDepartureTime(_userProfile.dateCreated):"",),
+                      ColumnWidget('Email Address', 'Enter Email Address', iseditable, false,myText: _userProfile.email,),
+                      ColumnWidget('Country of Birth', 'Select Country of Birth',iseditable, true,myText: _userProfile.countryOfBirth!=null?_userProfile.countryOfBirth:"",),
+                      ColumnWidget('Marital Status', 'Select Marital Status', iseditable, true,myText: _userProfile.maritalStatus,),
+                      ColumnWidget('Date of Birth', 'Enter Date', iseditable, true,icon: Icons.calendar_today_rounded,myText: _userProfile.dob!=null?getDepartureTime(_userProfile.dob):"",),
+                      ColumnWidget('Nationality', 'Select Nationality', iseditable, true,myText: _userProfile.nationality,),
+                      ColumnWidget('Supervisor', 'Search...', iseditable, false,myText: _userProfile.supervisorName,),
+
+                  Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom))
+                    ],
+                  ),
+                ),
               ),
 
               Positioned(
@@ -90,6 +138,12 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   ),
                 ),
               ),
+
+              Container(
+
+                width: Get.height,
+                child: showMobilityLoader(showhideloader, Colors.transparent),
+              )
             ],
 
           ),
@@ -105,19 +159,25 @@ class _PersonalInfoState extends State<PersonalInfo> {
 }
 
 class ColumnWidget extends StatelessWidget {
-  VoidCallback onTap;
+   VoidCallback onTap;
 
-  ColumnWidget(this.label, this.hint, this.iseditable, this.showDropdown
+  ColumnWidget(this.label, this.hint, this.iseditable, this.showDropdown ,{this.icon,this.myText}
       //{@required this.onTap}
       );
-
+  String myText;
+  IconData icon;
   final String label;
   final bool iseditable;
   final bool showDropdown;
   final dynamic hint;
+  TextEditingController _textEditingController= TextEditingController();
+
+
 
   @override
   Widget build(BuildContext context) {
+
+    _textEditingController.text=myText;
     return Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 15),
       child: Column(
@@ -133,7 +193,10 @@ class ColumnWidget extends StatelessWidget {
                     fontSize: 15.0),
               )),
           //SizedBox(height: 5),
-          TextField(
+          TextFormField(
+
+            controller: _textEditingController,
+
             style: TextStyle(
               fontSize: 16.0,
               height: 1.0,
@@ -143,8 +206,11 @@ class ColumnWidget extends StatelessWidget {
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
                 suffixIcon: showDropdown
-                    ? Icon(
+                    ? icon!=null?Icon( icon,
+                  color: iseditable?AppConstants.APP_THEME_COLOR:Colors.grey,
+                  size: 25,):Icon(
                         Icons.arrow_drop_down,
+                       color: iseditable?AppConstants.APP_THEME_COLOR:Colors.grey,
                         size: 25,
                       )
                     : null,

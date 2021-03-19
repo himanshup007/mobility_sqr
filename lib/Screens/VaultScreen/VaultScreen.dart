@@ -11,8 +11,8 @@ import 'package:mobility_sqr/ModelClasses/VisaModel.dart';
 import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:mobility_sqr/Screens/VaultScreen/PassportScreen.dart';
-import 'package:mobility_sqr/Screens/VaultScreen/VisaScreen.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/Screens/PassportScreen.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/Screens/VisaScreen.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
@@ -87,13 +87,7 @@ class _VaultScreenState extends State<VaultScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: AppConstants.APP_THEME_COLOR,
-        onPressed: () {
-          addTab();
-        },
-      ),
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 10,
@@ -131,7 +125,7 @@ class _VaultScreenState extends State<VaultScreen> {
                             Expanded(
                               flex: 4,
                               child: tabWidget(
-                                  'assets/images/passport.png', "Passport",
+                                  'assets/images/passport.png', "Passport             ",
                                   onClick: () {
                                 Navigator.push(
                                   context,
@@ -145,7 +139,7 @@ class _VaultScreenState extends State<VaultScreen> {
                             Expanded(
                               flex: 4,
                               child:
-                                  tabWidget('assets/images/visa.png', "Visa",onClick: (){
+                                  tabWidget('assets/images/visa.png', "Visa                                  ",onClick: (){
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -165,13 +159,13 @@ class _VaultScreenState extends State<VaultScreen> {
                           Expanded(
                             flex: 4,
                             child: tabWidget('assets/images/resident_card.png',
-                                "Residance Card"),
+                                "Residence Card             "),
                           ),
                           Expanded(flex: 1, child: SizedBox()),
                           Expanded(
                             flex: 4,
                             child: tabWidget('assets/images/medical_card.png',
-                                "Medical Card"),
+                                "Medical Card             "),
                           ),
                         ],
                       ),
@@ -183,7 +177,7 @@ class _VaultScreenState extends State<VaultScreen> {
                           Expanded(
                             flex: 4,
                             child: tabWidget(
-                                'assets/images/other_cards.png', "Other Cards"),
+                                'assets/images/national_id_tile.png', "National ID               "),
                           ),
                           Expanded(flex: 1, child: SizedBox()),
                           Expanded(
@@ -200,11 +194,16 @@ class _VaultScreenState extends State<VaultScreen> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 5,
+                            flex: 4,
                             child: tabWidget('assets/images/invite_letters.png',
-                                "Invite Letters"),
+                                "Invite Letters     "),
+                          ), Expanded(flex: 1, child: SizedBox()),
+                          Expanded(flex: 4, child: tabWidget(
+                              'assets/images/other_cards.png',
+                              "Other Cards        ", onClick: () {
+
+                          }),
                           ),
-                          Expanded(flex: 6, child: SizedBox()),
                           // Expanded(
                           //   flex: 4,
                           //   child: tabWidget('assets/images/assignement_letters.png',"Assignment Letters"),
@@ -223,33 +222,7 @@ class _VaultScreenState extends State<VaultScreen> {
     );
   }
 
-  tabWidget(String image, String title, {VoidCallback onClick}) {
-    return GestureDetector(
-      onTap: () {
-        onClick();
-      },
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Image.asset(
-            image,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 15.0.w),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-                fontSize: 18,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+
 
   addTab() {
     showCustomDialogClass(
@@ -283,4 +256,31 @@ class _VaultScreenState extends State<VaultScreen> {
           ),
         ));
   }
+}
+tabWidget(String image, String title, {VoidCallback onClick}) {
+  return GestureDetector(
+    onTap: () {
+      onClick();
+    },
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        Image.asset(
+          image,
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 15.0.w,left: 10),
+          child: Text(
+            title,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+              fontSize: 18,
+            ),
+          ),
+        )
+      ],
+    ),
+  );
 }

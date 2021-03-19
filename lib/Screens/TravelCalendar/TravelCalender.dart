@@ -57,8 +57,6 @@ class _TravelCalenderState extends State<TravelCalender>
             .get_Calender_Event(empCode: empCode)
             .then((value) => setCalendarValue(value));
       }
-
-
     } catch (e) {
       print(e);
     }
@@ -68,12 +66,11 @@ class _TravelCalenderState extends State<TravelCalender>
     var extracted_events = await getTask1(events.data.reversed.toList());
 
     this.setState(() {
-
       _events.addAll(extracted_events);
 
-DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
+      DateTime mydate = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
       _selectedEvents = _events[mydate] ?? [];
-
     });
   }
 
@@ -371,16 +368,19 @@ DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now()
                                           ),
                                           Container(
                                             margin: EdgeInsets.symmetric(
-                                                horizontal:5.0.w, vertical: 10),
+                                                horizontal: 5.0.w,
+                                                vertical: 10),
                                             child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceBetween,
-
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   SizedBox(
                                                     width: 20.0.w,
                                                     child: Text(
-                                                      'Activity',textAlign: TextAlign.center,
+                                                      'Activity',
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 14,
@@ -388,10 +388,12 @@ DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now()
                                                               FontWeight.w700),
                                                     ),
                                                   ),
-                                                  SizedBox(   width: 20.0.w,
+                                                  SizedBox(
+                                                    width: 20.0.w,
                                                     child: Text(
                                                       "Location",
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 16,
@@ -399,29 +401,37 @@ DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now()
                                                               FontWeight.w700),
                                                     ),
                                                   ),
-                                                  SizedBox(   width: 20.0.w,
-
-                                                    child: Text("Edit",     textAlign: TextAlign.end,style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                        FontWeight.w700),),
+                                                  SizedBox(
+                                                    width: 20.0.w,
+                                                    child: Text(
+                                                      "Edit",
+                                                      textAlign: TextAlign.end,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
                                                   ),
                                                 ]),
                                           ),
                                           Container(
                                             margin: EdgeInsets.symmetric(
-                                                horizontal: 5.0.w,vertical: 10),
+                                                horizontal: 5.0.w,
+                                                vertical: 10),
                                             child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   SizedBox(
                                                     width: 20.0.w,
                                                     child: AutoSizeText(
-                                                      '${_selectedEvents[index].activity.toString().contains("Holiday")?  "Holiday":_selectedEvents[index].activity}',maxLines: 1,
+                                                      '${_selectedEvents[index].activity.toString().contains("Holiday") ? "Holiday" : _selectedEvents[index].activity}',
+                                                      maxLines: 1,
                                                       minFontSize: 14,
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       maxFontSize: 14,
                                                       style: TextStyle(
                                                           color: Colors.black,
@@ -430,25 +440,32 @@ DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now()
                                                               FontWeight.w400),
                                                     ),
                                                   ),
-
                                                   SizedBox(
                                                     width: 35.0.w,
                                                     child: Text(
-                                                      "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}", textAlign: TextAlign.center,
+                                                      "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 14,
-
                                                           fontWeight:
                                                               FontWeight.w400),
                                                     ),
                                                   ),
                                                   GestureDetector(
                                                     onTap: () async {
-                                                      final result = await Navigator.push(
+                                                      final result =
+                                                          await Navigator.push(
                                                         context,
                                                         // Create the SelectionScreen in the next step.
-                                                        MaterialPageRoute(builder: (context) => AddEvent(event: _selectedEvents[index],)),
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    AddEvent(
+                                                                      event: _selectedEvents[
+                                                                          index],
+                                                                    )),
                                                       );
 
                                                       setCalendarValue(result);
@@ -456,65 +473,77 @@ DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now()
                                                     child: SizedBox(
                                                         width: 20.0.w,
                                                         child: Align(
-                                                            alignment: Alignment.centerRight,
-                                                            child: Icon(Icons.edit))),
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: Icon(
+                                                                Icons.edit))),
                                                   ),
                                                 ]),
                                           ),
                                         ],
                                       )
-                                    :  Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 5.0.w,vertical: 10),
-
-                                  child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width:20.0.w,
-                                          child: AutoSizeText(
-                                            '${_selectedEvents[index].activity.toString().contains("Holiday")?  "Holiday":_selectedEvents[index].activity}',maxLines: 1,
-                                            maxFontSize: 14,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16,
-
-                                                fontWeight:
-                                                FontWeight.w400),
-                                          ),
-                                        ),
-
-                                        SizedBox(
-                                          width: 35.0.w,
-                                          child: Text(
-                                            "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",   textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight:
-                                                FontWeight.w400),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            final result = await Navigator.push(
-                                              context,
-                                              // Create the SelectionScreen in the next step.
-                                              MaterialPageRoute(builder: (context) => AddEvent(event: _selectedEvents[index],)),
-                                            );
-
-                                            setCalendarValue(result);
-                                          },
-                                          child: SizedBox(
-                                              width: 20.0.w,
-                                              child: Align(
-                                                  alignment: Alignment.centerRight,
-                                                  child: Icon(Icons.edit))),
-                                        ),
-                                      ]),
-                                );
+                                    :
+                                // Container(
+                                //         margin: EdgeInsets.symmetric(
+                                //             horizontal: 5.0.w, vertical: 10),
+                                //         child: Row(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.spaceBetween,
+                                //             children: [
+                                //               SizedBox(
+                                //                 width: 20.0.w,
+                                //                 child: AutoSizeText(
+                                //                   '${_selectedEvents[index].activity.toString().contains("Holiday") ? "Holiday" : _selectedEvents[index].activity}',
+                                //                   maxLines: 1,
+                                //                   maxFontSize: 14,
+                                //                   textAlign: TextAlign.center,
+                                //                   style: TextStyle(
+                                //                       color: Colors.black,
+                                //                       fontSize: 16,
+                                //                       fontWeight:
+                                //                           FontWeight.w400),
+                                //                 ),
+                                //               ),
+                                //               SizedBox(
+                                //                 width: 35.0.w,
+                                //                 child: Text(
+                                //                   "${_selectedEvents[index].cityName} / ${_selectedEvents[index].countryName}",
+                                //                   textAlign: TextAlign.center,
+                                //                   style: TextStyle(
+                                //                       color: Colors.black,
+                                //                       fontSize: 14,
+                                //                       fontWeight:
+                                //                           FontWeight.w400),
+                                //                 ),
+                                //               ),
+                                //               GestureDetector(
+                                //                 onTap: () async {
+                                //                   final result =
+                                //                       await Navigator.push(
+                                //                     context,
+                                //                     // Create the SelectionScreen in the next step.
+                                //                     MaterialPageRoute(
+                                //                         builder: (context) =>
+                                //                             AddEvent(
+                                //                               event:
+                                //                                   _selectedEvents[
+                                //                                       index],
+                                //                             )),
+                                //                   );
+                                //
+                                //                   setCalendarValue(result);
+                                //                 },
+                                //                 child: SizedBox(
+                                //                     width: 20.0.w,
+                                //                     child: Align(
+                                //                         alignment: Alignment
+                                //                             .centerRight,
+                                //                         child:
+                                //                             Icon(Icons.edit))),
+                                //               ),
+                                //             ]),
+                                //       );
+                                SizedBox(height: 0,width: 0,);
                               },
                             ),
                           );
@@ -557,7 +586,6 @@ DateTime mydate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now()
       events: _events,
       holidays: _holidays,
       initialSelectedDay: null,
-
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.sunday,

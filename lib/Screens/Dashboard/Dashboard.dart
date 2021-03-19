@@ -58,8 +58,10 @@ class _DashboardState extends State<Dashboard> {
     try {
       info = await widget._userInfo.readUserInfo() ?? null;
       if (info != null) {
+
+
         this.setState(() {
-          UserName = info.data.userName;
+          UserName = info.data.firstName;
           ProfileImage = AppConstants.BASE_URL + info.data.photo;
         });
       }
@@ -225,19 +227,22 @@ class _DashboardState extends State<Dashboard> {
                   child: Container(
                 child: Column(
                   children: <Widget>[
-                    Material(
-                      child: ProfileImage == null
-                          ? ImageIcon(
-                              AssetImage(
-                                'assets/images/myprofile_sidemenu_icon.png',
+                    Hero(
+                      tag: 'profile',
+                      child: Material(
+                        child: ProfileImage == null
+                            ? ImageIcon(
+                                AssetImage(
+                                  'assets/images/myprofile_sidemenu_icon.png',
+                                ),
+                                size: 80,
+                              )
+                            : CircleAvatar(
+                                radius: 40.0,
+                                backgroundImage: NetworkImage("${ProfileImage}"),
+                                backgroundColor: Colors.transparent,
                               ),
-                              size: 80,
-                            )
-                          : CircleAvatar(
-                              radius: 40.0,
-                              backgroundImage: NetworkImage("${ProfileImage}"),
-                              backgroundColor: Colors.transparent,
-                            ),
+                      ),
                     ),
                     Material(
                       child: Text(
@@ -253,7 +258,9 @@ class _DashboardState extends State<Dashboard> {
               )),
               CustomMenuTitle("assets/images/myprofile_sidemenu_icon.png",
                   'My Profile', context, OnTouch: () {
-                Navigator.pushNamed(context, '/Profile_Screen');
+                Navigator.pushNamed(context, '/Profile_Screen', arguments: {"image":ProfileImage,"name": '${info.data.firstName} ${info.data.lastName}',
+               'department': "${info.data.department}"
+                });
               }),
               CustomDivider(),
               CustomMenuTitle(

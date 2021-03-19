@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/NotificationManager/Notification.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/SuccesfullyAdded.dart';
 import 'package:mobility_sqr/Screens/Approvals/ApprovalsScreen.dart';
@@ -16,7 +17,7 @@ import 'package:mobility_sqr/Screens/SplashScreen/SplashScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 import 'package:mobility_sqr/Screens/TravelCalendar/AddEvent.dart';
 import 'package:mobility_sqr/Screens/TravelReqView/TravelReqView.dart';
-import 'package:mobility_sqr/Screens/VaultScreen/PassportScreen.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/Screens/PassportScreen.dart';
 import 'package:mobility_sqr/Screens/VaultScreen/VaultScreen.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
 import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
@@ -34,8 +35,26 @@ void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+
+
+class _MyAppState extends State<MyApp> {
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    NotificationManager.instance;
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

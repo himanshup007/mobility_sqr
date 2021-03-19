@@ -26,6 +26,8 @@ import 'package:mobility_sqr/ModelClasses/SubmitRequestFResponse.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestForApprovalModel.dart';
 import 'package:mobility_sqr/ModelClasses/TravelReqResponse.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfoPayload.dart';
+import 'package:mobility_sqr/ModelClasses/UserProfileModel.dart';
 import 'package:mobility_sqr/ModelClasses/UserToken.dart';
 import 'package:mobility_sqr/ModelClasses/VisaModel.dart';
 import 'package:mobility_sqr/ModelClasses/eventPost.dart';
@@ -754,11 +756,12 @@ class ApiProvider {
 
   //=================================================================================================================
   Future<NotificationModel> get_notifcations() async {
-
-
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
 
-    Map<String, String> queryParams = {"email": userInfo.data.empCode,"org_id":userInfo.data.orgId};
+    Map<String, String> queryParams = {
+      "email": userInfo.data.empCode,
+      "org_id": userInfo.data.orgId
+    };
     String queryString = Uri(queryParameters: queryParams).query;
     //encode Map to JSON
     String token = await getToken_byReresh();
@@ -785,39 +788,80 @@ class ApiProvider {
 
 //=============================================================================================
   Future<bool> delete_notification({notiId}) async {
-
-
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
 
-    Map data = {"email": userInfo.data.empCode,"id":notiId};
+    Map data = {"email": userInfo.data.empCode, "id": notiId};
     //encode Map to JSON
     var body = json.encode(data);
 
     //encode Map to JSON
     String token = await getToken_byReresh();
     var response = await http.post(
-      AppConstants.BASE_URL +
-          AppConstants.GET_EMPLOYEE_NOTIFICATIONS ,
-
-
+      AppConstants.BASE_URL + AppConstants.GET_EMPLOYEE_NOTIFICATIONS,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}',
-
       },
-        body:body,
+      body: body,
     );
 
-    if(response.body != null&&response.statusCode==201){
-
+    if (response.body != null && response.statusCode == 201) {
       print("true");
       return true;
-    }else{
+    } else {
       print("false");
       return false;
     }
+  }
 
+  //===========================================================================================
+  Future<UserProfileModel> get_user_profile() async {
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
 
+    Map<String, String> queryParams = {"employee": userInfo.data.empCode};
+    String queryString = Uri(queryParameters: queryParams).query;
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var response = await http.get(
+      AppConstants.BASE_URL +
+          AppConstants.GET_EMPLOYEE_PROFILE +
+          "?" +
+          queryString,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+    UserProfileModel userProfileModel = UserProfileModel();
+    if (response.statusCode == 200) {
+      userProfileModel = UserProfileModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Error();
+    }
+
+    return userProfileModel;
+  }
+
+  //=======================================================================================
+
+  Future<UserProfileModel> update_Profile(UserInfoPayload jsonModel) async {
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var body = json.encode(jsonModel.toJson());
+    var response = await http.post(
+        AppConstants.BASE_URL + AppConstants.POST_CALENDER_EVENT,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ${token}',
+          'Accept': 'application/json',
+        },
+        body: body);
+    UserProfileModel updatedModel;
+    if (response.statusCode != 500) {
+      updatedModel = UserProfileModel.fromJson(jsonDecode(response.body));
+    }
+    return updatedModel;
   }
 }
