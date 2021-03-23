@@ -36,7 +36,8 @@ class AppConstants {
   static final String GET_EMPLOYEE_VISA = "/getemployee_visa_info/";
   static final String GET_EMPLOYEE_NOTIFICATIONS = "/get_post_notification/";
   static final String GET_EMPLOYEE_PROFILE = "/getemployee_personal_info/";
-  static final String UPDATE_EMPLOYEE_PROFILE = "get_add/employee/";
+  static final String UPDATE_EMPLOYEE_PROFILE = "/get_add/employee/";
+  static final String POST_VAULT_DOCUMENT = "/get_post_vault_document/";
 
 
 

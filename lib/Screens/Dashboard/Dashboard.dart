@@ -58,8 +58,6 @@ class _DashboardState extends State<Dashboard> {
     try {
       info = await widget._userInfo.readUserInfo() ?? null;
       if (info != null) {
-
-
         this.setState(() {
           UserName = info.data.firstName;
           ProfileImage = AppConstants.BASE_URL + info.data.photo;
@@ -94,12 +92,12 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  getActivites()async {
-   await _appApiProvider
-        .getActivities().then((value) => saveActivity(value));
+  getActivites() async {
+    await _appApiProvider.getActivities().then((value) => saveActivity(value));
   }
+
   saveActivity(Activities data) async {
-  await widget._userInfo.saveActivites(data);
+    await widget._userInfo.saveActivites(data);
   }
 
   @override
@@ -182,7 +180,6 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -201,8 +198,8 @@ class _DashboardState extends State<Dashboard> {
           iconTheme: IconThemeData(color: Colors.black),
           actions: [
             GestureDetector(
-              onTap: (){
-                showCustomDialogCityClass(context,SOS(),50.0.h);
+              onTap: () {
+                showCustomDialogCityClass(context, SOS(), 50.0.h);
               },
               child: Container(
                 height: 30,
@@ -239,7 +236,8 @@ class _DashboardState extends State<Dashboard> {
                               )
                             : CircleAvatar(
                                 radius: 40.0,
-                                backgroundImage: NetworkImage("${ProfileImage}"),
+                                backgroundImage:
+                                    NetworkImage("${ProfileImage}"),
                                 backgroundColor: Colors.transparent,
                               ),
                       ),
@@ -257,10 +255,17 @@ class _DashboardState extends State<Dashboard> {
                 ),
               )),
               CustomMenuTitle("assets/images/myprofile_sidemenu_icon.png",
-                  'My Profile', context, OnTouch: () {
-                Navigator.pushNamed(context, '/Profile_Screen', arguments: {"image":ProfileImage,"name": '${info.data.firstName} ${info.data.lastName}',
-               'department': "${info.data.department}"
-                });
+                  'My Profile', context, OnTouch: () async {
+                final result = await Navigator.pushNamed(
+                    context, '/Profile_Screen',
+                    arguments: {
+                      "image": ProfileImage,
+                      "name": '${info.data.firstName} ${info.data.lastName}',
+                      'department': "${info.data.department}"
+                    });
+                if (result != null) {
+                  getprofile();
+                }
               }),
               CustomDivider(),
               CustomMenuTitle(
@@ -360,7 +365,6 @@ class _DashboardState extends State<Dashboard> {
                                 return Container(
                                   height: 65.0.w,
                                   width: 100.0.w,
-
                                   margin: EdgeInsets.fromLTRB(20, 0, 10, 0),
                                   child: Scrollbar(
                                     isAlwaysShown: true,
@@ -749,11 +753,11 @@ class _DashboardState extends State<Dashboard> {
                         onReorder: _onReorder,
                         children: [
                           Hero(
-                            tag:"travel-req",
+                            tag: "travel-req",
                             child: Material(
-
                               child: TileDashboard(models[0],
-                                  onTap: (where) => {getNavigator(context, where)}),
+                                  onTap: (where) =>
+                                      {getNavigator(context, where)}),
                             ),
                           ),
                           TileDashboard(models[1],
@@ -802,17 +806,14 @@ class _DashboardState extends State<Dashboard> {
     Navigator.of(context, rootNavigator: true).pop();
   }
 
-
-
   getNavigator(BuildContext context, int where) {
     if (where == 1) {
-     // Navigator.pushNamed(context, '/AddCity');
+      // Navigator.pushNamed(context, '/AddCity');
       Navigator.push(
           context,
           PageRouteBuilder(
               transitionDuration: Duration(milliseconds: 700),
-              pageBuilder: (_, __, ___) => AddCity())
-    );
+              pageBuilder: (_, __, ___) => AddCity()));
     } else if (where == 2) {
       Navigator.pushNamed(context, '/ApprovalsScreen',
           arguments: {"where": 2, "header": "Previous Travels"});

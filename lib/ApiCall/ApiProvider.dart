@@ -19,6 +19,7 @@ import 'package:mobility_sqr/ModelClasses/Get_Post_Location.dart';
 import 'package:mobility_sqr/ModelClasses/NotificationModel.dart';
 import 'package:mobility_sqr/ModelClasses/PassportModel.dart';
 import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/PostDocModel.dart';
 import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
@@ -846,22 +847,47 @@ class ApiProvider {
 
   //=======================================================================================
 
-  Future<UserProfileModel> update_Profile(UserInfoPayload jsonModel) async {
+  Future<UserInfo> update_Profile(UserInfoPayload jsonModel) async {
     //encode Map to JSON
     String token = await getToken_byReresh();
     var body = json.encode(jsonModel.toJson());
     var response = await http.post(
-        AppConstants.BASE_URL + AppConstants.POST_CALENDER_EVENT,
+        AppConstants.BASE_URL + AppConstants.UPDATE_EMPLOYEE_PROFILE,
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer ${token}',
           'Accept': 'application/json',
         },
         body: body);
-    UserProfileModel updatedModel;
+    UserInfo updatedModel;
     if (response.statusCode != 500) {
-      updatedModel = UserProfileModel.fromJson(jsonDecode(response.body));
+      updatedModel = UserInfo.fromJson(jsonDecode(response.body));
     }
     return updatedModel;
   }
+
+
+  //====================================================================================
+
+  Future<UserInfo> post_vault_doc(PostDocModel jsonModel) async {
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var body = json.encode(jsonModel.toJson());
+    var response = await http.post(
+        AppConstants.BASE_URL + AppConstants.POST_VAULT_DOCUMENT,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ${token}',
+          'Accept': 'application/json',
+        },
+        body: body);
+    UserInfo updatedModel;
+    if (response.statusCode != 500) {
+      updatedModel = UserInfo.fromJson(jsonDecode(response.body));
+    }
+    return updatedModel;
+  }
+
+
+
 }

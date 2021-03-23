@@ -8,12 +8,14 @@ import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/FileUpload/FileUploader.dart';
 import 'package:mobility_sqr/ImagePickerLibUtil/ImagePickerUtil.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfoPayload.dart';
 import 'package:mobility_sqr/ModelClasses/UserProfileModel.dart';
 import 'package:mobility_sqr/NotificationManager/Notification.dart';
 import 'package:mobility_sqr/Screens/Profile/Personal_info/Personal_Info_Screen.dart';
 import 'package:mobility_sqr/Screens/VaultScreen/VaultScreen.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AppState {
   free,
@@ -28,6 +30,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   File _pickedImage = null;
+  String _pickedImageString;
   AppState state;
   FileUpload _fileUpload = FileUpload.instance;
   StreamSubscription _progressSubscription;
@@ -42,16 +45,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   UserInfoPayload _userInfoPayload = UserInfoPayload();
 
+  TokenGetter appsharedprefs = TokenGetter();
+
   fetch_userProfile() async {
     await _apiProvider
         .get_user_profile()
         .then((value) => this.setState(() {
               _userProfile = value.data[0];
             }))
-        .onError((error, stackTrace) => this.setState(() {}));
+        .onError((error, stackTrace) => print('error'));
   }
 
   setValueUpdate(String photo) async {
+
+    this.setState(() {
+      _pickedImageString=photo;
+    });
     _userInfoPayload.countryOfBirth = _userProfile.countryOfBirth;
     _userInfoPayload.dob = _userProfile.dob;
     _userInfoPayload.email = _userProfile.email;
@@ -75,11 +84,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userInfoPayload.updateId = _userProfile.id;
     _userInfoPayload.userName = _userProfile.userName;
 
-    await _apiProvider.update_Profile(_userInfoPayload).then((value) => print("Successfully updated"));
+    await _apiProvider
+        .update_Profile(_userInfoPayload)
+        .then((value) => SaveUpdatedData(value));
   }
 
+  SaveUpdatedData(dynamic userinfo) async {
+    if (userinfo != null) {
+      await appsharedprefs.saveUserInfo(userinfo);
+    }
+  }
+  var routes;
   @override
   void initState() {
+
+    Future.delayed(Duration.zero,(){
+       routes =
+      ModalRoute.of(context).settings.arguments as Map<String, String>;
+      setState(() {
+
+        _pickedImageString=routes['image'];
+      });
+    });
+
+
+
+
+
+
     // TODO: implement initState
     super.initState();
     state = AppState.free;
@@ -125,8 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final routes =
-        ModalRoute.of(context).settings.arguments as Map<String, String>;
+
     return SafeArea(
       top: false,
       bottom: false,
@@ -166,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   tag: 'profile',
                                   child: Material(
                                       child: _pickedImage == null
-                                          ? (routes['image'] == null
+                                          ? (_pickedImageString == null
                                               ? ImageIcon(
                                                   AssetImage(
                                                     'assets/images/myprofile_sidemenu_icon.png',
@@ -176,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               : CircleAvatar(
                                                   radius: 40.0,
                                                   backgroundImage: NetworkImage(
-                                                      "${routes['image']}"),
+                                                      "${_pickedImageString}"),
                                                   backgroundColor:
                                                       Colors.transparent,
                                                 ))
@@ -266,7 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 120.0,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pop(context,_pickedImageString);
                       },
                       child: Center(
                         child: ImageIcon(

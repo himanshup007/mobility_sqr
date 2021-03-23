@@ -12,6 +12,7 @@ import 'package:mobility_sqr/Screens/Profile/Profile_Screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/Screens/VaultScreen/Screens/PassportScreen.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/Screens/VaultTypeScreen.dart';
 import 'package:mobility_sqr/Screens/VaultScreen/Screens/VisaScreen.dart';
 import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
@@ -159,7 +160,16 @@ class _VaultScreenState extends State<VaultScreen> {
                           Expanded(
                             flex: 4,
                             child: tabWidget('assets/images/resident_card.png',
-                                "Residence Card             "),
+                                "Residence Card             ",onClick: (){
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            VaultTypeScreen('Residence')),
+                                  );
+
+                                }),
                           ),
                           Expanded(flex: 1, child: SizedBox()),
                           Expanded(

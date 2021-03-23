@@ -26,6 +26,8 @@ Future<File> _getImageFromGallery() async {
 Future<File> _cropImage() async {
   File croppedFile = await ImageCropper.cropImage(
       sourcePath: _image.path,
+      compressQuality: 50,
+      compressFormat: ImageCompressFormat.png,
       aspectRatioPresets: Platform.isAndroid
           ? [
         CropAspectRatioPreset.square,
