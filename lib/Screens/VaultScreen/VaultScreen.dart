@@ -18,6 +18,7 @@ import 'package:mobility_sqr/Widgets/AlertForClassDialog_withAnimation.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:sizer/sizer.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/Screens/DefaultVaultScreen.dart';
 
 class VaultScreen extends StatefulWidget {
   static String id = 'Vault_screen';
@@ -36,7 +37,6 @@ class _VaultScreenState extends State<VaultScreen> {
   String empcode = "";
   bool showloader = true;
 
-
   @override
   void initState() {
     super.initState();
@@ -51,7 +51,6 @@ class _VaultScreenState extends State<VaultScreen> {
   }
 
   getPassport(String empcode) async {
-
     await _apiProvider
         .get_employee_passport(empCode: empcode)
         .then((value) => this.setState(() {
@@ -65,19 +64,21 @@ class _VaultScreenState extends State<VaultScreen> {
             }));
   }
 
-  getVisa(String empcode) async{
+  getVisa(String empcode) async {
     this.setState(() {
       showloader = true;
     });
-    await _apiProvider.get_employee_visa(empCode: empcode).then((value) => this.setState(() {
-      _visaModel = value;
-      showloader = false;
-    }))
+    await _apiProvider
+        .get_employee_visa(empCode: empcode)
+        .then((value) => this.setState(() {
+              _visaModel = value;
+              showloader = false;
+            }))
         .catchError((onError) => this.setState(() {
-      this.setState(() {
-        showloader = false;
-      });
-    }));
+              this.setState(() {
+                showloader = false;
+              });
+            }));
   }
 
   @override
@@ -88,7 +89,6 @@ class _VaultScreenState extends State<VaultScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 10,
@@ -125,9 +125,8 @@ class _VaultScreenState extends State<VaultScreen> {
                           children: [
                             Expanded(
                               flex: 4,
-                              child: tabWidget(
-                                  'assets/images/passport.png', "Passport             ",
-                                  onClick: () {
+                              child: tabWidget('assets/images/passport.png',
+                                  "Passport             ", onClick: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -139,15 +138,16 @@ class _VaultScreenState extends State<VaultScreen> {
                             Expanded(flex: 1, child: SizedBox()),
                             Expanded(
                               flex: 4,
-                              child:
-                                  tabWidget('assets/images/visa.png', "Visa                                  ",onClick: (){
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              VisaScreen(_visaModel.data)),
-                                    );
-                                  }),
+                              child: tabWidget('assets/images/visa.png',
+                                  "Visa                                  ",
+                                  onClick: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          VisaScreen(_visaModel.data)),
+                                );
+                              }),
                             ),
                           ],
                         ),
@@ -160,22 +160,27 @@ class _VaultScreenState extends State<VaultScreen> {
                           Expanded(
                             flex: 4,
                             child: tabWidget('assets/images/resident_card.png',
-                                "Residence Card             ",onClick: (){
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            VaultTypeScreen('Residence')),
-                                  );
-
-                                }),
+                                "Residence Card             ", onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DefaultVaultScreen('Residence')),
+                              );
+                            }),
                           ),
                           Expanded(flex: 1, child: SizedBox()),
                           Expanded(
                             flex: 4,
                             child: tabWidget('assets/images/medical_card.png',
-                                "Medical Card             "),
+                                "Medical Card             ", onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DefaultVaultScreen('Medical Cards')),
+                              );
+                            }),
                           ),
                         ],
                       ),
@@ -187,14 +192,29 @@ class _VaultScreenState extends State<VaultScreen> {
                           Expanded(
                             flex: 4,
                             child: tabWidget(
-                                'assets/images/national_id_tile.png', "National ID               "),
+                                'assets/images/national_id_tile.png',
+                                "National ID               ", onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DefaultVaultScreen('National ID')),
+                              );
+                            }),
                           ),
                           Expanded(flex: 1, child: SizedBox()),
                           Expanded(
                             flex: 4,
                             child: tabWidget(
                                 'assets/images/assignement_letters.png',
-                                "Assignment Letters"),
+                                "Assignment Letters", onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DefaultVaultScreen(
+                                        'Assignment Letters ID')),
+                              );
+                            }),
                           ),
                         ],
                       ),
@@ -206,13 +226,27 @@ class _VaultScreenState extends State<VaultScreen> {
                           Expanded(
                             flex: 4,
                             child: tabWidget('assets/images/invite_letters.png',
-                                "Invite Letters     "),
-                          ), Expanded(flex: 1, child: SizedBox()),
-                          Expanded(flex: 4, child: tabWidget(
-                              'assets/images/other_cards.png',
-                              "Other Cards        ", onClick: () {
-
-                          }),
+                                "Invite Letters     ", onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DefaultVaultScreen('Invite Letters')),
+                              );
+                            }),
+                          ),
+                          Expanded(flex: 1, child: SizedBox()),
+                          Expanded(
+                            flex: 4,
+                            child: tabWidget('assets/images/other_cards.png',
+                                "Other Cards        ", onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DefaultVaultScreen('Other Cards')),
+                              );
+                            }),
                           ),
                           // Expanded(
                           //   flex: 4,
@@ -231,8 +265,6 @@ class _VaultScreenState extends State<VaultScreen> {
       ),
     );
   }
-
-
 
   addTab() {
     showCustomDialogClass(
@@ -267,6 +299,7 @@ class _VaultScreenState extends State<VaultScreen> {
         ));
   }
 }
+
 tabWidget(String image, String title, {VoidCallback onClick}) {
   return GestureDetector(
     onTap: () {
@@ -279,7 +312,7 @@ tabWidget(String image, String title, {VoidCallback onClick}) {
           image,
         ),
         Container(
-          margin: EdgeInsets.only(top: 15.0.w,left: 10),
+          margin: EdgeInsets.only(top: 15.0.w, left: 10),
           child: Text(
             title,
             textAlign: TextAlign.left,

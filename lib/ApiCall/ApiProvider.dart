@@ -871,6 +871,8 @@ class ApiProvider {
 
   Future<UserInfo> post_vault_doc(PostDocModel jsonModel) async {
     //encode Map to JSON
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+    jsonModel.empCode=userInfo.data.empCode;
     String token = await getToken_byReresh();
     var body = json.encode(jsonModel.toJson());
     var response = await http.post(

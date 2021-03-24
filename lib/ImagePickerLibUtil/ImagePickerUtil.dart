@@ -68,15 +68,17 @@ void showPicker(context,{Function(File)onImagePick }) {
                     title: Text('Photo Library'),
                     onTap: () async {
                     File _image=  await _getImageFromGallery();
-                    onImagePick(_image);
-                     Navigator.of(context).pop();
 
+                    onImagePick(_image);
+
+                    Navigator.of(context).pop();
                     }),
                 ListTile(
                   leading: Icon(Icons.photo_camera),
                   title: Text('Camera'),
                   onTap: ()  async {
                     File _image= await _getImageFromCamera();
+
                     onImagePick(_image);
                     Navigator.of(context).pop();
                   },
