@@ -39,6 +39,12 @@ class _ComplianceScreenState extends State<ComplianceScreen> {
           children: [
             ListView(
               children: [
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 15,top: 15),
+                  child: Text("Onsite Compliance Questions :- ",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+                ),
+                Divider(thickness: 1,),
                 _customWidget(
                     '1. Has your current work location changed from original assignment location?'),
                 _customWidget('2. Has your job role changed recently ?'),
