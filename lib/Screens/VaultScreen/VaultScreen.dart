@@ -165,7 +165,7 @@ class _VaultScreenState extends State<VaultScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DefaultVaultScreen('Residence')),
+                                        DefaultVaultScreen('Residence',"1")),
                               );
                             }),
                           ),
@@ -178,7 +178,7 @@ class _VaultScreenState extends State<VaultScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DefaultVaultScreen('Medical Cards')),
+                                        DefaultVaultScreen('Medical Cards',"2")),
                               );
                             }),
                           ),
@@ -198,7 +198,7 @@ class _VaultScreenState extends State<VaultScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DefaultVaultScreen('National ID')),
+                                        DefaultVaultScreen('National ID',"3")),
                               );
                             }),
                           ),
@@ -212,7 +212,7 @@ class _VaultScreenState extends State<VaultScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => DefaultVaultScreen(
-                                        'Assignment Letters ID')),
+                                        'Assignment Letters ID',"4")),
                               );
                             }),
                           ),
@@ -231,7 +231,7 @@ class _VaultScreenState extends State<VaultScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DefaultVaultScreen('Invite Letters')),
+                                        DefaultVaultScreen('Invite Letters',"5")),
                               );
                             }),
                           ),
@@ -244,7 +244,7 @@ class _VaultScreenState extends State<VaultScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DefaultVaultScreen('Other Cards')),
+                                        DefaultVaultScreen('Other Cards',"6")),
                               );
                             }),
                           ),

@@ -36,7 +36,7 @@ dependencies:
   sizer: ^1.1.8
   scrollable_positioned_list: ^0.1.8
   flutter_html: ^0.8.2
-  rxdart: ^0.22.0
+  rxdart: ^0.23.1
   shared_preferences: ^0.5.12+4
   rotated_corner_decoration: ^1.0.2
   auto_size_text: ^2.1.0
@@ -66,8 +66,8 @@ dependencies:
   flutter_uploader: ^1.2.1
   flutter_local_notifications: ^4.0.1+2
   file_picker: ^2.1.7
-
-
+  toggle_switch: ^0.1.9
+  flutter_cached_pdfview: ^0.3.1
 
 
 

@@ -129,8 +129,8 @@ class _DashboardState extends State<Dashboard> {
       DragDropModel(
           index: 3,
           image: 'assets/images/expense-master-box.png',
-          first_text: 'Expenses',
-          second_text: '',
+          first_text: 'Onsite',
+          second_text: 'Compliance',
           where: 4),
       DragDropModel(
           index: 4,
@@ -830,7 +830,10 @@ class _DashboardState extends State<Dashboard> {
         context,
         '/VaultScreen',
       );
-    } else {
+    } else if(where==4){
+      Navigator.pushNamed(context, '/ComplianceScreen');
+    }
+    else{
       showAlertDialog(context, " Coming Soon");
     }
   }

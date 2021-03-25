@@ -67,17 +67,20 @@ class _VisaScreenState extends State<VisaScreen> {
                 bottom: 0,
                 right: 0,
                 left: 0,
-                child: Container(
-                  height: 60,
-                  color: AppConstants.APP_THEME_COLOR,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
                     color: AppConstants.APP_THEME_COLOR,
-                    child: Text(
-                      " Add New",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+
+                      child: Text(
+                        " Add New",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.white),
+                      ),
                     ),
                     onPressed: () {},
                   ),

@@ -41,6 +41,7 @@ class AppConstants {
 
 
 
+
   //=======================================================================================/Colors
   static const Color DIVIDER_COLOR = Color(0xFFE9E9E9);
   static const Color PRIMARY_COLOR_LIGHT = Color(0xFFA5CFF1);

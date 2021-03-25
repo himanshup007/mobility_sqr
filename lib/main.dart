@@ -6,6 +6,7 @@ import 'package:mobility_sqr/NotificationManager/Notification.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/AddNewTravel.dart';
 import 'package:mobility_sqr/Screens/AddNewTravel/SuccesfullyAdded.dart';
 import 'package:mobility_sqr/Screens/Approvals/ApprovalsScreen.dart';
+import 'package:mobility_sqr/Screens/ComplianceScreen/ComplianceScreen.dart';
 
 import 'package:mobility_sqr/Screens/ForgetPassScreen/ForgetPass.dart';
 import 'package:mobility_sqr/Screens/LoginScreen/Username_screen.dart';
@@ -97,7 +98,8 @@ class _MyAppState extends State<MyApp> {
         '/AddEvent':(context) =>AddEvent(),
         '/Username_Screen':(context) =>Username_Screen(),
         '/VaultScreen':(context) => VaultScreen(),
-        '/NotificationScreen':(context)=>NotificationScreen()
+        '/NotificationScreen':(context)=>NotificationScreen(),
+        '/ComplianceScreen':(context)=>ComplianceScreen()
 
 
       },

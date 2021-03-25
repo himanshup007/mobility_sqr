@@ -12,6 +12,7 @@ import 'package:mobility_sqr/ModelClasses/CurrencyConversionModel.dart';
 import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/DialCodeModel.dart';
+import 'package:mobility_sqr/ModelClasses/DocumentModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
@@ -869,27 +870,35 @@ class ApiProvider {
 
   //====================================================================================
 
-  Future<UserInfo> post_vault_doc(PostDocModel jsonModel) async {
-    //encode Map to JSON
-    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
-    jsonModel.empCode=userInfo.data.empCode;
-    String token = await getToken_byReresh();
-    var body = json.encode(jsonModel.toJson());
-    var response = await http.post(
-        AppConstants.BASE_URL + AppConstants.POST_VAULT_DOCUMENT,
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer ${token}',
-          'Accept': 'application/json',
-        },
-        body: body);
-    UserInfo updatedModel;
-    if (response.statusCode != 500) {
-      updatedModel = UserInfo.fromJson(jsonDecode(response.body));
-    }
-    return updatedModel;
-  }
 
+
+  Future<DocumentModelClass> get_doc_vault(String type) async {
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+
+    Map<String, String> queryParams = {"emp_code": userInfo.data.empCode,'vault_type':type};
+    String queryString = Uri(queryParameters: queryParams).query;
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var response = await http.get(
+      AppConstants.BASE_URL +
+          AppConstants.POST_VAULT_DOCUMENT +
+          "?" +
+          queryString,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+    DocumentModelClass documentModelClass = DocumentModelClass();
+    if (response.statusCode == 200) {
+      documentModelClass = DocumentModelClass.fromJson(jsonDecode(response.body));
+    } else {
+      throw Error();
+    }
+
+    return documentModelClass;
+  }
 
 
 }
