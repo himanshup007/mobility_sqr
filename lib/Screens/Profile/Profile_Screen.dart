@@ -12,6 +12,7 @@ import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfoPayload.dart';
 import 'package:mobility_sqr/ModelClasses/UserProfileModel.dart';
 import 'package:mobility_sqr/NotificationManager/Notification.dart';
+import 'package:mobility_sqr/Screens/EmergencyContact/EmergencyScreen.dart';
 import 'package:mobility_sqr/Screens/Profile/Personal_info/Personal_Info_Screen.dart';
 import 'package:mobility_sqr/Screens/VaultScreen/VaultScreen.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
@@ -340,7 +341,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PersonalInfo()),
+                                    builder: (context) => EmergencyContact()),
                               );
                             }),
                           ),

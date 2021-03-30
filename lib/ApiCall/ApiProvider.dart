@@ -13,6 +13,7 @@ import 'package:mobility_sqr/ModelClasses/CurrencyResultModel.dart';
 import 'package:mobility_sqr/ModelClasses/DependentModel.dart';
 import 'package:mobility_sqr/ModelClasses/DialCodeModel.dart';
 import 'package:mobility_sqr/ModelClasses/DocumentModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/EmergencyContactModel.dart';
 import 'package:mobility_sqr/ModelClasses/ForgetPassModel.dart';
 import 'package:mobility_sqr/ModelClasses/GetTravelRequest.dart';
 import 'package:mobility_sqr/ModelClasses/GetVisaModelClass.dart';
@@ -656,10 +657,11 @@ class ApiProvider {
   Future<CalenderEventResponseModel> post_Calender_Event(
       eventPost jsonModel) async {
     //encode Map to JSON
+    String token = await getToken_byReresh();
     var body = json.encode(jsonModel.toJson());
     var response = await http.post(
         AppConstants.BASE_URL + AppConstants.POST_CALENDER_EVENT,
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer ${token}',},
         body: body);
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -674,13 +676,14 @@ class ApiProvider {
     Map<String, String> queryParams = {"emp_code": empCode};
     String queryString = Uri(queryParameters: queryParams).query;
     //encode Map to JSON
-
+    String token = await getToken_byReresh();
     var response = await http.get(
       AppConstants.BASE_URL +
           AppConstants.POST_CALENDER_EVENT +
           "?" +
           queryString,
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json",
+        'Authorization': 'Bearer ${token}',},
     );
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -694,12 +697,14 @@ class ApiProvider {
       eventPost jsonModel, int id) async {
     //encode Map to JSON
     var body = json.encode(jsonModel.toJson());
+    String token = await getToken_byReresh();
     var response = await http.patch(
         AppConstants.BASE_URL +
             AppConstants.UPDATE_CALENDER_EVENT +
             id.toString() +
             "/",
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          'Authorization': 'Bearer ${token}',},
         body: body);
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -899,6 +904,32 @@ class ApiProvider {
 
     return documentModelClass;
   }
+//==========================================================================================================
 
+  Future<EmergencyModel> getEmergencyContact() async {
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+    String empMail = userInfo.data.empCode;
+
+    Map<String, String> queryParams = {
+      'employee': empMail
+    };
+    String queryString = Uri(queryParameters: queryParams).query;
+
+    //   String token = await _TokenGetter.getAcessToken() ?? "";
+    String token = await getToken_byReresh();
+    var response = await http.get(
+      AppConstants.BASE_URL + AppConstants.GET_EMERGENCY_CONTACT + "?" + queryString,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+    EmergencyModel emergencyModel =
+    EmergencyModel.fromJson(jsonDecode(response.body));
+    print("${response.statusCode}");
+    print("${response.body}");
+    return emergencyModel;
+  }
 
 }
