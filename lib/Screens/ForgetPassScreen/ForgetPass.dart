@@ -1,156 +1,271 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animations/loading_animations.dart';
+import 'package:flutter/painting.dart';
+import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
-import 'package:mobility_sqr/Screens/LoginScreen/UsernameConstants.dart';
-import 'package:mobility_sqr/Screens/LoginScreen/bloc/UsernameBloc.dart';
-import 'package:mobility_sqr/Widgets/AlertDialog.dart';
-import 'package:mobility_sqr/Widgets/EditFieldUsername.dart';
+import 'package:mobility_sqr/LocalStorage/SharedPrefencs.dart';
+import 'package:mobility_sqr/ModelClasses/ChangePassPayload.dart';
+import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
+import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/Widgets/ToastCustom.dart';
-import 'package:sizer/sizer_util.dart';
+
 import 'package:sizer/sizer.dart';
 
 class ForgetPass extends StatefulWidget {
-
-
   @override
-  State<StatefulWidget> createState() => new _ForgetPass();
+  _ForgetPassState createState() => _ForgetPassState();
 }
 
-class _ForgetPass extends State<ForgetPass> {
-  BuildContext dialogContext;
+class _ForgetPassState extends State<ForgetPass> {
+  final formKey = GlobalKey<FormState>();
+  ChangePassPayload reqPayload = ChangePassPayload();
+  TokenGetter _tokenGetter = TokenGetter();
+  String newpass;
+  String newpassConfirm=' ';
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool showloader=false;
 
-  @override
-  void dispose() {
-    super.dispose();
-
-  }
-
-
+  ApiProvider _apiProvider=ApiProvider();
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    bloc.flushConfirmController();
+    readInfo();
+  }
+
+  readInfo() async {
+    UserInfo info = await _tokenGetter.readUserInfo();
+
+    reqPayload.email = info.data.email;
+    reqPayload.istemporary = '0';
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    return LayoutBuilder(//return LayoutBuilder
-        builder: (context, constraints) {
-      return OrientationBuilder(//return OrientationBuilder
-          builder: (context, orientation) {
-        //initialize SizerUtil()
-        SizerUtil()
-            .init(constraints, Orientation.portrait); //initialize SizerUtil
-        return Scaffold(
-          body: Builder(
-            builder: (ctx) =>Container(
+
+    return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(
+          "Change Password",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            )),
+      ),
+      body: Stack(
+        children: [
+          Container(
+            height: 100.0.h,
             width: 100.0.w,
-            color: Colors.white,
-            child: Column(
-              verticalDirection: VerticalDirection.down,
-              children: [
-                Container(
-                  child: Image.asset('assets/images/login_header.png'),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(30, 20, 20, 0),
-                  alignment: Alignment.centerLeft,
-                  child: Text("Forget Password",
-                      style: Loign_UI_Constants.styleForText),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(30, 10, 20, 10),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Please Sign in to access your account",
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
-                  ),
-                ),
-                Container(
-                  child: EditFieldCustom(Icons.perm_identity, "Username",
-                      UsernameConst.EMAIL_HINT, 3),
-                ),
-                Container(
-                  width: 100.0.w,
-                  margin: EdgeInsets.fromLTRB(30, 20, 20, 0),
-                  decoration: BoxDecoration(
-                      color: AppConstants.APP_THEME_COLOR,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: RaisedButton(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      color: AppConstants.APP_THEME_COLOR,
-                      child: Text(
-                        "Send",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-
-                        FocusScope.of(ctx).unfocus();
-                        _onLoading();
-                      String msg=  await bloc.sendResetEmail();
-                        showDefaultSnackbar(ctx,
-                            "$msg");
-                        Navigator.of(ctx, rootNavigator: true).pop(dialogContext);
-                      }),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 100.0.w,
-                    margin: EdgeInsets.fromLTRB(0, 30, 20, 30),
-                    child: Text(
-                      "Back to Sign in",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: AppConstants.APP_THEME_COLOR,
-                        decoration: TextDecoration.underline,
-                      ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+              child: Form(
+                key: formKey,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Row(
+                      children: [
+                        HeadTitles(
+                          title: "Old Password",
+                        ),
+                        Star()
+                      ],
                     ),
-                  ),
-                )
-              ],
+                    PassBoxes(
+                      hint: "Enter Old Password",
+                      hideText: false,
+                      ontextChanged: (text) {
+                        reqPayload.oldPassword = text;
+                      },
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 20,
+                    ),
+                    Row(
+                      children: [
+                        HeadTitles(
+                          title: "New Password",
+                        ),
+                        Star(),
+                      ],
+                    ),
+                    PassBoxes(
+                      hint: "Enter New Password",
+                      hideText: true,
+                      ontextChanged: (text) {
+                        reqPayload.password = text;
+                        newpass = text;
+                      },
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 20,
+                    ),
+                    Row(
+                      children: [
+                        HeadTitles(
+                          title: "Confirm Password",
+                        ),
+                        Star(),
+                      ],
+                    ),
+                    PassBoxes(
+                      hint: "Enter Confirm Password",
+                      hideText: false,
+                      where: 1,
+                      ontextChanged: (text) {
+                        reqPayload.password = text;
+                        newpassConfirm = text;
+                      },
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 4,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
+          Positioned(
+            bottom: 10,
+            right: 10,
+            left: 10,
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                onPressed: () {
+                  if (newpassConfirm == newpass) {
+                    this.setState(() {
+                      showloader=true;
+                    });
+                    _apiProvider.ChangePass(reqPayload).then((value) => this.setState(() {
+                      showloader=false;
+                    }));
+                  } else {
+                    eventSnackbar( _scaffoldKey.currentState,
+                        'Confirmed Password should same as new Password');
+                  }
+                },
+                textColor: Colors.white,
+                child: Text("Update"),
+                color: Color(0xff9641A9),
+              ),
+            ),
+          ),
+          Container(
+            child: showMobilityLoader(showloader, Colors.black12),
           )
-        );
-      });
-    });
-  }
-  void _onLoading() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-
-      builder: (BuildContext context) {
-        dialogContext = context;
-        return Container(
-          height: 50,
-          width: 50,
-          color: Colors.transparent,
-          child: Center(
-            child:LoadingBouncingGrid.circle(
-              size: 50,
-              backgroundColor: Colors.white,
-            ),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
-
 }
 
-class Loign_UI_Constants {
-  static const TextStyle styleForText = TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 20.0,
-    color: Colors.black,
-  );
+class Star extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "*",
+      style: stiling.copyWith(color: Colors.red),
+    );
+  }
+}
+
+class PassBoxes extends StatefulWidget {
+  PassBoxes(
+      {this.hint,
+      this.hideText,
+      this.validator,
+      this.where,
+      this.ontextChanged});
+
+  final String hint;
+  final bool hideText;
+  var validator;
+  int where;
+  Function(String) ontextChanged;
+
+  @override
+  _PassBoxesState createState() => _PassBoxesState();
+}
+
+class _PassBoxesState extends State<PassBoxes> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: TextFormField(
+        validator: (value) {
+          if (widget.hideText) {
+            if (value == null || value.isEmpty) {
+              return '';
+            } else if (!validateStructure(value)) {
+              return 'Password should contain at least 6 characters, and at least 1 uppercase, 1 lowercase, and 1 number,and 1 special character ';
+            }
+
+            return null;
+          }
+
+          return null;
+        },
+        onChanged: (text) {
+          widget.ontextChanged(text);
+        },
+        maxLines: 1,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        maxLength: 16,
+        obscureText: widget.hideText,
+        decoration: InputDecoration(
+            counterText: '',
+            contentPadding: EdgeInsets.only(left: 10),
+            focusedBorder: OutlineInputBorder(
+              //focus boarder
+              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+              borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
+            ),
+            errorBorder: OutlineInputBorder(
+                //error boarder
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                borderSide: BorderSide(width: 1, color: Colors.red)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+              borderSide: BorderSide(color: AppConstants.APP_THEME_COLOR),
+            ),
+            errorMaxLines: 2,
+            hintText: widget.hint,
+            hintStyle: TextStyle(fontSize: 18)),
+      ),
+    );
+  }
+}
+
+class HeadTitles extends StatelessWidget {
+  HeadTitles({this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title, style: stiling);
+  }
+}
+
+TextStyle stiling = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
+
+bool validateStructure(String value) {
+  String pattern =
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+  RegExp regExp = new RegExp(pattern);
+  return regExp.hasMatch(value);
 }

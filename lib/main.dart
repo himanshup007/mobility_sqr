@@ -18,10 +18,9 @@ import 'package:mobility_sqr/Screens/SplashScreen/SplashScreen.dart';
 import 'package:mobility_sqr/Screens/Terms/Terms_Conditions.dart';
 import 'package:mobility_sqr/Screens/TravelCalendar/AddEvent.dart';
 import 'package:mobility_sqr/Screens/TravelReqView/TravelReqView.dart';
-import 'package:mobility_sqr/Screens/VaultScreen/Screens/PassportScreen.dart';
+
 import 'package:mobility_sqr/Screens/VaultScreen/VaultScreen.dart';
 import 'package:mobility_sqr/Util/SearchClass.dart';
-import 'package:mobility_sqr/Widgets/ApproxTravelCost.dart';
 
 import 'Screens/AddNewTravel/AddNewTravel2.dart';
 import 'Screens/Dashboard/Dashboard.dart';
@@ -31,24 +30,17 @@ import 'Screens/TravelCalendar/TravelCalender.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
-
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatefulWidget {
-
-
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
 
-
-
 class _MyAppState extends State<MyApp> {
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -66,9 +58,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       title: 'Mobility SQR',
       debugShowCheckedModeBanner: false,
-
-      theme:
-      ThemeData(
+      theme: ThemeData(
         // highlightColor: Color(0xffffc600),
         unselectedWidgetColor: AppConstants.APP_THEME_COLOR,
 
@@ -78,7 +68,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       routes: {
-      //  '/': (context) => Username_Screen(),
+        //  '/': (context) => Username_Screen(),
         '/': (context) => SplashScreen(),
         '/AddCity': (context) => AddCity(),
         '/Dashboard': (context) => Dashboard(),
@@ -91,17 +81,15 @@ class _MyAppState extends State<MyApp> {
         '/ProjectIdScreen': (context) => ProjectIdScreen(),
         '/Profile_Screen': (context) => ProfileScreen(),
         '/PersonalInfo': (context) => PersonalInfo(),
-        '/SuccessfullyAdded':(context) => SuccessfullyAdded(),
-        '/ApprovalsScreen':(context) => ApprovalsScreen(),
-        '/TravelReqView':(context) =>TravelReqView(),
-        '/TravelCalender':(context) =>TravelCalender(),
-        '/AddEvent':(context) =>AddEvent(),
-        '/Username_Screen':(context) =>Username_Screen(),
-        '/VaultScreen':(context) => VaultScreen(),
-        '/NotificationScreen':(context)=>NotificationScreen(),
-        '/ComplianceScreen':(context)=>ComplianceScreen()
-
-
+        '/SuccessfullyAdded': (context) => SuccessfullyAdded(),
+        '/ApprovalsScreen': (context) => ApprovalsScreen(),
+        '/TravelReqView': (context) => TravelReqView(),
+        '/TravelCalender': (context) => TravelCalender(),
+        '/AddEvent': (context) => AddEvent(),
+        '/Username_Screen': (context) => Username_Screen(),
+        '/VaultScreen': (context) => VaultScreen(),
+        '/NotificationScreen': (context) => NotificationScreen(),
+        '/ComplianceScreen': (context) => ComplianceScreen(),
       },
     );
   }

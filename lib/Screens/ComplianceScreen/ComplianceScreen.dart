@@ -46,11 +46,11 @@ class _ComplianceScreenState extends State<ComplianceScreen> {
                 ),
                 Divider(thickness: 1,),
                 _customWidget(
-                    '1. Has your current work location changed from original assignment location?'),
-                _customWidget('2. Has your job role changed recently ?'),
-                _customWidget('3. Has your project code/id changed ?'),
-                _customWidget('4. Has your salary decreased from original?'),
-                _customWidget('5. Has your work hours increased ?')
+                    '1. Has your current work location changed / set to change from your original assigned location?'),
+                _customWidget('2. Has your job role changed recently or set to change? '),
+                _customWidget('3. Has your project code/id changed or set to change?'),
+                _customWidget('4. Has your salary decreased from original offered salary or set to decrease?'),
+                _customWidget('5. Have your work hours increased or set to increase?')
               ],
             ),
             Positioned(
@@ -100,10 +100,10 @@ class _ComplianceScreenState extends State<ComplianceScreen> {
               minHeight: 30.0,
               fontSize: 10.0,
               initialLabelIndex: 1,
-              activeBgColor: Colors.green,
+              activeBgColor: Colors.red,
               activeFgColor: Colors.white,
-              inactiveBgColor: Colors.grey,
-              inactiveFgColor: Colors.grey[900],
+              inactiveBgColor: AppConstants.APP_THEME_COLOR,
+              inactiveFgColor: Colors.white,
               labels: ['Yes', 'No'],
               onToggle: (index) {
                 print('switched to: $index');

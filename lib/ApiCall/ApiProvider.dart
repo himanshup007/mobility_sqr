@@ -5,6 +5,7 @@ import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/Approval.dart';
 
 import 'package:mobility_sqr/ModelClasses/CalenderResponseModel.dart';
+import 'package:mobility_sqr/ModelClasses/ChangePassPayload.dart';
 import 'package:mobility_sqr/ModelClasses/CheckUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
@@ -661,7 +662,10 @@ class ApiProvider {
     var body = json.encode(jsonModel.toJson());
     var response = await http.post(
         AppConstants.BASE_URL + AppConstants.POST_CALENDER_EVENT,
-        headers: {"Content-Type": "application/json", 'Authorization': 'Bearer ${token}',},
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ${token}',
+        },
         body: body);
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -682,8 +686,10 @@ class ApiProvider {
           AppConstants.POST_CALENDER_EVENT +
           "?" +
           queryString,
-      headers: {"Content-Type": "application/json",
-        'Authorization': 'Bearer ${token}',},
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer ${token}',
+      },
     );
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -703,8 +709,10 @@ class ApiProvider {
             AppConstants.UPDATE_CALENDER_EVENT +
             id.toString() +
             "/",
-        headers: {"Content-Type": "application/json",
-          'Authorization': 'Bearer ${token}',},
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ${token}',
+        },
         body: body);
     CalenderEventResponseModel calenderEventResponseModel =
         CalenderEventResponseModel.fromJson(jsonDecode(response.body));
@@ -872,15 +880,15 @@ class ApiProvider {
     return updatedModel;
   }
 
-
   //====================================================================================
-
-
 
   Future<DocumentModelClass> get_doc_vault(String type) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
 
-    Map<String, String> queryParams = {"emp_code": userInfo.data.empCode,'vault_type':type};
+    Map<String, String> queryParams = {
+      "emp_code": userInfo.data.empCode,
+      'vault_type': type
+    };
     String queryString = Uri(queryParameters: queryParams).query;
     //encode Map to JSON
     String token = await getToken_byReresh();
@@ -897,28 +905,31 @@ class ApiProvider {
     );
     DocumentModelClass documentModelClass = DocumentModelClass();
     if (response.statusCode == 200) {
-      documentModelClass = DocumentModelClass.fromJson(jsonDecode(response.body));
+      documentModelClass =
+          DocumentModelClass.fromJson(jsonDecode(response.body));
     } else {
       throw Error();
     }
 
     return documentModelClass;
   }
+
 //==========================================================================================================
 
   Future<EmergencyModel> getEmergencyContact() async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
     String empMail = userInfo.data.empCode;
 
-    Map<String, String> queryParams = {
-      'employee': empMail
-    };
+    Map<String, String> queryParams = {'employee': empMail};
     String queryString = Uri(queryParameters: queryParams).query;
 
     //   String token = await _TokenGetter.getAcessToken() ?? "";
     String token = await getToken_byReresh();
     var response = await http.get(
-      AppConstants.BASE_URL + AppConstants.GET_EMERGENCY_CONTACT + "?" + queryString,
+      AppConstants.BASE_URL +
+          AppConstants.GET_EMERGENCY_CONTACT +
+          "?" +
+          queryString,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -926,10 +937,31 @@ class ApiProvider {
       },
     );
     EmergencyModel emergencyModel =
-    EmergencyModel.fromJson(jsonDecode(response.body));
+        EmergencyModel.fromJson(jsonDecode(response.body));
     print("${response.statusCode}");
     print("${response.body}");
     return emergencyModel;
   }
 
+  //=========================================================================================================
+
+  Future<bool> ChangePass(ChangePassPayload jsonModel) async {
+    //encode Map to JSON
+    String token = await getToken_byReresh();
+    var body = json.encode(jsonModel.toJson());
+    var response = await http.post(
+        AppConstants.BASE_URL + AppConstants.CHANGE_PASS,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ${token}',
+        },
+        body: body);
+
+    if(response.statusCode==200){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
 }
