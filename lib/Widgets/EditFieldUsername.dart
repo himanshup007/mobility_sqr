@@ -67,9 +67,11 @@ class _EditFieldCustomState extends State<EditFieldCustom> {
               initialData: " ",
               builder: (context, snapshot) {
                 return TextField(
+                  maxLength: 16,
                   textInputAction: TextInputAction.unspecified,
                   obscureText: _passwordVisible ? hidePass : false,
                   decoration: InputDecoration(
+                    counterText: '',
                     border: InputBorder.none,
                     hintText: widget.Hint,
                     contentPadding:
