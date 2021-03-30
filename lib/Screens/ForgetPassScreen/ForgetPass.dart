@@ -153,6 +153,8 @@ class _ForgetPassState extends State<ForgetPass> {
                     _apiProvider.ChangePass(reqPayload).then((value) => this.setState(() {
                       showloader=false;
                     }));
+
+
                   } else {
                     eventSnackbar( _scaffoldKey.currentState,
                         'Confirmed Password should same as new Password');
@@ -268,4 +270,35 @@ bool validateStructure(String value) {
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
   RegExp regExp = new RegExp(pattern);
   return regExp.hasMatch(value);
+}
+showAlertDialog(BuildContext context, String text) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text(
+      "OK",
+      style: TextStyle(color: AppConstants.APP_THEME_COLOR),
+    ),
+    onPressed: () {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/', (Route<dynamic> route) => false);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("$text"),
+    content: Text("Password Updated Successfully"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

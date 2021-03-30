@@ -1,5 +1,3 @@
-
-
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +25,12 @@ class Username_Screen extends StatefulWidget {
 class _Username_Screen extends State<Username_Screen> {
   bool manageloginUI = false;
   final tokengetter = TokenGetter();
-  final apiProvider= ApiProvider();
+  final apiProvider = ApiProvider();
   String Email = "";
   BuildContext dialogContext;
-  final appsharedprefs=TokenGetter();
+  final appsharedprefs = TokenGetter();
   final LocalAuthentication auth = LocalAuthentication();
+
   @override
   void dispose() {
     bloc.dispose(); // call the dispose method to close our StreamController
@@ -42,284 +41,258 @@ class _Username_Screen extends State<Username_Screen> {
   void initState() {
     super.initState();
     bloc.flush();
-    Future.delayed(const Duration(seconds: 1), () =>  getUserAuthBiometric());
-
+    Future.delayed(const Duration(seconds: 1), () => getUserAuthBiometric());
   }
+
   getUserAuthBiometric() async {
     Credential userCred = await appsharedprefs.readCredentials() ?? null;
 
-    try{
-      if(userCred!=null){
-        if(userCred.checkBiometric){
-
-
-          _authenticate(userCred.username,userCred.password);
+    try {
+      if (userCred != null) {
+        if (userCred.checkBiometric) {
+          _authenticate(userCred.username, userCred.password);
         }
-
       }
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
+
   Future<void> _authenticate(String username, String password) async {
     bool authenticated = false;
     try {
-
       authenticated = await auth.authenticateWithBiometrics(
           localizedReason: 'Scan your fingerprint to authenticate',
           useErrorDialogs: true,
           stickyAuth: true);
-
     } on PlatformException catch (e) {
       AppSettings.openAppSettings();
       print(e);
     }
     if (!mounted) return;
 
-    if(authenticated){
+    if (authenticated) {
       _onLoading();
-      apiProvider.postRequest(username,password).then((value) =>saveValues(value, username)) ;
-
-
-
-
+      apiProvider
+          .postRequest(username, password)
+          .then((value) => saveValues(value, username));
     }
-
-
-
   }
 
-
-  saveValues(value,username)  {
-
-
-    UserDataAuth(value.access,username);
+  saveValues(value, username) {
+    UserDataAuth(value.access, username);
     appsharedprefs.saveValue(value.accesstoken, value.refreshtoken);
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder( //return LayoutBuilder
+    return LayoutBuilder(//return LayoutBuilder
         builder: (context, constraints) {
-          return OrientationBuilder( //return OrientationBuilder
-              builder: (context, orientation) {
-                //initialize SizerUtil()
-                SizerUtil()
-                    .init(
-                    constraints, Orientation.portrait); //initialize SizerUtil
-                return Scaffold(
-                    resizeToAvoidBottomInset: false,
-                    body: Container(
+      return OrientationBuilder(//return OrientationBuilder
+          builder: (context, orientation) {
+        //initialize SizerUtil()
+        SizerUtil()
+            .init(constraints, Orientation.portrait); //initialize SizerUtil
+        return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Container(
+              width: 100.0.w,
+              color: Colors.white,
+              child: Column(
+                verticalDirection: VerticalDirection.down,
+                children: [
+                  Container(
+                    child: Image.asset(
+                      'assets/images/login_header.png',
                       width: 100.0.w,
-                      color: Colors.white,
-                      child: Column(
-                        verticalDirection: VerticalDirection.down,
-                        children: [
-                          Container(
-                            child: Image.asset(
-                                'assets/images/login_header.png',width: 100.0.w,),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(30, 20, 20, 0),
-                            alignment: Alignment.centerLeft,
-                            child:
-                            Text("Sign In",
-                                style: Loign_UI_Constants.styleForText),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(30, 10, 20, 10),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Please Sign in to access your account",
-                              style: TextStyle(fontSize: 15,
-                                  color: Colors.grey),
-                            ),
-                          ),
-                          !manageloginUI
-                              ? Container(
-                            child: EditFieldCustom(Icons.perm_identity,
-                                "Username", UsernameConst.EMAIL_HINT, 1),
-                          )
-                              : Container(
-                            child: Column(
-                              children: [
-                                StreamBuilder<String>(
-                                    stream: bloc.EmailData,
-                                    builder: (context, snapshot) {
-                                      return Container(
-                                        margin:
-                                        EdgeInsets.fromLTRB(10, 20, 20, 0),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 10.0.w,
-                                              child: RaisedButton(
-                                                onPressed: () {
-                                                  this.setState(() {
-                                                    manageloginUI = false;
-                                                  });
-                                                  bloc.flush();
-                                                  bloc.fetchUserCheck(1);
-
-                                                },
-                                                child: Icon(Icons.arrow_back),
-                                                color: Colors.white,
-                                                elevation: 0,
-                                              ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(30, 20, 20, 0),
+                    alignment: Alignment.centerLeft,
+                    child:
+                        Text("Sign In", style: Loign_UI_Constants.styleForText),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(30, 10, 20, 10),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Please Sign in to access your account",
+                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                    ),
+                  ),
+                  !manageloginUI
+                      ? Container(
+                          child: EditFieldCustom(Icons.perm_identity,
+                              "Username", UsernameConst.EMAIL_HINT, 1),
+                        )
+                      : Container(
+                          child: Column(
+                            children: [
+                              StreamBuilder<String>(
+                                  stream: bloc.EmailData,
+                                  builder: (context, snapshot) {
+                                    return Container(
+                                      margin:
+                                          EdgeInsets.fromLTRB(10, 20, 20, 0),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 10.0.w,
+                                            child: RaisedButton(
+                                              onPressed: () {
+                                                this.setState(() {
+                                                  manageloginUI = false;
+                                                });
+                                                bloc.flush();
+                                                bloc.fetchUserCheck(1);
+                                              },
+                                              child: Icon(Icons.arrow_back),
+                                              color: Colors.white,
+                                              elevation: 0,
                                             ),
-                                            Text("${snapshot.data}")
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                                EditFieldCustom(Icons.lock_outlined, "Password",
-                                    UsernameConst.PASS_HINT, 2),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(context, '/ForgetPass');
-
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.centerRight,
-                                    margin: EdgeInsets.fromLTRB(0, 30, 20, 30),
-                                    child: Text(
-                                      "Forget Password?",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: AppConstants.APP_THEME_COLOR,
-                                        decoration: TextDecoration.underline,
+                                          ),
+                                          Text("${snapshot.data}")
+                                        ],
                                       ),
+                                    );
+                                  }),
+                              EditFieldCustom(Icons.lock_outlined, "Password",
+                                  UsernameConst.PASS_HINT, 2),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/ForgetPass');
+                                },
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  margin: EdgeInsets.fromLTRB(0, 30, 20, 30),
+                                  child: Text(
+                                    "Forget Password?",
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: AppConstants.APP_THEME_COLOR,
+                                      decoration: TextDecoration.underline,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                          Container(
-                            width: 100.0.w,
-                            margin: EdgeInsets.fromLTRB(30, 20, 20, 0),
-                            decoration: BoxDecoration(
-                                color: AppConstants.APP_THEME_COLOR,
-                                borderRadius: BorderRadius.circular(10.0)),
-                            child: !manageloginUI
-                                ? StreamBuilder<bool>(
-                                stream: bloc.isUser,
-                                initialData: false,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return RaisedButton(
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                        ),
-                                        color: AppConstants.APP_THEME_COLOR,
-                                        child: Text(
-                                          "NEXT",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        onPressed: () async {
-                                          //   Navigator.pushNamed(context, '/DashBoard');
-                                          FocusScope.of(context).unfocus();
-                                          _onLoading();
-                                          if (snapshot.hasData) {
-                                            // Navigator.pushNamed(context, '/Term&Condition');
-                                            bool data;
-                                            try {
-                                              data =
-                                              await bloc.fetchUserCheck(0);
-                                            } catch (e) {}
+                        ),
+                  Container(
+                    width: 100.0.w,
+                    margin: EdgeInsets.fromLTRB(30, 20, 20, 0),
+                    decoration: BoxDecoration(
+                        color: AppConstants.APP_THEME_COLOR,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: !manageloginUI
+                        ? StreamBuilder<bool>(
+                            stream: bloc.isUser,
+                            initialData: false,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return RaisedButton(
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    color: AppConstants.APP_THEME_COLOR,
+                                    child: Text(
+                                      "NEXT",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () async {
+                                      //   Navigator.pushNamed(context, '/DashBoard');
+                                      FocusScope.of(context).unfocus();
+                                      _onLoading();
+                                      if (snapshot.hasData) {
+                                        // Navigator.pushNamed(context, '/Term&Condition');
+                                        bool data;
+                                        try {
+                                          data = await bloc.fetchUserCheck(0);
+                                        } catch (e) {}
 
-                                            if (data != null && data != false) {
-                                              this.setState(() {
-                                                manageloginUI = true;
-                                              });
-                                              Navigator.of(context,
+                                        if (data != null && data != false) {
+                                          this.setState(() {
+                                            manageloginUI = true;
+                                          });
+                                          Navigator.of(context,
                                                   rootNavigator: true)
-                                                  .pop(dialogContext);
-                                            } else if (data == null) {
-                                              Navigator.of(context,
+                                              .pop(dialogContext);
+                                        } else if (data == null) {
+                                          Navigator.of(context,
                                                   rootNavigator: true)
-                                                  .pop(dialogContext);
-                                              showDefaultSnackbar(
-                                                  context, "No Internet found");
-                                            } else {
-                                              Navigator.of(context,
+                                              .pop(dialogContext);
+                                          showDefaultSnackbar(
+                                              context, "No Internet found");
+                                        } else {
+                                          Navigator.of(context,
                                                   rootNavigator: true)
-                                                  .pop(dialogContext);
-                                              showDefaultSnackbar(context,
-                                                  UsernameConst.USER_INVALID);
-                                            }
-                                          }
-                                        });
-                                  }
-                                })
-                                : StreamBuilder<UserToken>(
-                                stream: bloc.getIsValidPass,
-                                initialData: null,
-                                builder:
-                                    (context,
-                                    AsyncSnapshot<UserToken> snapshot) {
-                                  if (snapshot.hasData &&
-                                      snapshot.data.access != null) {
-                                    if (snapshot.data.access != null) {
-                                      tokengetter.saveValue(
-                                          snapshot.data.access,
-                                          snapshot.data.refresh);
-                                      UserData( snapshot.data.access);
-                                    }
-                                  } else if (snapshot.hasData &&
-                                      snapshot.data.detail != null&&snapshot.data.access==null) {
-
-                                    Future.delayed(Duration.zero, () {
-                                      try {
-                                        showDefaultSnackbar(
-                                            context, snapshot.data.detail);
-
-
-                                      } catch (e) {}
+                                              .pop(dialogContext);
+                                          showDefaultSnackbar(context,
+                                              UsernameConst.USER_INVALID);
+                                        }
+                                      }
                                     });
+                              }
+                            })
+                        : StreamBuilder<UserToken>(
+                            stream: bloc.getIsValidPass,
+                            initialData: null,
+                            builder:
+                                (context, AsyncSnapshot<UserToken> snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data.access != null) {
+                                if (snapshot.data.access != null) {
+                                  tokengetter.saveValue(snapshot.data.access,
+                                      snapshot.data.refresh);
+                                  UserData(snapshot.data.access);
+                                }
+                              } else if (snapshot.hasData &&
+                                  snapshot.data.detail != null &&
+                                  snapshot.data.access == null) {
+                                Future.delayed(Duration.zero, () {
+                                  try {
+                                    showDefaultSnackbar(
+                                        context, snapshot.data.detail);
+                                  } catch (e) {}
+                                });
+                              }
 
-                                  }
+                              return RaisedButton(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  color: AppConstants.APP_THEME_COLOR,
+                                  child: Text(
+                                    "NEXT",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () async {
+                                    _onLoading();
 
-                                  return RaisedButton(
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      ),
-                                      color: AppConstants.APP_THEME_COLOR,
-                                      child: Text(
-                                        "NEXT",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () async {
-                                        _onLoading();
-
-                                        FocusScope.of(context).unfocus();
-                                       UserToken data= await bloc.passwordValidate();
-                                       if(data.refresh==null){
-                                         Navigator.of(
-                                             context, rootNavigator: true)
-                                             .pop(dialogContext);
-                                       }
-
-                                      });
-                                }),
-                          ),
-                        ],
-                      ),
-                    ));
-              });
-        });
+                                    FocusScope.of(context).unfocus();
+                                    UserToken data =
+                                        await bloc.passwordValidate();
+                                    if (data.refresh == null) {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop(dialogContext);
+                                    }
+                                  });
+                            }),
+                  ),
+                ],
+              ),
+            ));
+      });
+    });
   }
 
   void _onLoading() {
     showDialog(
       context: context,
       barrierDismissible: false,
-
       builder: (BuildContext context) {
         dialogContext = context;
         return Container(
@@ -338,43 +311,31 @@ class _Username_Screen extends State<Username_Screen> {
   }
 
   UserData(String token) async {
-  await bloc.setUserInfo(token).then((value) =>
-    methodName(value)
-    );
-
+    await bloc.setUserInfo(token).then((value) => methodName(value));
   }
-  UserDataAuth(String token,String email) async {
-    await bloc.setUserInfoAuth(token,email).then((value) =>
-        methodName(value)
-    );
 
+  UserDataAuth(String token, String email) async {
+    await bloc.setUserInfoAuth(token, email).then((value) => methodName(value));
   }
-  methodName (dynamic userinfo) async {
 
+  methodName(dynamic userinfo) async {
     if (userinfo != null) {
-
-      await  appsharedprefs.saveUserInfo(userinfo);
+      await appsharedprefs.saveUserInfo(userinfo);
       getTimeforPush(userinfo);
     }
   }
 
-
-
   void getTimeforPush(userinfo) {
-    Navigator.of(
-        context, rootNavigator: true)
-        .pop(dialogContext);
-      if (userinfo.data.termandcondtion == "1") {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/Dashboard', (Route<dynamic> route) => false);
-      } else {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/Term&Condition', (Route<dynamic> route) => false);
-      }
-
+    Navigator.of(context, rootNavigator: true).pop(dialogContext);
+    if (userinfo.data.termandcondtion == "1") {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/Dashboard', (Route<dynamic> route) => false);
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/Term&Condition', (Route<dynamic> route) => false);
+    }
   }
 }
-
 
 class Loign_UI_Constants {
   static const TextStyle styleForText = TextStyle(
