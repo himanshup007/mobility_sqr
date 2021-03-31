@@ -56,11 +56,42 @@ class _PassportScreenState extends State<PassportScreen> {
         color: Colors.white,
         height: 100.0.h,
         alignment: Alignment.topCenter,
-        child: ListView.builder(
-            itemBuilder: (context, index) => _renderContainer("key$index",index),
-            itemCount: widget.passportDetaillist.length,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true),
+        child: Stack(
+          children: [
+                ListView.builder(
+                itemBuilder: (context, index) => _renderContainer("key$index",index),
+                itemCount: widget.passportDetaillist.length,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true),
+
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  color: AppConstants.APP_THEME_COLOR,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      " Add New",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                  ),
+                  onPressed: () {
+
+                  },
+                ),
+              ),
+            ),
+              ],
+        ),
       ),
     );
   }

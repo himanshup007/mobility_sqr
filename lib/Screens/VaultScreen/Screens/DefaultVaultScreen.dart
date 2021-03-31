@@ -36,22 +36,26 @@ class _DefaultVaultScreenState extends State<DefaultVaultScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _apiProvider
+    getDocuments();
+  }
+  getDocuments() async {
+    await _apiProvider
         .get_doc_vault(widget.vaultId)
         .then((value) => this.setState(() {
-              this.setState(() {
-                documents = value;
-                showloader = false;
-              });
-            }));
+      this.setState(() {
+        documents = value;
+        showloader = false;
+      });
+    }));
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.white10,
+        backgroundColor: Colors.white,
         elevation: 0,
         titleSpacing: 0.0,
         title: Text(
@@ -104,13 +108,17 @@ class _DefaultVaultScreenState extends State<DefaultVaultScreen> {
                         color: Colors.white),
                   ),
                 ),
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  final result = await   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => VaultTypeScreen(
                             '${widget.VaultType}', widget.vaultId)),
                   );
+
+                  if(result!=null&&result==true){
+                    getDocuments();
+                  }
                 },
               ),
             ),
@@ -306,7 +314,7 @@ class _DefaultVaultScreenState extends State<DefaultVaultScreen> {
                                                               EdgeInsets.only(
                                                                   top: 100),
                                                           child: Text(
-                                                            '$progress %',
+                                                            'loading $progress %',
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .black,

@@ -17,6 +17,7 @@ import 'package:mobility_sqr/NotificationManager/Notification.dart';
 import 'package:mobility_sqr/Screens/SOS/SOS.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
+import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:sizer/sizer.dart';
 
 class VaultTypeScreen extends StatefulWidget {
@@ -46,6 +47,8 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
   NotificationManager _notificationManager = NotificationManager.instance;
 
   bool showloader=false;
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     // TODO: implement initState
@@ -67,6 +70,7 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
 
       this.setState(() {
         showloader=false;
+        Navigator.pop(context,true);
       });
       print(
           "id: ${result.taskId}, status: ${result.status}, response: ${result.response}, statusCode: ${result.statusCode}, tag: ${result.tag}, headers: ${result.headers}");
@@ -103,9 +107,11 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white10,
+        backgroundColor: Colors.white,
         elevation: 0,
+
         titleSpacing: 0.0,
         title: Text(
           "${this.widget.VaultType}",
@@ -360,12 +366,19 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
                   model.docDescription=_doc_des_textcontroller.text;
                   model.documentUrl=DocPath;
                   model.vaultType=widget.vaultId;
-
-                  _fileUpload.uploadFileVault(docFile,  AppConstants.BASE_URL + AppConstants.POST_VAULT_DOCUMENT, _tasks, model);
-                  _notificationManager.showNotification(100, "Document Uploading");
                   this.setState(() {
                     showloader=true;
+
                   });
+                  if(model.documentUrl!=null&&model.documentUrl.trim().isNotEmpty&&model.docDescription!=null&&model.docDescription.trim().isNotEmpty&&model.docName!=null&&model.docName.trim().isNotEmpty){
+                    _fileUpload.uploadFileVault(docFile,  AppConstants.BASE_URL + AppConstants.POST_VAULT_DOCUMENT, _tasks, model );
+                    _notificationManager.showNotification(100, "Document Uploading");
+
+                  }else{
+                    eventSnackbar( _scaffoldKey.currentState,
+                        'Please fill all the fields');
+                  }
+
                 },
               ),
             ),

@@ -74,8 +74,6 @@ dependencies:
 
 
 
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -131,7 +129,7 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_native_splash:
   # color is the only required parameter.  It sets the background color of your splash screen.
-  #color: "#42a5f5"
+  color: "#ffffff"
 
   # Optional parameters are listed below.  To enable a parameter, uncomment the line by removing
   # the leading # character.
