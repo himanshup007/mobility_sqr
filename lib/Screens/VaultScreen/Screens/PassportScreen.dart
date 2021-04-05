@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:folding_cell/folding_cell/widget.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/PassportModel.dart';
+import 'package:mobility_sqr/Screens/VaultScreen/Screens/AddNewPassport.dart';
 import 'package:mobility_sqr/Util/UtilClass.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:sizer/sizer.dart';
@@ -12,23 +13,14 @@ class PassportScreen extends StatefulWidget {
 
   PassportScreen(this.passportDetaillist);
 
-
-
-
-
   @override
   _PassportScreenState createState() => _PassportScreenState();
 }
 
 class _PassportScreenState extends State<PassportScreen> {
-
-
   @override
   void initState() {
-
     super.initState();
-
-
   }
 
   @override
@@ -55,15 +47,20 @@ class _PassportScreenState extends State<PassportScreen> {
       body: Container(
         color: Colors.white,
         height: 100.0.h,
-        alignment: Alignment.topCenter,
         child: Stack(
           children: [
-                ListView.builder(
-                itemBuilder: (context, index) => _renderContainer("key$index",index),
-                itemCount: widget.passportDetaillist.length,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true),
-
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 50,
+              child: ListView.builder(
+                  itemBuilder: (context, index) =>
+                      _renderContainer("key$index", index),
+                  itemCount: widget.passportDetaillist.length,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true),
+            ),
             Positioned(
               bottom: 0,
               right: 0,
@@ -85,25 +82,28 @@ class _PassportScreenState extends State<PassportScreen> {
                     ),
                   ),
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddNewPassport()),
+                    );
                   },
                 ),
               ),
             ),
-              ],
+          ],
         ),
       ),
     );
   }
 
-  Widget _renderContainer(mykey, int index){
-    mykey=GlobalKey<SimpleFoldingCellState>();
+  Widget _renderContainer(mykey, int index) {
+    mykey = GlobalKey<SimpleFoldingCellState>();
     return Container(
       color: Colors.transparent,
       child: SimpleFoldingCell.create(
         key: mykey,
-        frontWidget: _buildFrontWidget(mykey,widget.passportDetaillist, index),
-        innerWidget: _buildInnerWidget(mykey,widget.passportDetaillist,index),
+        frontWidget: _buildFrontWidget(mykey, widget.passportDetaillist, index),
+        innerWidget: _buildInnerWidget(mykey, widget.passportDetaillist, index),
         cellSize: Size(MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height / 4),
         padding: EdgeInsets.all(15),
@@ -115,9 +115,10 @@ class _PassportScreenState extends State<PassportScreen> {
     );
   }
 
-  Widget _buildFrontWidget(mykey, List<PassportDetail> passportDetaillist, int index) {
+  Widget _buildFrontWidget(
+      mykey, List<PassportDetail> passportDetaillist, int index) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         mykey?.currentState?.toggleFold();
       },
       child: Container(
@@ -153,7 +154,8 @@ class _PassportScreenState extends State<PassportScreen> {
                         color: Colors.deepPurpleAccent,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 5),
                         child: AutoSizeText(
                           "${passportDetaillist[index].countryOfIssue.toUpperCase()}",
                           maxFontSize: 12,
@@ -186,7 +188,9 @@ class _PassportScreenState extends State<PassportScreen> {
                       "View Passport",
                       style: TextStyle(color: Colors.amber, fontSize: 16),
                     ),
-                    SizedBox(width: 5,),
+                    SizedBox(
+                      width: 5,
+                    ),
                     Icon(
                       Icons.remove_red_eye,
                       color: Colors.white,
@@ -211,13 +215,17 @@ class _PassportScreenState extends State<PassportScreen> {
           "${passportDetaillist.passportNumber}",
           style: _textStyle,
         ),
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 5,
+        ),
         Text(
           "Valid Through",
           style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w500),
         ),
         Text(
-          passportDetaillist.dateOfExpiration!=""?"${getPassportimeformat(passportDetaillist.dateOfExpiration)}":'N/A',
+          passportDetaillist.dateOfExpiration != ""
+              ? "${getPassportimeformat(passportDetaillist.dateOfExpiration)}"
+              : 'N/A',
           style: _textStyle,
         )
       ],
@@ -225,29 +233,35 @@ class _PassportScreenState extends State<PassportScreen> {
   }
 
 // onPressed: () => _foldingCellKey?.currentState?.toggleFold(),
-  Widget _buildInnerWidget(mykey, List<PassportDetail> passportDetaillist, int index) {
+  Widget _buildInnerWidget(
+      mykey, List<PassportDetail> passportDetaillist, int index) {
     return Container(
       color: Color(0xFFecf2f9),
       padding: EdgeInsets.only(top: 10),
       child: Stack(
         children: [
           Align(
-              alignment: Alignment.center,
-              child: Image.network('${AppConstants.BASE_URL}${passportDetaillist[index].photo}'),),
+            alignment: Alignment.center,
+            child: Image.network(
+                '${AppConstants.BASE_URL}${passportDetaillist[index].photo}'),
+          ),
           Positioned(
             top: 0,
             right: 5,
-
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 mykey?.currentState?.toggleFold();
               },
               child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)),color: Colors.deepPurpleAccent),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Colors.deepPurpleAccent),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Close",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500),
+                    "Close",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w500),
                   ),
                 ),
               ),

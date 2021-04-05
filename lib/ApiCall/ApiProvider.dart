@@ -25,6 +25,7 @@ import 'package:mobility_sqr/ModelClasses/PerDiemModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/PostDocModel.dart';
 import 'package:mobility_sqr/ModelClasses/ProjectIdModel.dart';
 import 'package:mobility_sqr/ModelClasses/PurposeModelClass.dart';
+import 'package:mobility_sqr/ModelClasses/RelationList.dart';
 import 'package:mobility_sqr/ModelClasses/SearchModelClass.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestFResponse.dart';
 import 'package:mobility_sqr/ModelClasses/SubmitRequestForApprovalModel.dart';
@@ -949,19 +950,41 @@ class ApiProvider {
     //encode Map to JSON
     String token = await getToken_byReresh();
     var body = json.encode(jsonModel.toJson());
-    var response = await http.post(
-        AppConstants.BASE_URL + AppConstants.CHANGE_PASS,
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer ${token}',
-        },
-        body: body);
+    var response =
+        await http.post(AppConstants.BASE_URL + AppConstants.CHANGE_PASS,
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': 'Bearer ${token}',
+            },
+            body: body);
 
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       return true;
-    }else{
+    } else {
       return false;
     }
+  }
 
+  //==============================================================================================================
+
+  Future<RelationList> getRelationList() async {
+    String token = await getToken_byReresh();
+
+    final http.Response response = await http.get(
+      '${AppConstants.BASE_URL + AppConstants.RELATION_LIST}',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      RelationList data = RelationList.fromJson(jsonDecode(response.body));
+      await _TokenGetter.saveRelationList(data);
+      return data;
+    } else {
+      throw Exception('api error');
+    }
   }
 }

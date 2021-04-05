@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
 import 'package:mobility_sqr/ModelClasses/Activities.dart';
 import 'package:mobility_sqr/ModelClasses/Credential.dart';
+import 'package:mobility_sqr/ModelClasses/RelationList.dart';
 import 'package:mobility_sqr/ModelClasses/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -82,6 +83,17 @@ class TokenGetter {
   saveActivites(value) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(AppConstants.ACTIVITIES, json.encode(value));
+  }
+
+  readRelationList() async {
+    final prefs = await SharedPreferences.getInstance();
+    RelationList _RelationList = RelationList.fromJson( json.decode(prefs.getString(AppConstants.RELATION)));
+    return _RelationList;
+  }
+
+  saveRelationList(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(AppConstants.RELATION, json.encode(value));
   }
 
 }

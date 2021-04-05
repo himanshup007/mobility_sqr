@@ -22,12 +22,14 @@ import 'package:mobility_sqr/Widgets/ToastCustom.dart';
 import 'package:sizer/sizer.dart';
 
 class AddEvent extends StatefulWidget {
-
-  CalendarEvent event= CalendarEvent();
+  CalendarEvent event = CalendarEvent();
   DateTime day;
-  AddEvent({event,DateTime day}){
-    this.event=event;this.day=day;
+
+  AddEvent({event, DateTime day}) {
+    this.event = event;
+    this.day = day;
   }
+
   @override
   _AddEventState createState() => _AddEventState();
 }
@@ -49,7 +51,7 @@ class _AddEventState extends State<AddEvent> {
 
   String empCode = "";
 
-  int eventID=null;
+  int eventID = null;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -68,20 +70,23 @@ class _AddEventState extends State<AddEvent> {
     }
   }
 
-  EditReq(CalendarEvent event){
-    if(event!=null){
-
-
-     eventPost tempEvent=eventPost(empCode: event.empCode,fromDate: event.fromDate,toDate: event.toDate,countryCode:event.countryCode
-     ,countryName: event.countryName,cityCode: event.cityCode,cityName: event.cityName,activity: event.activity);
+  EditReq(CalendarEvent event) {
+    if (event != null) {
+      eventPost tempEvent = eventPost(
+          empCode: event.empCode,
+          fromDate: event.fromDate,
+          toDate: event.toDate,
+          countryCode: event.countryCode,
+          countryName: event.countryName,
+          cityCode: event.cityCode,
+          cityName: event.cityName,
+          activity: event.activity);
 
       this.setState(() {
-        _postjson=tempEvent;
-        eventID=event.id;
+        _postjson = tempEvent;
+        eventID = event.id;
       });
-
     }
-
   }
 
   @override
@@ -122,9 +127,8 @@ class _AddEventState extends State<AddEvent> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-key: _scaffoldKey,
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
           "Add Event",
@@ -223,7 +227,8 @@ key: _scaffoldKey,
                             this.setState(() {
                               selCountry = value;
                               _postjson.countryName = value.name;
-                              _postjson.countryCode=_selectedValue.id.toString();
+                              _postjson.countryCode =
+                                  _selectedValue.id.toString();
                               showloader = true;
                             });
                             _apiProvider
@@ -254,13 +259,14 @@ key: _scaffoldKey,
                             this.setState(() {
                               _selectedCity = cityModel;
                               _postjson.cityName = cityModel.name;
-                              _postjson.cityCode=cityModel.id.toString();
+                              _postjson.cityCode = cityModel.id.toString();
                             });
                           },
                           onclose: () {
                             Navigator.of(context, rootNavigator: true).pop();
                           },
-                        ),100.0.h);
+                        ),
+                        100.0.h);
                   }),
                   CustomEventWidget(_postjson.activity, 'Select Activities',
                       Icons.arrow_drop_down_sharp, context, onTap: () {
@@ -275,10 +281,10 @@ key: _scaffoldKey,
                             });
                           },
                           onclose: () {
-
                             Navigator.of(context, rootNavigator: true).pop();
                           },
-                        ),100.0.h);
+                        ),
+                        100.0.h);
                   }),
                   SizedBox(
                     height: 40,
@@ -297,7 +303,6 @@ key: _scaffoldKey,
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                         onPressed: () async {
-
                           reqJsonBuild();
                         }),
                   )
@@ -312,25 +317,26 @@ key: _scaffoldKey,
   }
 
   reqJsonBuild() {
-
     _postjson.empCode = empCode;
 
-    if(_postjson.empCode!=null&&_postjson.cityCode!=null&&_postjson.fromDate!=null&&_postjson.toDate!=null&&_postjson.activity!=null){
-
-      if(eventID==null){
-        _apiProvider.post_Calender_Event(_postjson).then((value) =>  Navigator.pop(context, value));
-      }else{
-        _apiProvider.update_Calendar_Event(_postjson,eventID).then((value) => Navigator.pop(context, value));
+    if (_postjson.empCode != null &&
+        _postjson.cityCode != null &&
+        _postjson.fromDate != null &&
+        _postjson.toDate != null &&
+        _postjson.activity != null) {
+      if (eventID == null) {
+        _apiProvider
+            .post_Calender_Event(_postjson)
+            .then((value) => Navigator.pop(context, value));
+      } else {
+        _apiProvider
+            .update_Calendar_Event(_postjson, eventID)
+            .then((value) => Navigator.pop(context, value));
       }
-
-
-
-
+    } else {
+      eventSnackbar(
+          _scaffoldKey.currentState, "Please fill the Mandatory Fields");
     }
-    else{
-      eventSnackbar( _scaffoldKey.currentState, "Please fill the Mandatory Fields");
-    }
-
   }
 }
 

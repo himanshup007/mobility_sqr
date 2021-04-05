@@ -39,18 +39,26 @@ class _ComplianceScreenState extends State<ComplianceScreen> {
           children: [
             ListView(
               children: [
-
                 Padding(
-                  padding: const EdgeInsets.only(left: 15,top: 15),
-                  child: Text("Onsite Compliance Questions :- ",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+                  padding: const EdgeInsets.only(left: 15, top: 15),
+                  child: Text(
+                    "Onsite Compliance Questions :- ",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
                 ),
-                Divider(thickness: 1,),
+                Divider(
+                  thickness: 1,
+                ),
                 _customWidget(
                     '1. Has your current work location changed / set to change from your original assigned location?'),
-                _customWidget('2. Has your job role changed recently or set to change? '),
-                _customWidget('3. Has your project code/id changed or set to change?'),
-                _customWidget('4. Has your salary decreased from original offered salary or set to decrease?'),
-                _customWidget('5. Have your work hours increased or set to increase?')
+                _customWidget(
+                    '2. Has your job role changed recently or set to change? '),
+                _customWidget(
+                    '3. Has your project code/id changed or set to change?'),
+                _customWidget(
+                    '4. Has your salary decreased from original offered salary or set to decrease?'),
+                _customWidget(
+                    '5. Have your work hours increased or set to increase?')
               ],
             ),
             Positioned(
@@ -61,9 +69,11 @@ class _ComplianceScreenState extends State<ComplianceScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: RaisedButton(
                   color: AppConstants.APP_THEME_COLOR,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: BorderSide(color: AppConstants.APP_THEME_COLOR)),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-
                     child: Text(
                       "Submit",
                       style: TextStyle(
@@ -100,9 +110,9 @@ class _ComplianceScreenState extends State<ComplianceScreen> {
               minHeight: 30.0,
               fontSize: 10.0,
               initialLabelIndex: 1,
-              activeBgColor: Colors.red,
+              activeBgColor: AppConstants.APP_THEME_COLOR,
               activeFgColor: Colors.white,
-              inactiveBgColor: AppConstants.APP_THEME_COLOR,
+              inactiveBgColor: Colors.black26,
               inactiveFgColor: Colors.white,
               labels: ['Yes', 'No'],
               onToggle: (index) {

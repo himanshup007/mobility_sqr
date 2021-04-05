@@ -40,6 +40,7 @@ class AppConstants {
   static final String POST_VAULT_DOCUMENT = "/get_post_vault_document/";
   static final String GET_EMERGENCY_CONTACT = "/getemployee_emergency_contact/";
   static final String CHANGE_PASS = "/reset_password/";
+  static final String RELATION_LIST = "/get_post_relation/";
 
 
 
@@ -61,4 +62,5 @@ class AppConstants {
   static const String USER_DIAL_CODE = "Dial_code";
   static const String CREDENTIAL = "credentials";
   static const String ACTIVITIES = "activities";
+  static const String RELATION = "relation";
 }

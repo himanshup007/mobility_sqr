@@ -8,14 +8,21 @@ GetNotificationIcon( BuildContext context) {
         Navigator.of(context).pushNamed('/NotificationScreen');
       },
       child: Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+        width: 40,
+        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+
         child: Align(
           alignment: Alignment.centerLeft,
 
           child: Stack(
             children: <Widget>[
-              new Icon(
-                Icons.notifications, color: AppConstants.TEXT_BACKGROUND_COLOR,),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  child: new Icon(
+                    Icons.notifications, color: AppConstants.TEXT_BACKGROUND_COLOR,size: 25,),
+                ),
+              ),
               new Positioned(
                 right: 0,
                 child: new Container(

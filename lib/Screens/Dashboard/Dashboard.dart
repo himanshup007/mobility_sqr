@@ -94,6 +94,7 @@ class _DashboardState extends State<Dashboard> {
 
   getActivites() async {
     await _appApiProvider.getActivities().then((value) => saveActivity(value));
+    await _appApiProvider.getRelationList();
   }
 
   saveActivity(Activities data) async {
@@ -291,11 +292,9 @@ class _DashboardState extends State<Dashboard> {
               }),
               CustomDivider(),
               CustomMenuTitle("assets/images/change_password_sidemenu_icon.png",
-                  'Change Password', context,
-                  OnTouch: () {
-
-                    Navigator.pushNamed(context, '/ForgetPass');
-                  }),
+                  'Change Password', context, OnTouch: () {
+                Navigator.pushNamed(context, '/ForgetPass');
+              }),
               CustomDivider(),
               CustomMenuTitle(
                   "assets/images/logout_sidemenu_icon.png", 'Logout', context,
@@ -818,10 +817,8 @@ class _DashboardState extends State<Dashboard> {
               transitionDuration: Duration(milliseconds: 700),
               pageBuilder: (_, __, ___) => AddCity()));
     } else if (where == 2) {
-      Navigator.pushNamed(context, '/ApprovalsScreen', arguments: {"where": 2, "header": "Previous Travels"});
-
-
-
+      Navigator.pushNamed(context, '/ApprovalsScreen',
+          arguments: {"where": 2, "header": "Previous Travels"});
     } else if (where == 3) {
       Navigator.pushNamed(
         context,
@@ -835,10 +832,9 @@ class _DashboardState extends State<Dashboard> {
         context,
         '/VaultScreen',
       );
-    } else if(where==4){
+    } else if (where == 4) {
       Navigator.pushNamed(context, '/ComplianceScreen');
-    }
-    else{
+    } else {
       showAlertDialog(context, " Coming Soon");
     }
   }
