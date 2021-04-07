@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobility_sqr/ApiCall/ApiProvider.dart';
 import 'package:mobility_sqr/Constants/AppConstants.dart';
+import 'package:mobility_sqr/ModelClasses/CountryListModel.dart';
 import 'package:mobility_sqr/ModelClasses/EmergencyContactModel.dart';
 import 'package:mobility_sqr/Widgets/MobilityLoader.dart';
 import 'package:mobility_sqr/Widgets/NotificationWidget.dart';
 import 'package:stacked_card_carousel/stacked_card_carousel.dart';
 import 'package:sizer/sizer.dart';
+import 'dart:math' as math;
 
 class EmergencyContact extends StatefulWidget {
   @override
@@ -19,18 +21,31 @@ class _EmergencyContactState extends State<EmergencyContact> {
 
   List<Widget> cards = [];
 
+  bool loaderBool = true;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _apiProvider.getEmergencyContact().then((value) => this.setState(() {
-          _list = value.data;
+    _apiProvider
+        .getEmergencyContact()
+        .then((value) => this.setState(() {
+              _list = value.data;
 
-          for (int i = 0; i < _list.length; i++) {
-            cards.add(Card(_list[i]));
-          }
-        }));
+              this.setState(() {
+                loaderBool = false;
+              });
+              if (value.data != null) {
+                for (int i = 0; i < _list.length; i++) {
+                  cards.add(Card(_list[i], i));
+                }
+              }
+            }))
+        .onError((error, stackTrace) => this.setState(() {
+              loaderBool = false;
+            }));
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +56,8 @@ class _EmergencyContactState extends State<EmergencyContact> {
         autofocus: true,
         onPressed: () {},
         icon: Icon(Icons.add),
-        tooltip: 'Add Contact', label: Text('Add Contact'),
+        tooltip: 'Add Contact',
+        label: Text('Add Contact'),
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -61,16 +77,27 @@ class _EmergencyContactState extends State<EmergencyContact> {
           GetNotificationIcon(context),
         ],
       ),
-      body: Container(
-        child: cards != null && cards.isNotEmpty
-            ? StackedCardCarousel(
-                initialOffset: 40,
-                spaceBetweenItems: 400,
-                items: cards,
-              )
-            : SizedBox(
-                child: showMobilityLoader(true, Colors.black12),
-              ),
+      body: Stack(
+        children: [
+          Container(
+            child: cards != null && cards.isNotEmpty
+                ? StackedCardCarousel(
+                    initialOffset: 40,
+                    spaceBetweenItems: 400,
+                    items: cards,
+                  )
+                : SizedBox(
+                    child: !loaderBool
+                        ? Center(child: Text("No Record Found"))
+                        : SizedBox(),
+                  ),
+          ),
+          Container(
+            height: 100.0.h,
+            width: 100.0.w,
+            child: showMobilityLoader(loaderBool, Colors.black12),
+          )
+        ],
       ),
     );
   }
@@ -78,8 +105,17 @@ class _EmergencyContactState extends State<EmergencyContact> {
 
 class Card extends StatelessWidget {
   Data cardDetail;
+  int index;
 
-  Card(@required this.cardDetail);
+  Card(@required this.cardDetail, @required this.index);
+
+  final rnd = math.Random();
+  List<Color> colors = [
+    Colors.purple[200],
+    Colors.blueAccent.shade200,
+    Colors.deepPurple,
+    Colors.indigo
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -91,16 +127,7 @@ class Card extends StatelessWidget {
           Radius.circular(20),
         ),
         border: Border.all(color: Colors.white),
-        gradient: new LinearGradient(
-            colors: [
-              const Color(0xFF9a4c92),
-              const Color(0xFFbf7192),
-              const Color(0xFF8c3771),
-            ],
-            begin: const FractionalOffset(0.0, 0.0),
-            end: const FractionalOffset(1.0, 0.0),
-            stops: [0.0, 1.0, 2.0],
-            tileMode: TileMode.clamp),
+        color: colors[rnd.nextInt(colors.length)],
       ),
       child: Stack(
         children: [

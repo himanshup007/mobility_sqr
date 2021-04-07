@@ -69,6 +69,8 @@ dependencies:
   toggle_switch: ^0.1.9
   flutter_cached_pdfview: ^0.3.1
   stacked_card_carousel: ^0.0.2+1
+  liquid_progress_indicator: ^0.3.2
+
 
 
 

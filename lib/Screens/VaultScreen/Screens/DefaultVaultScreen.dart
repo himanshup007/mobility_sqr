@@ -54,6 +54,26 @@ class _DefaultVaultScreenState extends State<DefaultVaultScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 50,
+        backgroundColor: AppConstants.APP_THEME_COLOR,
+        autofocus: true,
+        onPressed: () async {
+          final result = await   Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VaultTypeScreen(
+                    '${widget.VaultType}', widget.vaultId)),
+          );
+
+          if(result!=null&&result==true){
+            getDocuments();
+          }
+        },
+        icon: Icon(Icons.add),
+        tooltip: 'Add New',
+        label: Text('Add New'),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -88,41 +108,7 @@ class _DefaultVaultScreenState extends State<DefaultVaultScreen> {
                   : SizedBox(),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                color: AppConstants.APP_THEME_COLOR,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    " Add New",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.white),
-                  ),
-                ),
-                onPressed: () async {
-                  final result = await   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => VaultTypeScreen(
-                            '${widget.VaultType}', widget.vaultId)),
-                  );
 
-                  if(result!=null&&result==true){
-                    getDocuments();
-                  }
-                },
-              ),
-            ),
-          ),
           showMobilityLoader(showloader, Colors.white70)
         ],
       ),

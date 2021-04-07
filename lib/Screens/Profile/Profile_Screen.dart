@@ -58,9 +58,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   setValueUpdate(String photo) async {
-
     this.setState(() {
-      _pickedImageString=photo;
+      _pickedImageString = photo;
     });
     _userInfoPayload.countryOfBirth = _userProfile.countryOfBirth;
     _userInfoPayload.dob = _userProfile.dob;
@@ -95,23 +94,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await appsharedprefs.saveUserInfo(userinfo);
     }
   }
+
   var routes;
+
   @override
   void initState() {
-
-    Future.delayed(Duration.zero,(){
-       routes =
-      ModalRoute.of(context).settings.arguments as Map<String, String>;
+    Future.delayed(Duration.zero, () {
+      routes = ModalRoute.of(context).settings.arguments as Map<String, String>;
       setState(() {
-
-        _pickedImageString=routes['image'];
+        _pickedImageString = routes['image'];
       });
     });
-
-
-
-
-
 
     // TODO: implement initState
     super.initState();
@@ -158,7 +151,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       top: false,
       bottom: false,
@@ -197,23 +189,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Hero(
                                   tag: 'profile',
                                   child: Material(
-                                      child: _pickedImage == null
-                                          ? (_pickedImageString == null
-                                              ? ImageIcon(
-                                                  AssetImage(
-                                                    'assets/images/myprofile_sidemenu_icon.png',
-                                                  ),
-                                                  size: 80,
-                                                )
-                                              : CircleAvatar(
-                                                  radius: 40.0,
-                                                  backgroundImage: NetworkImage(
-                                                      "${_pickedImageString}"),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                ))
-                                          : ClipOval(
-                                              child: Image.file(_pickedImage))),
+                                    child: _pickedImage == null
+                                        ? (_pickedImageString == null
+                                            ? ImageIcon(
+                                                AssetImage(
+                                                  'assets/images/myprofile_sidemenu_icon.png',
+                                                ),
+                                                size: 80,
+                                              )
+                                            : CircleAvatar(
+                                                radius: 40.0,
+                                                backgroundImage: NetworkImage(
+                                                    "${_pickedImageString}"),
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                              ))
+                                        : ClipOval(
+                                            child: Image.file(_pickedImage),
+                                          ),
+                                  ),
                                 ),
                               ),
                               Positioned(
@@ -298,7 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 120.0,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context,_pickedImageString);
+                        Navigator.pop(context, _pickedImageString);
                       },
                       child: Center(
                         child: ImageIcon(

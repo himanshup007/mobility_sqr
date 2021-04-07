@@ -26,6 +26,20 @@ class _PassportScreenState extends State<PassportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 50,
+        backgroundColor: AppConstants.APP_THEME_COLOR,
+        autofocus: true,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewPassport()),
+          );
+        },
+        icon: Icon(Icons.add),
+        tooltip: 'Add New',
+        label: Text('Add New'),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 10,
@@ -54,41 +68,16 @@ class _PassportScreenState extends State<PassportScreen> {
               left: 0,
               right: 0,
               bottom: 50,
-              child: ListView.builder(
-                  itemBuilder: (context, index) =>
-                      _renderContainer("key$index", index),
-                  itemCount: widget.passportDetaillist.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  color: AppConstants.APP_THEME_COLOR,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      " Add New",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddNewPassport()),
-                    );
-                  },
-                ),
-              ),
+              child: widget.passportDetaillist == null
+                  ? Center(
+                      child: Text("No Data Found"),
+                    )
+                  : ListView.builder(
+                      itemBuilder: (context, index) =>
+                          _renderContainer("key$index", index),
+                      itemCount: widget.passportDetaillist.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true),
             ),
           ],
         ),

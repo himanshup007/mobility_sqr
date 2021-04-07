@@ -41,14 +41,15 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
   TextEditingController _doc_name_textcontroller = TextEditingController();
   TextEditingController _document_name_textcontroller = TextEditingController();
   TextEditingController _doc_des_textcontroller = TextEditingController();
-  ApiProvider _apiProvider=ApiProvider();
+  ApiProvider _apiProvider = ApiProvider();
   FileUpload _fileUpload = FileUpload.instance;
 
   NotificationManager _notificationManager = NotificationManager.instance;
 
-  bool showloader=false;
+  bool showloader = false;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -66,11 +67,12 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
     });
 
     _resultSubscription = _fileUpload.uploader.result.listen((result) {
-      _notificationManager.showNotification(100, "Document uploaded Successfully!");
+      _notificationManager.showNotification(
+          100, "Document uploaded Successfully!");
 
       this.setState(() {
-        showloader=false;
-        Navigator.pop(context,true);
+        showloader = false;
+        Navigator.pop(context, true);
       });
       print(
           "id: ${result.taskId}, status: ${result.status}, response: ${result.response}, statusCode: ${result.statusCode}, tag: ${result.tag}, headers: ${result.headers}");
@@ -81,7 +83,6 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
       if (task == null) return;
 
       this.setState(() {
-
         _tasks[result.tag] = task.copyWith(status: result.status);
       });
     }, onError: (ex, stacktrace) {
@@ -91,17 +92,15 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
       final task = _tasks[exp.tag];
 
       this.setState(() {
-        showloader=false;
+        showloader = false;
       });
       if (task == null) return;
 
       this.setState(() {
-
         _tasks[exp.tag] = task.copyWith(status: exp.status);
       });
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +110,6 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-
         titleSpacing: 0.0,
         title: Text(
           "${this.widget.VaultType}",
@@ -165,7 +163,8 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
                                 border: new OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
-                                    borderSide: BorderSide(color: Colors.grey))),
+                                    borderSide:
+                                        BorderSide(color: Colors.grey))),
                           ),
                         ),
                       ],
@@ -209,7 +208,8 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
                                 border: new OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
-                                    borderSide: BorderSide(color: Colors.grey))),
+                                    borderSide:
+                                        BorderSide(color: Colors.grey))),
                           ),
                         ),
                       ],
@@ -221,7 +221,8 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
                 ),
                 FittedBox(
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 10),
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,43 +250,41 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
                           child: Container(
                               width: 100.0.w,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(color: Colors.white),
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
                                     child: GestureDetector(
                                       onTap: () async {
                                         showAlertDialogforFilePicker(context,
                                             pdfpick: (path) async {
-
-
-                                          final File fileForFirebase = File(path.path);
+                                          final File fileForFirebase =
+                                              File(path.path);
 
                                           this.setState(() {
-
                                             _paths = path;
                                             DocPath = _paths.path;
 
-                                            docFile=fileForFirebase;
-
+                                            docFile = fileForFirebase;
                                           });
-                                          String _fileName =
-                                              _paths != null ? _paths.name : '...';
-                                          _doc_name_textcontroller.text = _fileName;
-
+                                          String _fileName = _paths != null
+                                              ? _paths.name
+                                              : '...';
+                                          _doc_name_textcontroller.text =
+                                              _fileName;
                                         }, imagepick: (file) async {
-
                                           String file_name =
                                               file.path.split('/').last;
-                                          _doc_name_textcontroller.text = file_name;
+                                          _doc_name_textcontroller.text =
+                                              file_name;
 
                                           this.setState(() {
                                             DocPath = file.path;
 
-                                            docFile=file;
-
+                                            docFile = file;
                                           });
-
                                         });
                                       },
                                       child: ClayContainer(
@@ -361,31 +360,37 @@ class _VaultTypeScreenState extends State<VaultTypeScreen> {
                   ),
                 ),
                 onPressed: () {
-                  PostDocModel model=PostDocModel();
-                  model.docName=_document_name_textcontroller.text;
-                  model.docDescription=_doc_des_textcontroller.text;
-                  model.documentUrl=DocPath;
-                  model.vaultType=widget.vaultId;
+                  PostDocModel model = PostDocModel();
+                  model.docName = _document_name_textcontroller.text;
+                  model.docDescription = _doc_des_textcontroller.text;
+                  model.documentUrl = DocPath;
+                  model.vaultType = widget.vaultId;
                   this.setState(() {
-                    showloader=true;
-
+                    showloader = true;
                   });
-                  if(model.documentUrl!=null&&model.documentUrl.trim().isNotEmpty&&model.docDescription!=null&&model.docDescription.trim().isNotEmpty&&model.docName!=null&&model.docName.trim().isNotEmpty){
-                    _fileUpload.uploadFileVault(docFile,  AppConstants.BASE_URL + AppConstants.POST_VAULT_DOCUMENT, _tasks, model );
-                    _notificationManager.showNotification(100, "Document Uploading");
-
-                  }else{
-                    eventSnackbar( _scaffoldKey.currentState,
+                  if (model.documentUrl != null &&
+                      model.documentUrl.trim().isNotEmpty &&
+                      model.docDescription != null &&
+                      model.docDescription.trim().isNotEmpty &&
+                      model.docName != null &&
+                      model.docName.trim().isNotEmpty) {
+                    _fileUpload.uploadFileVault(
+                        docFile,
+                        AppConstants.BASE_URL +
+                            AppConstants.POST_VAULT_DOCUMENT,
+                        _tasks,
+                        model);
+                    _notificationManager.showNotification(
+                        100, "Document Uploading");
+                  } else {
+                    eventSnackbar(_scaffoldKey.currentState,
                         'Please fill all the fields');
                   }
-
                 },
               ),
             ),
           ),
-
           showMobilityLoader(showloader, Colors.transparent)
-
         ],
       ),
     );

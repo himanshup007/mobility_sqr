@@ -30,6 +30,17 @@ class _VisaScreenState extends State<VisaScreen> {
       bottom: false,
       top: false,
       child: Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+          elevation: 50,
+          backgroundColor: AppConstants.APP_THEME_COLOR,
+          autofocus: true,
+          onPressed: () {
+
+          },
+          icon: Icon(Icons.add),
+          tooltip: 'Add New',
+          label: Text('Add New'),
+        ),
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 10,
@@ -56,36 +67,16 @@ class _VisaScreenState extends State<VisaScreen> {
             children: [
               Container(
                 height: Get.height,
-                child: ListView.builder(
+                child:  widget.visaDetaillist==null?Center(
+                  child: Text("No Data Found"),
+                ):ListView.builder(
                     itemBuilder: (context, index) =>
                         _renderContainer("key$index", index),
                     itemCount: widget.visaDetaillist.length,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true),
               ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    color: AppConstants.APP_THEME_COLOR,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
 
-                      child: Text(
-                        " Add New",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.white),
-                      ),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              )
             ],
           ),
         ),
