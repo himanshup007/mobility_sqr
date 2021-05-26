@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class AppConstants {
 //==============================================================================URL
   // static final String BASE_URL = "http://52.165.220.40:8888";           //PreProd for client
-  static final String BASE_URL = "http://52.165.220.40:8080"; //Testing Url
+ // static final String BASE_URL = "http://52.165.220.40:8080"; //Testing Url
+ // static final String BASE_URL = "http://172.104.183.68:8080"; //Testing Url
   //static final String BASE_URL = "http://52.165.220.40:8000";       //Prod Url
+  static final String BASE_URL = "http://mobilitysqr.net:8080";       //Prod Url
+
+
   static final String CHECK_USER = "/checkemployeeuser/";
-  static final String ACCESS_TOKEN_FETCHER = "/api/login/";
+  static final String ACCESS_TOKEN_FETCHER = "/api/custom/login/";
   static final String GET_USER_INFO = "/emoloyeeinfo/";
   static final String FORGET_PASS = "/forget_password/";
   static final String GET_TRAVEL_REQ = "/get_add/travel_request/";

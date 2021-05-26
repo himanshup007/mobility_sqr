@@ -208,9 +208,14 @@ class ApiProvider {
 //======================================================================================================
   Future<PurposeModelClass> getPurposeList(String iata) async {
     String token = await getToken_byReresh();
+    UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
 
+    String OrgId = userInfo.data.orgId;
     Map<String, String> queryParams = {
-      'country_id': iata,
+      'country_id': '$iata',
+      'organization':OrgId
+
+
     };
     String queryString = Uri(queryParameters: queryParams).query;
     final http.Response response = await http.get(
@@ -336,11 +341,17 @@ class ApiProvider {
   }
 
 //========================================================================================================================
-  Future<PerDiemModel> GetPerDiem(String country) async {
+  Future<PerDiemModel> GetPerDiem(String country,String homeCountry) async {
     UserInfo userInfo = await _TokenGetter.readUserInfo() ?? null;
+
+    String OrgId = userInfo.data.orgId;
     Map<String, String> queryParams = {
       'country': country,
+    'home_country':homeCountry,
+    'organization':OrgId,
+
     };
+
     String token = await getToken_byReresh();
     String queryString = Uri(queryParameters: queryParams).query;
     final http.Response response = await http.get(
@@ -355,7 +366,7 @@ class ApiProvider {
       PerDiemModelClass myresponse =
           PerDiemModelClass.fromJson(jsonDecode(response.body));
 
-      return myresponse.data[0];
+      return myresponse.data;
     } else {
       throw Exception('error');
     }

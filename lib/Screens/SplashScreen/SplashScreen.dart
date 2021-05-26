@@ -14,7 +14,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   bool get isPlaying => _controller?.isActive ?? false;
-
   Artboard _riveArtboard;
   Artboard _riveArtboardbg;
   RiveAnimationController _controller;

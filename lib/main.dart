@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       routes: {
-        //  '/': (context) => Username_Screen(),
+         '/Username_Screen': (context) => Username_Screen(),
         '/': (context) => SplashScreen(),
         '/AddCity': (context) => AddCity(),
         '/Dashboard': (context) => Dashboard(),

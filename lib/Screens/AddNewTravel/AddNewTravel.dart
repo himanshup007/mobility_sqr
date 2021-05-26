@@ -576,10 +576,26 @@ class _AddCity extends State<AddCity> {
                                                               .travellingCountry =
                                                           fromplace.countryName;
                                                     });
+
+                                                    try{
+                                                      _appApiProvider.GetPerDiem(
+                                                          traveldata[
+                                                          index]
+                                                              .toCountryData
+                                                              .countryName,traveldata[index].travellingCountry)
+                                                          .then((value) =>
+                                                          SaveCostData(
+                                                              value));
+                                                    }catch(e){
+
+                                                    }
+
+
                                                   } else {
                                                     showDefaultSnackbar(context,
                                                         "From and To airports can not be the same");
                                                   }
+
                                                 }
                                               },
                                             ),
@@ -627,6 +643,8 @@ class _AddCity extends State<AddCity> {
                                                             toCountryData =
                                                             data;
                                                         ;
+                                                        toData=toCountryData;
+
                                                         if (traveldata[index]
                                                                 .sourceCity !=
                                                             toCountryData
@@ -666,7 +684,7 @@ class _AddCity extends State<AddCity> {
                                                                   context)
                                                               .add(FetchPurposelist(
                                                                   toData
-                                                                      .iataCode));
+                                                                      .country));
                                                           _appApiProvider.GetPostLocation(
                                                                   traveldata[
                                                                           index]
@@ -698,7 +716,7 @@ class _AddCity extends State<AddCity> {
                                                                   traveldata[
                                                                           index]
                                                                       .toCountryData
-                                                                      .countryName)
+                                                                      .countryName,traveldata[index].travellingCountry)
                                                               .then((value) =>
                                                                   SaveCostData(
                                                                       value));

@@ -1,9 +1,9 @@
 class PerDiemModelClass {
   bool _status;
   String _message;
-  List<PerDiemModel> _data;
+  PerDiemModel _data;
 
-  PerDiemModelClass({bool status, String message, List<PerDiemModel> data}) {
+  PerDiemModelClass({bool status, String message, PerDiemModel data}) {
     this._status = status;
     this._message = message;
     this._data = data;
@@ -13,18 +13,14 @@ class PerDiemModelClass {
   set status(bool status) => _status = status;
   String get message => _message;
   set message(String message) => _message = message;
-  List<PerDiemModel> get data => _data;
-  set data(List<PerDiemModel> data) => _data = data;
+  PerDiemModel get data => _data;
+  set data(PerDiemModel data) => _data = data;
 
   PerDiemModelClass.fromJson(Map<String, dynamic> json) {
     _status = json['status'];
     _message = json['Message'];
-    if (json['data'] != null) {
-      _data = new List<PerDiemModel>();
-      json['data'].forEach((v) {
-        _data.add(new PerDiemModel.fromJson(v));
-      });
-    }
+    _data = json['data'] != null ? new PerDiemModel.fromJson(json['data']) : null;
+
   }
 
   Map<String, dynamic> toJson() {
@@ -32,7 +28,7 @@ class PerDiemModelClass {
     data['status'] = this._status;
     data['Message'] = this._message;
     if (this._data != null) {
-      data['data'] = this._data.map((v) => v.toJson()).toList();
+      data['data'] = this._data.toJson();
     }
     return data;
   }
@@ -42,8 +38,8 @@ class PerDiemModel {
   int _id;
   String _dateCreated;
   String _dateModified;
-  Null _createdBy;
-  Null _modifiedBy;
+  dynamic _createdBy;
+  dynamic _modifiedBy;
   bool _status;
   String _country;
   String _currency;
